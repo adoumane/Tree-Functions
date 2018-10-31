@@ -1,0 +1,47 @@
+\section{First-order rational functions}\label{sec:fo-rational}
+
+\begin{definition}[Fo-rational functions]\ 
+    \begin{enumerate}
+        \item \emph{Characteristic functions.} Let $\varphi(x)$ be a formula of first-order logic, over vocabulary $\sigma$. Define the \emph{characteristic function} of $\varphi(x)$ to be the function
+        \begin{align*}
+            f : \treesz \sigma \to \treesz (2 \otimes \sigma)
+        \end{align*}
+        which adds 0 or 1 to  the label of each node depending on whether the node satisfies $\varphi(x)$.
+        \item \emph{Fo-rational.} An \emph{fo-rational} function is any finite composition of charactersitic functions as defined in the previous item, and tree-to-tree homomorphisms. 
+    \end{enumerate}
+     
+\end{definition}
+
+
+\newcommand{\nextmod}{\mathsf X}
+\newcommand{\untilmod}{\mathsf U}
+\newcommand{\sincemod}{\mathsf S}
+
+
+\begin{definition}[2-ctl]
+    Define 2-ctl to be the least set of unary queries which contains queries of the form ``node $x$ has label $a$'', and which is closed under the following connectives
+    \begin{enumerate}
+        \item \emph{Boolean.} Boolean combinations of unary queries, including negation;
+        \item \emph{Next.} If $\varphi$ is a unary query and $i \in \Nat$, then  $\nextmod_i \varphi$ is also a unary query, which is true in nodes whose $i$-th child satisfies $\varphi$.
+         \item \emph{Until.} If $\varphi,\psi$ are  unary queries, then  $\varphi \untilmod \psi$ is also a unary query, which is true in a node $x$ if there exists some $y > x$ such that: (a) $\psi$ is true in $y$; (b) $\varphi$ is true in all nodes $z$ with $x < z < y$;
+         \item \emph{Since.} If $\varphi,\psi$ are  unary queries, then  $\varphi \sincemod \psi$ is also a unary query, which is true in a node $x$ if there exists some $y < x$ such that: (a) $\psi$ is true in $y$; (b) $\varphi$ is true in all nodes $z$ with $y < z < x$.
+    \end{enumerate}
+\end{definition}
+\begin{theorem} ~\cite[Theorem 2.6]{schlingloff1992expressive} The unary queries in 2-ctl are exactly the unary queries that are definable in first-order logic.
+\end{theorem}
+
+\begin{lemma}
+    Let $\tau,\sigma$ be finite ranked sets. Then for every fo-rational
+    \begin{align*}
+        f : \treesz \tau \to \treesz \sigma
+    \end{align*}
+    there is a function in the class which agrees with $f$ on elements of arity $\emptyset$. 
+\end{lemma}
+\begin{pr}
+    Using the 2-ctl theorem.
+    \end{pr}
+
+
+\begin{lemma}
+    The unfold function for 
+\end{lemma}

@@ -1,0 +1,27 @@
+
+\section{Ranked sets and operations on them}
+\paragraph*{Ranked sets.}
+Fix a set of variables $\varnames$.
+\begin{definition}[Ranked set]
+    A \emph{ranked set} consists of a set, called the \emph{underlying set}, together with a mapping  which assigns to each element of the underlying set an \emph{arity}, which is a finite subset of the variables $\varnames$. 
+\end{definition}
+When talking about elements of a ranked set, we mean elements of the underlying set.   For a ranked set $A$ and a finite set of variables $X \subseteq \varnames$, we write $\slice A X$ for the elements of $A$ that have arity $X$. 
+
+\paragraph*{Type constructors.}
+Consider the following operations, which are used to define new ranked sets based on existing ones.
+\begin{enumerate}
+    \item {\bf Disjoint union $A+B$.} An element of $A+B$ is either an element of $A$ or an element of $B$, with the arities inherited from $A,B$. 
+    \item {\bf Cartesian\footnote{This is the Cartesian product in the category where objects are ranked sets, and morphisms are arity preserving functions.}  product $A \times B$.} An arity $X$ element of $A \otimes B$ is a pair $(a,b)$ such $a \in A$ and $b \in B$ are elements whose arities are both $X$.
+    \item {\bf Tensor product $A \otimes B$.} An arity $X$ element of $A \otimes B$ is a pair $(a,b)$ such $a \in A$ and $b \in B$ are elements whose arities form a partition of $X$. 
+    \item {\bf Trees.} For a ranked set  $A$, define a \emph{term} over $A$ of arity $X$ to be a tree, where nodes are labelled by  $A$ or $X$, and edges are labelled by  variables, such that:
+    \begin{itemize}
+        \item labels from $X$ appear only in the leaves, and each label from $X$ appears exactly once;
+        \item if a node has a label $a \in A$ of arity $Y$, then outgoing edges of the node are labelled by variables from $Y$ in one-to-one fashion. 
+    \end{itemize}
+    Define $\trees A$ to be the ranked set of terms over $A$. Here is a picture: \mypic{1}
+\end{enumerate}    
+
+An alternative definition of $\trees \sigma$ is that it is the least set which satisfies the following recursion
+\begin{align*}
+    \trees \sigma = \varnames + \coprod_{a \in \sigma} \underbrace{\trees \sigma \otimes \cdots \otimes \trees \sigma}_{\text{arity of $a$ times}}
+\end{align*}

@@ -1,0 +1,107 @@
+
+\section{First-order tree functions}
+
+\begin{definition}[Types] The \emph{atomic types} are:
+    \begin{itemize}
+        \item every ranked set with finitely many elements;
+        \item a ranked set, call it  $1$, which has one element on every arity;
+    \end{itemize}
+    A type is any ranked set obtained from atomic types and applying the constructors $+$, $\times$, $\otimes$ and $\trees$.
+\end{definition}
+    
+
+
+
+
+\begin{definition}[Atomic functions]\label{def:atomic-functions}
+    Let $\tau,\sigma,\tau_0$ and $\tau_1$ be ranked sets. The following functions are called \emph{atomic functions}. 
+\begin{enumerate}
+    \item The unique  function $! : \sigma \to 1$
+    \item Every arity-preserving function with finite domain
+    \begin{align*}
+        f : \tau \to \sigma
+    \end{align*}
+    \item Projection and co-projection
+    \begin{align*}
+        \pi_i : \tau_0 \times \tau_1 \to \tau_i \qquad \iota_i : \tau_i \to \tau_0 + \tau_1
+    \end{align*}
+    \item Distribute
+\begin{align*}
+    (\tau_0 + \tau_1 ) \times \sigma \to (\tau_0 \times \sigma) + (\tau_1 \times \sigma)
+\end{align*}
+\item Tree construction: for every $\sigma$ and every $a \in \sigma$  a function
+\begin{align*}
+    \underbrace{\trees \sigma \otimes \cdots \otimes \trees \sigma}_{\text{arity of $a$ times}} \to \trees \sigma
+\end{align*}
+
+\item Tree deconstruction: for every $\sigma$ and every $a \in \sigma$  a function
+\begin{align*}
+      \trees \sigma \to 1 + \underbrace{\trees \sigma \otimes \cdots \otimes \trees \sigma}_{\text{arity of $a$ times}}
+\end{align*}
+\item The port-order function
+\begin{align*}
+\trees (\sigma + \tau) \to \trees (\sigma + \tau)
+\end{align*}
+
+    \item The block function
+    \begin{align*}
+        \trees (\sigma + \tau) \to \trees (\trees \sigma + \trees \tau)
+    \end{align*}
+    \item For every variables $x,y \in \varnames$ (mabye just $x=1$ and $y=2$) the function 
+    \begin{align*}
+        swap : \trees \tau \to \trees \tau
+    \end{align*}
+    \item The yield function
+    \begin{align*}
+        \trees \sigma \to \trees 1
+    \end{align*}
+    \item Some kind of swapping (maybe not needed)
+    \item Let $\circ$ be a ranked set with one element of arity $\emptyset$.
+    \begin{align*}
+        \trees(\sigma+\tau) \to \trees(\sigma+\tau+\circ) \otimes \trees(\sigma+\tau+\circ)
+    \end{align*}
+\end{enumerate}
+\end{definition}
+
+
+
+\begin{definition}
+    [Combinators] \label{def:combinators} \ 
+    \begin{enumerate}
+    \item Function composition
+    \begin{align*}
+    \frac{f : \tau \to \sigma \quad g : \sigma \to \theta} {g \circ f : \tau \to \theta}
+\end{align*}
+
+\item Lifting functions to trees
+\begin{align*}
+    \frac{f : \tau \to \sigma} {\trees f : \trees \tau \to \trees \sigma}
+\end{align*}
+\item Cases
+\begin{align*}
+    \frac{f_0 : \tau_0 \to \sigma \quad f_1 : \tau_1 \to \sigma} {[f_0,f_1] : \tau_0 + \tau_1 \to \sigma}
+\end{align*}
+
+\item Pairing functions
+\begin{align*}
+    \frac{f_0 : \tau \to \sigma_0 \quad f_1 : \tau \to \sigma_1} {(f_0,f_1) : \tau \to \sigma_0 \times \sigma_1}
+\end{align*}
+
+\item Tensor product of functions
+\begin{align*}
+    \frac{f_0 : \tau_0 \to \sigma_0 \quad f_1 : \tau_1 \to \sigma_1} {\langle f_0,f_1 \rangle : \tau_0 \otimes \tau_1 \to \sigma_0 \otimes \sigma_1}
+\end{align*}
+\end{enumerate}
+\end{definition}
+
+\begin{definition}[First-order tree functions] \label{def:fo-tree-functions} The class of \emph{first-order tree functions} is the smallest class of functions which contains the atomic functions from Definition~\ref{def:atomic-functions} and is closed under the combinators from Definition~\ref{def:combinators}.
+\end{definition}
+
+
+We are now ready to state the main result of this paper. 
+\begin{theorem}
+    The following classes of functions are equal\begin{itemize}
+        \item First-order tree-to-tree transductions;
+        \item Restrictions to arity $\emptyset$ of first-order tree functions.
+    \end{itemize}
+\end{theorem}
