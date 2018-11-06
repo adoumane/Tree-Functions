@@ -1,16 +1,6 @@
 \section{First-order rational functions}\label{sec:fo-rational}
 
-\begin{definition}[Fo-rational functions]\ 
-    \begin{enumerate}
-        \item \emph{Characteristic functions.} Let $\varphi(x)$ be a formula of first-order logic, over vocabulary $\sigma$. Define the \emph{characteristic function} of $\varphi(x)$ to be the function
-        \begin{align*}
-            f : \treesz \sigma \to \treesz (2 \otimes \sigma)
-        \end{align*}
-        which adds 0 or 1 to  the label of each node depending on whether the node satisfies $\varphi(x)$.
-        \item \emph{Fo-rational.} An \emph{fo-rational} function is any finite composition of charactersitic functions as defined in the previous item, and tree-to-tree homomorphisms. 
-    \end{enumerate}
-     
-\end{definition}
+
 
 
 \newcommand{\nextmod}{\mathsf X}
@@ -30,15 +20,30 @@
 \begin{theorem} ~\cite[Theorem 2.6]{schlingloff1992expressive} The unary queries in 2-ctl are exactly the unary queries that are definable in first-order logic.
 \end{theorem}
 
-\begin{lemma}
-    Let $\tau,\sigma$ be finite ranked sets. Then for every fo-rational
-    \begin{align*}
-        f : \treesz \tau \to \treesz \sigma
-    \end{align*}
-    there is first-order tree function which agrees with $f$ on elements of arity $\emptyset$. 
+\begin{definition}
+    Let $\varphi(x)$ be a formula of first-order logic, over vocabulary $\sigma$. Define the \emph{characteristic function} of $\varphi(x)$ to be the function
+            \begin{align*}
+                f : \treesz \sigma \to \treesz (2 \otimes \sigma)
+            \end{align*}
+            which adds 0 or 1 to  the label of each node depending on whether the node satisfies $\varphi(x)$.
+\end{definition}
+
+
+\begin{lemma}\label{lem:fo-char} For every first-order definable unary query, its characteristic function is  a first-order tree function.
 \end{lemma}
 \begin{pr}
-    Using the 2-ctl theorem.
+    By the 2-ctl theorem, it is enough to consider the characteristic functions of next, until and since.
     \end{pr}
 
 
+    % \begin{definition}[Fo-rational functions]\ 
+    %     \begin{enumerate}
+    %         \item \emph{Characteristic functions.} Let $\varphi(x)$ be a formula of first-order logic, over vocabulary $\sigma$. Define the \emph{characteristic function} of $\varphi(x)$ to be the function
+    %         \begin{align*}
+    %             f : \treesz \sigma \to \treesz (2 \otimes \sigma)
+    %         \end{align*}
+    %         which adds 0 or 1 to  the label of each node depending on whether the node satisfies $\varphi(x)$.
+    %         \item \emph{Fo-rational.} An \emph{fo-rational} function is any finite composition of charactersitic functions as defined in the previous item, and tree-to-tree homomorphisms. 
+    %     \end{enumerate}
+         
+    % \end{definition}

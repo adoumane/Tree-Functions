@@ -94,14 +94,14 @@
 \end{enumerate}
 \end{definition}
 
-\begin{definition}[First-order tree functions] \label{def:fo-tree-functions} The class of \emph{first-order tree functions} is the smallest class of functions which contains the atomic functions from Definition~\ref{def:atomic-functions} and is closed under the combinators from Definition~\ref{def:combinators}.
+\begin{definition}[First-order tree functions] \label{def:fo-tree-functions} The class of \emph{first-order term functions} is the smallest class of functions which contains the atomic functions from Definition~\ref{def:atomic-functions} and is closed under the combinators from Definition~\ref{def:combinators}. A \emph{first-order tree function} is a first-order function restricted to trees (i.e.~terms of arity $\emptyset$).
 \end{definition}
 
 
 We are now ready to state the main result of this paper. 
-\begin{theorem}
+\begin{theorem}\label{thm:main}
     The following classes of functions are equal\begin{itemize}
         \item First-order tree-to-tree transductions;
-        \item Restrictions to arity $\emptyset$ of first-order tree functions.
+        \item First-order tree functions.
     \end{itemize}
 \end{theorem}

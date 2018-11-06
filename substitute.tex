@@ -1,13 +1,20 @@
-\section{Unfolding}
+\section{Substitute}
+Suppose that $\Sigma$ is a finite ranked alphabet. Define $\hat \Sigma$ to be the set of terms over $\Sigma + 1$ where subject to the following restrictions:
+\mypic{6}
 
-Suppose that $\Sigma$ is a ranked alphabet. For $k \in \Nat$ define $\Sigma^{[k]}$ to be the following ranked alphabet. A letter of arity $X \subseteq \varnames$ in $\Sigma^{[k]}$ consists of:
-\begin{itemize}
-    \item $k$ letters $a_1,\ldots,a_k$ with arities $X_1,\ldots,X_k$.
-    \item an injective function $X_1 + \cdots + X_k \to X \times k$.
-\end{itemize}
-Here is a picture of a letter in $\Sigma^{[2]}$ of arity $\set{x,y,z}$:
-\mypic{2} 
-Define the unfolding operation 
+Define 
 \begin{align*}
-    unfold : \treesz {\Sigma^{[k]}} \to (\treesz \Sigma)^k
+    \mathsf{substitute} : \treesz \hat \Sigma \to (\trees \Sigma)_{\set{x}}
 \end{align*}
+to be the operation  depicted in the following picture
+\mypic{5}
+
+ 
+\begin{lemma}\label{lem:substitute}
+    For every finite ranked set $\Sigma$ and every finite subset $\Gamma \subseteq \hat \Sigma$, the operation
+    \begin{align*}
+        t \in \trees \Gamma \qquad \mapsto \qquad \mathsf{substitute}(t)(\bullet)
+    \end{align*}
+     is a first-order tree function.
+\end{lemma}
+ 

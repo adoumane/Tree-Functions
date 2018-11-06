@@ -1,0 +1,22 @@
+\section{Putting it all together}
+% Define a \emph{fo-translation} to be any function
+% \begin{align*}
+%     \treesz \Sigma \to \treesz \Gamma
+% \end{align*}
+% which is obtained by composing the characteristic functions of several unary fo-queries, and then applying a letter-to-letter renaming. 
+
+
+Theorem~\ref{thm:main} follows immediately from the following lemma, and the results in the previous sections.
+
+\begin{lemma}
+    Every first-order tree-to-tree transduction is a finite composition of functions of the form:
+    \begin{itemize}
+        \item a relabelling;
+        \item a characteristic function as in Lemma~\ref{lem:fo-char};
+        \item unfolding as in Lemma~\ref{lem:unfold};
+        \item substitution as in Lemma~\ref{lem:substitute}
+    \end{itemize}
+\end{lemma}
+\begin{pr}
+    By understanding the semantics of a first-order definable streaming tree transducer.
+\end{pr}

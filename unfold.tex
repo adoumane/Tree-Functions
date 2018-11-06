@@ -1,0 +1,25 @@
+\section{Unfolding}
+
+Suppose that $\Sigma$ is a ranked alphabet. For $k \in \Nat$ define $\Sigma^{[k]}$ to be the following ranked alphabet. A letter of arity $X \subseteq \varnames$ in $\Sigma^{[k]}$ consists of:
+\begin{itemize}
+    \item $k$ letters $a_1,\ldots,a_k$ with arities $X_1,\ldots,X_k$.
+    \item an injective function $X_1 + \cdots + X_k \to X \times k$.
+\end{itemize}
+Here is a picture of a letter in $\Sigma^{[2]}$ of arity $\set{x,y,z}$:
+\mypic{2} 
+For $k \in \set{1,2,\ldots}$ and $i \in \set{1,\ldots,k}$ define 
+ the unfolding operation 
+\begin{align*}
+    \mathsf{unfold}_i : \treesz {\Sigma^{[k]}} \to \treesz \Sigma
+\end{align*}
+as illustrated in the following picture
+\mypic{3}
+ 
+
+\begin{lemma}\label{lem:unfold}
+    For every finite alphabet $\Sigma$, every $k \in \set{1,2,\ldots}$, and every $i \in \set{1,\ldots,k}$ the function
+    \begin{align*}
+        \mathsf{unfold}_i : \treesz {\Sigma^{[k]}} \to (\treesz \Sigma)^k
+    \end{align*}    
+     is a first-order tree function.
+\end{lemma}
