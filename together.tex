@@ -11,7 +11,7 @@ Theorem~\ref{thm:main} follows immediately from the following lemma, and the res
 \begin{lemma}
     Every first-order tree-to-tree transduction is a finite composition of functions of the form:
     \begin{itemize}
-        \item a relabelling;
+        \item a relabelling, i.e.~a function $\trees f : \trees \sigma \to \trees \tau$ for some $f : \sigma \to \tau$ where $\sigma,\tau$ are finite ranked sets;
         \item a characteristic function as in Lemma~\ref{lem:fo-char};
         \item unfolding as in Lemma~\ref{lem:unfold};
         \item substitution as in Lemma~\ref{lem:substitute}
@@ -19,4 +19,4 @@ Theorem~\ref{thm:main} follows immediately from the following lemma, and the res
 \end{lemma}
 \begin{pr}
     By understanding the semantics of a first-order definable streaming tree transducer.
-\end{pr}
+\end{pr}  

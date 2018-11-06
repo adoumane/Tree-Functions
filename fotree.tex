@@ -29,37 +29,46 @@
 \begin{align*}
     (\tau_0 + \tau_1 ) \times \sigma \to (\tau_0 \times \sigma) + (\tau_1 \times \sigma)
 \end{align*}
-\item Tree construction: for every $\sigma$ and every $a \in \sigma$  a function
-\begin{align*}
-    \underbrace{\trees \sigma \otimes \cdots \otimes \trees \sigma}_{\text{arity of $a$ times}} \to \trees \sigma
+\item For every finite ranked set $\sigma$, the bijection 
+ \begin{align*}
+    \trees \sigma  \to  \varnames + \coprod_{a \in \sigma} \underbrace{\trees \sigma \otimes \cdots \otimes \trees \sigma}_{\text{arity of $a$ times}}
 \end{align*}
+and its inverse.
 
-\item Tree deconstruction: for every $\sigma$ and every $a \in \sigma$  a function
-\begin{align*}
-      \trees \sigma \to 1 + \underbrace{\trees \sigma \otimes \cdots \otimes \trees \sigma}_{\text{arity of $a$ times}}
-\end{align*}
-\item The port-order function
-\begin{align*}
-\trees (\sigma + \tau) \to \trees (\sigma + \tau)
-\end{align*}
+% \item Tree construction: for every $\sigma$ and every $a \in \sigma$  a function
+% \begin{align*}
+%     \underbrace{\trees \sigma \otimes \cdots \otimes \trees \sigma}_{\text{arity of $a$ times}} \to \trees \sigma
+% \end{align*}
 
-    \item The block function
+% \item Tree deconstruction: for every $\sigma$ and every $a \in \sigma$  a function
+% \begin{align*}
+%       \trees \sigma \to 1 + \underbrace{\trees \sigma \otimes \cdots \otimes \trees \sigma}_{\text{arity of $a$ times}}
+% \end{align*}
+\item The block function
     \begin{align*}
         \trees (\sigma + \tau) \to \trees (\trees \sigma + \trees \tau)
     \end{align*}
-    \item For every variables $x,y \in \varnames$ (mabye just $x=1$ and $y=2$) the function 
+    \item For every $\sigma$ with one binary and one nullary letter, the comb function 
     \begin{align*}
-        swap : \trees \tau \to \trees \tau
+        \trees \sigma \to \trees \sigma
     \end{align*}
-    \item The yield function
-    \begin{align*}
-        \trees \sigma \to \trees 1
-    \end{align*}
-    \item Some kind of swapping (maybe not needed)
-    \item Let $\circ$ be a ranked set with one element of arity $\emptyset$.
+    
+% \item The port-order function
+% \begin{align*}
+% \trees (\sigma + \tau) \to \trees (\sigma + \tau)
+% \end{align*}
+
+    % \item For every variables $x,y \in \varnames$ (mabye just $x=1$ and $y=2$) the function 
+    % \begin{align*}
+    %     swap : \trees \tau \to \trees \tau
+    % \end{align*}
+    
+    % \item Some kind of swapping (maybe not needed)
+        \item Let $\circ$ be a ranked set with one element of arity $\emptyset$.
     \begin{align*}
         \trees(\sigma+\tau) \to \trees(\sigma+\tau+\circ) \otimes \trees(\sigma+\tau+\circ)
     \end{align*}
+
 \end{enumerate}
 \end{definition}
 
@@ -94,7 +103,11 @@
 \end{enumerate}
 \end{definition}
 
-\begin{definition}[First-order tree functions] \label{def:fo-tree-functions} The class of \emph{first-order term functions} is the smallest class of functions which contains the atomic functions from Definition~\ref{def:atomic-functions} and is closed under the combinators from Definition~\ref{def:combinators}. A \emph{first-order tree function} is a first-order function restricted to trees (i.e.~terms of arity $\emptyset$).
+\begin{definition}[First-order tree functions] \label{def:fo-tree-functions} \ 
+    \begin{itemize}
+        \item The class of \emph{first-order term functions} is the smallest class of functions which contains the atomic functions from Definition~\ref{def:atomic-functions} and is closed under the combinators from Definition~\ref{def:combinators}.
+        \item  A \emph{first-order tree function} is a first-order term function restricted to trees (i.e.~terms of arity $\emptyset$).
+    \end{itemize}    
 \end{definition}
 
 
