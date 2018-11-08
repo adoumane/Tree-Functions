@@ -1,0 +1,104 @@
+\section{The proof strategy}
+
+\subsection{Streaming tree transducers}
+% We use an algebraic syntax for streaming tree transducers. 
+% \emph{Linear polynomials.} Suppose that $\Sigma$ is a finite ranked alphabet.  For a ranked set $X$, define a \emph{polynomial with variables $X$ over $\Sigma$} to be any term in $\trees (\Sigma + X)$. Given such a polynomial $p$, and an arity preserving valuation $v : X \to \trees \Sigma$, we define $p(v)\in \trees \Sigma$ to be the term obtained from $p$ by replacing each variable with its value under $v$. The arity of $p(v)$ is the same as the arity of $p$.  A polynomial is called \emph{linear}, or non-duplicating, if each variable from $X$ is used at most once.
+
+% \begin{definition}
+%     For a ranked set $\Sigma$, define $\aalg_\Sigma$ to be the following multisorted algebra. 
+%     \begin{itemize}
+%         \item The sorts are arities, i.e.~numbers in $\set{0,1,2,\ldots}$, and elements of sort $n$ are $n$-ary terms in $\trees  \Sigma$;
+%         \item The operations are the polynomial operations. 
+%     \end{itemize}
+% \end{definition}
+
+
+
+
+\paragraph*{Register valuations and updates.}   Let $\Sigma, R$ be finite ranked sets, which are called the \emph{output alphabet} and \emph{register names} respectively.  
+A \emph{register valuation} (over $\Sigma$ and $R$) is defined to be any arity-preserving function
+\begin{align*}
+    v : R \to \trees \Sigma
+\end{align*}
+For  $k \in \set{0,1,\ldots}$, a \emph{$k$-ary register update} (over $\Sigma$ and $R$) is defined to be any an arity-preserving function
+\begin{align*}
+    u : R \to \trees ( \Sigma + \underbrace{R + \cdots +R}_{\text{$k$ times}})
+\end{align*}
+A $k$-ary register update can be applied to a $k$-tuple of register valuations, yielding a new register valuation, as illustrated in the following picture:
+\begin{center}
+    picture here
+\end{center}
+A register update is called \emph{copyless} if each copy of a register name is used at most once. More formally,for each $i \in \set{1,\ldots,k}$ and each register name $r \in R$, there is at most one $s \in R$ such that the $i$-th copy of $r$ appears in $u(s)$, and furthermore this copy appears at most once in $u(s)$. 
+
+
+\begin{definition}[Streaming Tree Transducer]
+    A \emph{streaming tree transducer} consists of 
+\begin{itemize}
+    \item Input and output alphabets $\Sigma$ and $\Gamma$, which are finite ranked sets;
+    \item A finite set of states $Q$, not ranked.
+    \item A finite set of regsiters $R$, ranked.
+    \item For each input letter $a \in \Sigma$, of arity $n$, a transition function
+ \begin{align*}
+     Q^n \to Q \times \text{($n$-ary register updates over $\Gamma$ and $R$)}
+ \end{align*}
+ \item An ouptut function
+ \begin{align*}
+     Q \to \treesz(\Gamma + R)
+ \end{align*}
+\end{itemize}
+\end{definition}
+
+For a streaming tree transducer and a tree over the input alphabet, one defines a pair (state, register valuation)
+by induction on the size of the tree, using the transition function, in the natural way. Suppose that $t$  is a tree over the input alphabet, and let $(q,v)$ be the associated states and register  valuations. To obtain the output for the tree $t$, one applies the output function to $q$, yielding a tree over $\Gamma + R$, and then substitutes the register names according to the register valuation $v$. 
+
+
+\begin{definition}[First-order Definable Streaming Tree Transducer]\ 
+    A streaming tree-to-tree transducer is called \emph{first-order definable} if for every state $q$, the set of trees which get evaluated to state $q$ is a first-order definable tree language.
+\end{definition}    
+\begin{theorem}\label{thm:sst}
+    The following classes of tree-to-tree transductions are the same:
+    \begin{itemize}
+        \item  \mso tree-to-tree transductions;
+        \item streaming tree transducers.
+    \end{itemize}
+    First-order  tree-to-tree transductions are equal to first-order definable streaming tree transducers.
+\end{theorem}
+
+The result for \mso, adjusting for a different syntax,  was proved in~\cite[Theorem 4.6]{alur2017streaming}. The result for fo uses the same ideas. A proof is in the appendix.
+\begin{center}
+    do this appendix 
+\end{center}
+
+\subsection{A decomposition}
+
+
+\begin{definition}[Fo translation]
+    An fo-translation is a tree-to-tree transduction
+    \begin{align*}
+      f :   \treesz \Sigma \to \treesz \Gamma
+    \end{align*}
+    which is given by a family of unary queries 
+    \begin{align*}
+        \set{\varphi_a(x)}_{a \in \Gamma}
+    \end{align*}
+    over input alphabet $\Sigma$ such that for every tree $t \in \treesz \Sigma$ and node $x$ in $t$, there is exactly one $a \in \Gamma$ such that $\varphi_a(x)$ is true, and furthermore the arity of $a$ is the same as the arity (number of children) of $x$.  The output tree $f(t)$ is defined by replacing the label of each node $x$ by the unique $a$ which makes $\varphi_a(x)$ true.
+\end{definition}
+% \begin{lemma}
+%     Every first-order streaming tree transducer is equivalent to one where all registers have arity 1.
+% \end{lemma}
+
+
+
+\begin{lemma}\label{lem:decomposition-of-fo-transductions} Every first-order tree function $f$  can be decomposed as
+    \begin{align*}
+        \xymatrix@C=2cm{\treesz \Sigma \ar[d]_f \ar[r]^g& \treesz \overbrace{(\Delta \otimes \cdots \otimes \Delta)}^{\text{$k$ times}} \ar[d]^{\mathsf{unfold}} \\   \treesz \Gamma  & \treesz \Delta \ar[l]^h}
+    \end{align*}
+    where 
+    \begin{itemize}
+        \item $\Delta$ is a finite ranked alphabet and $k \in \set{1,2,\ldots}$;
+        \item $g$ is an fo-translation;
+        \item $h$ is recognised by a first-order streaming transducer which has one register, and that register has arity one.
+    \end{itemize}
+\end{lemma}
+
+By the above lemma, it remains to deal with first-order translations and streaming tree transducers with one unary register. This we do in Sections~\ref{sec:fo-translation} and~\ref{sec:one-register}.

@@ -1,12 +1,11 @@
 
-\section{First-order tree functions}
 
 \begin{definition}[Types] The \emph{atomic types} are:
     \begin{itemize}
         \item every ranked set with finitely many elements;
         \item a ranked set, call it  $1$, which has one element on every arity;
     \end{itemize}
-    A type is any ranked set obtained from atomic types and applying the constructors $+$, $\times$, $\otimes$ and $\trees$.
+    A type is any ranked set obtained from atomic types and applying the constructors $+$, $\times$, $\otimes$ and $\trees$ from Definition~\ref{def:type-constructors}.
 \end{definition}
     
 
@@ -14,26 +13,25 @@
 
 
 \begin{definition}[Atomic functions]\label{def:atomic-functions}
-    Let $\tau,\sigma,\tau_0$ and $\tau_1$ be ranked sets. The following functions are called \emph{atomic functions}. 
+    Let $\Sigma,\Gamma,\Sigma_0,\Sigma_1$ be types, and let $\Sigma_{\text{fin}}$ be a type with finitely many elements. The following functions are called \emph{atomic functions}. 
 \begin{enumerate}
-    \item The unique  function $! : \sigma \to 1$
-    \item Every arity-preserving function with finite domain
+    \item The unique  function $! : \Sigma \to 1$
+    \item Every arity-preserving function
     \begin{align*}
-        f : \tau \to \sigma
+        f : \Sigma_{\text{fin}} \to \Gamma
     \end{align*}
     \item Projection and co-projection
     \begin{align*}
-        \pi_i : \tau_0 \times \tau_1 \to \tau_i \qquad \iota_i : \tau_i \to \tau_0 + \tau_1
+        \pi_i : \Sigma_0 \times \Sigma_1 \to \Sigma_i \qquad \iota_i : \Sigma_i \to \Sigma_0 + \Sigma_1
     \end{align*}
-    \item Distribute
+    \item Distribution of $+$ across $\times$:
 \begin{align*}
-    (\tau_0 + \tau_1 ) \times \sigma \to (\tau_0 \times \sigma) + (\tau_1 \times \sigma)
+    (\Sigma_0 + \Sigma_1 ) \times \Gamma \to (\Sigma_0 \times \Gamma) + (\Sigma_1 \times \Gamma)
 \end{align*}
-\item For every finite ranked set $\sigma$, the bijection 
+\item The two (to and from) canonical bijections between the ranked sets
  \begin{align*}
-    \trees \sigma  \to  \varnames + \coprod_{a \in \sigma} \underbrace{\trees \sigma \otimes \cdots \otimes \trees \sigma}_{\text{arity of $a$ times}}
+    \trees \Sigma \qquad \text{and} \qquad    \set \portletter + \coprod_{a \in \Sigma} \underbrace{\trees \Sigma \otimes \cdots \otimes \trees \Sigma}_{\text{arity of $a$ times}}
 \end{align*}
-and its inverse.
 
 % \item Tree construction: for every $\sigma$ and every $a \in \sigma$  a function
 % \begin{align*}
@@ -46,12 +44,17 @@ and its inverse.
 % \end{align*}
 \item The block function
     \begin{align*}
-        \trees (\sigma + \tau) \to \trees (\trees \sigma + \trees \tau)
+        \trees (\Sigma + \Gamma) \to \trees (\trees \Sigma + \trees \Gamma)
     \end{align*}
-    \item For every $\sigma$ with one binary and one nullary letter, the comb function 
+    \item The  comb function 
     \begin{align*}
-        \trees \sigma \to \trees \sigma
+        \trees 1 \to \trees 1
     \end{align*}
+    \item The unfolding function 
+\begin{align*}
+    \trees (\Sigma \otimes \Sigma) \to (\trees \Sigma) \otimes (\trees \Sigma)
+\end{align*}
+\item Some kind of port swapping
     
 % \item The port-order function
 % \begin{align*}
@@ -64,10 +67,10 @@ and its inverse.
     % \end{align*}
     
     % \item Some kind of swapping (maybe not needed)
-        \item Let $\circ$ be a ranked set with one element of arity $\emptyset$.
-    \begin{align*}
-        \trees(\sigma+\tau) \to \trees(\sigma+\tau+\circ) \otimes \trees(\sigma+\tau+\circ)
-    \end{align*}
+    %     \item Let $\circ$ be a ranked set with one element of arity $\emptyset$.
+    % \begin{align*}
+    %     \trees(\sigma+\tau) \to \trees(\sigma+\tau+\circ) \otimes \trees(\sigma+\tau+\circ)
+    % \end{align*}
 
 \end{enumerate}
 \end{definition}
@@ -75,30 +78,30 @@ and its inverse.
 
 
 \begin{definition}
-    [Combinators] \label{def:combinators} \ 
+     [Combinators] \label{def:combinators} \ 
     \begin{enumerate}
     \item Function composition
     \begin{align*}
-    \frac{f : \tau \to \sigma \quad g : \sigma \to \theta} {g \circ f : \tau \to \theta}
+    \frac{f : \Sigma \to \Gamma \quad g : \Gamma \to \Delta} {g \circ f : \Sigma \to \Delta}
 \end{align*}
 
 \item Lifting functions to trees
 \begin{align*}
-    \frac{f : \tau \to \sigma} {\trees f : \trees \tau \to \trees \sigma}
+    \frac{f : \Sigma \to \Gamma} {\trees f : \trees \Sigma \to \trees \Gamma}
 \end{align*}
 \item Cases
 \begin{align*}
-    \frac{f_0 : \tau_0 \to \sigma \quad f_1 : \tau_1 \to \sigma} {[f_0,f_1] : \tau_0 + \tau_1 \to \sigma}
+    \frac{f_0 : \Sigma_0 \to \Gamma \quad f_1 : \Sigma_1 \to \Gamma} {[f_0,f_1] : \Sigma_0 + \Sigma_1 \to \Gamma}
 \end{align*}
 
 \item Pairing functions
 \begin{align*}
-    \frac{f_0 : \tau \to \sigma_0 \quad f_1 : \tau \to \sigma_1} {(f_0,f_1) : \tau \to \sigma_0 \times \sigma_1}
+    \frac{f_0 : \Sigma \to \Gamma_0 \quad f_1 : \Sigma \to \Gamma_1} {(f_0,f_1) : \Sigma \to \Gamma_0 \times \Gamma_1}
 \end{align*}
 
 \item Tensor product of functions
 \begin{align*}
-    \frac{f_0 : \tau_0 \to \sigma_0 \quad f_1 : \tau_1 \to \sigma_1} {\langle f_0,f_1 \rangle : \tau_0 \otimes \tau_1 \to \sigma_0 \otimes \sigma_1}
+    \frac{f_0 : \Sigma_0 \to \Gamma_0 \quad f_1 : \Sigma_1 \to \Gamma_1} {\langle f_0,f_1 \rangle : \Sigma_0 \otimes \Sigma_1 \to \Gamma_0 \otimes \Gamma_1}
 \end{align*}
 \end{enumerate}
 \end{definition}

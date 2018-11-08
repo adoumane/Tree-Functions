@@ -1,20 +1,20 @@
-\section{Substitute}
-Suppose that $\Sigma$ is a finite ranked alphabet. Define $\hat \Sigma$ to be the set of terms over $\Sigma + 1$ where subject to the following restrictions:
-\mypic{6}
+\section{STTs with one unary register}
+\label{sec:one-register}
 
-Define 
-\begin{align*}
-    \mathsf{substitute} : \treesz \hat \Sigma \to (\trees \Sigma)_{\set{x}}
-\end{align*}
-to be the operation  depicted in the following picture
-\mypic{5}
+% \begin{definition}
+%     Let $\Sigma$ be a ranked set. We can view $\trees \Sigma$ as a multisorted algebra as follows.
+%     \begin{itemize}
+%         \item the sorts are arities;
+%         \item the elements of arity $n$ are $n$-ary terms in $\Sigma$;
+%         \item for every ranked set $X$ and every $t \in \trees (\Sigma+X)$ there is an operation
+%         \begin{align*}
+%             (\trees \Sigma)^X \to \trees \Sigma
+%         \end{align*}
+%     \end{itemize}
+% \end{definition}
+% Define $\aalg_\Sigma$ to be the multisorted algebra where:
 
- 
-\begin{lemma}\label{lem:substitute}
-    For every finite ranked set $\Sigma$ and every finite subset $\Gamma \subseteq \hat \Sigma$, the operation
-    \begin{align*}
-        t \in \trees \Gamma \qquad \mapsto \qquad \mathsf{substitute}(t)(\bullet)
-    \end{align*}
-     is a first-order tree function.
+
+\begin{lemma}\label{lem:one-register}
+    Let $f$ be recognised by a first-order definable streaming tree transducer, which has one register that is unary. Then $f$ is first-order tree function.
 \end{lemma}
- 

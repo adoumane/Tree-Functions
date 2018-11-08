@@ -1,4 +1,4 @@
-\section{First-order rational functions}\label{sec:fo-rational}
+\section{First-order translations}\label{sec:fo-translation}
 
 
 
@@ -17,24 +17,62 @@
          \item \emph{Since.} If $\varphi,\psi$ are  unary queries, then  $\varphi \sincemod \psi$ is also a unary query, which is true in a node $x$ if there exists some $y < x$ such that: (a) $\psi$ is true in $y$; (b) $\varphi$ is true in all nodes $z$ with $y < z < x$.
     \end{enumerate}
 \end{definition}
-\begin{theorem} ~\cite[Theorem 2.6]{schlingloff1992expressive} The unary queries in 2-ctl are exactly the unary queries that are definable in first-order logic.
+\begin{theorem}~\cite[Theorem 2.6]{schlingloff1992expressive} \label{thm:ctl} The unary queries in 2-ctl are exactly the unary queries that are definable in first-order logic.
 \end{theorem}
 
-\begin{definition}
-    Let $\varphi(x)$ be a formula of first-order logic, over vocabulary $\sigma$. Define the \emph{characteristic function} of $\varphi(x)$ to be the function
+\begin{definition}[Characteristic function of a unary query]\label{def:characteristic}
+    Let $\varphi(x)$ be a formula of first-order logic, over alphabet $\Sigma$. Define the \emph{characteristic function} of $\varphi(x)$ to be the function
             \begin{align*}
-                f : \treesz \sigma \to \treesz (2 \otimes \sigma)
+                f : \treesz \Sigma \to \treesz (2 \otimes \Sigma)
             \end{align*}
             which adds 0 or 1 to  the label of each node depending on whether the node satisfies $\varphi(x)$.
 \end{definition}
 
 
-\begin{lemma}\label{lem:fo-char} For every first-order definable unary query, its characteristic function is  a first-order tree function.
+\begin{lemma}\label{lem:fo-translation} Every fo translation is a first-order tree function.
 \end{lemma}
 \begin{pr}
-    By the 2-ctl theorem, it is enough to consider the characteristic functions of next, until and since.
+    Every fo translation can be decomposed as 
+    \begin{align*}
+        f \circ f_1 \circ \cdots \circ f_n
+    \end{align*}
+    where each $f_i$ is the characteristic function of some unary first-order query as in Definition~\ref{def:characteristic}, while $f$ is a relabelling, i.e.~a function
+    \begin{align*}
+        f : \treesz \Sigma \to \treesz \Gamma
+    \end{align*}
+    that replaces each label $a \in \Sigma$ by some fixed label  $f(a) \in \Gamma$. Relabellings are clearly first-order tree functions, and first-order tree functions are closed under composition. It remains to deal with the characteristic functions. By Theorem~\ref{thm:ctl}, the characteristic function of every first-order unary query is a composition of characteristic functions of queries of the form:
+    \begin{align*}
+        \nextmod_i \Gamma \quad \Gamma \untilmod \Delta \quad \Gamma \sincemod \Delta \qquad \text{for finite ranked sets $\Gamma,\Delta \subseteq \Sigma$ and $i \in \set{1,2,\ldots}$} 
+    \end{align*}
+    where $\nextmod_i \Gamma$ is defined as 
+    \begin{align*}
+        \nextmod_i (\bigvee_{a \in \Gamma} a) 
+    \end{align*}
+    and likewise for $\Gamma \untilmod \Delta $ and $ \Gamma \sincemod \Delta$. Therefore it is enough to  deal with these, which we do below, in Lemmas~\ref{lem:nextmod},~\ref{lem:untilmod} and~\ref{lem:sincemod}.
     \end{pr}
 
+
+    \begin{lemma}\label{lem:nextmod}
+        For every finite ranked sets $\Gamma \subseteq \Sigma$ and $i \in \set{1,2,\ldots}$ the characteristic function of $\nextmod_i \Gamma$ is a first-order tree function.
+    \end{lemma}
+\begin{pr}
+    
+\end{pr}
+
+\begin{lemma}\label{lem:untilmod}
+    For every finite ranked sets $\Gamma, \Delta \subseteq \Sigma$  the characteristic function of $\Gamma \untilmod \Delta$ is a first-order tree function.
+\end{lemma}
+\begin{pr}
+
+\end{pr}
+
+
+\begin{lemma}\label{lem:sincemod}
+    For every finite ranked sets $\Gamma, \Delta \subseteq \Sigma$  the characteristic function of $\Gamma \sincemod \Delta$ is a first-order tree function.
+\end{lemma}
+\begin{pr}
+
+\end{pr}
 
     % \begin{definition}[Fo-rational functions]\ 
     %     \begin{enumerate}

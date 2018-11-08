@@ -1,0 +1,26 @@
+\section{Trees and transductions}
+\label{sec:trees-transductions}
+\begin{definition}[Ranked set]
+    A \emph{ranked set} is a set where each element has an associated \emph{arity} in $\set{0,1,2,\ldots}$. An arity preserving map is a function between two ranked sets which maps elements to elements of same arity. 
+\end{definition}
+% When talking about elements of a ranked set, we mean elements of the underlying set.   For a ranked set $A$ and a finite set of variables $X \subseteq \varnames$, we write $\slice A X$ for the elements of $A$ that have arity $X$. 
+
+If $\Sigma$ is a ranked set, then a \emph{tree} over $\Sigma$ is a tree where nodes are labelled by  $\Sigma $ such that the number of a children in a node is equal to the arity of its label.
+In our notion of trees, we assume that the sibling are ordered, i.e.~it makes sense to talk about the first child, second child etc. 
+We write $\treesz \Sigma$ for the (unranked) set of trees over $\Sigma$.
+
+\paragraph*{Logic on trees.} A tree $t$ over $\Sigma$ is viewed as a model, where the universe is the nodes of the tree, and there are the following predicates:
+\begin{itemize}
+    \item $x$ is a descendant of $y$;
+    \item $x$ is an $i$-th child, for every $i \in \set{1,2,\ldots}$;
+    \item $x$ has label $a$, for every $a \in \Sigma$.
+\end{itemize}
+ To express properties of trees, we use first-order logic and monadic second-order logic \mso. A sentence of first-order logic (or \mso) describes a tree language. We also care about unary queries, i.e.~formulas $\varphi(x)$ with one free first-order variable $x$, such a formula describes a property of pairs (tree, distinguished node).
+
+
+\paragraph*{Tree-to-tree transductions.} An \mso tree-to-tree transduction is a function
+\begin{align*}
+ f :    \trees \Sigma \to \trees \Gamma
+\end{align*}
+which  can be described using \mso, see .. We also care -- actually we probably only care -- about the special case of first-order tree-to-tree transductions.
+

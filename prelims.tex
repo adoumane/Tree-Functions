@@ -1,29 +1,22 @@
 
-\section{Ranked sets and operations on them}
-\paragraph*{Ranked sets.}
-Fix a set of variables $\varnames$.
-\begin{definition}[Ranked set]
-    A \emph{ranked set} consists of a set, called the \emph{underlying set}, together with a mapping  which assigns to each element of the underlying set an \emph{arity}, which is a finite subset of the variables $\varnames$. 
-\end{definition}
-When talking about elements of a ranked set, we mean elements of the underlying set.   For a ranked set $A$ and a finite set of variables $X \subseteq \varnames$, we write $\slice A X$ for the elements of $A$ that have arity $X$. 
+\section{First-order tree functions}
+The goal of this paper is to describe the first-order tree-to-tree transductions using a small number of atomic functions and certain closure properties. To describe these functions, we will use not just trees, but more complex types, e.g.~pairs of trees, trees of trees, etc. Also, instead of trees, we use terms, which are trees with ports where other trees can be inserted. 
+The types that we used are described in the following definition. 
 
-\paragraph*{Type constructors.}
-Consider the following operations, which are used to define new ranked sets based on existing ones.
+
+\begin{definition}[Type constructors]\label{def:type-constructors}
+    Consider the following operations, which are used to define new ranked sets based on existing ones.
 \begin{enumerate}
-    \item {\bf Disjoint union $A+B$.} An element of $A+B$ is either an element of $A$ or an element of $B$, with the arities inherited from $A,B$. 
-    \item {\bf Cartesian\footnote{This is the Cartesian product in the category where objects are ranked sets, and morphisms are arity preserving functions.}  product $A \times B$.} An arity $X$ element of $A \otimes B$ is a pair $(a,b)$ such $a \in A$ and $b \in B$ are elements whose arities are both $X$.
-    \item {\bf Tensor product $A \otimes B$.} An arity $X$ element of $A \otimes B$ is a pair $(a,b)$ such $a \in A$ and $b \in B$ are elements whose arities form a partition of $X$. 
-    \item {\bf Trees.} For a ranked set  $A$, define a \emph{term} over $A$ of arity $X$ to be a tree, where nodes are labelled by  $A$ or $X$, and edges are labelled by  variables, such that:
-    \begin{itemize}
-        \item labels from $X$ appear only in the leaves, and each label from $X$ appears exactly once;
-        \item if a node has a label $a \in A$ of arity $Y$, then outgoing edges of the node are labelled by variables from $Y$ in one-to-one fashion. 
-    \end{itemize}
-    Define $\trees A$ to be the ranked set of terms over $A$. Here is a picture: \mypic{1}
+    \item {\bf Disjoint union $\Sigma+\Gamma$.} An element of $\Sigma+\Gamma$ is either an element of $\Sigma$ or an element of $\Gamma$, with the arities inherited from $\Sigma,\Gamma$. 
+    \item {\bf Cartesian\footnote{This is the Cartesian product in the category where objects are ranked sets, and morphisms are arity preserving functions.}  product $\Sigma \times \Gamma$.} An arity $n$ element of $\Sigma \times \Gamma$ is a pair $(a,b)$ such $a \in \Sigma$ and $b \in \Gamma$ are elements whose arities are both $n$.
+    \item {\bf Tensor product $\Sigma \otimes \Gamma$.} An arity $n$ element of $\Sigma \otimes \Gamma$ is a pair $(a,b)$ such $a \in \Sigma$ and $b \in \Gamma$ are elements whose arities sum up to $n$.
+    \item {\bf Terms.} For a ranked set  $\Sigma$, define a \emph{term}\footnote{The terms that we use are special kinds of terms, where each variable is used exactly once, sometimes such terms are called \emph{linear}.} to be tree over $\Sigma + \set \portletter$, where $\portletter$ is a fresh symbol of arity zero. Define $\trees \Sigma$ to be the ranked set of terms over $\Sigma$, where the arity of a term is the number of ports (a port is a node with label $\portletter$).
 \end{enumerate}    
+\end{definition}
 
-An alternative definition of $\trees \sigma$ is that it is the least set which satisfies the following recursion
+
+An alternative definition of $\trees \Sigma$ is that it is the least set which satisfies the following recursion
 \begin{align*}
-    \trees \sigma = \varnames + \coprod_{a \in \sigma} \underbrace{\trees \sigma \otimes \cdots \otimes \trees \sigma}_{\text{arity of $a$ times}}
+    \trees \Sigma = \set \portletter + \coprod_{a \in \sigma} \underbrace{\trees \Sigma \otimes \cdots \otimes \trees \Sigma}_{\text{arity of $a$ times}}
 \end{align*}
 
-We write $\treesz \Sigma$ for the (unranked) set of terms over $\Sigma$ which have arity $\emptyset$. 
