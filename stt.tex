@@ -7,7 +7,7 @@ In this section, we present the proof strategy for the top-down inclusion in The
 The general idea is to convert a first-order tree transduction into an automaton model (streaming tree transducers), and then decomposition results for automata and logic on trees to arrive at the atomic tree functions. We begin by describing the automaton nodel. 
 
 \subsection{Streaming tree transducers}
-The automaton model is based on streaming tree transducers~\cite{alur2017streaming}, although are syntax is based more on notions from universal algebra such as terms and substituion.
+The automaton model is based on streaming tree transducers~\cite{alur2017streaming}, although our syntax is based more on notions from universal algebra such as terms and substituion.
 % We use an algebraic syntax for streaming tree transducers. 
 % \emph{Linear polynomials.} Suppose that $\Sigma$ is a finite ranked alphabet.  For a ranked set $X$, define a \emph{polynomial with variables $X$ over $\Sigma$} to be any term in $\trees (\Sigma + X)$. Given such a polynomial $p$, and an arity preserving valuation $v : X \to \trees \Sigma$, we define $p(v)\in \trees \Sigma$ to be the term obtained from $p$ by replacing each variable with its value under $v$. The arity of $p(v)$ is the same as the arity of $p$.  A polynomial is called \emph{linear}, or non-duplicating, if each variable from $X$ is used at most once.
 
@@ -79,7 +79,7 @@ The result for \mso, adjusting for a different syntax,  was proved in~\cite[Theo
 \end{center}
 
 \subsection{The proof strategy}
-Having defined streaming tree transducers, we can present the proof strategy for the bottom-up inclusion in Theorem~\ref{thm:main}. By Theorem~\ref{thm:sst}, it is enough to show that every first-order streaming tree transducer can be simulated using the atomic functions and combinators. To simulate streaming tree transducers, we use the following persepective on a run of such a transducer: (a)  replace each node in the input tree by an operation in the algebra of register updates; (b) evaluate the resulting term in the algebra of register upates; (c) apply the output function to the resulting register valuation. In the rest of the paper, we show that each of the steps (a), (b) and (c) can be simulated using our atomic funcitons and combinators. 
+Having defined streaming tree transducers, we can present the proof strategy for the top-down inclusion in Theorem~\ref{thm:main}. By Theorem~\ref{thm:sst}, it is enough to show that every first-order streaming tree transducer can be simulated using the atomic functions and combinators. To simulate streaming tree transducers, we use the following persepective on a run of such a transducer: (a)  replace each node in the input tree by an operation in the algebra of register updates; (b) evaluate the resulting term in the algebra of register upates; (c) apply the output function to the resulting register valuation. In the rest of the paper, we show that each of the steps (a), (b) and (c) can be simulated using our atomic funcitons and combinators. 
 
 To formalise the replacement mentioned in step (a), we use the following definition. The definition is more general than needed for step (a), since it allows the new label of a node to depend not just on the node's subtree, but also no the rest of the tree. These sort of two-way dependencies will play a role in Section~\ref{sec:one-register}.
 
@@ -114,4 +114,4 @@ To formalise the replacement mentioned in step (a), we use the following definit
     \end{itemize}
 \end{lemma}
 
-By the above lemma, it remains to deal with first-order translations and streaming tree transducers with one unary register. This we do in Sections~\ref{sec:fo-translation} and~\ref{sec:one-register}, respectively.
+By the above lemma, it remains to deal with first-order translations and streaming tree transducers with one unary register. We do this in Sections~\ref{sec:fo-translation} and~\ref{sec:one-register}, respectively.

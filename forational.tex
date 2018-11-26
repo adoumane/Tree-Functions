@@ -17,17 +17,17 @@ The goal of this seciton is to prove the following lemma.
     \begin{enumerate}
         \item \emph{Boolean.} Boolean combinations of unary queries, including negation;
         \item \emph{Next.} If $\varphi$ is a unary query and $i \in \Nat$, then  $\nextmod_i \varphi$ is also a unary query, which is true in nodes whose $i$-th child satisfies $\varphi$.
-         \item \emph{Until.} If $\varphi,\psi$ are  unary queries, then  $\varphi \untilmod \psi$ is also a unary query, which is true in a node $x$ if there exists some $y > x$ such that: (a) $\psi$ is true in $y$; (b) $\varphi$ is true in all nodes $z$ with $x < z < y$;
-         \item \emph{Since.} If $\varphi,\psi$ are  unary queries, then  $\varphi \sincemod \psi$ is also a unary query, which is true in a node $x$ if there exists some $y < x$ such that: (a) $\psi$ is true in $y$; (b) $\varphi$ is true in all nodes $z$ with $y < z < x$.
+         \item \emph{Until.} If $\varphi,\psi$ are  unary queries, then  $\varphi \untilmod \psi$ is also a unary query, which is true in a node $x$ if there exists some $y \geq x$ such that: (a) $\psi$ is true in $y$; (b) $\varphi$ is true in all nodes $z$ with $x \leq z \leq y$;
+         \item \emph{Since.} If $\varphi,\psi$ are  unary queries, then  $\varphi \sincemod \psi$ is also a unary query, which is true in a node $x$ if there exists some $y \leq x$ such that: (a) $\psi$ is true in $y$; (b) $\varphi$ is true in all nodes $z$ with $y \leq z \leq x$.
     \end{enumerate}
 \end{definition}
 
-The following result was proved in~\cite[Theorem 2.6]{schlingloff1992expressive}, although the proof in that paper looks to simple to me to be correct.
+The following result was proved in~\cite[Theorem 2.6]{schlingloff1992expressive}, although the proof in that paper looks too simple to me to be correct.
 
 \begin{theorem} \label{thm:ctl} The unary queries in 2-ctl are exactly the unary queries that are definable in first-order logic.
 \end{theorem}
 
-The since modality in 2ctl, which implies that the truth value of a formula in a node can depend on the node's ancestors, is crucial to the  expressive completeness result above. A one-way variant, having only next and until is weaker. Without since one cannot express the first-order definable property ``one some root-to-leaf path, the labels alternate between $a$ and $b$'', which can be proved using a similar technique as in~\cite[Theorem 1]{bojanczyk2008common}. 
+The Since modality in 2ctl, which implies that the truth value of a formula in a node can depend on the node's ancestors, is crucial to the  expressive completeness result above. A one-way variant, having only next and until is weaker. Without since one cannot express the first-order definable property ``one some root-to-leaf path, the labels alternate between $a$ and $b$'', which can be proved using a similar technique as in~\cite[Theorem 1]{bojanczyk2008common}. 
 \begin{definition}[Characteristic function of a unary query]\label{def:characteristic}
     Let $\varphi(x)$ be a formula of first-order logic, over alphabet $\Sigma$. Define the \emph{characteristic function} of $\varphi(x)$ to be the function
             \begin{align*}
@@ -65,10 +65,18 @@ It is not hard to see that every fo translation can be decomposed as
 \end{pr}
 
 \begin{lemma}\label{lem:untilmod}
+Let $\chi$ be the characteristic function of $\Gamma \untilmod \Delta$.
     For every finite ranked sets $\Gamma, \Delta \subseteq \Sigma$  the characteristic function of $\Gamma \untilmod \Delta$ is a first-order tree function.
 \end{lemma}
 \begin{pr}
+We start by decomposing our tree into blocks, depending on whether their node labels are in $\Gamma\cup\Delta$ or not. We will show that the restriction of $\chi$ to $\trees (\Gamma\cup\Delta)$, denoted $\chi_1$; and the restriction of $\chi$ to $\trees (\Sigma\setminus(\Gamma\cup\Delta))$, denoted $\chi_2$, are first-order tree functions. The function $\chi$ is obtained by applying $\chi_1$ or $\chi_2$ to each block, depending on its type, then by applying a flattening.
+This decomposition is relevant because the value of a node depends only on the node labels of its block (it is constant equal to $0$ in the case of $\Sigma\setminus(\Gamma\cup\Delta)$ blocks).
 
+The function $\chi_2:\trees (\Sigma\setminus(\Gamma\cup\Delta))\to \trees(2\otimes\Sigma)$ is clearly a first-order tree function, as it assigns uniformly $0$ to every node label. 
+
+To see that $\chi_1:\trees (\Gamma\cup\Delta)\to \trees(2\otimes\Sigma)$ 
+is a first-order function, we start by applying the function $\mathsf{Desc}_\Delta$ from
+Example~\ref{}, which adds $1$ to the node labels if they have a descendent in $\Delta$ and adds $0$ otherwise. Then we decompose the obtained tree into blocks, depending on whether their node labels contain $0$ or not. For the block of nodes having $0$ in their label, their value w.r.t. $\Gamma\untilmod \Delta$ is indeed $0$, since they do not have a descendent in $\Delta$. To these blocks we apply the identity function. For the blocks that received $1$, we assign $1$ to the nodes whose labels are in  $\Gamma$ and $0$ to the others (whose labels are in $\Delta\setminus\Gamma$). Indeed, inside these blocks, a node $n$ labeled from $\Gamma$ has by construction a descendent in $\Delta$. If we consider the nearest such descendent $m$, the path between $n$ and $m$  is labeled in $\Gamma$ (since we are in blocks having only $\Gamma\cup\Delta$ labels). Thus $n$ satisfies $\Gamma\untilmod\Delta$. Nodes labeled in $\Delta\setminus\Gamma$ have obviously value $0$.      
 \end{pr}
 
 
@@ -76,7 +84,7 @@ It is not hard to see that every fo translation can be decomposed as
     For every finite ranked sets $\Gamma, \Delta \subseteq \Sigma$  the characteristic function of $\Gamma \sincemod \Delta$ is a first-order tree function.
 \end{lemma}
 \begin{pr}
-
+The same proof as above, one only needs to replace the use of $\mathsf{Desc}_\Delta$ by that of $\mathsf{Anc}_\Delta$.
 \end{pr}
 
     % \begin{definition}[Fo-rational functions]\ 

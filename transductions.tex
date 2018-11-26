@@ -30,7 +30,7 @@ for finite ranked sets $\Sigma, \Gamma$. We are interseted in languages, queries
 Technically speaking, there are infinitely many ``$i$-th child'' predicates, but only the ones where $i$ is at most the maximal arity of $\Sigma$ are going to be interpreted in a nonempty way.
 
  To express properties of trees, we use first-order logic and monadic second-order logic \mso. For definitions of these logics, see~\cite[Section 3]{thomas1997languages}.
- A sentence of first-order logic (or \mso) describes a tree language, i.e.~a set of trees over a fixed alphabet, while a formula with $n$ free first-order variables describes a unary query.  One could also consider queries with free set variables; these are not used in this paper.
+ A sentence of first-order logic (or \mso) describes a tree language, i.e.~a set of trees over a fixed alphabet, while a formula with $n$ free first-order variables describes an $n$-unary query.  One could also consider queries with free set variables; these are not used in this paper.
 
 The following definition shows how to describe  a tree-to-tree function using logic. A \emph{relational vocabulary} is a set of relation names, each one with associated arity -- formally speaking this is the same thing as a ranked set. 
 
@@ -40,7 +40,7 @@ The following definition shows how to describe  a tree-to-tree function using lo
     \item Input and output relational vocabularies $\tau,\sigma$;
     \item A copying constant $k \in \set{1,2,\ldots}$;
     \item For every $i \in \set{1,\ldots,k}$ a \emph{universe formula} $\varphi_i(x)$ over $\sigma$
-    \item For every relation name $R \in \tau$ of arity $n$, and every tuple $\bar i \in \set{1,\ldots,k}^n$, a formula $\varphi_R^{\bar i}(x_1,\ldots,x_n)$ over $\sigma$
+    \item For every relation name $R \in \sigma$ of arity $n$, and every tuple $\bar i \in \set{1,\ldots,k}^n$, a first-order formula $\varphi_R^{\bar i}(x_1,\ldots,x_n)$ over $\tau$
 \end{enumerate}
 \end{definition}
 
@@ -57,6 +57,6 @@ We care about first-order transductions that input and output trees. By abuse of
     \begin{align*}
         f : \treesz \Sigma \to \treesz \Gamma
     \end{align*}
-    is  a first-order transduction if there is a first-order transduction which gives the same result,, assuming the trees are encoded as models as in Defintion~\ref{def:tree-model}.   
+    is  a first-order transduction if there is a first-order transduction which gives the same result, assuming the trees are encoded as models as in Defintion~\ref{def:tree-model}.   
 
-    We will also talk about \mso tree-to-tree transductions, which are defined the same way, except that the formulas are allowed to use \mso. 
+    We will also talk about \mso tree-to-tree transductions, which are defined the same way, except that the formulas of item 4 are allowed to use \mso. 

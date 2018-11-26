@@ -50,7 +50,7 @@ In fact, the term constructor can be viewed as a least fixpoint of tensor produc
     \begin{align*}
         f : \Sigma \to \Gamma
     \end{align*}
-    \item Projection and co-projection
+    \item Projection and co-projection:
     \begin{align*}
         \pi_i : \Sigma_0 \times \Sigma_1 \to \Sigma_i \qquad \iota_i : \Sigma_i \to \Sigma_0 + \Sigma_1
     \end{align*}
@@ -63,7 +63,7 @@ In fact, the term constructor can be viewed as a least fixpoint of tensor produc
     \trees \Sigma \qquad \text{and} \qquad    \set \portletter + \coprod_{a \in \Sigma} \underbrace{\trees \Sigma \otimes \cdots \otimes \trees \Sigma}_{\text{arity of $a$ times}}
 \end{align*}
 
-\item Flattening
+\item Flattening:
 \begin{align*}
     \trees \trees \Sigma \to \trees \Sigma
 \end{align*}
@@ -115,12 +115,12 @@ The atomic functions can be combined into more complex functions using the follo
 \begin{definition}
      [Combinators] \label{def:combinators} \ 
     \begin{enumerate}
-    \item Function composition
+    \item Function composition:
     \begin{align*}
     \frac{f : \Sigma \to \Gamma \quad g : \Gamma \to \Delta} {g \circ f : \Sigma \to \Delta}
 \end{align*}
 
-\item Lifting functions to trees
+\item Lifting functions to trees:
 \begin{align*}
     \frac{f : \Sigma \to \Gamma} {\trees f : \trees \Sigma \to \trees \Gamma}
 \end{align*}
@@ -129,12 +129,12 @@ The atomic functions can be combined into more complex functions using the follo
     \frac{f_0 : \Sigma_0 \to \Gamma \quad f_1 : \Sigma_1 \to \Gamma} {[f_0,f_1] : \Sigma_0 + \Sigma_1 \to \Gamma}
 \end{align*}
 
-\item Pairing functions
+\item Pairing functions:
 \begin{align*}
     \frac{f_0 : \Sigma \to \Gamma_0 \quad f_1 : \Sigma \to \Gamma_1} {(f_0,f_1) : \Sigma \to \Gamma_0 \times \Gamma_1}
 \end{align*}
 
-\item Tensor product of functions
+\item Tensor product of functions:
 \begin{align*}
     \frac{f_0 : \Sigma_0 \to \Gamma_0 \quad f_1 : \Sigma_1 \to \Gamma_1} {\langle f_0,f_1 \rangle : \Sigma_0 \otimes \Sigma_1 \to \Gamma_0 \otimes \Gamma_1}
 \end{align*}
@@ -150,6 +150,40 @@ We are now ready to define the first-order tree functions, which are the topic o
     \end{itemize}    
 \end{definition}
 
+%\begin{remark}
+Note that first-order term functions are arity preserving. 
+%\end{remark}
+
+\begin{example}[Derivable combinators]
+\begin{itemize}
+\item The combinator which applies $f$ to the root and $g$ to the rest of the tree:
+\begin{align*}
+    \frac{f : \Sigma \to \Gamma_0 \quad g : \Sigma \to \Gamma_1}
+     {\mathsf{root}_{f,g} : \trees\Sigma \to \trees(\Gamma_0 + \Gamma_1)}
+\end{align*}
+\item The combinator which applies $f$ to the leaves and $g$ to the rest of the tree:
+\begin{align*}
+    \frac{f : \Sigma \to \Gamma_0 \quad g : \Sigma \to \Gamma_1}
+     {\mathsf{leaf}_{f,g} : \trees\Sigma \to \trees(\Gamma_0 + \Gamma_1)}
+\end{align*}
+\end{itemize}
+\end{example}
+
+\begin{example}[Derivable functions]
+\begin{itemize}
+\item The function $\mathsf{Desc}_\Gamma: \trees \Sigma \to \trees (2\otimes\Sigma)$ which 
+adds $1$ to the label of each node depending on whether it has a descendent in $\Gamma$.
+\item The function $\mathsf{Anc}_\Gamma: \trees \Sigma \to \trees (2\otimes\Sigma)$ which 
+adds $1$ to the label of each node depending on whether it has an ancestor in $\Gamma$.
+\end{itemize}
+\end{example}
+
+\begin{example}[Derivable functions]
+The function $Erase_a:\trees \Sigma\to\trees \Sigma$, where $a$ is a unary symbol of $\Sigma$, which  erases all the occurrences of $a$ in a tree, if the later contains another symbol than $a$, otherwise, it returs $a$, is a first-order tree function.  
+\end{example}
+
+\begin{example}[Depth-first traversal]
+\end{example}
 
 We are now ready to state the main result of this paper. 
 \begin{theorem}\label{thm:main}
