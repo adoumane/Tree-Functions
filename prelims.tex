@@ -8,7 +8,7 @@ The goal of this paper is to describe the first-order tree-to-tree functions as 
 
 
 \begin{definition}[Types]\label{def:types}
-    Define a \emph{type} to be any ranked set which can be obtained from the atomic types by applying the type constructors, as described below.
+    Define a \emph{type} to be any ranked set which can be obtained from the atomic types by applying the type constructors, as described below. We denote by $\Tt$ the set of all types. 
     \begin{itemize}
         \item {\bf Atomic types.} 
            \begin{enumerate}
@@ -58,25 +58,18 @@ In fact, the term constructor can be viewed as a least fixpoint of tensor produc
 \begin{align*}
     (\Sigma_0 + \Sigma_1 ) \times \Gamma \to (\Sigma_0 \times \Gamma) + (\Sigma_1 \times \Gamma)
 \end{align*}
+\item Distribution of $+$ across $\otimes$:
+\begin{align*}
+    (\Sigma_0 + \Sigma_1 ) \otimes \Gamma \to (\Sigma_0 \otimes \Gamma) + (\Sigma_1 \otimes \Gamma)
+\end{align*}
 \item Assuming that $\Sigma$ is finite, the two canonical bijections (one in each direction) between the ranked sets:
  \begin{align*}
     \trees \Sigma \qquad \text{and} \qquad    \set \portletter + \coprod_{a \in \Sigma} \underbrace{\trees \Sigma \otimes \cdots \otimes \trees \Sigma}_{\text{arity of $a$ times}}
 \end{align*}
-
 \item Flattening:
 \begin{align*}
     \trees \trees \Sigma \to \trees \Sigma
 \end{align*}
-
-% \item Tree construction: for every $\sigma$ and every $a \in \sigma$  a function
-% \begin{align*}
-%     \underbrace{\trees \sigma \otimes \cdots \otimes \trees \sigma}_{\text{arity of $a$ times}} \to \trees \sigma
-% \end{align*}
-
-% \item Tree deconstruction: for every $\sigma$ and every $a \in \sigma$  a function
-% \begin{align*}
-%       \trees \sigma \to 1 + \underbrace{\trees \sigma \otimes \cdots \otimes \trees \sigma}_{\text{arity of $a$ times}}
-% \end{align*}
 \item Blocking
     \begin{align*}
         \trees (\Sigma + \Gamma) \to \trees (\trees \Sigma + \trees \Gamma)
@@ -85,28 +78,16 @@ In fact, the term constructor can be viewed as a least fixpoint of tensor produc
     \begin{align*}
         \trees 1 \to \trees 1
     \end{align*}
-    \item Unfolding 
+    \item Unfolding: 
 \begin{align*}
-    \trees (\Sigma \otimes \Sigma) \to (\trees \Sigma) \otimes (\trees \Sigma)
+    \trees (\Sigma \otimes \Gamma) \to (\trees \Sigma) \otimes (\trees \Gamma)
 \end{align*}
+    \item Unit:
+\begin{align*}
+    \Sigma  \to \trees \Sigma
+\end{align*}
+
 \item Some kind of port swapping
-    
-% \item The port-order function
-% \begin{align*}
-% \trees (\sigma + \tau) \to \trees (\sigma + \tau)
-% \end{align*}
-
-    % \item For every variables $x,y \in \varnames$ (mabye just $x=1$ and $y=2$) the function 
-    % \begin{align*}
-    %     swap : \trees \tau \to \trees \tau
-    % \end{align*}
-    
-    % \item Some kind of swapping (maybe not needed)
-    %     \item Let $\circ$ be a ranked set with one element of arity $\emptyset$.
-    % \begin{align*}
-    %     \trees(\sigma+\tau) \to \trees(\sigma+\tau+\circ) \otimes \trees(\sigma+\tau+\circ)
-    % \end{align*}
-
 \end{enumerate}
 \end{definition}
 
@@ -149,12 +130,38 @@ We are now ready to define the first-order tree functions, which are the topic o
         \item  A \emph{first-order tree function} is any first-order term function restricted to trees, i.e.~terms of arity zero.
     \end{itemize}    
 \end{definition}
-
 %\begin{remark}
 Note that first-order term functions are arity preserving. 
 %\end{remark}
 
-\begin{example}[Derivable combinators]
+To illustrate these first-order tree functions, we present a series of examples, many of which will be useful later.
+
+\bigskip
+\noindent \begin{example}[Identity] For every type $\Sigma$, the identity function $x\in\Sigma\mapsto x\in\Sigma$ is a first-order tree function. This is achieved by induction on the types: the identity function over a finite set of elements is first-order since its domain is finite, and the identity function over $1$ is the first-order function $!$. For $\Sigma$ and $\Gamma$ in $\Tt$ , the identity
+function over $\Sigma+\Gamma$ is the disjoint union of the co-projections $\Sigma \to \Sigma + \Gamma$ and $\Gamma \to \Sigma + \Gamma$. The
+identity function over $\Sigma \times \Gamma$ is the pairing of the projections $\Sigma \times \Gamma \to \Sigma$ and $\Sigma \times \Gamma \to \Gamma$. The
+identity function over $\Sigma \otimes \Gamma$ is the tensor product of the identity over $\Sigma$ and the identity over $\Gamma$. Finally,
+the identity function over $\trees\Sigma$ is constructed from the identity function over $\Sigma$ using the combinator $\trees$.
+\end{example}
+
+\bigskip
+\noindent\begin{example}[If then else]  Let $g:\Sigma\to\Delta$ and $h:\Gamma\to\Delta$ be two first-order tree functions. Consider the the function:
+ $$f:\trees(\Sigma+\Gamma)\to\trees\Delta$$
+ which applies the function $g$ to the $\Sigma$ nodes of the input and the function $h$ to the $\Gamma$ ones. Let us show that this is a first-order tree function. First, we apply a block to get 
+ a tree in $\trees(\trees\Sigma+\trees\Gamma)$. We lift both $g$ and $h$ using the combinator $\trees$ to get the functions $\trees g:\trees \Sigma\to\trees \Delta$ and $\trees h:\trees \Gamma\to\trees \Delta$, then we combine them using the case combinator. We lift the obtained function using the combinator $\trees$, we get then a function of type $\trees(\trees \Sigma+\trees\Gamma)\to\trees\trees\Delta$. Finally, the desired function $f$ is obtained by appliying a flattening. 
+\end{example}
+
+
+\bigskip
+\noindent\begin{example}[Filter] Let $\Gamma, \Sigma\in\Tt$, where $\Sigma$ is a finite set of unary symbols. Consider the function:
+$$ f:\trees (\Sigma+\Gamma)\to\trees \Sigma$$
+which erases the elements of $\Gamma$ from the inupt tree. This function is well defined since erasing unary symbols does not not break the tree structure of the input. 
+Let us explain why this is a first-order list function. 
+Consider the function unit from $\Sigma$ to $\trees\Sigma$ and the constant function $\Gamma\to\trees\Sigma$ which associates to every element of $\Gamma$ the empty tree. The later is a first order tree function since its domain is finite. Using the if then else construction of Example~\ref{}, we get a tree in $\trees\trees\Sigma$. We conclude by applying a flattening. 
+\end{example}
+
+\bigskip
+\noindent  \begin{example}[Root and leaves]
 \begin{itemize}
 \item The combinator which applies $f$ to the root and $g$ to the rest of the tree:
 \begin{align*}
@@ -169,7 +176,8 @@ Note that first-order term functions are arity preserving.
 \end{itemize}
 \end{example}
 
-\begin{example}[Derivable functions]
+\bigskip
+\noindent\begin{example}[Descendent and ancestors]
 \begin{itemize}
 \item The function $\mathsf{Desc}_\Gamma: \trees \Sigma \to \trees (2\otimes\Sigma)$ which 
 adds $1$ to the label of each node depending on whether it has a descendent in $\Gamma$.
@@ -178,11 +186,9 @@ adds $1$ to the label of each node depending on whether it has an ancestor in $\
 \end{itemize}
 \end{example}
 
-\begin{example}[Derivable functions]
-The function $Erase_a:\trees \Sigma\to\trees \Sigma$, where $a$ is a unary symbol of $\Sigma$, which  erases all the occurrences of $a$ in a tree, if the later contains another symbol than $a$, otherwise, it returs $a$, is a first-order tree function.  
-\end{example}
 
-\begin{example}[Depth-first traversal]
+\bigskip
+\noindent\begin{example}[Depth-first traversal]
 \end{example}
 
 We are now ready to state the main result of this paper. 

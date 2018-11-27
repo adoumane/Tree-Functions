@@ -58,7 +58,7 @@ Let us show that $Subst$ is a first-order tree function. We will show that the c
  
 \medskip
 \noindent\textbf{Step 1:} We have noticed that the tree underlying a symbol of $\Uu$ is of arity $1$. To bridge this mismatch beteen the arity of a symbol and its underlying tree, we apply the following
-rank-preverving function:
+rank-preverving function, where $@$ is a binary symbol and $\bullet$ the nullary symbol used in the definition of the function $Subst$:
  \begin{align*}
   Match\colon \Uu &\to \trees(\Gamma+\bullet+k@)\\
   u &\mapsto \underline{u}[\bullet][@/r].
