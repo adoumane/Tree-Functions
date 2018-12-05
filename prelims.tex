@@ -13,7 +13,7 @@ The goal of this paper is to describe the first-order tree-to-tree functions as 
         \item {\bf Atomic types.} 
            \begin{enumerate}
             \item every ranked set with finitely many elements;
-            \item a ranked set, call it  $1$, which has one element on every arity;
+            \item a ranked set, call it  $\llone$, which has one element on every arity;
         \end{enumerate}
     \item {\bf Type constructors.} 
      \begin{enumerate}
@@ -37,6 +37,13 @@ In fact, the term constructor can be viewed as a least fixpoint of tensor produc
     \trees \Sigma \quad \simeq \quad  \set \portletter + \coprod_{a \in \Sigma} \underbrace{\trees \Sigma \otimes \cdots \otimes \trees \Sigma}_{\text{arity of $a$ times}}
 \end{align*}
 
+\begin{example}[The type $n$, $n\in\mathbb{N}$]
+The ranked set whose underlying set is $\{0,\dots,n\}$ and the arity of each symbol is $0$ is a type. We denote it by $0$. 
+\end{example}
+
+\begin{example}[The type $\llzero$]
+$\llzero=\llone\otimes 0$
+\end{example}
 
 \paragraph*{Atomic functions.} Having described the types, we now describe the atomic functions that transform elements of these types.
 
@@ -45,7 +52,7 @@ In fact, the term constructor can be viewed as a least fixpoint of tensor produc
 
 \begin{definition}[Atomic functions]\label{def:atomic-functions} The \emph{atomic functions} are the following functions (for every types $\Sigma,\Gamma,\Sigma_0,\Sigma_1$): 
 \begin{enumerate}
-    \item The unique arity-preserving function $! : \Sigma \to 1$
+    \item The unique arity-preserving function $! : \Sigma \to \llone$
     \item Every arity-preserving function when the domain $\Sigma$ is finite:
     \begin{align*}
         f : \Sigma \to \Gamma
@@ -76,7 +83,7 @@ In fact, the term constructor can be viewed as a least fixpoint of tensor produc
     \end{align*}
     \item Comb
     \begin{align*}
-        \trees 1 \to \trees 1
+        \trees \llone \to \trees \llone
     \end{align*}
     \item Unfolding: 
 \begin{align*}
@@ -90,6 +97,7 @@ In fact, the term constructor can be viewed as a least fixpoint of tensor produc
 \item Some kind of port swapping
 \end{enumerate}
 \end{definition}
+
 
 
 The atomic functions can be combined into more complex functions using the following combinators.
@@ -137,28 +145,107 @@ Note that first-order term functions are arity preserving.
 To illustrate these first-order tree functions, we present a series of examples, many of which will be useful later.
 
 \bigskip
-\noindent \begin{example}[Identity] For every type $\Sigma$, the identity function $x\in\Sigma\mapsto x\in\Sigma$ is a first-order tree function. This is achieved by induction on the types: the identity function over a finite set of elements is first-order since its domain is finite, and the identity function over $1$ is the first-order function $!$. For $\Sigma$ and $\Gamma$ in $\Tt$ , the identity
+\noindent \begin{example}[Identity] For every type $\Sigma$, the identity function $x\in\Sigma\mapsto x\in\Sigma$ is a first-order tree function. This is achieved by induction on the types: the identity function over a finite set of elements is first-order since its domain is finite, and the identity function over $\llone$ is the first-order function $!$. For $\Sigma$ and $\Gamma$ in $\Tt$ , the identity
 function over $\Sigma+\Gamma$ is the disjoint union of the co-projections $\Sigma \to \Sigma + \Gamma$ and $\Gamma \to \Sigma + \Gamma$. The
 identity function over $\Sigma \times \Gamma$ is the pairing of the projections $\Sigma \times \Gamma \to \Sigma$ and $\Sigma \times \Gamma \to \Gamma$. The
 identity function over $\Sigma \otimes \Gamma$ is the tensor product of the identity over $\Sigma$ and the identity over $\Gamma$. Finally,
 the identity function over $\trees\Sigma$ is constructed from the identity function over $\Sigma$ using the combinator $\trees$.
 \end{example}
 
-\bigskip
-\noindent\begin{example}[If then else]  Let $g:\Sigma\to\Delta$ and $h:\Gamma\to\Delta$ be two first-order tree functions. Consider the the function:
- $$f:\trees(\Sigma+\Gamma)\to\trees\Delta$$
- which applies the function $g$ to the $\Sigma$ nodes of the input and the function $h$ to the $\Gamma$ ones. Let us show that this is a first-order tree function. First, we apply a block to get 
- a tree in $\trees(\trees\Sigma+\trees\Gamma)$. We lift both $g$ and $h$ using the combinator $\trees$ to get the functions $\trees g:\trees \Sigma\to\trees \Delta$ and $\trees h:\trees \Gamma\to\trees \Delta$, then we combine them using the case combinator. We lift the obtained function using the combinator $\trees$, we get then a function of type $\trees(\trees \Sigma+\trees\Gamma)\to\trees\trees\Delta$. Finally, the desired function $f$ is obtained by appliying a flattening. 
-\end{example}
-
 
 \bigskip
-\noindent\begin{example}[Filter] Let $\Gamma, \Sigma\in\Tt$, where $\Sigma$ is a finite set of unary symbols. Consider the function:
+\noindent\begin{example}[Filter] Let $\Gamma, \Sigma\in\Tt$, where $\Gamma$ is a finite set of unary symbols. Consider the function:
 $$ f:\trees (\Sigma+\Gamma)\to\trees \Sigma$$
-which erases the elements of $\Gamma$ from the inupt tree. This function is well defined since erasing unary symbols does not not break the tree structure of the input. 
+which erases the elements of $\Gamma$ from the inupt tree. This function is well defined since erasing unary symbols does not break the tree structure of the input. 
 Let us explain why this is a first-order list function. 
-Consider the function unit from $\Sigma$ to $\trees\Sigma$ and the constant function $\Gamma\to\trees\Sigma$ which associates to every element of $\Gamma$ the empty tree. The later is a first order tree function since its domain is finite. Using the if then else construction of Example~\ref{}, we get a tree in $\trees\trees\Sigma$. We conclude by applying a flattening. 
+Consider the function $unit:\Sigma\to\trees\Sigma$ and the constant function $Empty:\Gamma\to\trees\Sigma$ which associates to every element of $\Gamma$ the empty tree. The function $Empty$ is a first order tree function since its domain is finite. Using the cases combinator, we get a tree in $\trees\trees\Sigma$, which we transform into a tree in $\trees \Sigma$ using flattening.
 \end{example}
+
+\bigskip
+\noindent \begin{example}[If then else] Suppose that $f : \Sigma \to \llzero+\llone$ and $g_0, g_1 : \Sigma \to\Gamma$ are first-order tree functions. Then the function:
+ \begin{align*}
+  g\colon \Sigma &\to \Gamma \\
+  x &\mapsto g_0(x)  \text{ if } f(x)\in\llzero\\
+  x &\mapsto g_1(x)  \text{ if } f(x)\in\llone.
+\end{align*}
+ is also a first-order tree function. This is done as follows. On input
+$x\in\Sigma$, we first apply the pairing of f and the identity function, yielding a result:
+$$ (f(x),x)\in(\llzero+\llone)\times\Sigma$$
+Next we apply the function distribute, transforming the type into:
+$$ \llzero\times\Sigma+\llone\times\Sigma$$
+To this result we apply the disjoint union $h_0 + h_1$ where $h_0:\llzero\times\Sigma\to \Gamma$ and
+$h_01:\llone\times\Sigma\to \Gamma$ are defined by $h_i=\pi_2(id_i,g_i)$, where $id_0$ and $id_1$ are the identity function on $\llzero$ and $\llone$ respectively, yielding the desired result.
+\end{example}
+
+\bigskip
+\noindent \begin{example}[Pattern matching]
+\end{example}
+
+\bigskip
+\noindent \begin{example}[Characteristic function of a finite type]
+Let $\Sigma, \Delta\in \Tt$ and suppose that $\Sigma$ is finite. 
+The order-preserving function $\chi_\Sigma:\Delta\to \llzero+\llone$ which satisfies $\chi_\Sigma(s)\in \llone$ if and only if $s\in \Sigma$ is a first-order tree function. 
+\end{example}
+
+\bigskip
+\noindent \begin{example}[Siblings and parent information]
+Let $\Gamma$ be a finite type, and $n$ the maximal arity of its symbols. We set $(\Gamma\cup\bot)^{\leq n}$ to be the ranked set of \emph{nullary} symbols, whose elements are lists of lenght at most $n$ of $\Gamma$ symbols together with a symbol $\bot$.
+
+\medskip
+Consider the function:
+$$ Sib: \trees \Gamma \to \trees (\Gamma\otimes (\Gamma\cup\bot)^{\leq n})$$
+which adds to every node of a tree in $\trees \Sigma$ the list of its siblings (the missing siblings are witnessed by $\bot$ in the list).
+
+% from  $(\Gamma\cup\bot)^{\leq n}$, whose lenght is the arity of the node, and such that the $i^{th}$ element of the  list is the symbol of its $i^{th}$ sibling if it has one, otherwise it is $\bot$.
+Let us explain why $Sib$ is a first-order tree function. 
+\begin{enumerate}
+\item For every symbol $a\in \Gamma$, consider the unary symbols $a_\#$ and $a_\flat$.
+We set $\Gamma_\#=\{a_\#\mid a\in\Gamma\}$ and $\Gamma_\flat=\{a_\flat\mid a\in\Gamma\}$.
+Let $g$ be the following function:
+ \begin{align*}
+  g\colon \Gamma &\to \trees(\Gamma+\Gamma_\#+\Gamma_\flat)\\
+  a &\mapsto a_\#[a[a_\flat,\dots,a_\flat]].
+\end{align*}
+The action of $g$ on a $\Gamma$ symbol looks like this:
+\begin{center}
+Picture
+\end{center}
+\item We lift $g$ to the trees of $\trees \Gamma$ using the combinator $\trees$, then apply a flattenig. After this operation, a tree of $\trees\Gamma$ is transformed this way:
+\begin{center}
+Picture
+\end{center}
+\item We apply a block, to separate the symbols of $\Gamma$ form the others, we get then a tree in $\trees(\trees\Gamma+\trees(\Gamma_\#+\Gamma_\flat))$. Those trees look like this:
+\begin{center}
+Picture
+\end{center}
+\item Consider the function $h:\trees(\Gamma_\#+\Gamma_\flat)\to \trees(\Gamma_\#+\Gamma_\flat)$ which transforms the trees of the following shape as follows:
+\begin{center}
+Picture
+\end{center}
+and leaves the others unchanged. 
+The function $h$ is a first-order tree function because \todo{pattern matching on a finite set}.
+
+\item To the trees of $\trees(\trees\Gamma+\trees(\Gamma_\#+\Gamma_\flat))$ we apply the identity to the blocks $\trees \Gamma$ and $h$ to the others, then we apply a flettening to get again trees of the form:
+\begin{center}
+Picture
+\end{center} 
+\item We apply again a block, to separate the symbols of $\Gamma_\flat$ form the others. We get blocks where each $\Gamma$ symbol is in the same block with its siblings (marked with $\#$):
+\begin{center}
+Picture
+\end{center}
+\item Consider the function $k:\trees(\Gamma_\#+\Gamma_\flat)\to (\Gamma\cup\bot)^{\leq n}$ which transforms every tree of the following shape as follows:
+\begin{center}
+Picture
+\end{center}
+and leaves the other unchanged. We apply the function $k$ to the $\trees(\Gamma_\#+\Gamma_\flat)$
+blocks and the identity to the others. The we apply a flattening and erase the symbols from $\Gamma_\#$. Doing so we get the desired function.
+\end{enumerate}
+\medskip
+
+Now consider the function $$Par:\trees\Gamma\to \trees (\Gamma\times \Gamma^{\leq 1})$$ which adds to every node of a tree in $\trees \Sigma$ the list (of lenght at most 1) containing the symbol of its parent.
+\end{example}
+
+
 
 \bigskip
 \noindent  \begin{example}[Root and leaves]
