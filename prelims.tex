@@ -22,8 +22,7 @@ The goal of this paper is to describe the first-order tree-to-tree functions as 
         \item {\bf Tensor product $\Sigma \otimes \Gamma$.} An  $n$-ary element of $\Sigma \times \Gamma$ is a pair of elements from $\Sigma, \Gamma$, respectively, whose arities  sum up to $n$.
         \item {\bf Terms.} For a ranked set  $\Sigma$, define a \emph{term}\footnote{The terms that we use are special kinds of terms, where each variable is used exactly once.} to be tree over the alphabet $\Sigma + \set \portletter$, where $\portletter$ is a fresh symbol of arity zero. Define $\trees \Sigma$ to be the ranked set of terms over $\Sigma$, where the arity of a term is the number of labels $\portletter$.
     \end{enumerate}  
-    \end{itemize}
-  
+    \end{itemize}  
 \end{definition}
 
 \newcommand{\tensorpair}[2]{\langle #1, #2 \rangle}
@@ -210,11 +209,11 @@ The action of $g$ on a $\Gamma$ symbol looks like this:
 \begin{center}
 Picture
 \end{center}
-\item We lift $g$ to the trees of $\trees \Gamma$ using the combinator $\trees$, then apply a flattenig. After this operation, a tree of $\trees\Gamma$ is transformed this way:
+\item We lift $g$ to the trees of $\trees \Gamma$ using the combinator $\trees$, then apply a flattenig. After this operation, a tree in $\trees\Gamma$ is transformed to a tree in $\trees(\Gamma+\Gamma_\#+\Gamma_\flat)$ this way:
 \begin{center}
 Picture
 \end{center}
-\item We apply a block, to separate the symbols of $\Gamma$ form the others, we get then a tree in $\trees(\trees\Gamma+\trees(\Gamma_\#+\Gamma_\flat))$. Those trees look like this:
+\item We apply a block, to separate the symbols of $\Gamma$ form the symbols of $\Gamma_\#$ and $\Gamma_\flat$, we get then a tree in $\trees(\trees\Gamma+\trees(\Gamma_\#+\Gamma_\flat))$. Those trees look like this:
 \begin{center}
 Picture
 \end{center}
@@ -225,42 +224,65 @@ Picture
 and leaves the others unchanged. 
 The function $h$ is a first-order tree function because \todo{pattern matching on a finite set}.
 
-\item To the trees of $\trees(\trees\Gamma+\trees(\Gamma_\#+\Gamma_\flat))$ we apply the identity to the blocks $\trees \Gamma$ and $h$ to the others, then we apply a flettening to get again trees of the form:
+\item To the blocks $\trees \Gamma$ we apply the identity function, and to the blocks $\trees(\Gamma_\#+\Gamma_\flat)$ we apply $h$. After that, we apply a flettening to get trees in $\trees(\Gamma+\Gamma_\#+\Gamma_\flat)$ of the form:
 \begin{center}
 Picture
 \end{center} 
-\item We apply again a block, to separate the symbols of $\Gamma_\flat$ form the others. We get blocks where each $\Gamma$ symbol is in the same block with its siblings (marked with $\#$):
+\item We apply block to separate the symbols of $\Gamma_\flat$ form the others. Doing so, every $\Gamma$ node ends up in the same block as its siblings (marked with $\#$):
 \begin{center}
 Picture
 \end{center}
-\item Consider the function $k:\trees(\Gamma_\#+\Gamma_\flat)\to (\Gamma\cup\bot)^{\leq n}$ which transforms every tree of the following shape as follows:
+\item Consider the function $k:\trees(\Gamma+\Gamma_\#)\to (\Gamma\cup\bot)^{\leq n}$ which transforms every tree of the following shape as follows:
 \begin{center}
 Picture
 \end{center}
-and leaves the other unchanged. We apply the function $k$ to the $\trees(\Gamma_\#+\Gamma_\flat)$
-blocks and the identity to the others. The we apply a flattening and erase the symbols from $\Gamma_\#$. Doing so we get the desired function.
+and leaves the other unchanged. We apply the function $k$ to the $\trees(\Gamma+\Gamma_\#)$
+blocks and the identity to the others. The we apply a flattening and erase the symbols from $\Gamma_\flat$. Doing so we get the desired function.
 \end{enumerate}
 \medskip
 
-Now consider the function $$Par:\trees\Gamma\to \trees (\Gamma\otimes \Gamma^{\leq 1})$$ which adds to every node of a tree in $\trees \Sigma$ the list (of lenght at most 1) containing the symbol of its parent.
+Now consider the function $$Par:\trees\Gamma\to \trees (\Gamma\otimes \Gamma^{\leq 1})$$ which adds to every node of a tree in $\trees \Sigma$ the list (of lenght at most 1) containing the symbol of its parent. In particular, its root is labeled by the empty list. 
+The fuction $Par$ is a first order tree function. To see this, the same steps above can be followed, exept for steps 6 and 7 which should be adapted this way:
+\begin{enumerate}
+\item[6'] We apply block to separate the symbols of $\Gamma_\#$ form the others. Doing so, every $\Gamma$ node ends up in the same block as its parent (marked with $\flat$):
+\begin{center}
+Picture
+\end{center}
+\item[7'] Consider the function $k:\trees(\Gamma+\Gamma_\flat)\to (\Gamma\cup\bot)^{\leq 1}$ which transforms every tree of the following shape as follows:
+\begin{center}
+Picture
+\end{center}
+and leaves the other unchanged. We apply the function $k$ to the $\trees(\Gamma+\Gamma_\flat)$
+blocks and the identity to the others. The we apply a flattening and erase the symbols from $\Gamma_\#$. Doing so we get the desired function.
+\end{enumerate} 
 \end{example}
 
 
 
 \bigskip
-\noindent  \begin{example}[Root and leaves]
-\begin{itemize}
-\item The combinator which applies $f$ to the root and $g$ to the rest of the tree:
+\noindent  \begin{example}[Root and leaves] Let $\Sigma$ be a finite type and $f:\Sigma \to \Gamma$, $g: \Sigma \to \Gamma$ be first order tree functions. 
+
+The function $\mathsf{root}_{f,g} : \trees\Sigma \to \trees(\Gamma)$
+which applies $f$ to the root and $g$ to the rest of the tree is a first order tree function.
+ 
+To show this, we first start by applying the function $Par:\trees\Sigma\to\trees(\Sigma\otimes\Sigma^{\leq 1})$ to the trees of $\trees \Sigma$. Doing so, the root can be distinghished from the other nodes since it will be tagged by the empty list, while the other nodes will be tagged by lists of lenght exactly $1$ (the set of lists of lenght exactly $n$ will be denoted by $\Sigma^{=n}$).  
+
+Consider the function $\chi:\Sigma\otimes\Sigma^{\leq 1}\to \llzero+\llone$ which associates $1$ to the elements of $\Sigma\otimes \Sigma^{=0}$ and $\llzero$ to the others.  This is a
+first order tree function since it is the characteristic function of a finite set.  Thus, the function: 
 \begin{align*}
-    \frac{f : \Sigma \to \Gamma_0 \quad g : \Sigma \to \Gamma_1}
-     {\mathsf{root}_{f,g} : \trees\Sigma \to \trees(\Gamma_0 + \Gamma_1)}
+  h\colon \Sigma &\to \Gamma \\
+  x &\mapsto f(x)  \text{ if } \chi(x)\in\llone\\
+  x &\mapsto g(x)  \text{ if } \chi(x)\in\llzero.
 \end{align*}
-\item The combinator which applies $f$ to the leaves and $g$ to the rest of the tree:
-\begin{align*}
-    \frac{f : \Sigma \to \Gamma_0 \quad g : \Sigma \to \Gamma_1}
-     {\mathsf{leaf}_{f,g} : \trees\Sigma \to \trees(\Gamma_0 + \Gamma_1)}
-\end{align*}
-\end{itemize}
+is a first order tree function using the if then else construction. 
+We lift $h$ to the trees of $\trees\Gamma$ to conclude.
+
+
+%We lift the function $ditribute_\otimes: \Sigma\otimes\Sigma^{\leq 1}\to  \Sigma\otimes\Sigma^{=0}+ \Sigma\otimes\Sigma^{= 1}$ to the trees of $\trees \Sigma\otimes\Sigma^{\leq 1}$ to get trees in $\trees (\)$.
+
+\medskip
+The function $\mathsf{leaves}_{f,g} : \trees\Sigma \to \trees(\Gamma_0 + \Gamma_1)$
+ which applies $f$ to the leaves and $g$ to the rest of the tree is a first order tree function. This is done using the same ideas as before, but invoquing the function $Sib$ instead of the function $Par$: leaves can be distingushed from the other nodes since there tags are in $\{\bot\}^{\leq n}$.
 \end{example}
 
 \bigskip

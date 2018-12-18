@@ -41,10 +41,10 @@ If $T=u[T_1,\dots,T_n]$, where $u\in\Uu$, then $\norm{T}=\underline{u}[\norm{T_1
 
 %Note that $\norm{\_}$ is not arity-preserving.
 
-\noindent Let $\bullet$ be a nullary symbol not in $\Gamma$. We set: 
+\noindent Let $\star$ be a nullary symbol not in $\Gamma$. We set: 
 \begin{align*}
-  Subst \colon\trees_0(\Uu) &\to \trees_0(\Gamma+\bullet)\\
-  T &\mapsto \norm{T}[\bullet].
+  Subst \colon\trees_0(\Uu) &\to \trees_0(\Gamma+\star)\\
+  T &\mapsto \norm{T}[\star].
 \end{align*} 
 \end{definition}
 
@@ -58,22 +58,22 @@ Let us show that $Subst$ is a first-order tree function. We will show that the c
  
 \medskip
 \noindent\textbf{Step 1:} We have noticed that the tree underlying a symbol of $\Uu$ is of arity $1$. To bridge this mismatch beteen the arity of a symbol and its underlying tree, we apply the following
-rank-preverving function, where $@$ is a binary symbol and $\bullet$ the nullary symbol used in the definition of the function $Subst$:
+rank-preverving function, where $@$ is a binary symbol and $\star$ the nullary symbol used in the definition of the function $Subst$:
  \begin{align*}
-  Match\colon \Uu &\to \trees(\Gamma+\bullet+k@)\\
-  u &\mapsto \underline{u}[\bullet][@/r].
+  Match\colon \Uu &\to \trees(\Gamma+\star+k@)\\
+  u &\mapsto \underline{u}[\star][@/r].
 \end{align*} 
-In words, the function $Match$ transforms the occurrences of the unary symbol $r$ appearing in $u$ into the binary symbol $@$, and closes the free variable of $\underline{u}$ by the nullary symbol $\bullet$.
+In words, the function $Match$ transforms the occurrences of the unary symbol $r$ appearing in $u$ into the binary symbol $@$, and closes the free variable of $\underline{u}$ by the nullary symbol $\star$.
 \begin{center}
 Picture
 \end{center}
 \medskip
-\textbf{Step 2:} After step 1, each symbol of $\Uu$ became a tree of $\trees(\Gamma+\bullet+n.@)$ of the same arity. Inside each such tree, we isolate the block of nodes which are the ancestors of $\bullet$. This function is of type $\trees(\Gamma+k.@+\bullet)\to \trees (\trees (\Gamma+k.@+\bullet)+\Gamma+k.@)$. We call \emph{skeleton} the block isolated by this function, ad we denote by 
-$SK$ the type $\trees (\Gamma+k.@+\bullet)$.
+\textbf{Step 2:} After step 1, each symbol of $\Uu$ became a tree of $\trees(\Gamma+\star+@)$ of the same arity. Inside each such tree, we isolate the block of nodes which are the ancestors of $\star$. This function is of type $\trees(\Gamma+@+\star)\to \trees (\trees (\Gamma+@+\star)+\Gamma+@)$. We call \emph{skeleton} the block isolated by this function, ad we denote by 
+$SK$ the type $\trees (\Gamma+@+\star)$.
 \begin{center}
 Picture
 \end{center}
-The composition of Step 1 and Step 2 functions yields the function $Skel:\Uu\to \trees (SK+\Gamma+k.@)$. 
+The composition of Step 1 and Step 2 functions yields the function $Skel:\Uu\to \trees (SK+\Gamma+@)$. 
 \begin{center}
 Picture
 \end{center}
@@ -82,15 +82,20 @@ Since $Skel$ is rank preserving and has a finite domain, it is then a fo tree fu
 Picture
 \end{center}
  \medskip
-\textbf{Step 3:} We apply a flattening to get a tree of type $\trees(SK+\Gamma+k.@)$. 
+\textbf{Step 3:} We apply a flattening to get a tree of type $\trees(SK+\Gamma+@)$. 
 \begin{center}
 Picture
 \end{center}
 \medskip
-\textbf{Step 4:} We apply the block function to isolate the sketeons and the $@$'s from the other symbols. We get a tree of type $\trees (\trees(SK+k.@)+\trees\Gamma)$. As usual when whe decompose a tree into blocks, we should tell whot should we do for each kind of these blocks. on the block of type $\trees \Gamma$, we apply the identity. We describe in step 5 what we should do the $\trees(SK+@)$ blocks.
+\textbf{Step 4:} We apply the block function to isolate the sketeons and the $@$'s from the other symbols. We get a tree of type $\trees (\trees(SK+@)+\trees\Gamma)$. To the blocks of type $\trees \Gamma$ we apply the identity function. Let us describe in the step 5 and 6 the function that we apply to the blocks $\trees(SK+@)$.
 
 \medskip
-\noindent \textbf{Step 5:} Pour les arbres de type $\trees (SK+@)$, on commence par flat les skeleton, pour avoir un arbre de type $\trees(\Gamma+\bullet+@)$ (Pour ce faire il suffit de transformer les symboles $@$ en $\trees @$, ensuite on injecte $SK$ et $\trees @$ dans $\trees(\Gamma+\bullet+@)$, puis on flatten).
-On applique ensuite un parcours en profondeur de l'arbre ainsi obtenu.
- 
+\noindent \textbf{Step 5:} Consider the function $f:\trees(SK+@)\to\trees(\Gamma+\star+@)$, which flattens the skeletons, as shown in the following example:
+\begin{center}
+Picture
+\end{center}
+The function $f$ is a first order tree function. To show this, consider the unit function on 
+$\{@\}$. We compose it with the injection to get a function of type $u:\{@\}\to \trees(\Gamma+\star+@)$.  To every tree of $\trees(SK+@)$, we apply $u$ to the $@$ nodes and the identity to the others. We finally get $f$ by applying a flattening.
 
+\medskip
+\noindent \textbf{Step 5:} Consider the function $DFT: \trees(\Gamma+\star+@)\to $ which performs a depth-first traversal of the trees in $\trees(\Gamma+\star+@)$. Since the $\Gamma$ nodes have exactly one son 
