@@ -72,7 +72,8 @@ p \text{ is the } i^\text{th} \text{ port of } t;\\
 \forall i\in[1,n_2]&\quad p \leq_{\Gamma\otimes\Sigma} n_1+i \text{ where } 
 p \text{ is the } i^\text{th} \text{ port of } u.
 \end{align*} 
- 
 \end{enumerate}        
-        \item {\bf Terms.}   
+ \item Let $t$ be an $n$-ary element of $\Sigma+\Gamma$. Then, it is either an element of $\Sigma$ or an element of $\Gamma$. Suppose wlog. that $t$ is an element of $\Sigma$. We set $\underline{t}_\Sigma$ to be the interpretation of $t$ seen as an element of $\Sigma$. The universe of $\underline{t}$ is the universe of $\underline{t}_\Sigma$ together with $n+1$ new nodes named $0,1,\dots,n$. The interpretation of the predicates from $\hat \Sigma$ are inherited from $\underline{t}_\Sigma$ as usual. Node $0$ satisfies $\Root{\Sigma+\Gamma}$, the nodes $[1,n]$ satisfy $\Port{\Sigma+\Gamma}$, and they are ordered by $\prec_{\Sigma+\Gamma}$ respecting the order of natural numbers. The relation $\leq_{\Sigma+\Gamma}$ extends $\leq_\Sigma$ with the following pairs: $0\leq r$ if $\Root{\Sigma}(r)$, and $p\leq_{\Sigma+\Gamma} i$ if $p$ is the $i^{th}$ port of $\underline{t}_\Sigma$.
+        
+        \item The vocabulary $\widehat {\trees \Sigma}$, corresponding to the type $\trees \Sigma$, is $\Interface{\Sigma}\uplus\{\sqsubseteq\}$. 
     \end{itemize}  
