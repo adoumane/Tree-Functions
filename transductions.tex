@@ -6,7 +6,7 @@ A \emph{ranked set} is a set where each element has an associated \emph{arity} i
 
 We use standard tree terminology, such as ancestor, descendant, child, parent. 
 
-We define a tree language over a ranked alphabet $\Sigma$ to be any subset of $\trees \Sigma$. A $k$-ary query over $\Sigma$ is defined to be any subset of 
+We define a tree language over a ranked alphabet $\Sigma$ to be any subset of $\trees \Sigma$. An $n$-ary query over $\Sigma$ is defined to be any subset of 
 \begin{align*}
     \set{(t,x_1,\ldots,x_n) : t \in \treesz \Sigma \text{ and $x_1,\ldots,x_n$ are nodes in $t$}}.
 \end{align*}
@@ -39,8 +39,8 @@ The following definition shows how to describe  a tree-to-tree function using lo
 \begin{enumerate}
     \item Input and output relational vocabularies $\tau,\sigma$;
     \item A copying constant $k \in \set{1,2,\ldots}$;
-    \item For every $i \in \set{1,\ldots,k}$ a \emph{universe formula} $\varphi_i(x)$ over $\sigma$
-    \item For every relation name $R \in \sigma$ of arity $n$, and every tuple $\bar i \in \set{1,\ldots,k}^n$, a first-order formula $\varphi_R^{\bar i}(x_1,\ldots,x_n)$ over $\tau$
+    \item For every $i \in \set{1,\ldots,k}$ a \emph{universe formula} $\varphi_i(x)$ over $\tau$;
+    \item For every relation name $R \in \sigma$ of arity $n$, and every tuple $\bar i \in \set{1,\ldots,k}^n$, a first-order formula $\varphi_R^{\bar i}(x_1,\ldots,x_n)$ over $\tau$.
 \end{enumerate}
 \end{definition}
 

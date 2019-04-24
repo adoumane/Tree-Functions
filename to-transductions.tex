@@ -1,3 +1,6 @@
+\newcommand{\Root}[1]{\mathsf{root}_{#1}}
+\newcommand{\Port}[1]{\mathsf{port}_{#1}}
+\newcommand{\Interface}[1]{\mathsf{Interface}_{#1}}
 \section{To transductions}
 \label{sec:to-transductions}
 In this section, we prove the bottom-up inclusion in Theorem~\ref{thm:main}:
@@ -5,14 +8,71 @@ In this section, we prove the bottom-up inclusion in Theorem~\ref{thm:main}:
     \text{first-order tree-to-tree interpretations} \qquad \supseteq \qquad \text{first-order tree functions}
 \end{align*}
 Since first-order tree functions are defined as tree restrictions of term-to-term functions, we need to work with first-order transductions that transforms terms (and elements of other types, such as pairs of terms, terms of terms, etc.). We begin by describing how elements of a type are encoded as models. 
+\\
 
-\begin{center}
-    (do this)
-\end{center}
+We define by induction on the type $\Sigma$, the vocabulary $\hat \Sigma$ and the encoding 
+ \begin{align*}
+     t \in \Sigma \quad \mapsto \quad \underline t \in \text{models over $\hat \Sigma$}
+ \end{align*}
+ which represents elements $t$ of $\Sigma$ as relational structures over $\hat \Sigma$.
+ \\
+ 
+ For every type $\Sigma$, the vocabulary $\hat \Sigma$ will contain at least the following set of predicates, called $\sf{Interface}_\Sigma$, which contains:
+ \begin{itemize}
+ \item A unary predicate $\Root{\Sigma}$;
+ \item a binary predicate $\leq_\Sigma$ ordering the nodes of the structure;
+  \item a unary predicate $\Port{\Sigma}$ selecting the "free variables" of a term; 
+ \item a binary predicate $\prec_\Sigma$ ordering these ports from right to left.  
+\end{itemize}  
 
+The rest of the predicates of $\hat \Sigma$ is inherited by induction from its sub-types, as described in the following.\\
 
-% For each type $\Sigma$ we define a coding
-% \begin{align*}
-%     t \in \Sigma \quad \mapsto \quad \underline t \in \text{models over $\hat \Sigma$}
-% \end{align*}
-% which represents elements of $t$ as 
+\noindent{\bf Atomic types.} 
+   \begin{itemize}
+   \item Let $F$ be a finite ranked set.  We set $\hat F$ to be $\Interface{F}$ together with a unary predicate $a$ for each symbol $a$ of $F$. 
+            
+            If $a$ is an $n$-ary element of $F$, we define its corresponding structure $\underline a$ as follows:
+            \begin{itemize}
+            \item Its univers contains $n+1$ nodes named $0,1\dots,n$;
+            \item node $0$ satisfies the predicate $a$ and $\Root F$;
+            \item For every $i\in[1,n]$, node $i$ satisfies $\Port F$  and $0\leq_F i$; and for every $i, j \in[1,n]$ such that $i< j$, we have that $i\prec_F j$.
+\end{itemize}             
+            \begin{center}
+            Picture ?
+            \end{center}
+            \item For the atomic type $\llone$, we set $\hat \llone$ to be $\Interface \llone$. The structure $\underline a$ of an element $a$ of $\llone$ is exactly as above (exept that we ignore the predicate $a$).
+        \end{itemize}
+    {\bf Type constructors.}
+    
+    If $\Sigma \odot \Gamma$ is a type where $\odot \in \{\times, \otimes,+\}$, we set $\widehat{\Sigma\odot\Gamma}$ to be $\hat{\Sigma} \uplus \hat{\Gamma} \uplus \Interface {\Sigma\odot\Gamma}$. Let us describe the encoding of an element of $\Sigma \odot \Gamma$ as a structure over $\widehat{\Sigma\odot\Gamma}$.
+     \begin{itemize}
+\item Let $(t,u)$ be an $n$-ary element of $\Sigma \times \Gamma$. Thus $t$ and $u$ are elements from $\Sigma, \Gamma$, respectively, whose arities are both $n$. We set:
+        \begin{enumerate}
+       \item the universe of $\underline{(t,u)}$ is the disjoint union of the universes of $\underline{t}$ and $\underline{u}$ together with $n+1$ nodes named $0,1,\dots, n$;
+       \item the interpretation of the predicates from $\hat \Sigma$ and $\hat \Gamma$ are inherited from $\underline{t}$ and $\underline {u}$ respectively;
+       \item node $0$ satisfies $\Root{\Sigma\times\Gamma}$ and for every $i,j \in[1,n]$ such that $i<j$, we set $i \prec_{\Gamma\times\Sigma} j$;
+       \item the relation $\leq_{\Gamma\times\Sigma}$ contains   $\leq_{\Gamma}$ and $\leq_{\Sigma}$ together with:
+\begin{align*}
+0\leq_{\Gamma\times\Sigma} r \quad\text{ if } \quad \Root{\Sigma}(r) \quad\text{ or }\quad \Root{\Gamma}(r);\qquad\\
+\forall i\in[1,n],\quad p \leq_{\Gamma\times\Sigma} i \text{ where } 
+p \text{ is the } i^\text{th} \text{ port of } t \text{ (resp.  $u$)}.
+\end{align*}  
+        \end{enumerate}
+        \begin{center}
+        Picture
+        \end{center}        
+\item Let $(t,u)$ be an $n$-ary element of $\Sigma\otimes \Gamma$. Thus $t$ is an element of $\Sigma$ of arity $n_1$ and $u$ is an element of $\Gamma$ of arity $n_2$ such that $n_1+n_2=n$. The universe of $\underline{(t,u)}$ and the interpretation of the predicates from $\hat \Sigma$ and $\hat \Gamma$ are exctly as in ites 1 and 2 above. As in item 3, node $0$ satisfies $\Root{\Sigma\otimes \Gamma}$ and $\prec_{\Sigma\otimes \Gamma}$
+       is the order on natural numbers. Item 4 become:
+       \begin{enumerate}
+       \item[4'.] The relation $\leq_{\Gamma\otimes\Sigma}$ contains   $\leq_{\Gamma}$ and $\leq_{\Sigma}$ together with:
+       \begin{align*}
+0\leq_{\Gamma\otimes\Sigma} r &\quad\text{ if } \quad \Root{\Sigma}(r) \quad\text{ or }\quad \Root{\Gamma}(r);\qquad\\
+\forall i\in[1,n_1] & \quad p \leq_{\Gamma\otimes\Sigma} i \text{ where } 
+p \text{ is the } i^\text{th} \text{ port of } t;\\
+\forall i\in[1,n_2]&\quad p \leq_{\Gamma\otimes\Sigma} n_1+i \text{ where } 
+p \text{ is the } i^\text{th} \text{ port of } u.
+\end{align*} 
+ 
+\end{enumerate}        
+        \item {\bf Terms.}   
+    \end{itemize}  
