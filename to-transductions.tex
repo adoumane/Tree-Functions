@@ -17,9 +17,9 @@ We define by induction on the type $\Sigma$, the vocabulary $\hat \Sigma$ and th
  which represents elements $t$ of $\Sigma$ as relational structures over $\hat \Sigma$.
  \\
  
- For every type $\Sigma$, the vocabulary $\hat \Sigma$ will contain at least the following set of predicates, called $\sf{Interface}_\Sigma$, which contains:
+ For every type $\Sigma$, the vocabulary $\hat \Sigma$ will contain at least the following set of predicates, called $\sf{Interface}_\Sigma$, which includes:
  \begin{itemize}
- \item A unary predicate $\Root{\Sigma}$;
+ \item a unary predicate $\Root{\Sigma}$;
  \item a binary predicate $\leq_\Sigma$ ordering the nodes of the structure;
   \item a unary predicate $\Port{\Sigma}$ selecting the "free variables" of a term; 
  \item a binary predicate $\prec_\Sigma$ ordering these ports from right to left.  
@@ -48,7 +48,7 @@ The rest of the predicates of $\hat \Sigma$ is inherited by induction from its s
      \begin{itemize}
 \item Let $(t,u)$ be an $n$-ary element of $\Sigma \times \Gamma$. Thus $t$ and $u$ are elements from $\Sigma, \Gamma$, respectively, whose arities are both $n$. We set:
         \begin{enumerate}
-       \item the universe of $\underline{(t,u)}$ is the disjoint union of the universes of $\underline{t}$ and $\underline{u}$ together with $n+1$ nodes named $0,1,\dots, n$;
+       \item the universe of $\underline{(t,u)}$ is the disjoint union of the universes of $\underline{t}$ and $\underline{u}$ together with $n+1$ new nodes named $0,1,\dots, n$;
        \item the interpretation of the predicates from $\hat \Sigma$ and $\hat \Gamma$ are inherited from $\underline{t}$ and $\underline {u}$ respectively;
        \item node $0$ satisfies $\Root{\Sigma\times\Gamma}$ and for every $i,j \in[1,n]$ such that $i<j$, we set $i \prec_{\Gamma\times\Sigma} j$;
        \item the relation $\leq_{\Gamma\times\Sigma}$ contains   $\leq_{\Gamma}$ and $\leq_{\Sigma}$ together with:
@@ -61,7 +61,7 @@ p \text{ is the } i^\text{th} \text{ port of } t \text{ (resp.  $u$)}.
         \begin{center}
         Picture
         \end{center}        
-\item Let $(t,u)$ be an $n$-ary element of $\Sigma\otimes \Gamma$. Thus $t$ is an element of $\Sigma$ of arity $n_1$ and $u$ is an element of $\Gamma$ of arity $n_2$ such that $n_1+n_2=n$. The universe of $\underline{(t,u)}$ and the interpretation of the predicates from $\hat \Sigma$ and $\hat \Gamma$ are exctly as in ites 1 and 2 above. As in item 3, node $0$ satisfies $\Root{\Sigma\otimes \Gamma}$ and $\prec_{\Sigma\otimes \Gamma}$
+\item Let $(t,u)$ be an $n$-ary element of $\Sigma\otimes \Gamma$. Thus $t$ is an element of $\Sigma$ of arity $n_1$ and $u$ is an element of $\Gamma$ of arity $n_2$ such that $n_1+n_2=n$. The universe of $\underline{(t,u)}$ and the interpretation of the predicates from $\hat \Sigma$ and $\hat \Gamma$ are exctly as in items 1 and 2 above. As in item 3, node $0$ satisfies $\Root{\Sigma\otimes \Gamma}$ and $\prec_{\Sigma\otimes \Gamma}$
        is the order on natural numbers. Item 4 become:
        \begin{enumerate}
        \item[4'.] The relation $\leq_{\Gamma\otimes\Sigma}$ contains   $\leq_{\Gamma}$ and $\leq_{\Sigma}$ together with:
