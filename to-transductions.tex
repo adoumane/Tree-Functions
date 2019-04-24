@@ -77,13 +77,18 @@ p \text{ is the } i^\text{th} \text{ port of } u.
         
         \item The vocabulary $\widehat {\trees \Sigma}$, corresponding to the type $\trees \Sigma$, is $\Interface{\Sigma}\uplus\{\sqsubseteq\}$. 
     
-Let $t$ be an $n$-ary tree of $\trees \Sigma$ whose $\Sigma$-nodes are $\{v_1,\dots v_k\}$. The universe of $\underline{t}$ is the disjoint union of $\underline{v_1},\dots, \underline{v_k}$, together with $n+1$ new nodes named $0,1,\dots,n$. The interpretation of the predicates from $\hat \Sigma$ are inherited from $\underline{v_i}$, where $i\in[1,k]$. Node $0$ satisfies $\Root{\trees\Sigma}$, the nodes $[1,n]$ satisfy $\Port{\trees\Sigma}$, and they are ordered by $\prec_{\trees\Sigma}$ respecting the order of natural numbers. The relation $\leq_{\trees\Sigma}$ extends $\leq_\Sigma$ with the following pairs:      
+Let $t$ be an $n$-ary tree of $\trees \Sigma$ whose $\Sigma$-nodes are $\{v_1,\dots v_k\}$ and $v_1$ its root. The universe of $\underline{t}$ is the disjoint union of $\underline{v_1},\dots, \underline{v_k}$, together with $n+1$ new nodes named $0,1,\dots,n$. The interpretation of the predicates from $\hat \Sigma$ are inherited from $\underline{v_i}$, where $i\in[1,k]$. Node $0$ satisfies $\Root{\trees\Sigma}$, the nodes $[1,n]$ satisfy $\Port{\trees\Sigma}$, and they are ordered by $\prec_{\trees\Sigma}$ respecting the order of natural numbers. The relation $\leq_{\trees\Sigma}$ extends $\leq_\Sigma$ with the following pairs:      
+$$ 0\leq _{\trees\Sigma} r \text{ if  $r$ is the node of $v_1$ satisfying } \Root\Sigma(r) $$
     \end{itemize}  
 
-\begin{definition} Let $\Sigma, \Gamma$ be two types. We say that a function $f:\Sigma\to \Gamma$ is \emph{definable by an FO-transduction} if there is some FO-transduction $\varphi$ which makes the following diagram commutes:
+\begin{definition} Let $\Sigma, \Gamma\in \Tt$. We say that a function $f:\Sigma\to \Gamma$ is \emph{definable by an FO-transduction} if there is some FO-transduction $\varphi$ which makes the following diagram commutes:
 \[\begin{array}{lll}
 \Sigma& \stackrel{t\mapsto \underline{t}}{\xrightarrow{\hspace*{3cm}}} & \text{structures over }\hat \Sigma \\
 f&&\varphi\\
 \Gamma& \stackrel{t\mapsto \underline{t}}{\xrightarrow{\hspace*{3cm}}}  & \text{structures over }\hat \Gamma 
 \end{array}\]
 \end{definition}
+
+\begin{theorem}
+Let $\Gamma, \Sigma \in \Tt$. A function $f:\Sigma\to\Gamma$ is a first-order transduction if and only if it is definable by an FO-transduction. 
+\end{theorem}
