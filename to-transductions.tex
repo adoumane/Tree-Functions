@@ -76,4 +76,14 @@ p \text{ is the } i^\text{th} \text{ port of } u.
  \item Let $t$ be an $n$-ary element of $\Sigma+\Gamma$. Then, it is either an element of $\Sigma$ or an element of $\Gamma$. Suppose wlog. that $t$ is an element of $\Sigma$. We set $\underline{t}_\Sigma$ to be the interpretation of $t$ seen as an element of $\Sigma$. The universe of $\underline{t}$ is the universe of $\underline{t}_\Sigma$ together with $n+1$ new nodes named $0,1,\dots,n$. The interpretation of the predicates from $\hat \Sigma$ are inherited from $\underline{t}_\Sigma$ as usual. Node $0$ satisfies $\Root{\Sigma+\Gamma}$, the nodes $[1,n]$ satisfy $\Port{\Sigma+\Gamma}$, and they are ordered by $\prec_{\Sigma+\Gamma}$ respecting the order of natural numbers. The relation $\leq_{\Sigma+\Gamma}$ extends $\leq_\Sigma$ with the following pairs: $0\leq r$ if $\Root{\Sigma}(r)$, and $p\leq_{\Sigma+\Gamma} i$ if $p$ is the $i^{th}$ port of $\underline{t}_\Sigma$.
         
         \item The vocabulary $\widehat {\trees \Sigma}$, corresponding to the type $\trees \Sigma$, is $\Interface{\Sigma}\uplus\{\sqsubseteq\}$. 
+    
+Let $t$ be an $n$-ary tree of $\trees \Sigma$ whose $\Sigma$-nodes are $\{v_1,\dots v_k\}$. The universe of $\underline{t}$ is the disjoint union of $\underline{v_1},\dots, \underline{v_k}$, together with $n+1$ new nodes named $0,1,\dots,n$. The interpretation of the predicates from $\hat \Sigma$ are inherited from $\underline{v_i}$, where $i\in[1,k]$. Node $0$ satisfies $\Root{\trees\Sigma}$, the nodes $[1,n]$ satisfy $\Port{\trees\Sigma}$, and they are ordered by $\prec_{\trees\Sigma}$ respecting the order of natural numbers. The relation $\leq_{\trees\Sigma}$ extends $\leq_\Sigma$ with the following pairs:      
     \end{itemize}  
+
+\begin{definition} Let $\Sigma, \Gamma$ be two types. We say that a function $f:\Sigma\to \Gamma$ is \emph{definable by an FO-transduction} if there is some FO-transduction $\varphi$ which makes the following diagram commutes:
+\[\begin{array}{lll}
+\Sigma& \stackrel{t\mapsto \underline{t}}{\xrightarrow{\hspace*{3cm}}} & \text{structures over }\hat \Sigma \\
+f&&\varphi\\
+\Gamma& \stackrel{t\mapsto \underline{t}}{\xrightarrow{\hspace*{3cm}}}  & \text{structures over }\hat \Gamma 
+\end{array}\]
+\end{definition}
