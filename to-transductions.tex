@@ -25,6 +25,9 @@ We define by induction on the type $\Sigma$, the vocabulary $\hat \Sigma$ and th
  \item a binary predicate $\prec_\Sigma$ ordering these ports from right to left.  
 \end{itemize}  
 
+For a $\hat\Sigma$ structure $t$, we call the \emph{root of $t$} the node satisfying the predicate $\Root{\Sigma}$, and we call {the $i^{th}$ port} the node satisfying $\Port\Sigma$, which is in the $i^{th}$ position wrt. $\prec_\Sigma$. 
+\\
+
 The rest of the predicates of $\hat \Sigma$ is inherited by induction from its sub-types, as described in the following.\\
 
 \noindent{\bf Atomic types.} 
@@ -77,9 +80,30 @@ p \text{ is the } i^\text{th} \text{ port of } u.
         
         \item The vocabulary $\widehat {\trees \Sigma}$, corresponding to the type $\trees \Sigma$, is $\Interface{\Sigma}\uplus\{\sqsubseteq\}$. 
     
-Let $t$ be an $n$-ary tree of $\trees \Sigma$ whose $\Sigma$-nodes are $\{v_1,\dots v_k\}$ and $v_1$ its root. The universe of $\underline{t}$ is the disjoint union of $\underline{v_1},\dots, \underline{v_k}$, together with $n+1$ new nodes named $0,1,\dots,n$. The interpretation of the predicates from $\hat \Sigma$ are inherited from $\underline{v_i}$, where $i\in[1,k]$. Node $0$ satisfies $\Root{\trees\Sigma}$, the nodes $[1,n]$ satisfy $\Port{\trees\Sigma}$, and they are ordered by $\prec_{\trees\Sigma}$ respecting the order of natural numbers. The relation $\leq_{\trees\Sigma}$ extends $\leq_\Sigma$ with the following pairs:      
-$$ 0\leq _{\trees\Sigma} r \text{ if  $r$ is the node of $v_1$ satisfying } \Root\Sigma(r) $$
-    \end{itemize}  
+ Let $t$ be an $n$-ary tree of $\trees \Sigma$. Let $V_\Sigma$ be  the set of its $\Sigma$-nodes and $V_\portletter$ be the set of its $\portletter$-nodes. 
+\begin{enumerate}
+\item The universe of $\underline{t}$ is $\{\underline{v}| v\in V_\Sigma\}\uplus V_\portletter\uplus\{0\}$.
+\item The interpretation of the predicates from $\hat \Sigma$ are inherited from the structures $\underline{v}$, where $v\in V_\Sigma$.
+\item Node $0$ satisfies $\Root{\trees\Sigma}$. The nodes $V_\portletter$ satisfy $\Port{\trees\Sigma}$, and they are ordered by $\prec_{\trees\Sigma}$ respecting their order in $t$. 
+\item The relation $\leq_{\trees\Sigma}$ extends $\leq_\Sigma$ with the following pairs:      
+\begin{itemize}
+\item $0\leq_{\trees\Sigma} r$ if $r$ is the root of $\underline{v}$ and $v$ is the root of $t$.
+\item $ p\leq_{\trees\Sigma} r$ if there is $v,w \in V_\Sigma$ such that:
+\begin{itemize}
+\item $v$ is the $i^{th}$ son of $w$; 
+\item $r$ is the root of $\underline{w}$ and $p$ is the $i^{th}$ port of $\underline{v}$.
+\end{itemize}
+\item $p\leq_{\trees\Sigma} w$ if there is $v\in V_\Sigma$ and $w\in V_\portletter$ such that:
+\begin{itemize}
+\item $w$ is the $i^{th}$ son of $v$ in $t$;
+\item $p$ is the $i^{th}$ port of $\underline{v}$.
+\end{itemize}
+\end{itemize}
+\end{enumerate}
+\begin{center}
+Picture
+\end{center}
+ \end{itemize}  
 
 \begin{definition} Let $\Sigma, \Gamma\in \Tt$. We say that a function $f:\Sigma\to \Gamma$ is \emph{definable by an FO-transduction} if there is some FO-transduction $\varphi$ which makes the following diagram commutes:
 \[\begin{array}{lll}
@@ -89,6 +113,25 @@ f&&\varphi\\
 \end{array}\]
 \end{definition}
 
-\begin{theorem}
-Let $\Gamma, \Sigma \in \Tt$. A function $f:\Sigma\to\Gamma$ is a first-order transduction if and only if it is definable by an FO-transduction. 
-\end{theorem}
+\begin{proposition}
+Let $\Gamma, \Sigma \in \Tt$. If $f:\Sigma\to\Gamma$ is a first-order term function, then it is definable by an FO-transduction. 
+\end{proposition}
+
+\begin{pr}
+The proof is by induction, following the defintion of first-order term functions. The atomic functions $\llone$, constant functions, projection, co-projection and distributions are easily definable by FO-transductions.  
+We prove now that are also definable by FO-ransductions. 
+\\
+
+\begin{enumerate}
+\item $\sf{Flat}$. Given a tree $t$ of type $\trees\trees\Sigma$, the fucntion $\sf{Flat}(t)$ can be implemented using an FO-transduction as follows: the copying constant is 1, the universe formula is 
+\[\varphi_1(x) = \neg (\Root{\trees\Sigma}(x) \vee \Port{\trees\Sigma}(x) )  \]
+For every relation symbol $R\in\hat \Sigma$ , we conserve the same interpretation:
+\[\varphi_R^{1,1}(x,y)=R(x,y) \text{ if $R$ is binary }
+\quad \text{ and } \quad\varphi_R^{1}(x)=R(x) \text{ if $R$ is unary }\] 
+For the other symbols of $\widehat\trees\Sigma$, that is $\Root{\trees\Sigma},\Port{\trees\Sigma}, \prec_{\trees\Sigma}, \leq_{\trees\Sigma}$, we "shift by one $\trees$" their interpretation, more precisely, if $R\in\{\Root{}, \Port{}, \prec, \leq\}$, we set:
+\[ \varphi^1_{R_{\trees\Sigma}}(x) = R_{\trees\trees\Sigma}(x) \text{ if $R_{\trees\Sigma}$ is unary } \]
+\[\varphi^{1,1}_{R_{\trees\Sigma}}(x,y) = R_{\trees\trees\Sigma}(x,y) \text{ if it is binary. }\] 
+\item $\sf{Block}$. We show how to simulation the function $\sf{Block}:\trees (\Sigma + \Gamma) \to \trees (\trees \Sigma + \trees \Gamma)$ by an FO-transduction. 
+\end{enumerate} 
+
+ \end{pr}
