@@ -31,7 +31,7 @@ The Since modality in 2ctl, which implies that the truth value of a formula in a
 \begin{definition}[Characteristic function of a unary query]\label{def:characteristic}
     Let $\varphi(x)$ be a formula of first-order logic, over alphabet $\Sigma$. Define the \emph{characteristic function} of $\varphi(x)$ to be the function
             \begin{align*}
-                f : \treesz \Sigma \to \treesz (2 \otimes \Sigma)
+                f : \treesz \Sigma \to \treesz (\Sigma_{\sf{Bool}})
             \end{align*}
             which adds 0 or 1 to  the label of each node depending on whether the node satisfies $\varphi(x)$.
 \end{definition}
@@ -61,22 +61,29 @@ It is not hard to see that every fo translation can be decomposed as
         For every finite ranked sets $\Gamma \subseteq \Sigma$ and $i \in \set{1,2,\ldots}$ the characteristic function of $\nextmod_i \Gamma$ is a first-order tree function.
     \end{lemma}
 \begin{pr}
+    To show that $\chi_{\nextmod_i \Gamma}:\trees \Sigma\to \trees{(\Sigma_{\sf{Bool}})}$,  the characteristic function of $\nextmod_i \Gamma$, is a first order tree function, we start applying the sibling function $\sf{Sib}:\trees\Sigma\to \trees \Sigma^{\sf{Sib}}$. Consider the function $f$
+    \begin{align*}
+    f:\Sigma^{\sf{Sib}} &\to \Sigma_{\sf{Bool}}\\
+    (a,l)& \mapsto (a,1) \qquad\text{if } l[i]\in\Gamma, \\
+    & \mapsto (a,0) \qquad\text{otherwise.}   \end{align*}
+The function $f$ is clearly first order since it is arity preserving with finite domain.    
     
+  We get $\chi_{\nextmod_i \Gamma}$ by liftinf $f$ to trees and composing it with $\sf{Sib}$. 
 \end{pr}
 
 \begin{lemma}\label{lem:untilmod}
-Let $\chi$ be the characteristic function of $\Gamma \untilmod \Delta$.
     For every finite ranked sets $\Gamma, \Delta \subseteq \Sigma$  the characteristic function of $\Gamma \untilmod \Delta$ is a first-order tree function.
 \end{lemma}
 \begin{pr}
+Let $\chi$ be the characteristic function of $\Gamma \untilmod \Delta$.
 We start by decomposing our tree into blocks, depending on whether their node labels are in $\Gamma\cup\Delta$ or not. We will show that the restriction of $\chi$ to $\trees (\Gamma\cup\Delta)$, denoted $\chi_1$; and the restriction of $\chi$ to $\trees (\Sigma\setminus(\Gamma\cup\Delta))$, denoted $\chi_2$, are first-order tree functions. The function $\chi$ is obtained by applying $\chi_1$ or $\chi_2$ to each block, depending on its type, then by applying a flattening.
-This decomposition is relevant because the value of a node depends only on the node labels of its block (it is constant equal to $0$ in the case of $\Sigma\setminus(\Gamma\cup\Delta)$ blocks).
+This decomposition is relevant because the value of a node depends only on the node labels of its block. %(it is constant equal to $0$ in the case of $\Sigma\setminus(\Gamma\cup\Delta)$ blocks).
 
-The function $\chi_2:\trees (\Sigma\setminus(\Gamma\cup\Delta))\to \trees(2\otimes\Sigma)$ is clearly a first-order tree function, as it assigns uniformly $0$ to every node label. 
+The function $\chi_2:\trees (\Sigma\setminus(\Gamma\cup\Delta))\to \trees(\Sigma_{\sf{Bool}})$ is clearly a first-order tree function, as it assigns uniformly $0$ to every node label. 
 
-To see that $\chi_1:\trees (\Gamma\cup\Delta)\to \trees(2\otimes\Sigma)$ 
+To see that $\chi_1:\trees (\Gamma\cup\Delta)\to \trees(\Sigma_{\sf{Bool}})$ 
 is a first-order function, we start by applying the function $\mathsf{Desc}_\Delta$ from
-Example~\ref{}, which adds $1$ to the node labels if they have a descendent in $\Delta$ and adds $0$ otherwise. Then we decompose the obtained tree into blocks, depending on whether their node labels contain $0$ or not. For the block of nodes having $0$ in their label, their value w.r.t. $\Gamma\untilmod \Delta$ is indeed $0$, since they do not have a descendent in $\Delta$. To these blocks we apply the identity function. For the blocks that received $1$, we assign $1$ to the nodes whose labels are in  $\Gamma$ and $0$ to the others (whose labels are in $\Delta\setminus\Gamma$). Indeed, inside these blocks, a node $n$ labeled from $\Gamma$ has by construction a descendent in $\Delta$. If we consider the nearest such descendent $m$, the path between $n$ and $m$  is labeled in $\Gamma$ (since we are in blocks having only $\Gamma\cup\Delta$ labels). Thus $n$ satisfies $\Gamma\untilmod\Delta$. Nodes labeled in $\Delta\setminus\Gamma$ have obviously value $0$.      
+Example~\ref{}, which adds $1$ to the node labels if they have a descendent in $\Delta$ and adds $0$ otherwise. Then we decompose the obtained tree into blocks, depending on whether their node labels contain $0$ or not. For the block of nodes having $0$ in their label, their value w.r.t. $\Gamma\untilmod \Delta$ is indeed $0$, since they do not have a descendent in $\Delta$. To these blocks we apply the identity function. For the blocks that received $1$, we assign $1$ to the nodes whose labels are in  $\Gamma$ and $0$ to the others (whose labels are in $\Delta\setminus\Gamma$). Indeed, inside these blocks, a node $n$ labeled from $\Gamma$ has by construction a descendent in $\Delta$, moreover the path connecting $n$ to such descendent lies in the same block as $n$. If we consider the nearest such descendent $m$, the path between $n$ and $m$  is labeled in $\Gamma$ (since we are in blocks having only $\Gamma\cup\Delta$ labels). Thus $n$ satisfies $\Gamma\untilmod\Delta$. Nodes labeled in $\Delta\setminus\Gamma$ have obviously value $0$.      
 \end{pr}
 
 

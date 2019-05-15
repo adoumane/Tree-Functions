@@ -10,95 +10,85 @@ In this section, we prove the bottom-up inclusion in Theorem~\ref{thm:main}:
 Since first-order tree functions are defined as tree restrictions of term-to-term functions, we need to work with first-order transductions that transforms terms (and elements of other types, such as pairs of terms, terms of terms, etc.). We begin by describing how elements of a type are encoded as models. 
 \\
 
-We define by induction on the type $\Sigma$, the vocabulary $\widehat \Sigma$ and the encoding 
+We define by induction on the type $\Sigma$, the vocabulary $\underline \Sigma$ and the encoding 
  \begin{align*}
-     t \in \Sigma \quad \mapsto \quad \underline t \in \text{models over $\widehat \Sigma$}
+     t \in \Sigma \quad \mapsto \quad \underline t \in \text{models over $\underline \Sigma$}
  \end{align*}
- which represents elements $t$ of $\Sigma$ as relational structures over $\widehat \Sigma$.
+ which represents elements $t$ of $\Sigma$ as relational structures over $\underline \Sigma$.
  \\
  
- For every type $\Sigma$, the vocabulary $\widehat \Sigma$ will contain at least the following set of predicates, called $\sf{Interface}_\Sigma$, which includes:
+ For every type $\Sigma$, the vocabulary $\underline \Sigma$ will contain at least the following set of predicates, denoted $\mathcal{I}_\Sigma$ and called \emph{interface vocabulary}, which includes:
  \begin{itemize}
  \item a unary predicate $\Root{\Sigma}$;
- \item a binary predicate $\leq_\Sigma$ ordering the nodes of the structure;
+% \item a binary predicate $\leq_\Sigma$ ordering the nodes of the structure;
   \item a unary predicate $\Port{\Sigma}$ selecting the "free variables" of a term; 
  \item a binary predicate $\prec_\Sigma$ ordering these ports from right to left.  
 \end{itemize}  
 
-For a $\widehat\Sigma$ structure $t$, we call the \emph{root of $t$} the node satisfying the predicate $\Root{\Sigma}$, and we call {the $i^{th}$ port} the node satisfying $\Port\Sigma$, which is in the $i^{th}$ position wrt. $\prec_\Sigma$. 
+For a $\underline\Sigma$ structure $t$, we call the \emph{root of $t$} the node satisfying the predicate $\Root{\Sigma}$, and we call {the $i^{th}$ port} the node satisfying $\Port\Sigma$, which is in the $i^{th}$ position wrt. $\prec_\Sigma$. 
 \\
 
-The rest of the predicates of $\widehat \Sigma$ is inherited by induction from its sub-types, as described in the following.\\
+%The rest of the predicates of $\underline \Sigma$ will be defined by induction. But first, let us provide two constructions which will allow us to combine structures to get more complex ones:
+%\begin{enumerate}
+%\item {\bf Disjoint union.} Let $t_i, i\in I$ be a collection of structures over the vocabularies $V_i, i\in I$ respectively. We set $\Pi_{i\in I} t_i$
+%to be the structure defined as follows:
+%\begin{itemize}
+%\item Its universe is the disjoint union of the universes of $t_i, i\in I$.
+%\item Its vocabulary is the disjoint union of the vocabularies $V_i, i\in I$ together with the unary predicates $C_i, i\in I$.
+%\item Say how to interpret the symbols. 
+%\end{itemize}  
+%\item {\bf Disjoint sum.}
+%Let $t_i, i\in I$ be a collection of structures over a vocabulary $V$ respectively. We set $\amalg_{i\in I} t_i$
+%to be the structure defined as follows:
+%\begin{itemize}
+%\item Its universe is the disjoint union of the universes of $t_i, i\in I$.
+%\item Its vocabulary is the disjoint union of the vocabulary $V$ together with the binary predicate $\sim$. 
+%\item Say how to interpret the symbols.
+%\end{itemize}  
+%\end{enumerate}  
+
+We construct the vocabulary $\underline{\Sigma}$ and the structures $\underline{t}$ for every $t\in\Sigma$ by induction as follows:
+ 
 
 \noindent{\bf Atomic types.} 
    \begin{itemize}
-   \item Let $F$ be a finite ranked set.  We set $\widehat F$ to be $\Interface{F}$ together with a unary predicate $a$ for each symbol $a$ of $F$. 
+   \item Let $F$ be a finite ranked set.  We set $\underline F$ to be $\mathcal{I}_{F}$ together with a unary predicate $a$ for each symbol $a$ of $F$. 
             
-            If $a$ is an $n$-ary element of $F$, we define its corresponding structure $\underline a$ as follows:
-            \begin{itemize}
+            \noindent If $a$ is an $n$-ary element of $F$, we define its corresponding structure $\underline a$ as follows:
+            \begin{enumerate}
             \item Its univers contains $n+1$ nodes named $0,1\dots,n$;
             \item node $0$ satisfies the predicate $a$ and $\Root F$;
-            \item For every $i\in[1,n]$, node $i$ satisfies $\Port F$  and $0\leq_F i$; and for every $i, j \in[1,n]$ such that $i< j$, we have that $i\prec_F j$.
-\end{itemize}             
+            \item For every $i\in[1,n]$, node $i$ satisfies $\Port F$; and for every $i, j \in[1,n]$ such that $i< j$, we have that $i\prec_F j$.
+            \end{enumerate}             
             \begin{center}
             Picture ?
             \end{center}
-            \item For the atomic type $\llone$, we set $\widehat \llone$ to be $\Interface \llone$. The structure $\underline a$ of an element $a$ of $\llone$ is exactly as above (exept that we ignore the predicate $a$).
+            \item For the atomic type $\llone$, we set $\underline \llone$ to be $\mathcal{I}_ \llone$. The structure $\underline a$ of an element $a$ of $\llone$ is exactly as above (exept that we ignore the predicate $a$).
         \end{itemize}
     {\bf Type constructors.}
     
-    If $\Sigma \odot \Gamma$ is a type where $\odot \in \{\times, \otimes,+\}$, we set $\widehat{\Sigma\odot\Gamma}$ to be $\widehat{\Sigma} \uplus \widehat{\Gamma} \uplus \Interface {\Sigma\odot\Gamma}$. Let us describe the encoding of an element of $\Sigma \odot \Gamma$ as a structure over $\widehat{\Sigma\odot\Gamma}$.
      \begin{itemize}
-\item Let $(t,u)$ be an $n$-ary element of $\Sigma \times \Gamma$. Thus $t$ and $u$ are elements from $\Sigma, \Gamma$, respectively, whose arities are both $n$. We set:
+\item {\bf Cartesian product.} The vocabulary $\underline{\Sigma\times\Gamma}$ is the disjoint union of $\mathcal{I}_{\Sigma\times\Gamma}$, $\underline{\Sigma}$, $\underline{\Gamma}$ and two unary predicates $L_{\Sigma\times\Gamma}$ and $R_{\Sigma\times\Gamma}$.
+
+ Let $(t,u)$ be an $n$-ary element of $\Sigma \times \Gamma$. We set:
         \begin{enumerate}
        \item the universe of $\underline{(t,u)}$ is the disjoint union of the universes of $\underline{t}$ and $\underline{u}$ together with $n+1$ new nodes named $0,1,\dots, n$;
-       \item the interpretation of the predicates from $\widehat \Sigma$ and $\widehat \Gamma$ are inherited from $\underline{t}$ and $\underline {u}$ respectively;
+       \item the interpretation of the predicates from $\underline \Sigma$ and $\underline \Gamma$ are inherited from $\underline{t}$ and $\underline {u}$ respectively;
        \item node $0$ satisfies $\Root{\Sigma\times\Gamma}$ and for every $i,j \in[1,n]$ such that $i<j$, we set $i \prec_{\Gamma\times\Sigma} j$;
-       \item the relation $\leq_{\Gamma\times\Sigma}$ contains   $\leq_{\Gamma}$ and $\leq_{\Sigma}$ together with:
-\begin{align*}
-0\leq_{\Gamma\times\Sigma} r \quad\text{ if } \quad \Root{\Sigma}(r) \quad\text{ or }\quad \Root{\Gamma}(r);\qquad\\
-\forall i\in[1,n],\quad p \leq_{\Gamma\times\Sigma} i \text{ where } 
-p \text{ is the } i^\text{th} \text{ port of } t \text{ (resp.  $u$)}.
-\end{align*}  
+        \item a node satisfies $L_{\Sigma\times\Gamma}$ (resp. $R_{\Sigma\times\Gamma}$) if it comes from $\underline{t}$ (resp.  $\underline{u}$).  
         \end{enumerate}
-        \begin{center}
-        Picture
-        \end{center}        
-\item Let $(t,u)$ be an $n$-ary element of $\Sigma\otimes \Gamma$. Thus $t$ is an element of $\Sigma$ of arity $n_1$ and $u$ is an element of $\Gamma$ of arity $n_2$ such that $n_1+n_2=n$. The universe of $\underline{(t,u)}$ and the interpretation of the predicates from $\widehat \Sigma$ and $\widehat \Gamma$ are exctly as in items 1 and 2 above. As in item 3, node $0$ satisfies $\Root{\Sigma\otimes \Gamma}$ and $\prec_{\Sigma\otimes \Gamma}$
-       is the order on natural numbers. Item 4 become:
-       \begin{enumerate}
-       \item[4'.] The relation $\leq_{\Gamma\otimes\Sigma}$ contains   $\leq_{\Gamma}$ and $\leq_{\Sigma}$ together with:
-       \begin{align*}
-0\leq_{\Gamma\otimes\Sigma} r &\quad\text{ if } \quad \Root{\Sigma}(r) \quad\text{ or }\quad \Root{\Gamma}(r);\qquad\\
-\forall i\in[1,n_1] & \quad p \leq_{\Gamma\otimes\Sigma} i \text{ where } 
-p \text{ is the } i^\text{th} \text{ port of } t;\\
-\forall i\in[1,n_2]&\quad p \leq_{\Gamma\otimes\Sigma} n_1+i \text{ where } 
-p \text{ is the } i^\text{th} \text{ port of } u.
-\end{align*} 
-\end{enumerate}        
- \item Let $t$ be an $n$-ary element of $\Sigma+\Gamma$. Then, it is either an element of $\Sigma$ or an element of $\Gamma$. Suppose wlog. that $t$ is an element of $\Sigma$. We set $\underline{t}_\Sigma$ to be the interpretation of $t$ seen as an element of $\Sigma$. The universe of $\underline{t}$ is the universe of $\underline{t}_\Sigma$ together with $n+1$ new nodes named $0,1,\dots,n$. The interpretation of the predicates from $\widehat \Sigma$ are inherited from $\underline{t}_\Sigma$ as usual. Node $0$ satisfies $\Root{\Sigma+\Gamma}$, the nodes $[1,n]$ satisfy $\Port{\Sigma+\Gamma}$, and they are ordered by $\prec_{\Sigma+\Gamma}$ respecting the order of natural numbers. The relation $\leq_{\Sigma+\Gamma}$ extends $\leq_\Sigma$ with the following pairs: $0\leq r$ if $\Root{\Sigma}(r)$, and $p\leq_{\Sigma+\Gamma} i$ if $p$ is the $i^{th}$ port of $\underline{t}_\Sigma$.
+ \item {\bf Disjoint union.} The vocabulary $\underline{\Sigma+\Gamma}$ is the disjoint union of $\mathcal{I}_{\Sigma+\Gamma}$, $\underline{\Sigma}$, $\underline{\Gamma}$ and two unary predicates $L_{\Sigma+\Gamma}$ and $R_{\Sigma+\Gamma}$.
+
+Let $t$ be an $n$-ary element of $\Sigma+\Gamma$. Then, it is either an element of $\Sigma$ or an element of $\Gamma$. Suppose wlog. that $t$ is an element of $\Sigma$. We set $\underline{t}_\Sigma$ to be the interpretation of $t$ seen as an element of $\Sigma$. The universe of $\underline{t}$ is the universe of $\underline{t}_\Sigma$ together with $n+1$ new nodes named $0,1,\dots,n$. The interpretation of the predicates from $\underline \Sigma$ are inherited from $\underline{t}_\Sigma$ as usual. Node $0$ satisfies $\Root{\Sigma+\Gamma}$, the nodes $[1,n]$ satisfy $\Port{\Sigma+\Gamma}$, and they are ordered by $\prec_{\Sigma+\Gamma}$ respecting the order of natural numbers. All the nodes satisfy $L_{\Sigma+\Gamma}$ (they would all satisfy $R_{\Sigma+\Gamma}$ if $t$ was an element of $\Gamma$).
         
-        \item The vocabulary $\widehat {\trees \Sigma}$, corresponding to the type $\trees \Sigma$, is $\Interface{\Sigma}\uplus\{\sqsubseteq\}$. 
+        \item {\bf Terms.} The vocabulary $\underline {\trees \Sigma}$ is $\mathcal{I}_{\trees\Sigma}+\underline{\Sigma}+\{\sf{reach}_{\trees \Sigma}, \sf{Sib}_{\trees \Sigma}, \sim_{\trees \Sigma}\}$ where . 
     
  Let $t$ be an $n$-ary tree of $\trees \Sigma$. Let $V_\Sigma$ be  the set of its $\Sigma$-nodes and $V_\portletter$ be the set of its $\portletter$-nodes. 
 \begin{enumerate}
-\item The universe of $\underline{t}$ is $\{\underline{v}| v\in V_\Sigma\}\uplus V_\portletter\uplus\{0\}$.
-\item The interpretation of the predicates from $\widehat \Sigma$ are inherited from the structures $\underline{v}$, where $v\in V_\Sigma$.
+\item The universe of $\underline{t}$ is $\{\underline{v}| v\in V_\Sigma\}+ V_\portletter+\{0\}$.
+\item The interpretation of the predicates from $\underline \Sigma$ are inherited from the structures $\underline{v}$, where $v\in V_\Sigma$.
 \item Node $0$ satisfies $\Root{\trees\Sigma}$. The nodes $V_\portletter$ satisfy $\Port{\trees\Sigma}$, and they are ordered by $\prec_{\trees\Sigma}$ respecting their order in $t$. 
-\item The relation $\leq_{\trees\Sigma}$ extends $\leq_\Sigma$ with the following pairs:      
-\begin{itemize}
-\item $0\leq_{\trees\Sigma} r$ if $r$ is the root of $\underline{v}$ and $v$ is the root of $t$.
-\item $ p\leq_{\trees\Sigma} r$ if there is $v,w \in V_\Sigma$ such that:
-\begin{itemize}
-\item $v$ is the $i^{th}$ son of $w$; 
-\item $r$ is the root of $\underline{w}$ and $p$ is the $i^{th}$ port of $\underline{v}$.
-\end{itemize}
-\item $p\leq_{\trees\Sigma} w$ if there is $v\in V_\Sigma$ and $w\in V_\portletter$ such that:
-\begin{itemize}
-\item $w$ is the $i^{th}$ son of $v$ in $t$;
-\item $p$ is the $i^{th}$ port of $\underline{v}$.
-\end{itemize}
-\end{itemize}
+\item The relation $\leq_{\trees\Sigma}$ 
 \end{enumerate}
 \begin{center}
 Picture
@@ -107,9 +97,9 @@ Picture
 
 \begin{definition} Let $\Sigma, \Gamma\in \Tt$. We say that a function $f:\Sigma\to \Gamma$ is \emph{definable by an FO-transduction} if there is some FO-transduction $\varphi$ which makes the following diagram commutes:
 \[\begin{array}{lll}
-\Sigma& \stackrel{t\mapsto \underline{t}}{\xrightarrow{\hspace*{3cm}}} & \text{structures over }\widehat \Sigma \\
+\Sigma& \stackrel{t\mapsto \underline{t}}{\xrightarrow{\hspace*{3cm}}} & \text{structures over }\underline \Sigma \\
 f&&\varphi\\
-\Gamma& \stackrel{t\mapsto \underline{t}}{\xrightarrow{\hspace*{3cm}}}  & \text{structures over }\widehat \Gamma 
+\Gamma& \stackrel{t\mapsto \underline{t}}{\xrightarrow{\hspace*{3cm}}}  & \text{structures over }\underline \Gamma 
 \end{array}\]
 \end{definition}
 
@@ -130,10 +120,10 @@ y=\sf{succ}_< (x) &:=  y<x \wedge \neg (\exists z. y<z \wedge z<x)
 \begin{enumerate}
 \item $\sf{Flat}$. Given a tree $t$ of type $\trees\trees\Sigma$, the fucntion $\sf{Flat}(t)$ can be implemented using an FO-transduction as follows: the copying constant is 1, the universe formula is 
 \[\varphi_1(x) = \neg (\Root{\trees\Sigma}(x) \vee \Port{\trees\Sigma}(x) )  \]
-For every relation symbol $R\in\widehat \Sigma$ , we conserve the same interpretation:
+For every relation symbol $R\in\underline \Sigma$ , we conserve the same interpretation:
 \[\varphi_R^{1,1}(x,y)=R(x,y) \text{ if $R$ is binary }
 \quad \text{ and } \quad\varphi_R^{1}(x)=R(x) \text{ if $R$ is unary }\] 
-For the other symbols of $\widehat\trees\Sigma$, that is $\Root{\trees\Sigma},\Port{\trees\Sigma}, \prec_{\trees\Sigma}, \leq_{\trees\Sigma}$, we "shift by one $\trees$" their interpretation, more precisely, if $R\in\{\Root{}, \Port{}, \prec, \leq\}$, we set:
+For the other symbols of $\underline\trees\Sigma$, that is $\Root{\trees\Sigma},\Port{\trees\Sigma}, \prec_{\trees\Sigma}, \leq_{\trees\Sigma}$, we "shift by one $\trees$" their interpretation, more precisely, if $R\in\{\Root{}, \Port{}, \prec, \leq\}$, we set:
 \[ \varphi^1_{R_{\trees\Sigma}}(x) = R_{\trees\trees\Sigma}(x) \text{ if $R_{\trees\Sigma}$ is unary } \]
 \[\varphi^{1,1}_{R_{\trees\Sigma}}(x,y) = R_{\trees\trees\Sigma}(x,y) \text{ if it is binary. }\] 
 \item $\sf{Block}$. We show how to simulation the function $\sf{Block}:\trees (\Sigma + \Gamma) \to \trees (\trees \Sigma + \trees \Gamma)$ by an FO-transduction. 
@@ -169,7 +159,7 @@ Add pictures and explanations.
 \varphi_1(x)=\neg [\Root{\Sigma\otimes\Gamma}(x)\vee (\Port{\Sigma\otimes\Gamma}(x)\wedge \exists y. y=succ_{<_{\trees(\Sigma\otimes\Gamma)}}(x) \wedge \Root{\Sigma\otimes\Gamma}(y))]\\
 \varphi_2(x)=\exists r, y. \Root{\trees(\Sigma\otimes\Gamma)}(r) \wedge y=succ_{<_{\trees(\Sigma\otimes\Gamma)}}(r) \wedge x= succ_{<_{\trees(\Sigma\otimes\Gamma)}}(x) 
 \end{align*}
-In the first copy, all the relations of $\widehat{\Sigma}$ and $\widehat{\Gamma}$ are interpreted in the same way. 
+In the first copy, all the relations of $\underline{\Sigma}$ and $\underline{\Gamma}$ are interpreted in the same way. 
 Let us discuss the relation of $\trees\Sigma$ and $\trees\Gamma$.
 \[\varphi^{1,1}_{\trees\Sigma}(x,y)=\] 
 \end{enumerate} 
