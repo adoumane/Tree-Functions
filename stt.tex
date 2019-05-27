@@ -9,12 +9,12 @@ The general idea is to convert a first-order tree transduction into an automaton
 \subsection{Streaming tree transducers}
 The automaton model is based on streaming tree transducers~\cite{alur2017streaming}, although our syntax is based more on notions from universal algebra such as terms and substituion.
 % We use an algebraic syntax for streaming tree transducers. 
-% \emph{Linear polynomials.} Suppose that $\Sigma$ is a finite ranked alphabet.  For a ranked set $X$, define a \emph{polynomial with variables $X$ over $\Sigma$} to be any term in $\trees (\Sigma + X)$. Given such a polynomial $p$, and an arity preserving valuation $v : X \to \trees \Sigma$, we define $p(v)\in \trees \Sigma$ to be the term obtained from $p$ by replacing each variable with its value under $v$. The arity of $p(v)$ is the same as the arity of $p$.  A polynomial is called \emph{linear}, or non-duplicating, if each variable from $X$ is used at most once.
+% \emph{Linear polynomials.} Suppose that $\Sigma$ is a finite ranked alphabet.  For a ranked set $X$, define a \emph{polynomial with variables $X$ over $\Sigma$} to be any term in $\tmonad (\Sigma + X)$. Given such a polynomial $p$, and an arity preserving valuation $v : X \to \tmonad \Sigma$, we define $p(v)\in \tmonad \Sigma$ to be the term obtained from $p$ by replacing each variable with its value under $v$. The arity of $p(v)$ is the same as the arity of $p$.  A polynomial is called \emph{linear}, or non-duplicating, if each variable from $X$ is used at most once.
 
 % \begin{definition}
 %     For a ranked set $\Sigma$, define $\aalg_\Sigma$ to be the following multisorted algebra. 
 %     \begin{itemize}
-%         \item The sorts are arities, i.e.~numbers in $\set{0,1,2,\ldots}$, and elements of sort $n$ are $n$-ary terms in $\trees  \Sigma$;
+%         \item The sorts are arities, i.e.~numbers in $\set{0,1,2,\ldots}$, and elements of sort $n$ are $n$-ary terms in $\tmonad  \Sigma$;
 %         \item The operations are the polynomial operations. 
 %     \end{itemize}
 % \end{definition}
@@ -25,11 +25,11 @@ The automaton model is based on streaming tree transducers~\cite{alur2017streami
 \paragraph*{Register valuations and updates.}   Let $\Gamma, R$ be finite ranked sets, which are called the \emph{output alphabet} and \emph{register names} respectively.  
 A \emph{register valuation} (over $\Gamma$ and $R$) is defined to be any arity-preserving function
 \begin{align*}
-    v : R \to \trees \Gamma
+    v : R \to \tmonad \Gamma
 \end{align*}
 For  $k \in \set{0,1,\ldots}$, a \emph{$k$-ary register update} (over $\Gamma$ and $R$) is defined to be any an arity-preserving function
 \begin{align*}
-    u : R \to \trees ( \Gamma + \underbrace{R + \cdots +R}_{\text{$k$ times}})
+    u : R \to \tmonad ( \Gamma + \underbrace{R + \cdots +R}_{\text{$k$ times}})
 \end{align*}
 A $k$-ary register update can be applied to a $k$-tuple of register valuations, yielding a single register valuation, as illustrated in the following picture:
 \begin{center}
@@ -52,7 +52,7 @@ In other words, if we fix the an output alphabet $\Gamma$ and a set of registers
  \end{align*}
  \item An ouptut function
  \begin{align*}
-     Q \to \treesz(\Gamma + R)
+     Q \to \trees(\Gamma + R)
  \end{align*}
 \end{itemize}
 \end{definition}
@@ -87,13 +87,13 @@ To formalise the replacement mentioned in step (a), we use the following definit
 \begin{definition}[Fo translation]
      An fo-translation is a  function
     \begin{align*}
-      f :   \treesz \Sigma \to \treesz \Gamma
+      f :   \trees \Sigma \to \trees \Gamma
     \end{align*}
     which is given by a family of unary queries 
     \begin{align*}
         \set{\varphi_a(x)}_{a \in \Gamma}
     \end{align*}
-    over input alphabet $\Sigma$ such that for every tree $t \in \treesz \Sigma$ and node $x$ in $t$, there is exactly one $a \in \Gamma$ such that $\varphi_a(x)$ is true, and furthermore the arity of $a$ is the same as the arity (number of children) of $x$.  The output tree $f(t)$ is defined by replacing the label of each node $x$ by the unique $a$ which makes $\varphi_a(x)$ true.
+    over input alphabet $\Sigma$ such that for every tree $t \in \trees \Sigma$ and node $x$ in $t$, there is exactly one $a \in \Gamma$ such that $\varphi_a(x)$ is true, and furthermore the arity of $a$ is the same as the arity (number of children) of $x$.  The output tree $f(t)$ is defined by replacing the label of each node $x$ by the unique $a$ which makes $\varphi_a(x)$ true.
 \end{definition}
 
 % \begin{lemma}
@@ -104,7 +104,7 @@ To formalise the replacement mentioned in step (a), we use the following definit
 
 \begin{lemma}\label{lem:decomposition-of-fo-transductions} Every first-order tree function $f$  can be decomposed as
     \begin{align*}
-        \xymatrix@C=2cm{\treesz \Sigma \ar[d]_f \ar[r]^g& \treesz \overbrace{(\Delta \otimes \cdots \otimes \Delta)}^{\text{$k$ times}} \ar[d]^{\mathsf{unfold}} \\   \treesz \Gamma  & \treesz \Delta \ar[l]^h}
+        \xymatrix@C=2cm{\trees \Sigma \ar[d]_f \ar[r]^g& \trees \overbrace{(\Delta \otimes \cdots \otimes \Delta)}^{\text{$k$ times}} \ar[d]^{\mathsf{unfold}} \\   \trees \Gamma  & \trees \Delta \ar[l]^h}
     \end{align*}
     where 
     \begin{itemize}

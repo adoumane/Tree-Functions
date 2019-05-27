@@ -1,37 +1,31 @@
 \section{Trees and transductions}
 \label{sec:trees-transductions}
-A \emph{ranked set} is a set where each element has an associated \emph{arity} in $\set{0,1,2,\ldots}$. The following picture describes the notion of trees that use and some terminology:
+A \emph{ranked set} is a set where each element has an associated \emph{arity} in $\set{0,1,2,\ldots}$. We use ranked sets as building blocks for trees. The following picture describes the notion of trees that we use and some terminology:
 \mypic{1}
 % When talking about elements of a ranked set, we mean elements of the underlying set.   For a ranked set $A$ and a finite set of variables $X \subseteq \varnames$, we write $\slice A X$ for the elements of $A$ that have arity $X$. 
 
-We use standard tree terminology, such as ancestor, descendant, child, parent. 
+We use standard tree terminology, such as ancestor, descendant, child, parent. We write $\trees \Sigma$ for the set of trees over a ranked set $\Sigma$. 
+We define a \emph{tree language} over a ranked alphabet $\Sigma$ to be any subset of $\trees \Sigma$. A \emph{tree transduction} is any function
+\begin{align*}
+f : \trees \Sigma \to \trees \Gamma.
+\end{align*}
+The ranked set $\Sigma$ is called the \emph{input alphabet}, while $\Gamma$ is called the \emph{output alphabet}. The goal of this paper is to characterise 
 
-We define a tree language over a ranked alphabet $\Sigma$ to be any subset of $\trees \Sigma$. An $n$-ary query over $\Sigma$ is defined to be any subset of 
-\begin{align*}
-    \set{(t,x_1,\ldots,x_n) : t \in \treesz \Sigma \text{ and $x_1,\ldots,x_n$ are nodes in $t$}}.
-\end{align*}
-In particular, a tree language can be viewed as a nullary query, i.e.~one of arity zero.  A tree-to-tree transduction is defined to be any function
-\begin{align*}
-    f : \treesz \Sigma \to \treesz \Gamma
-\end{align*}
-for finite ranked sets $\Sigma, \Gamma$. We are interseted in languages, queries and transductions which can be defined using logic, mainly first-order logic, as described below.
 
   
-\paragraph*{Logic on trees.} For an introduction to the  logic-automata connection, see~\cite{thomas1997languages}. The basic idea is to view a tree as a model, and then to use logics such as first-order logic to describe properties of this model.
+\paragraph*{Logic on trees.} For an introduction to the  logic-automata connection, see~\cite{thomas1997languages}. The basic idea is to view a tree as a model, and then to use logics such as first-order logic  or monadic second-order logic to describe properties of this model.
 
 \begin{definition}[Tree as a model]\label{def:tree-model}
-    The \emph{model} associated to a  tree $t$ over a ranked alphabet $\Sigma$ has as its universe the nodes of the tree, and is equipped with the following predicates:
-    \begin{itemize}
-        \item $x$ is a descendant of $y$;
-        \item $x$ is an $i$-th child, for every $i \in \set{1,2,\ldots}$;
-        \item $x$ has label $a$, for every $a \in \Sigma$.
-    \end{itemize}        
-\end{definition}
-Technically speaking, there are infinitely many ``$i$-th child'' predicates, but only the ones where $i$ is at most the maximal arity of $\Sigma$ are going to be interpreted in a nonempty way.
-
+    The \emph{model} $\underline t$  associated to a  tree $t$ over a ranked alphabet $\Sigma$ has as its universe the nodes of the tree, and is equipped with the following predicates:
+    \begin{align*}
+        \underbrace{x < y}_{\substack{\text{$x$ is an ancestor of $y$}}} \qquad \underbrace{\mathrm{child}_i(x)}_{\substack{\text{$x$ is an $i$-th child}\\ \text{(one unary predicate for each $i\in \set{1,2,\ldots}$)}}}
+        \qquad \underbrace{a(x)}_{\substack{\text{$x$ has label $a$}\\ \text{(one unary predicate for each $a \in \Sigma$)}}}
+    \end{align*}
+    \end{definition}
  To express properties of trees, we use first-order logic and monadic second-order logic \mso. For definitions of these logics, see~\cite[Section 3]{thomas1997languages}.
- A sentence of first-order logic (or \mso) describes a tree language, i.e.~a set of trees over a fixed alphabet, while a formula with $n$ free first-order variables describes an $n$-unary query.  One could also consider queries with free set variables; these are not used in this paper.
-
+ A sentence of first-order logic (or \mso) describes a tree language, i.e.~a set of trees over a fixed alphabet.
+ 
+ The main topic of this paper is not tree languages, but tree-to-tree functions.
 The following definition shows how to describe  a tree-to-tree function using logic. A \emph{relational vocabulary} is a set of relation names, each one with associated arity -- formally speaking this is the same thing as a ranked set. 
 
 \begin{definition}[First-order transduction]\label{def:fo-transduction}
@@ -39,8 +33,8 @@ The following definition shows how to describe  a tree-to-tree function using lo
 \begin{enumerate}
     \item Input and output relational vocabularies $\tau,\sigma$;
     \item A copying constant $k \in \set{1,2,\ldots}$;
-    \item For every $i \in \set{1,\ldots,k}$ a \emph{universe formula} $\varphi_i(x)$ over $\tau$;
-    \item For every relation name $R \in \sigma$ of arity $n$, and every tuple $\bar i \in \set{1,\ldots,k}^n$, a first-order formula $\varphi_R^{\bar i}(x_1,\ldots,x_n)$ over $\tau$.
+    \item For every $i \in \set{1,\ldots,k}$ a \emph{universe formula} $\varphi_i(x)$ over the input vocabulary $\tau$;
+    \item For every $n$-ary relation name $R$ in the input vocabulary, and every tuple $\bar i \in \set{1,\ldots,k}^n$, a first-order formula $\varphi_R^{\bar i}(x_1,\ldots,x_n)$ over $\tau$.
 \end{enumerate}
 \end{definition}
 
@@ -55,7 +49,7 @@ defined as follows. If the input model is $\mathbb A$, then the output model is 
 
 We care about first-order transductions that input and output trees. By abuse of notations, we say that a  function 
     \begin{align*}
-        f : \treesz \Sigma \to \treesz \Gamma
+        f : \trees \Sigma \to \trees \Gamma
     \end{align*}
     is  a first-order transduction if there is a first-order transduction which gives the same result, assuming the trees are encoded as models as in Defintion~\ref{def:tree-model}.   
 

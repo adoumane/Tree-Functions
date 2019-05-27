@@ -81,14 +81,14 @@ We construct the vocabulary $\underline{\Sigma}$ and the structures $\underline{
 
 Let $t$ be an $n$-ary element of $\Sigma+\Gamma$. Then, it is either an element of $\Sigma$ or an element of $\Gamma$. Suppose wlog. that $t$ is an element of $\Sigma$. We set $\underline{t}_\Sigma$ to be the interpretation of $t$ seen as an element of $\Sigma$. The universe of $\underline{t}$ is the universe of $\underline{t}_\Sigma$ together with $n+1$ new nodes named $0,1,\dots,n$. The interpretation of the predicates from $\underline \Sigma$ are inherited from $\underline{t}_\Sigma$ as usual. Node $0$ satisfies $\Root{\Sigma+\Gamma}$, the nodes $[1,n]$ satisfy $\Port{\Sigma+\Gamma}$, and they are ordered by $\prec_{\Sigma+\Gamma}$ respecting the order of natural numbers. All the nodes satisfy $L_{\Sigma+\Gamma}$ (they would all satisfy $R_{\Sigma+\Gamma}$ if $t$ was an element of $\Gamma$).
         
-        \item {\bf Terms.} The vocabulary $\underline {\trees \Sigma}$ is $\mathcal{I}_{\trees\Sigma}+\underline{\Sigma}+\{\sf{reach}_{\trees \Sigma}, \sf{Sib}_{\trees \Sigma}, \sim_{\trees \Sigma}\}$ where . 
+        \item {\bf Terms.} The vocabulary $\underline {\tmonad \Sigma}$ is $\mathcal{I}_{\tmonad\Sigma}+\underline{\Sigma}+\{\sf{reach}_{\tmonad \Sigma}, \sf{Sib}_{\tmonad \Sigma}, \sim_{\tmonad \Sigma}\}$ where . 
     
- Let $t$ be an $n$-ary tree of $\trees \Sigma$. Let $V_\Sigma$ be  the set of its $\Sigma$-nodes and $V_\portletter$ be the set of its $\portletter$-nodes. 
+ Let $t$ be an $n$-ary tree of $\tmonad \Sigma$. Let $V_\Sigma$ be  the set of its $\Sigma$-nodes and $V_\portletter$ be the set of its $\portletter$-nodes. 
 \begin{enumerate}
 \item The universe of $\underline{t}$ is $\{\underline{v}| v\in V_\Sigma\}+ V_\portletter+\{0\}$.
 \item The interpretation of the predicates from $\underline \Sigma$ are inherited from the structures $\underline{v}$, where $v\in V_\Sigma$.
-\item Node $0$ satisfies $\Root{\trees\Sigma}$. The nodes $V_\portletter$ satisfy $\Port{\trees\Sigma}$, and they are ordered by $\prec_{\trees\Sigma}$ respecting their order in $t$. 
-\item The relation $\leq_{\trees\Sigma}$ 
+\item Node $0$ satisfies $\Root{\tmonad\Sigma}$. The nodes $V_\portletter$ satisfy $\Port{\tmonad\Sigma}$, and they are ordered by $\prec_{\tmonad\Sigma}$ respecting their order in $t$. 
+\item The relation $\leq_{\tmonad\Sigma}$ 
 \end{enumerate}
 \begin{center}
 Picture
@@ -107,7 +107,7 @@ f&&\varphi\\
 Let $\Gamma, \Sigma \in \Tt$. If $f:\Sigma\to\Gamma$ is a first-order term function, then it is definable by an FO-transduction. 
 \end{proposition}
 
-\begin{pr}
+\begin{proof}
 The proof is by induction, following the defintion of first-order term functions. The atomic functions $\llone$, constant functions, projection, co-projection and distributions are easily definable by FO-transductions.  
 We prove now that are also definable by FO-ransductions. 
 \\
@@ -118,25 +118,25 @@ In the following we adopt the following shortcuts:
 y=\sf{succ}_< (x) &:=  y<x \wedge \neg (\exists z. y<z \wedge z<x)
 \end{align*} 
 \begin{enumerate}
-\item $\sf{Flat}$. Given a tree $t$ of type $\trees\trees\Sigma$, the fucntion $\sf{Flat}(t)$ can be implemented using an FO-transduction as follows: the copying constant is 1, the universe formula is 
-\[\varphi_1(x) = \neg (\Root{\trees\Sigma}(x) \vee \Port{\trees\Sigma}(x) )  \]
+\item $\sf{Flat}$. Given a tree $t$ of type $\tmonad\tmonad\Sigma$, the fucntion $\sf{Flat}(t)$ can be implemented using an FO-transduction as follows: the copying constant is 1, the universe formula is 
+\[\varphi_1(x) = \neg (\Root{\tmonad\Sigma}(x) \vee \Port{\tmonad\Sigma}(x) )  \]
 For every relation symbol $R\in\underline \Sigma$ , we conserve the same interpretation:
 \[\varphi_R^{1,1}(x,y)=R(x,y) \text{ if $R$ is binary }
 \quad \text{ and } \quad\varphi_R^{1}(x)=R(x) \text{ if $R$ is unary }\] 
-For the other symbols of $\underline\trees\Sigma$, that is $\Root{\trees\Sigma},\Port{\trees\Sigma}, \prec_{\trees\Sigma}, \leq_{\trees\Sigma}$, we "shift by one $\trees$" their interpretation, more precisely, if $R\in\{\Root{}, \Port{}, \prec, \leq\}$, we set:
-\[ \varphi^1_{R_{\trees\Sigma}}(x) = R_{\trees\trees\Sigma}(x) \text{ if $R_{\trees\Sigma}$ is unary } \]
-\[\varphi^{1,1}_{R_{\trees\Sigma}}(x,y) = R_{\trees\trees\Sigma}(x,y) \text{ if it is binary. }\] 
-\item $\sf{Block}$. We show how to simulation the function $\sf{Block}:\trees (\Sigma + \Gamma) \to \trees (\trees \Sigma + \trees \Gamma)$ by an FO-transduction. 
-\item $\sf{Comb}$. The function $\sf{Comb}:\trees \llone\to\trees\llone$ is implemented by an FO-transduction as follows. Th copying constant is 4. 
+For the other symbols of $\underline\tmonad\Sigma$, that is $\Root{\tmonad\Sigma},\Port{\tmonad\Sigma}, \prec_{\tmonad\Sigma}, \leq_{\tmonad\Sigma}$, we "shift by one $\tmonad$" their interpretation, more precisely, if $R\in\{\Root{}, \Port{}, \prec, \leq\}$, we set:
+\[ \varphi^1_{R_{\tmonad\Sigma}}(x) = R_{\tmonad\tmonad\Sigma}(x) \text{ if $R_{\tmonad\Sigma}$ is unary } \]
+\[\varphi^{1,1}_{R_{\tmonad\Sigma}}(x,y) = R_{\tmonad\tmonad\Sigma}(x,y) \text{ if it is binary. }\] 
+\item $\sf{Block}$. We show how to simulation the function $\sf{Block}:\tmonad (\Sigma + \Gamma) \to \tmonad (\tmonad \Sigma + \tmonad \Gamma)$ by an FO-transduction. 
+\item $\sf{Comb}$. The function $\sf{Comb}:\tmonad \llone\to\tmonad\llone$ is implemented by an FO-transduction as follows. Th copying constant is 4. 
 In the first copy we keep the root and the ports, and in the other 3 copies we keep all the ports exept the first one:
 \begin{align*}
-\varphi_1(x)&=\Root{\trees\llone}(x) \vee \Port{\trees\llone}(x)\\
-\varphi_i(x)&=\Port{\trees\llone}(x)\wedge \neg \sf{FirstPort}_{\trees\llone}(x)& i=2,3,4
+\varphi_1(x)&=\Root{\tmonad\llone}(x) \vee \Port{\tmonad\llone}(x)\\
+\varphi_i(x)&=\Port{\tmonad\llone}(x)\wedge \neg \sf{FirstPort}_{\tmonad\llone}(x)& i=2,3,4
 \end{align*}
 
 \begin{align*}
-\varphi^1_{\Root{\trees\llone}}(x)=\Root{\trees\llone}(x) \qquad \varphi^1_{\Port{\trees\llone}}(x)=\Port{\trees\llone}(x)
-\qquad\varphi^{1,1}_{\prec_{\trees\llone}}(x,y)=\prec_{\trees\llone}(x,y) 
+\varphi^1_{\Root{\tmonad\llone}}(x)=\Root{\tmonad\llone}(x) \qquad \varphi^1_{\Port{\tmonad\llone}}(x)=\Port{\tmonad\llone}(x)
+\qquad\varphi^{1,1}_{\prec_{\tmonad\llone}}(x,y)=\prec_{\tmonad\llone}(x,y) 
 \end{align*}
 
 \begin{align*}
@@ -145,23 +145,23 @@ In the first copy we keep the root and the ports, and in the other 3 copies we k
 \end{align*}
 
 \begin{align*}
-\varphi^{2,3}_{<_{\trees\llone}}(x,y)= \varphi^{2,4}_{<_{\trees\llone}}(x,y)= ((x=y) \vee (x\prec_{\trees\llone} y))\\
-\varphi^{4,2}_{<_{\trees\llone}}(x,y)=\varphi^{4,3}_{<_{\trees\llone}}(x,y)=\varphi^{2,2}_{<_{\trees\llone}}(x,y)= \varphi^{4,4}_{<_{\trees\llone}}(x,y)= (x\prec_{\trees\llone} y)\\
-\varphi^{1,1}_{<_{\trees\llone}}(x,y)=\varphi^{1,2}_{<_{\trees\llone}}(x,y)= \Root{\trees\llone}(x)\\
-\varphi^{2,1}_{<_{\trees\llone}}(x,y)=\varphi^{3,1}_{<_{\trees\llone}}(x,y)=(x=y) \vee (y\prec_{\trees\llone} x)\qquad 
-\varphi^{4,1}_{<_{\trees\llone}}(x,y)=(y\prec_{\trees\llone} x)
+\varphi^{2,3}_{<_{\tmonad\llone}}(x,y)= \varphi^{2,4}_{<_{\tmonad\llone}}(x,y)= ((x=y) \vee (x\prec_{\tmonad\llone} y))\\
+\varphi^{4,2}_{<_{\tmonad\llone}}(x,y)=\varphi^{4,3}_{<_{\tmonad\llone}}(x,y)=\varphi^{2,2}_{<_{\tmonad\llone}}(x,y)= \varphi^{4,4}_{<_{\tmonad\llone}}(x,y)= (x\prec_{\tmonad\llone} y)\\
+\varphi^{1,1}_{<_{\tmonad\llone}}(x,y)=\varphi^{1,2}_{<_{\tmonad\llone}}(x,y)= \Root{\tmonad\llone}(x)\\
+\varphi^{2,1}_{<_{\tmonad\llone}}(x,y)=\varphi^{3,1}_{<_{\tmonad\llone}}(x,y)=(x=y) \vee (y\prec_{\tmonad\llone} x)\qquad 
+\varphi^{4,1}_{<_{\tmonad\llone}}(x,y)=(y\prec_{\tmonad\llone} x)
 \end{align*}
 \begin{center}
 Add pictures and explanations.
 \end{center}
-\item $\sf{Unfold}$. Let us now consider the function $\sf{Unfold}:\trees(\Sigma\otimes \Gamma)\to \trees\Sigma\otimes\trees\Gamma$. The copying constant is 2. 
+\item $\sf{Unfold}$. Let us now consider the function $\sf{Unfold}:\tmonad(\Sigma\otimes \Gamma)\to \tmonad\Sigma\otimes\tmonad\Gamma$. The copying constant is 2. 
 \begin{align*}
-\varphi_1(x)=\neg [\Root{\Sigma\otimes\Gamma}(x)\vee (\Port{\Sigma\otimes\Gamma}(x)\wedge \exists y. y=succ_{<_{\trees(\Sigma\otimes\Gamma)}}(x) \wedge \Root{\Sigma\otimes\Gamma}(y))]\\
-\varphi_2(x)=\exists r, y. \Root{\trees(\Sigma\otimes\Gamma)}(r) \wedge y=succ_{<_{\trees(\Sigma\otimes\Gamma)}}(r) \wedge x= succ_{<_{\trees(\Sigma\otimes\Gamma)}}(x) 
+\varphi_1(x)=\neg [\Root{\Sigma\otimes\Gamma}(x)\vee (\Port{\Sigma\otimes\Gamma}(x)\wedge \exists y. y=succ_{<_{\tmonad(\Sigma\otimes\Gamma)}}(x) \wedge \Root{\Sigma\otimes\Gamma}(y))]\\
+\varphi_2(x)=\exists r, y. \Root{\tmonad(\Sigma\otimes\Gamma)}(r) \wedge y=succ_{<_{\tmonad(\Sigma\otimes\Gamma)}}(r) \wedge x= succ_{<_{\tmonad(\Sigma\otimes\Gamma)}}(x) 
 \end{align*}
 In the first copy, all the relations of $\underline{\Sigma}$ and $\underline{\Gamma}$ are interpreted in the same way. 
-Let us discuss the relation of $\trees\Sigma$ and $\trees\Gamma$.
-\[\varphi^{1,1}_{\trees\Sigma}(x,y)=\] 
+Let us discuss the relation of $\tmonad\Sigma$ and $\tmonad\Gamma$.
+\[\varphi^{1,1}_{\tmonad\Sigma}(x,y)=\] 
 \end{enumerate} 
 
- \end{pr}
+ \end{proof}

@@ -2,13 +2,13 @@
 \label{sec:one-register}
 
 % \begin{definition}
-%     Let $\Sigma$ be a ranked set. We can view $\trees \Sigma$ as a multisorted algebra as follows.
+%     Let $\Sigma$ be a ranked set. We can view $\tmonad \Sigma$ as a multisorted algebra as follows.
 %     \begin{itemize}
 %         \item the sorts are arities;
 %         \item the elements of arity $n$ are $n$-ary terms in $\Sigma$;
-%         \item for every ranked set $X$ and every $t \in \trees (\Sigma+X)$ there is an operation
+%         \item for every ranked set $X$ and every $t \in \tmonad (\Sigma+X)$ there is an operation
 %         \begin{align*}
-%             (\trees \Sigma)^X \to \trees \Sigma
+%             (\tmonad \Sigma)^X \to \tmonad \Sigma
 %         \end{align*}
 %     \end{itemize}
 % \end{definition}
@@ -21,7 +21,7 @@
 
 Let us fix in the rest of this section an SST $S$ with input and output alphabets $\Sigma$ and $\Gamma$, a set of states $Q$, a unique register $r$ which is unary and a transition function $\delta_a$ for every $a\in \Sigma$. Let $U$ be the set of register updates used by $S$, that is:
 $$U=\{u\ \mid\  \exists \vec{q}, q' \in Q, a\in \Sigma, \delta_a(q)=(q',u)\}$$
-Since $S$ has only one register,  $U$ can be seen as a finite subset of  $\trees_1( \Gamma + k.r)$, where $k$ is the maximal arity of $\Sigma$.
+Since $S$ has only one register,  $U$ can be seen as a finite subset of  $\tmonad_1( \Gamma + k.r)$, where $k$ is the maximal arity of $\Sigma$.
 In words, $U$ is a finite set of unary trees over $\Gamma$ and $k$ copies of $r$.
 
 Let $\mathcal{U}=(U,ar)$ be the ranked set whose underlying set is $U$ and the arity of each symbol is the number of copies of $r$ it uses. 
@@ -35,7 +35,7 @@ Be aware of the distinction between the arity of a symbol of $\mathcal{U}$, whic
 
 We define in the following the substitution function, which replaces inductively every copy of the register $r$ by its value.
 \begin{definition}
-Let $\norm{\_}:\trees_0(\Uu)\to \trees_1(\Gamma)$ be the function defined inductively as follows:
+Let $\norm{\_}:\tmonad_0(\Uu)\to \tmonad_1(\Gamma)$ be the function defined inductively as follows:
 
 If $T=u[T_1,\dots,T_n]$, where $u\in\Uu$, then $\norm{T}=\underline{u}[\norm{T_1}/r_1,\dots,\norm{T_n}/r_n]$. 
 
@@ -43,14 +43,14 @@ If $T=u[T_1,\dots,T_n]$, where $u\in\Uu$, then $\norm{T}=\underline{u}[\norm{T_1
 
 \noindent Let $\star$ be a nullary symbol not in $\Gamma$. We set: 
 \begin{align*}
-  Subst \colon\trees_0(\Uu) &\to \trees_0(\Gamma+\star)\\
+  Subst \colon\tmonad_0(\Uu) &\to \tmonad_0(\Gamma+\star)\\
   T &\mapsto \norm{T}[\star].
 \end{align*} 
 \end{definition}
 
 \begin{example}
 \begin{center}
-A tree $T$ of $\trees \Uu$ $\qquad\qquad\mapsto\qquad\qquad$ Its substitution $Subst(T)$ 
+A tree $T$ of $\tmonad \Uu$ $\qquad\qquad\mapsto\qquad\qquad$ Its substitution $Subst(T)$ 
 \end{center}
 \end{example}
 
@@ -60,7 +60,7 @@ Let us show that $Subst$ is a first-order tree function. We will show that the c
 \noindent\textbf{Step 1:} We have noticed that the tree underlying a symbol of $\Uu$ is of arity $1$. To bridge this mismatch beteen the arity of a symbol and its underlying tree, we apply the following
 rank-preverving function, where $@$ is a binary symbol and $\star$ the nullary symbol used in the definition of the function $Subst$:
  \begin{align*}
-  Match\colon \Uu &\to \trees(\Gamma+\star+k@)\\
+  Match\colon \Uu &\to \tmonad(\Gamma+\star+k@)\\
   u &\mapsto \underline{u}[\star][@/r].
 \end{align*} 
 In words, the function $Match$ transforms the occurrences of the unary symbol $r$ appearing in $u$ into the binary symbol $@$, and closes the free variable of $\underline{u}$ by the nullary symbol $\star$.
@@ -68,34 +68,34 @@ In words, the function $Match$ transforms the occurrences of the unary symbol $r
 Picture
 \end{center}
 \medskip
-\textbf{Step 2:} After step 1, each symbol of $\Uu$ became a tree of $\trees(\Gamma+\star+@)$ of the same arity. Inside each such tree, we isolate the block of nodes which are the ancestors of $\star$. This function is of type $\trees(\Gamma+@+\star)\to \trees (\trees (\Gamma+@+\star)+\Gamma+@)$. We call \emph{skeleton} the block isolated by this function, ad we denote by 
-$SK$ the type $\trees (\Gamma+@+\star)$.
+\textbf{Step 2:} After step 1, each symbol of $\Uu$ became a tree of $\tmonad(\Gamma+\star+@)$ of the same arity. Inside each such tree, we isolate the block of nodes which are the ancestors of $\star$. This function is of type $\tmonad(\Gamma+@+\star)\to \tmonad (\tmonad (\Gamma+@+\star)+\Gamma+@)$. We call \emph{skeleton} the block isolated by this function, ad we denote by 
+$SK$ the type $\tmonad (\Gamma+@+\star)$.
 \begin{center}
 Picture
 \end{center}
-The composition of Step 1 and Step 2 functions yields the function $Skel:\Uu\to \trees (SK+\Gamma+@)$. 
+The composition of Step 1 and Step 2 functions yields the function $Skel:\Uu\to \tmonad (SK+\Gamma+@)$. 
 \begin{center}
 Picture
 \end{center}
-Since $Skel$ is rank preserving and has a finite domain, it is then a fo tree function. We can then lift it to the trees of $\trees \Uu$ via the combinator $\trees$. Here is an example of what we get after these steps.
+Since $Skel$ is rank preserving and has a finite domain, it is then a fo tree function. We can then lift it to the trees of $\tmonad \Uu$ via the combinator $\tmonad$. Here is an example of what we get after these steps.
 \begin{center}
 Picture
 \end{center}
  \medskip
-\textbf{Step 3:} We apply a flattening to get a tree of type $\trees(SK+\Gamma+@)$. 
+\textbf{Step 3:} We apply a flattening to get a tree of type $\tmonad(SK+\Gamma+@)$. 
 \begin{center}
 Picture
 \end{center}
 \medskip
-\textbf{Step 4:} We apply the block function to isolate the sketeons and the $@$'s from the other symbols. We get a tree of type $\trees (\trees(SK+@)+\trees\Gamma)$. To the blocks of type $\trees \Gamma$ we apply the identity function. Let us describe in the step 5 and 6 the function that we apply to the blocks $\trees(SK+@)$.
+\textbf{Step 4:} We apply the block function to isolate the sketeons and the $@$'s from the other symbols. We get a tree of type $\tmonad (\tmonad(SK+@)+\tmonad\Gamma)$. To the blocks of type $\tmonad \Gamma$ we apply the identity function. Let us describe in the step 5 and 6 the function that we apply to the blocks $\tmonad(SK+@)$.
 
 \medskip
-\noindent \textbf{Step 5:} Consider the function $f:\trees(SK+@)\to\trees(\Gamma+\star+@)$, which flattens the skeletons, as shown in the following example:
+\noindent \textbf{Step 5:} Consider the function $f:\tmonad(SK+@)\to\tmonad(\Gamma+\star+@)$, which flattens the skeletons, as shown in the following example:
 \begin{center}
 Picture
 \end{center}
 The function $f$ is a first order tree function. To show this, consider the unit function on 
-$\{@\}$. We compose it with the injection to get a function of type $u:\{@\}\to \trees(\Gamma+\star+@)$.  To every tree of $\trees(SK+@)$, we apply $u$ to the $@$ nodes and the identity to the others. We finally get $f$ by applying a flattening.
+$\{@\}$. We compose it with the injection to get a function of type $u:\{@\}\to \tmonad(\Gamma+\star+@)$.  To every tree of $\tmonad(SK+@)$, we apply $u$ to the $@$ nodes and the identity to the others. We finally get $f$ by applying a flattening.
 
 \medskip
-\noindent \textbf{Step 5:} Consider the function $DFT: \trees(\Gamma+\star+@)\to $ which performs a depth-first traversal of the trees in $\trees(\Gamma+\star+@)$. Since the $\Gamma$ nodes have exactly one son 
+\noindent \textbf{Step 5:} Consider the function $DFT: \tmonad(\Gamma+\star+@)\to $ which performs a depth-first traversal of the trees in $\tmonad(\Gamma+\star+@)$. Since the $\Gamma$ nodes have exactly one son 

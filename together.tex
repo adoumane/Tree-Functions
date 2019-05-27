@@ -1,7 +1,7 @@
 \section{Putting it all together}
 % Define a \emph{fo-translation} to be any function
 % \begin{align*}
-%     \treesz \Sigma \to \treesz \Gamma
+%     \trees \Sigma \to \trees \Gamma
 % \end{align*}
 % which is obtained by composing the characteristic functions of several unary fo-queries, and then applying a letter-to-letter renaming. 
 
@@ -11,7 +11,7 @@ Theorem~\ref{thm:main} follows immediately from the following lemma, and the res
 \begin{lemma}
     Every first-order tree-to-tree transduction is a finite composition of functions of the form:
     \begin{itemize}
-        \item a relabelling, i.e.~a function $\trees f : \trees \sigma \to \trees \tau$ for some $f : \sigma \to \tau$ where $\sigma,\tau$ are finite ranked sets;
+        \item a relabelling, i.e.~a function $\tmonad f : \tmonad \sigma \to \tmonad \tau$ for some $f : \sigma \to \tau$ where $\sigma,\tau$ are finite ranked sets;
         \item a characteristic function as in Lemma~\ref{lem:fo-char};
         \item unfolding as in Lemma~\ref{lem:unfold};
         \item substitution as in Lemma~\ref{lem:substitute}

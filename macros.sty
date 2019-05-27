@@ -2,9 +2,9 @@
 \newcommand{\portletter}{\bullet}
 \newcommand{\varnames}{\mathsf V}
 \newcommand{\slice}[2]{(#1)_{#2}}
-\newcommand{\trees}{\mathsf T}
-\newcommand{\treesz}{\mathsf {trees}}
-
+ \newcommand{\tmonad}{\mathsf T}
+\newcommand{\trees}{\mathsf {trees}}
+ 
 \newcommand{\norm}[1]{\llbracket #1 \rrbracket}
 \newcommand{\todo}[1]{\textcolor{red}{Todo: #1}}
 % logiclns without theorem
@@ -15,26 +15,26 @@
 \ProvidesPackage{logic-article}
 
 
-%% theorem environments for amsthm
-\newcommand\@thmheadfont{\bfseries}
-%\theoremstyle{plain}
-\newtheorem{theorem}{Theorem}[section]
-\newtheorem{conjecture}[theorem]{Conjecture}
-\newtheorem{lemma}[theorem]{Lemma}
-\newtheorem{proposition}[theorem]{Proposition}
-\newtheorem{corollary}[theorem]{Corollary}
-\newtheorem{fact}[theorem]{Fact}
-\newtheorem{claim}[theorem]{Claim}
-\newtheorem{exampl}[theorem]{Example}
-\newtheorem{observation}[theorem]{Observation}
-\newtheorem{sublemma}{Lemma}[theorem]
-\newtheorem{definition}[theorem]{Definition}
+% %% theorem environments for amsthm
+% \newcommand\@thmheadfont{\bfseries}
+% %\theoremstyle{plain}
+% \newtheorem{theorem}{Theorem}[section]
+% \newtheorem{conjecture}[theorem]{Conjecture}
+% \newtheorem{lemma}[theorem]{Lemma}
+% \newtheorem{proposition}[theorem]{Proposition}
+% \newtheorem{corollary}[theorem]{Corollary}
+% \newtheorem{fact}[theorem]{Fact}
+% \newtheorem{claim}[theorem]{Claim}
+% \newtheorem{exampl}[theorem]{Example}
+% \newtheorem{observation}[theorem]{Observation}
+% \newtheorem{sublemma}{Lemma}[theorem]
+% \newtheorem{definition}[theorem]{Definition}
 
 
 
 
-\newenvironment{example}{{\@thmheadfont Example:}}{~$\square$}
-\newenvironment{remark}{{\@thmheadfont Remark:}}{}
+% \newenvironment{example}{{\@thmheadfont Example:}}{~$\square$}
+% \newenvironment{remark}{{\@thmheadfont Remark:}}{}
 
 
 \ProvidesPackage{mik-makro}
@@ -144,7 +144,7 @@
        \normalfont\ (#1)}\\}}%
  {\koniec\medskip}
 
-\newcommand{\comment}[1]{\marginpar{\footnotesize #1}}
+%\newcommand{\comment}[1]{\marginpar{\footnotesize #1}}
 
 \newcommand{\ctlstar}{CTL$^*$ }
 \newcommand{\tuple}[1]{\langle #1 \rangle}
