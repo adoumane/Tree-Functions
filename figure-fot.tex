@@ -1,0 +1,123 @@
+
+\newcommand{\fotitem}[2]{$\displaystyle #1$ & #2 \\ \\ }
+\begin{figure}[h]
+    \centering 
+    \begin{tabular}{ll}
+        \fotitem{
+            \frac
+            { \ranked{f : \Sigma \to \Delta} \quad \ranked{g : \Delta \to \Gamma}}
+            {\ranked{g \circ f :  \Sigma \to  \Gamma}}
+            }
+            {
+                Composition of functions.
+            }
+        \fotitem{
+            \ranked{f : \Sigma \to \Gamma}
+            }
+            {
+                Every arity preserving function with finite domain $\rSigma$.
+            }
+            \fotitem{
+                \ranked{\iota_i : \Sigma_i \to \Sigma_1 + \Sigma_2}
+                }
+                {
+                    Coprojection for $i \in \set{1,2}$.
+                }
+        \fotitem{
+            \frac
+            { \ranked{f_1 : \Sigma_1 \to \Gamma} \quad \ranked{f_2 : \Sigma_2 \to \Gamma}}
+            {\ranked{f_1 \text{or} f_2 :  (\Sigma_1 + \Sigma_2) \to  \Gamma}}
+            }
+            {
+                Co-pairing of functions.
+            }
+            \fotitem{
+                \ranked{\pi_i : \Sigma_1 \times \Sigma_2 \to \Sigma_i}
+                }
+                {
+                    Projection for $i \in \set{1,2}$.
+                }
+        \fotitem{
+            \frac
+            { \ranked{f_1 : \Sigma \to \Gamma_1} \quad \ranked{f_2 : \Sigma \to \Gamma_2}}
+            {\ranked{(f_1,f_2) :  \Sigma \to  \Gamma_1 \times \Gamma_2}}
+            }
+            {
+                Pairing of functions.
+            }
+            \fotitem{
+                \ranked{\distrcart : (\Sigma_1 + \Sigma_2)\times \Gamma \to (\Sigma_1 \times \Gamma) + (\Sigma_2 \times \Gamma)}
+                }
+                {
+                    Cartesian product distributes across coproduct.
+                }
+            \fotitem{
+            \frac
+            { \ranked{f_1 : \Sigma_1 \to \Gamma_1} \quad \ranked{f_2 : \Sigma_2 \to \Gamma_2}}
+            {\ranked{ \tensorpair{f_1,f_2}  :  \Sigma_1 \otimes \Sigma_2 \to  \Gamma_1 \otimes \Gamma_2}}
+            }
+            {
+                Lifting functions to tensors.
+            }
+            \fotitem{
+                \ranked{\distrtensor : (\Sigma_1 + \Sigma_2)\otimes \Gamma \to (\Sigma_1 \otimes \Gamma) + (\Sigma_2 \otimes \Gamma)}
+                }
+                {
+                    Tensor product distributes across coproduct.
+                }
+            \fotitem{
+            \frac{ \ranked{f : \Sigma \to \Gamma}}{\ranked{\tmonad f : \tmonad \Sigma \to \tmonad \Gamma}}
+            }
+            {
+                Lift a function from the alphabet  to terms.
+            }
+            \fotitem{
+            \ranked{\unit_\Sigma : \Sigma \to \tmonad \Sigma}
+            }
+            {
+                View a letter as a term.
+            }
+            \fotitem{
+                \ranked{\flatt_\Sigma : \tmonad \tmonad \Sigma \to \tmonad \Sigma}
+                }
+                {
+                    Flatten a term of terms into a term.
+                }
+                \fotitem{
+                \ranked{ \composeterm :  
+                \set * + \coprod_{a \in \Sigma} \overbrace{\tmonad \rSigma \otimes \cdots \otimes \tmonad \rSigma}^{\text{arity of $a$ times}} \to \tmonad \rSigma }
+                }
+                {
+                        Compose a term from its list of children, for finite $\rSigma$.
+                }
+            \fotitem{
+                \ranked{ \decomposeterm : \tmonad \rSigma \to 
+                \set * + \coprod_{a \in \Sigma} \overbrace{\tmonad \rSigma \otimes \cdots \otimes \tmonad \rSigma}^{\text{arity of $a$ times}}}
+                }
+                {
+                        The inverse of $\composeterm$, for finite $\rSigma$.
+                }    
+    
+            \fotitem{
+                \ancfact, \decfact  : \ranked{\tmonad(\Sigma_1+\Sigma_2) \to \tmonad(\tmonad \Sigma_1 + \tmonad \Sigma_2)}
+            }
+                    {
+                        Ancestor and descendant factorisations.
+                    }
+            \fotitem{
+                \ranked{\preorder : \tmonad \Sigma \to \tmonad (\rSigma + \set{\grayball, \grayballbin})}
+                }
+                {
+                    Pre-order traversal.
+                }    
+            \fotitem{
+                \ranked{\unfold : \tmonad (\Sigma^{[k]}) \to (\tmonad \Sigma)^{[k]}}
+            }
+                {
+                        Matrix power distributes across terms.
+                }
+    \end{tabular} 
+    
+    \caption{First-order term functions}
+    \label{fig:fo-term}
+\end{figure}

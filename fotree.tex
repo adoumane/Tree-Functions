@@ -1,241 +1,91 @@
 \section{First-order term functions}
-In this section, we define the class of first-order term functions. The idea is to start with finite sets, 
-
-The types that we work with do not represent sets, but ranked sets. Why ranked sets? Suppose that we are given a tree, and we want to factor it into pieces, as shown in the following picture, where nodes are factorised into connected groups with the same label:
-\mypic{15}
-We could view the above factorisation as a new tree, where the nodes are the groups. But these nodes are not labelled by trees, because they have dangling edges. 
-
-The main reason for working with ranked sets is that  instead of trees, we will need to work with terms, which can be seen as trees with ports. 
-
-\newcounter{typeoperations}
-\newcommand{\datatypefigure}[2]
-{
-    \noindent \begin{tabular}[t]{ll}
-        \begin{minipage}[t]{.35\textwidth}
-            \emph{The type constructor}\\
-            #1
-        \end{minipage}
-        &
-        \begin{minipage}[t]{.60\textwidth}
-            \emph{Its operations}
-            \begin{enumerate}
-                \setcounter{enumi}{\value{typeoperations}}
-                #2
-                \setcounter{typeoperations}{\value{enumi}}
-            \end{enumerate}        
-        \end{minipage}
-    \end{tabular} 
-
-    \smallskip
-}
-
-\subsection{Atomic types: finite sets}
-
-\datatypefigure
-{
-    If a ranked set $\rSigma$ is finite (i.e.~it has finitely many elements altogether, in particular only finitely many arities are represented), then it is a type. 
-}
-{
-    \item For every finite ranked set $\rSigma$ and every type $\rGamma$ (the type $\rGamma$ might be constructed using the constructors defined later in this section), we can use any arity preserving function
-    \begin{align*}
-    \ranked{ f : \Sigma \to \Gamma}
-    \end{align*}
-}
-
-\subsection{Coproduct}
-Coproduct is the same thing as disjoint union. 
-
-\datatypefigure
-{
-If $\ranked{\Sigma_1}$ and $\ranked{\Sigma_2}$ are ranked sets, then  their \emph{coproduct}
-\begin{align*}
-    \ranked{\Sigma_1 + \Sigma_2}
-\end{align*}
-is also a ranked set. An $n$-ary element of the coproduct is a pair $(i,a)$ where $i \in \set{1,2}$ and $a$ is an $n$-ary element of  $\ranked{\Sigma_i}$. 
-}
-{
-   \item For each  ranked sets $\ranked{\Sigma_1}$, $\ranked{\Sigma_2}$ there are the coprojections
-       \begin{align*}
-           \ranked{\iota_i : \Sigma_i \to \Sigma_1 + \Sigma_2} \qquad \text{for $i \in \set{1,2}$}.
-       \end{align*}
-       \item Every two arity preserving functions $\set{\ranked{f_i : \Sigma_i \to \Gamma}}_{i \in \set{1,2}}$ can be combined into a single function 
-       \begin{align*}
-           \ranked{\caseterm{f_1}{f_2} : (\Sigma_1 + \Sigma_2) \to \Gamma}
-       \end{align*}
-       which applies $\ranked{f_1}$ or $\ranked{f_2}$ depending on the type of argument.
-}
-  
-\subsection{Cartesian product}
-
-\datatypefigure
-{
-If $\ranked{\Sigma_1}$ and $\ranked{\Sigma_2}$ are ranked sets, then  their \emph{Cartesian product}
-\begin{align*}
-    \ranked{\Sigma_1 \times \Sigma_2}
-\end{align*}
-is also a ranked set. An $n$-ary element of the Cartesian product is a pair $(a_1,a_2)$ such that $a_i \in \ranked{\Sigma_i}$ and 
-\begin{align*}
-    n = \arity{a_1} = \arity{a_2}.
-\end{align*}
-}
-{
-       \item For each  ranked sets $\ranked{\Sigma_1}$, $\ranked{\Sigma_2}$ there are the projections:
-       \begin{align*}
-           \ranked{\pi_i : \Sigma_1 \times \Sigma_2  \to \Sigma_i} \qquad \text{for $i \in \set{1,2}$}.
-       \end{align*}
-       \item Functions $\set{\ranked{f_i : \Sigma \to \Gamma_i}}_{i \in \set{1,2}}$ can be paired: 
-       \begin{align*}
-           \ranked{\pairfun{f_1}{f_2} : \Sigma \to  \Gamma_1 \times \Gamma_2}.
-       \end{align*}
-       \item Cartesian  product distributes across coproduct:
-       \begin{align*}
-           \ranked{\distrcart : (\Sigma_1 + \Sigma_2)\times \Gamma \to (\Sigma_1 \times \Gamma) + (\Sigma_2 \times \Gamma)}.
-       \end{align*}
-}
-  
-\subsection{Tensor product}
-
-\datatypefigure
-{
-If $\ranked{\Sigma_1}$ and $\ranked{\Sigma_2}$ are ranked sets, then  their \emph{tensor product}
-\begin{align*}
-    \ranked{\Sigma_1 \otimes \Sigma_2}
-\end{align*}
-is also a ranked set. An $n$-ary element of the tensor product is a pair $\tensorpair {a_1,a_2}$ such that $a_i \in \ranked{\Sigma_i}$ and 
-\begin{align*}
-    n = \arity{a_1} + \arity{a_2}.
-\end{align*}
-We use angled brackets to distinguish tensor pairs $\tensorpair{a_1,a_2}$ from Cartesian pairs $(a_1,a_2)$. 
-}
-{
-       \item Functions $\set{\ranked{f_i : \Sigma_i \to \Gamma_i}}_{i \in \set{1,2}}$ can tensored: 
-       \begin{align*}
-           \ranked{\tensorfun{f_1}{f_2} : \Sigma_1 \otimes \Sigma_2 \to  \Gamma_1 \otimes \Gamma_2}
-       \end{align*}
-       \item Tensor  product distributes across coproduct:
-       \begin{align*}
-           \ranked{\distrtensor : (\Sigma_1 + \Sigma_2)\otimes \Gamma \to (\Sigma_1 \otimes \Gamma) + (\Sigma_2 \otimes \Gamma)}.
-       \end{align*} 
-}
-
-
+The goal of this paper is to characterise the first-order tree-to-tree functions in terms of some atomic functions and combinators which produce new functions from previously defined ones. A typical combinator is composition of functions.
 
 \subsection{Terms}
-We now introduce the  central type constructor in this paper, namely  the \emph{term} constructor. As a special case of terms, when there are no arguments, we get trees. The term constructor is the only one which creates infinite types, all other constructors preserve finiteness.
+For our purposes, the datatype of trees will be insufficient, because  we will need a generalisation of trees where some leaves  are ports   where other trees can be substituted. We use the name \emph{terms} for this generalisation. Fix a set of variables
+\begin{align*}
+    \termvars = \set{x_1,x_2,\ldots}
+\end{align*}
+which will be assumed to be disjoint with all other sets.  We view the variables as a ranked set, where each variable has arity zero, i.e.~it can only be used in leaves. 
+
+\begin{definition}[Terms]\label{def:terms}
+    An $n$-ary term over a ranked set $\rSigma$ is defined to be a tree over the ranked alphabet $\rSigma + \termvars$ where each variable from $x_1,\ldots,x_n$ appears exactly once, in left-to-right order,  and the other variables do not appear at all.    We write $\tmonad \rSigma$ for the ranked set of terms over $\rSigma$. 
+\end{definition}
+
+We adopt the following convention for drawing terms. The term is drawn inside a box, and the dangling edges which leave the box at the bottom are its variables, ordered left-to-right, as in the following picture: \mypic{7}
+% If we disallow crossing edges in the pictures, then the above drawing convention can only represent terms where the variables are ordered $x_1,\ldots,x_n$ from left to right. 
+ The restriction that each variable appears exactly one, sometimes called \emph{linearity}, is connected to the fact that first-order transductions have linear size increase. Because the set of terms is itself a ranked set,  we can create terms of terms, which will be useful in the constructions of this paper. 
+
+To see the need for terms, suppose that we want to group the nodes of a tree into connected parts, called factors. Then the factors are not trees, because they have dangling edges, but they can be viewed as terms, as explained in the following picture:
+\mypic{15}
+        
+A consequence of using terms is that we will work in the category of ranked sets; i.e.~the types we use will be ranked sets and the functions we consider are arity-preserving functions between ranked sets. We adopt the notation that arity-preserving functions are written in red, like this: $\ranked{f : \Sigma \to \Gamma}$. 
 
 
-\datatypefigure
-{Let $\ranked \Sigma$ be a ranked set. Define  $\tmonad \Sigma$ to be the ranked set, where the  elements are trees over alphabet obtained by extending $\Sigma$ with a symbol $*$ of arity zero. The arity of an element is the number of nodes with label $*$, such nodes are called \emph{ports}. Elements of $\tmonad \Sigma$ are called \emph{terms} over $\Sigma$. Here is a picture of a term:
-     \mypic{7}
-    In particular, there is a term $*$ of arity one, where the root is a port. 
-    The terms, as defined above, can be seen as a special case of terms as used in univeral algebra.  In universal algebra, a term is allowed to use variables and each variable can appear several times. Our terms can be seen as the special case of terms from universal algebra, where the variables in a term of arity $n$ are $x_1,\ldots,x_n$, each of the variables is required to appear exactly once (this condition is known as \emph{linearity}), and the variables appear in the term in  left-to-right order.
-}
-{
-        \item Suppose that $\ranked f : \rSigma \rto \rGamma$ is  an arity preserving function. Its lifting 
-        \begin{align*}
-        \ranked {\tmonad f : \tmonad \Sigma \to \tmonad \Gamma}
-        \end{align*}
-        is defined to be the function which replaces the label of each node in the input term according to $\ranked f$. 
-        \item For every ranked set $\rSigma$, the \emph{unit} function
-        \begin{align*}
-            \unit_\rSigma : \rSigma \rto \tmonad \rSigma
-        \end{align*}
-        maps each letter $a$ to the corresponding term which has exactly one non-port node with label $a$, as illustrated below:
-        \mypic{10}
+\subsection{Types}
+The  main goal of this paper is to  describe first-order tree-to-tree functions using a certain atomic functions and combinators on them. These functions will be arity preserving functions on ranked sets. In this section, we describe the kinds of ranked sets that will be allowed as domains and co-domains of our functions. The general idea is that we start with finite ranked sets, and close these under the following type constructors: coproducts, two kinds of product (Cartesian and tensor), taking terms, and the matrix power. 
+The  matrix power -- which is possibly the least natural type constructor -- will be motivated and discussed in more detail later on.
 
-        \item \label{it:flattening} For every ranked set $\rSigma$, the \emph{flattening} function
-        \begin{align*}
-            \flatt_\rSigma : \tmonad \tmonad \rSigma \rto \tmonad \rSigma
-        \end{align*}
-        maps a term of terms into a term, by using substitution as illustrated in the following picture:  \mypic{9}
-    }
 
-    The term type constructor, together with its associated operations, forms a monad in the category of ranked sets. 
-
-    Let $t \in \tmonad \rSigma$ be a term. 
-    There are two definitions of factorisations of $t$, which will turn out to be equivalent. 
+\begin{definition}[Types] \label{def:types} The following ranked sets are called \emph{types}:
     \begin{enumerate}
-        \item a \emph{factorisation equivalence} is any equivalence relation on non-port nodes where equivalence classes are connected with respect to the parent-child relation;
-        \item a \emph{factorisation term} is any term $s  \in \tmonad \tmonad \rSigma$ which flattens to $t$ in the sense explained by the operation~\opref{it:flattening}.
+        \item  \emph{Finite ranked sets.} Every finite  ranked set is a type. (A finite ranked set is one that  has finitely many elements altogether, in particular only finitely many arities are represented.)
+        \item \emph{Coproduct.} If $\ranked{\Sigma_1}$ and $\ranked{\Sigma_2}$ are types, then  their \emph{coproduct} $\ranked{\Sigma_1 + \Sigma_2}$
+        is also a type. An $n$-ary element of the coproduct is a pair $(i,a)$ where $i \in \set{1,2}$ and $a$ is an $n$-ary element of  $\ranked{\Sigma_i}$. 
+        \item \emph{Cartesian product.} If $\ranked{\Sigma_1}$ and $\ranked{\Sigma_2}$ are types, then  their \emph{Cartesian product}
+        $ \ranked{\Sigma_1 \times \Sigma_2}$
+        is also a type. An $n$-ary element of the Cartesian product is a pair $(a_1,a_2)$ such that $a_i \in \ranked{\Sigma_i}$ and 
+        \begin{align*}
+            n = \arity{a_1} = \arity{a_2}.
+        \end{align*}
+        \item \emph{Tensor product.} If $\ranked{\Sigma_1}$ and $\ranked{\Sigma_2}$ are types, then  their \emph{tensor product}
+        $ \ranked{\Sigma_1 \otimes \Sigma_2}$
+        is also a type. An $n$-ary element of the Cartesian product is a pair $\tensorpair{a_1,a_2}$ such that $a_i \in \ranked{\Sigma_i}$ and 
+        \begin{align*}
+            n = \arity{a_1} + \arity{a_2}.
+        \end{align*}
+        Note how we use  angular brackets to distinguish tensor $\tensorpair{a_1,a_2}$ pairs from Cartesian pairs $(a_1,a_2)$.
+        \item \emph{Terms.} If $\ranked \Sigma$ is a type, then  the ranked sets of terms  $\tmonad \rSigma$ is also a type.
+       \item \emph{Matrix power.}  If  $\rSigma$ is a type and $k \in \set{1,2,\ldots}$, then the \emph{$k$-th matrix power of $\rSigma$}, denoted by $\ranked{\Sigma^{[k]}}$, is also a type.  An $n$-ary element of $\ranked{\Sigma^{[k]}}$ is a (tensor) tuple
+       \begin{align*}
+           \tensorpair{a_1,\ldots,a_k} \in \overbrace{\ranked{\Sigma \otimes \cdots \otimes \Sigma}}^{\text{$k$ times}} 
+       \end{align*}
+       of arity $kn$ (note the difference between the arities $n$ and $kn$), together with a function
+       \begin{align*}
+           f : \set{1,\ldots,kn} \to \set{1,\ldots,n} \qquad \text{such that $f^{-1}(i)$ has size exactly $k$ for every $i$.}
+       \end{align*}
+       Here is a picture of an $n$-ary element of  $\ranked{\Sigma^{[2]}}$ for $n=3$ and $k=2$:
+       \mypic{16}
     \end{enumerate}
-    The above two definitions are equivalent, in the sense that there is a one-to-one correspondence between factorisation equivalences and factorisation terms, which is explained in the following picture:
-    \mypic{14}
+\end{definition}
 
-    \begin{enumerate}
-        \setcounter{enumi}{\value{typeoperations}}
-        \item Factorisation. Suppose that $\ranked{\Sigma_1}$ and $\ranked{\Sigma_2}$ are ranked sets. The ancestor and descendant factorisations 
-        \begin{align*}
-            \overbrace{\ancfact}^{\text{ancestor}}, \overbrace{\decfact}^{\text{descendant}}  : \ranked{\tmonad(\Sigma_1+\Sigma_2) \to \tmonad(\tmonad \Sigma_1 + \tmonad \Sigma_2)}
-        \end{align*}
-        are defined as follows. Consider an input term
-        \begin{align*}
-            t \in \ranked{\tmonad(\Sigma_1+\Sigma_2)}.
-        \end{align*}
-        We say that two non-port nodes have \emph{same type} if both have labels in the same  $\ranked{\Sigma_i}$; otherwise we say that non-port nodes have \emph{opposing type}.  Call two non-port nodes \emph{ancestor equivalent} (respectively, \emph{descendant equivalent}) if they  same proper ancestors (respectively, descendants) of opposing type. Here is a picture, with $\ranked{\Sigma_1}$ being red and $\ranked{\Sigma_2}$ being blue:
-        \mypic{11}
-        Both ancestor and descendant equivalences are factorisations; and in each case equivalence classes contain only nodes of same type.  The function $\ancfact$ maps a term to (the factorisation term corresponding to) its ancestor factorisation, likewise we define $\decfact$ for  descendant factorisations.
-        \item Decomposition. Let $\ranked \Sigma$ be a finite ranked set. Every term in $\ranked \rSigma$ is either just a port $*$, or it is obtained by combining a symbol $a \in \rSigma$ of arity $n$ with terms $t_1,\ldots,t_n$. In the second case, the arity of the resulting term is the sum of arities of $t_1,\ldots,t_n$, and therefore we can view the terms $t_1,\ldots,t_n$ as a tensor tuple $\tensorpair{t_1,\ldots,t_n}.$  The above observation describes two mutually inverse functions 
-        \begin{align*}
-            \tmonad \rSigma  \qquad \ranked{\xymatrix{
-                \ar@<.5ex>[r]^{\decomposeterm}&  \ar@<.5ex>[l]^{\composeterm} 
-            }} \qquad 
-            \set * + \coprod_{a \in \Sigma} \overbrace{\tmonad \rSigma \otimes \cdots \otimes \tmonad \rSigma}^{\text{arity of $a$ times}}
-        \end{align*}
-        \item \emph{Pre-order traversal.} Let  $\rSigma$ be a ranked set. Let $\rGamma$ be a ranked set with two elements, of arities zero and two, and  define the pre-order traversal to be the function
-        \begin{align*}
-            \ranked{\preorder : \tmonad \Sigma \to \tmonad (\rSigma + \rGamma)}
-        \end{align*}
-        described in the following picture:
-        \mypic{13}
-        \setcounter{typeoperations}{\value{enumi}}
-    \end{enumerate}
+\subsection{The main result}
+In this section, we state the main result of this paper, which is that every first-order tree-to-tree function can be obtained by starting with certain simple functions and combining them using combinators. The atomic functions and combinators are listed in Figure~\ref{fig:fo-term}. Their precise definitions, along with some justification for their use,   will be given in more detail in Section~\ref{sec:atomic-and-combinators}.
 
-\subsection{Matrix power}
-We now describe the final type constructor, the matrix power, which might be the most unexpected one. The significance of matrix power will become clear when we start studying register automata.  
+Many of the operations are very natural given their underlying types, e.g.~we include constructors and destructors that are usually associated to products and coproducts, we also have various kinds of distributivity laws (e.g.~both products distribute across coproducts). Several operations for  the type of terms arise from the fact that the term construction is a monad. There are, however, some operations which require more explanation; the same is true also for the matrix power construction. 
 
-\datatypefigure{
-    For a ranked set $\rSigma$ and $k \in \set{1,2,\ldots}$, define the \emph{$k$-th matrix power of $\rSigma$}, denoted by $\ranked{\Sigma^{[k]}}$, to be the following ranked set. An $n$-ary element of $\ranked{\Sigma^{[k]}}$ is a tuple
-    \begin{align*}
-        [a_1,\ldots,a_k] \qquad a_1,\ldots,a_k \in \Sigma
-    \end{align*}
-    such that 
-    \begin{align*}
-        \arity{a_1} + \cdots + \arity{a_k} = k\cdot n
-    \end{align*}
-    together with monotone  functions
-    \begin{align*}
-        f_1,\ldots,f_k : \set{1,\ldots,k} \to \set{1,\ldots,k \cdot n}
-    \end{align*}
-    whose images  partition of $\set{1,\ldots,k \cdot n}$.  In particular,  the functions $f_1,\ldots,f_k$ must be injective, since the combined size of their domains is exactly $k \cdot n$. Here is a picture of an $n$-ary element of  $\ranked{\Sigma^{[2]}}$ for $n=3$ and $k=2$:
-    \mypic{16}
-}
-{
-    \item dupa
-}
+\begin{definition}
+    A \emph{first-order term function} is any function that can be constructed using the atomic functions and combinators described in Figure~\ref{fig:fo-term}.
+\end{definition}
 
-
-
+Since all atomic functions are arity preserving functions between types (as per Definition~\ref{def:types}), and the combinators preserve this property, it follows that all first-order term functions are arity preserving functions between types. We are now ready to state the main theorem of this paper. 
 
 \begin{theorem}
-    Let $\rSigma,\rGamma$ be finite ranked sets. The following conditions are equivalent for a function
+    Let $\rSigma,\rGamma$ be finite ranked sets. A function 
     \begin{align*}
         f : \trees \rSigma \to \trees \rGamma
     \end{align*}
-\begin{enumerate}
-    \item There is a first-order transduction $g$ which makes the following diagram commute:
+    is a first-order tree-to-tree transduction if and only if it can be obtained by taking a first-order term function
     \begin{align*}
-        \xymatrix{
-            \trees \rSigma \ar[d]_{t \mapsto \underline t}\ar[r]^f & \trees \rGamma \ar[d]^{t \mapsto \underline t} \\
-            \set{\underline t : t \in \trees \rSigma} \ar[r]_g & \set{\underline t : t \in \trees \rGamma}.
-        }
+        \ranked {g : \tmonad \Sigma \to \tmonad \Gamma}
     \end{align*}
-    \item There is a first-order term function $\ranked g$ which makes the following diagram commute:
-    \begin{align*}
-        \xymatrix{
-            \trees \rSigma \ar@{^{(}->}[d]\ar[r]^f & \trees \rGamma \ar@{^{(}->}[d] \\
-            \tmonad \rSigma \ar[r]_{\ranked g} & \tmonad \rGamma.
-        }
-    \end{align*}
-    where the top-down injections view a tree as a special case of a term (of arity zero).
-\end{enumerate}
+    and restricting it to trees (i.e.~terms of arity zero).
 \end{theorem}
+
+
+\include{figure-fot}
+
+
+
+
+
