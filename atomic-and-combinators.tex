@@ -1,77 +1,35 @@
 
-\section{The atomic functions and combinators}
+\section{The atomic functions and combinators for terms}
 \label{sec:atomic-and-combinators}
-
-The first two items in Figure~\ref{fig:fo-term}, namely function composition and functions with finite domains should be self-explanatory. There are also no surprises for the remaining items which do not involve $\tmonad$:
-
-\begin{center}
-    \newcommand{\fotitemsmall}[2]{$ #1$ & $#2$ \\ }
-\begin{tabular}{ll}
-        \fotitemsmall{
-            \ranked{\iota_i : \Sigma_i \to \Sigma_1 + \Sigma_2}
-            }
-            {
-                a \mapsto (i,a)
-            }
-    \fotitemsmall{
-        {\ranked{f_1 \text{or} f_2 :  (\Sigma_1 + \Sigma_2) \to  \Gamma}}
-        }
-        {
-            (i,a) \mapsto {\ranked{f_i}(a)}
-        }
-        \fotitemsmall{
-            \ranked{\pi_i : \Sigma_1 \times \Sigma_2 \to \Sigma_i}
-            }
-            {
-                (a_1,a_2) \mapsto a_i
-            }
-    \fotitemsmall{
-        {\ranked{(f_1,f_2) :  \Sigma \to  \Gamma_1 \times \Gamma_2}}
-        }
-        {
-            a \mapsto (\ranked{f_1}(a_1), \ranked{f_2}(a_2))
-        }
-        \fotitemsmall{
-            \ranked{\distrcart : (\Sigma_1 + \Sigma_2)\times \Gamma \to (\Sigma_1 \times \Gamma) + (\Sigma_2 \times \Gamma)}
-            }
-            {
-                \tensorpair{(i,a),b} \mapsto (i,\tensorpair{a,b})
-            }
-        \fotitemsmall{
-        {\ranked{ \tensorpair{f_1,f_2}  :  \Sigma_1 \otimes \Sigma_2 \to  \Gamma_1 \otimes \Gamma_2}}
-        }
-        {
-            \tensorpair{a_1,a_2} \mapsto \tensorpair {\ranked{f_1}(a_1), \ranked{f_2}(a_2)}
-        }
-        \fotitemsmall{
-            \ranked{\distrtensor : (\Sigma_1 + \Sigma_2)\otimes \Gamma \to (\Sigma_1 \otimes \Gamma) + (\Sigma_2 \otimes \Gamma)}
-            }
-            {
-                \tensorpair{(i,a),b} \mapsto (i,\tensorpair{a,b})
-            }
-\end{tabular}
-\end{center}
+In this section, we define the atomic functions and combinators from Figure~\ref{fig:fo-term} which involve the term type constructor $\tmonad$. 
 
 
 
-\subsection{Terms}
-We now introduce the  central type constructor in this paper, namely  the \emph{term} constructor. As a special case of terms, when there are no arguments, we get trees. The term constructor is the only one which creates infinite types, all other constructors preserve finiteness.
 
 
-\subsubsection{Terms as an algebraic data type} Let $\ranked \Sigma$ be a ranked set. Every term over  $\rSigma$ is either just single port in the root, or it is of the form
+\subsection{Terms as an algebraic data type} Let $\ranked \Sigma$ be a ranked set. If $a \in \Sigma$ is a letter of arity $n$, and $t_1,\ldots,t_n$ are terms in $\tmonad \rSigma$, then also 
 \begin{align*}
     a \tensorpair{t_1,\ldots,t_n}
 \end{align*}
-which means that it has  $a \in \rSigma$ of arity $n$ in the root, and the children of the root are  terms $t_1,\ldots,t_n$. The above observation describes two mutually inverse functions 
-\begin{align*}
-    \tmonad \rSigma  \qquad \ranked{\xymatrix{
-        \ar@<.5ex>[r]^{\decomposeterm}&  \ar@<.5ex>[l]^{\composeterm} 
-    }} \qquad 
-    \set * + \coprod_{a \in \Sigma} \overbrace{\tmonad \rSigma \otimes \cdots \otimes \tmonad \rSigma}^{\text{arity of $a$ times}}
+is a term, which has $a$ in the root and child subterms $t_1,\ldots,t_n$. We use the tensor brackets $\tensorpair{t_1,\ldots,t_n}$ because the arity of the term is the sum of the arities of $t_1,\ldots,t_n$, as in the tensor product. Another way of constructing a term is to simply have a port $\portletter$ in the root. The above observations explain the function 
+\begin{align*}     
+    \set * + \coprod_{a \in \Sigma} \overbrace{\tmonad \rSigma \otimes \cdots \otimes \tmonad \rSigma}^{\text{arity of $a$ times}}   \qquad \ranked{\xymatrix{
+        \ar[r]^{\composeterm}& 
+        %  \ar@<.5ex>[l]^{\composeterm} 
+    }} \qquad \tmonad \rSigma
 \end{align*}
-where $\set{*}$ is a ranked set which contains only one element of arity 1. 
+from Figure~\ref{fig:fo-term}. Note that the coproduct above can only be viewed as a legitimate type when $\rSigma$ is finite; and therefore the function $\composeterm$ is only allowed when $\rSigma$ is finite. The function $\composeterm$ is not injective but not surjective, because its image will contain only the terms that satisfy condition (*) explained in the following picture: 
+\mypic{28}
+If we assumed, in definition~\ref{def:terms}, that the variables in a term are ordered left-to-right, then $\composeterm$ would be a bijection. The operation 
+\begin{align*}     
+    \set {\bot,*} + \coprod_{a \in \Sigma} \overbrace{\tmonad \rSigma \otimes \cdots \otimes \tmonad \rSigma}^{\text{arity of $a$ times}}   \qquad \ranked{\xymatrix{
+&          \ar[l]^{\decomposeterm} 
+    }} \qquad \tmonad \rSigma
+\end{align*}
+is a one-sided inverse of $\composeterm$, i.e.~it is output is the inverse of $\composeterm$ for terms that satisfy (*) and otherwise it is $\bot$. 
 
-\subsubsection{Terms as a monad.} Three of the operations associated to the type constructor $\tmonad$, namely  
+
+\subsection{Terms as a monad.} Three of the operations associated to the type constructor $\tmonad$, namely  
 \begin{align*}
         \underbrace{\ranked {\tmonad f : \tmonad \Sigma \to \tmonad \Gamma}}_{\text{$\tmonad$ is a functor}} \qquad  \underbrace{\unit_\rSigma : \rSigma \rto \tmonad \rSigma}_{\text{the unit in the monad}} \qquad  \underbrace{\flatt_\rSigma : \tmonad \tmonad \rSigma \rto \tmonad \rSigma}_{\text{the product operation in the monad}}
 \end{align*}
@@ -79,20 +37,16 @@ induce a monad structure on terms (in the category of ranked sets). The lifting 
         \mypic{10}
 Finally, the  \emph{flattening} operation $\flatt_\rSigma$ 
         maps a term of terms into a term, by using substitution as illustrated in the following picture:  \mypic{9}
-A more formal definition is the flattening of $\portletter$ is $\portletter$, while the flattening of a term of the form 
-\begin{align*}
-    t \tensorpair{t_1,\ldots,t_n} \qquad t \in \tmonad \rSigma, t_1,\ldots,t_n \in \tmonad \tmonad \rSigma    
-\end{align*}
- is the term obtained by taking $t$, and replacing each port $x_i$ by the flattening of $t_i$.
+% A more formal definition is the flattening of $\portletter$ is $\portletter$, while the flattening of a term of the form 
+% \begin{align*}
+%     t \tensorpair{t_1,\ldots,t_n} \qquad t \in \tmonad \rSigma, t_1,\ldots,t_n \in \tmonad \tmonad \rSigma    
+% \end{align*}
+%  is the term obtained by taking $t$, and replacing each port $x_i$ by the flattening of $t_i$.
     
-\subsubsection{Factorisations}
+\subsection{Factorisations}
     Let $t \in \tmonad \rSigma$ be a term. 
-    There are two equivalent definitions of factorisations of $t$:
-    \begin{enumerate}
-        \item a \emph{factorisation equivalence} is any equivalence relation on non-port nodes where equivalence classes are connected with respect to the parent-child relation;
-        \item a \emph{factorisation term} is any term $s  \in \tmonad \tmonad \rSigma$ which flattens to $t$ in the sense explained aove.
-    \end{enumerate}
-    The above two definitions are easily seen to be equivalent equivalent, in the sense that there is a one-to-one correspondence between factorisation equivalences and factorisation terms.
+    There are two equivalent definitions of factorisations of $t$. One definition is that a factorisation is an equivalence relation on non-port nodes where every equivalence class is a factor; the other definition is that it is any term $s  \in \tmonad \tmonad \rSigma$ which flattens to $t$. 
+    The two definitions are easily seen to be equivalent equivalent, in the sense that there is a one-to-one correspondence between factorisation equivalences and factorisation terms.
     %  which is explained in the following picture:
     % \mypic{14}
     Suppose that $\ranked{\Sigma_1}$ and $\ranked{\Sigma_2}$ are ranked sets. The ancestor and descendant factorisations 
@@ -105,24 +59,13 @@ A more formal definition is the flattening of $\portletter$ is $\portletter$, wh
         \end{align*}
         We say that two non-port nodes have \emph{same type} if both have labels in the same  $\ranked{\Sigma_i}$; otherwise we say that non-port nodes have \emph{opposing type}.  Call two non-port nodes \emph{ancestor equivalent}  if they  same proper ancestors of opposing type. Call two non-port nodes \emph{descendant equivalent}  if they  are ancestor equivalent and they have the same proper descendants of opposing type. Here is a picture, with $\ranked{\Sigma_1}$ being red and $\ranked{\Sigma_2}$ being blue:
         \mypic{11}
-        Both ancestor and descendant equivalences are factorisations; and in each case equivalence classes contain only nodes of same type.  The function $\ancfact$ maps a term to (the factorisation term corresponding to) its ancestor factorisation, likewise we define $\decfact$ for  descendant factorisations.
+        Both ancestor and descendant equivalences are factorisations; and in each case equivalence classes contain only nodes of same type.  The function $\ancfact$ maps a term to (the term of terms corresponding to) its ancestor equivalence relation, likewise we define $\decfact$ for  descendant factorisations.
     
-        \subsubsection{Pre-order traversal.} Let  $\rSigma$ be a ranked set. Let \grayball and \grayballbin be two letters, of arities zero and two. Define 
+        \subsection{Pre-order traversal.} Let  $\rSigma$ be a ranked set. Let \grayball and \grayballbin be two letters, of arities zero and two. Define 
         \begin{align*}
             \ranked{\preorder : \tmonad \Sigma \to \tmonad (\rSigma + \set{\grayball, \grayballbin})}
         \end{align*}
-        to be the function which maps a term to its preorder traversal, as explained  in the following picture:
+        to be the extension to  terms of the pre-order function discussed in Example~\ref{ex:pre-order}, as explained below:
         \mypic{13}
         
-\subsection{Matrix power}
-We now describe the final type constructor, the matrix power, which might be the most unexpected one. The significance of matrix power will become clear when we start studying register automata.  
-
-Consider a tree, where every node is labelled by a t
-\mypic{26}
-
-an element is a tensor tuple $\tensorpair{a_1,\ldots,a_k}$ and nondecreasing functions 
-\begin{align*}
-    f_1,\ldots,f_n : \set{1,\ldots,k} \to \set{1,\ldots,k}
-\end{align*}
-
 

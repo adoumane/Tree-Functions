@@ -1,0 +1,27 @@
+\section{Matrix power}
+\label{sec:matrix-power}
+
+
+\begin{definition}[Matrix power]
+    If  $\rSigma$ is a type and $k \in \set{1,2,\ldots}$, then the \emph{$k$-th matrix power of $\rSigma$}, denoted by $\ranked{\Sigma^{[k]}}$, is also a type.  An $n$-ary element of $\ranked{\Sigma^{[k]}}$ is a (tensor) tuple
+    \begin{align*}
+        \tensorpair{a_1,\ldots,a_k} \in \overbrace{\ranked{\Sigma \otimes \cdots \otimes \Sigma}}^{\text{$k$ times}} 
+    \end{align*}
+    of arity $kn$ (note the difference between the arities $n$ and $kn$), together with a function
+    \begin{align*}
+        f : \set{1,\ldots,kn} \to \set{1,\ldots,n} \qquad \text{such that $f^{-1}(i)$ has size exactly $k$ for every $i$.}
+    \end{align*}
+    Here is a picture of an $n$-ary element of  $\ranked{\Sigma^{[2]}}$ for $n=3$ and $k=2$:
+    \mypic{16}  
+\end{definition}
+  
+We now describe the final type constructor, the matrix power, which might be the most unexpected one. The significance of matrix power will become clear when we start studying register automata.  
+
+Consider a tree, where every node is labelled by a t
+\mypic{26}
+
+an element is a tensor tuple $\tensorpair{a_1,\ldots,a_k}$ and nondecreasing functions 
+\begin{align*}
+    f_1,\ldots,f_n : \set{1,\ldots,k} \to \set{1,\ldots,k}
+\end{align*}
+

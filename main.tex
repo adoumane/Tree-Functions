@@ -1,4 +1,4 @@
-\documentclass{acmart}
+\documentclass[acmsmall,review,anonymous]{acmart}\settopmatter{printfolios=true,printccs=false,printacmref=false}
 \usepackage{amsmath}
 % \usepackage{theorem}
 \usepackage{proof}
@@ -23,6 +23,7 @@
 \input{atomic-and-combinators}
 \input{to-transductions}
 \input{stt}
+\input{matrix-power}
 
 \input{forational}
 % % \input{unfold}
@@ -31,4 +32,6 @@
 \bibliography{bib}
 
 \appendix
+
+\input{appendix-to-fo}
 \end{document}

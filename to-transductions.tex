@@ -3,165 +3,109 @@
 \newcommand{\Interface}[1]{\mathsf{Interface}_{#1}}
 \section{To transductions}
 \label{sec:to-transductions}
-In this section, we prove the bottom-up inclusion in Theorem~\ref{thm:main}:
+In this section, we prove the right-to-left implication in Theorem~\ref{thm:main}, namely that if $\rSigma,\rGamma$ are finite ranked sets and 
 \begin{align*}
-    \text{first-order tree-to-tree interpretations} \qquad \supseteq \qquad \text{first-order tree functions}
+    \ranked {f : \tmonad \Sigma \to \tmonad \Gamma} 
 \end{align*}
-Since first-order tree functions are defined as tree restrictions of term-to-term functions, we need to work with first-order transductions that transforms terms (and elements of other types, such as pairs of terms, terms of terms, etc.). We begin by describing how elements of a type are encoded as models. 
-\\
+is a first-order term function, then its restriction to trees 
+\begin{align*}
+    f : \trees \rSigma \to \trees \rGamma
+\end{align*}
+is a first-order tree-to-tree transduction. The proof is a relatively straightforward induction on the way that $\ranked f$ is constructed from the atomic functions using the combinators. Recall that first-order tree-to-tree transductions were defined by applying the notion of first-order transduction (Definition~\ref{def:fo-transduction}) to models associated to trees (Definition~\ref{def:tree-model}). To apply first-order transductions to more complicated types, such as terms, pairs of terms, tensors of terms of pairs, etc, we need to explain how those types are modeled as relational structures; this is done in the following definition. 
 
-We define by induction on the type $\Sigma$, the vocabulary $\underline \Sigma$ and the encoding 
- \begin{align*}
-     t \in \Sigma \quad \mapsto \quad \underline t \in \text{models over $\underline \Sigma$}
- \end{align*}
- which represents elements $t$ of $\Sigma$ as relational structures over $\underline \Sigma$.
- \\
- 
- For every type $\Sigma$, the vocabulary $\underline \Sigma$ will contain at least the following set of predicates, denoted $\mathcal{I}_\Sigma$ and called \emph{interface vocabulary}, which includes:
- \begin{itemize}
- \item a unary predicate $\Root{\Sigma}$;
-% \item a binary predicate $\leq_\Sigma$ ordering the nodes of the structure;
-  \item a unary predicate $\Port{\Sigma}$ selecting the "free variables" of a term; 
- \item a binary predicate $\prec_\Sigma$ ordering these ports from right to left.  
-\end{itemize}  
 
-For a $\underline\Sigma$ structure $t$, we call the \emph{root of $t$} the node satisfying the predicate $\Root{\Sigma}$, and we call {the $i^{th}$ port} the node satisfying $\Port\Sigma$, which is in the $i^{th}$ position wrt. $\prec_\Sigma$. 
-\\
+% We do this by assigning to each element $a$ in a type $\rSigma$ an associated model $\underline a$. 
+% \newcommand{\structa}{\mathfrak A}
+% When defining the models below, we use two types of disjoint union. 
+% \begin{itemize}
+%     \item For two relational structures $\structa_1,\structa_2$ over relational vocabularies $\ranked{\tau_1},\ranked{\tau_2}$, define $\structa_1 + \structa_2$ to be the  relational structure over vocabulary $\ranked{\tau_1 + \tau_2}$ defined by taking the disjoint union of the structures, and interpreting the relations of $\structa_i$ using the copy $\ranked{\tau_i}$ of the vocabulary.
+%     \item For a family of $\set{\structa_i}_{i \in I}$ of relational structures over a common vocabulary $\ranked \tau$, define $\coprod_i \structa_i$ to be the structure over $\ranked \tau$ disjoint union of the structures, with all components using the common vocabulary.
+% \end{itemize}
 
-%The rest of the predicates of $\underline \Sigma$ will be defined by induction. But first, let us provide two constructions which will allow us to combine structures to get more complex ones:
-%\begin{enumerate}
-%\item {\bf Disjoint union.} Let $t_i, i\in I$ be a collection of structures over the vocabularies $V_i, i\in I$ respectively. We set $\Pi_{i\in I} t_i$
-%to be the structure defined as follows:
-%\begin{itemize}
-%\item Its universe is the disjoint union of the universes of $t_i, i\in I$.
-%\item Its vocabulary is the disjoint union of the vocabularies $V_i, i\in I$ together with the unary predicates $C_i, i\in I$.
-%\item Say how to interpret the symbols. 
-%\end{itemize}  
-%\item {\bf Disjoint sum.}
-%Let $t_i, i\in I$ be a collection of structures over a vocabulary $V$ respectively. We set $\amalg_{i\in I} t_i$
-%to be the structure defined as follows:
-%\begin{itemize}
-%\item Its universe is the disjoint union of the universes of $t_i, i\in I$.
-%\item Its vocabulary is the disjoint union of the vocabulary $V$ together with the binary predicate $\sim$. 
-%\item Say how to interpret the symbols.
-%\end{itemize}  
-%\end{enumerate}  
 
-We construct the vocabulary $\underline{\Sigma}$ and the structures $\underline{t}$ for every $t\in\Sigma$ by induction as follows:
- 
-
-\noindent{\bf Atomic types.} 
-   \begin{itemize}
-   \item Let $F$ be a finite ranked set.  We set $\underline F$ to be $\mathcal{I}_{F}$ together with a unary predicate $a$ for each symbol $a$ of $F$. 
-            
-            \noindent If $a$ is an $n$-ary element of $F$, we define its corresponding structure $\underline a$ as follows:
-            \begin{enumerate}
-            \item Its univers contains $n+1$ nodes named $0,1\dots,n$;
-            \item node $0$ satisfies the predicate $a$ and $\Root F$;
-            \item For every $i\in[1,n]$, node $i$ satisfies $\Port F$; and for every $i, j \in[1,n]$ such that $i< j$, we have that $i\prec_F j$.
-            \end{enumerate}             
-            \begin{center}
-            Picture ?
-            \end{center}
-            \item For the atomic type $\llone$, we set $\underline \llone$ to be $\mathcal{I}_ \llone$. The structure $\underline a$ of an element $a$ of $\llone$ is exactly as above (exept that we ignore the predicate $a$).
-        \end{itemize}
-    {\bf Type constructors.}
-    
-     \begin{itemize}
-\item {\bf Cartesian product.} The vocabulary $\underline{\Sigma\times\Gamma}$ is the disjoint union of $\mathcal{I}_{\Sigma\times\Gamma}$, $\underline{\Sigma}$, $\underline{\Gamma}$ and two unary predicates $L_{\Sigma\times\Gamma}$ and $R_{\Sigma\times\Gamma}$.
-
- Let $(t,u)$ be an $n$-ary element of $\Sigma \times \Gamma$. We set:
-        \begin{enumerate}
-       \item the universe of $\underline{(t,u)}$ is the disjoint union of the universes of $\underline{t}$ and $\underline{u}$ together with $n+1$ new nodes named $0,1,\dots, n$;
-       \item the interpretation of the predicates from $\underline \Sigma$ and $\underline \Gamma$ are inherited from $\underline{t}$ and $\underline {u}$ respectively;
-       \item node $0$ satisfies $\Root{\Sigma\times\Gamma}$ and for every $i,j \in[1,n]$ such that $i<j$, we set $i \prec_{\Gamma\times\Sigma} j$;
-        \item a node satisfies $L_{\Sigma\times\Gamma}$ (resp. $R_{\Sigma\times\Gamma}$) if it comes from $\underline{t}$ (resp.  $\underline{u}$).  
-        \end{enumerate}
- \item {\bf Disjoint union.} The vocabulary $\underline{\Sigma+\Gamma}$ is the disjoint union of $\mathcal{I}_{\Sigma+\Gamma}$, $\underline{\Sigma}$, $\underline{\Gamma}$ and two unary predicates $L_{\Sigma+\Gamma}$ and $R_{\Sigma+\Gamma}$.
-
-Let $t$ be an $n$-ary element of $\Sigma+\Gamma$. Then, it is either an element of $\Sigma$ or an element of $\Gamma$. Suppose wlog. that $t$ is an element of $\Sigma$. We set $\underline{t}_\Sigma$ to be the interpretation of $t$ seen as an element of $\Sigma$. The universe of $\underline{t}$ is the universe of $\underline{t}_\Sigma$ together with $n+1$ new nodes named $0,1,\dots,n$. The interpretation of the predicates from $\underline \Sigma$ are inherited from $\underline{t}_\Sigma$ as usual. Node $0$ satisfies $\Root{\Sigma+\Gamma}$, the nodes $[1,n]$ satisfy $\Port{\Sigma+\Gamma}$, and they are ordered by $\prec_{\Sigma+\Gamma}$ respecting the order of natural numbers. All the nodes satisfy $L_{\Sigma+\Gamma}$ (they would all satisfy $R_{\Sigma+\Gamma}$ if $t$ was an element of $\Gamma$).
-        
-        \item {\bf Terms.} The vocabulary $\underline {\tmonad \Sigma}$ is $\mathcal{I}_{\tmonad\Sigma}+\underline{\Sigma}+\{\sf{reach}_{\tmonad \Sigma}, \sf{Sib}_{\tmonad \Sigma}, \sim_{\tmonad \Sigma}\}$ where . 
-    
- Let $t$ be an $n$-ary tree of $\tmonad \Sigma$. Let $V_\Sigma$ be  the set of its $\Sigma$-nodes and $V_\portletter$ be the set of its $\portletter$-nodes. 
-\begin{enumerate}
-\item The universe of $\underline{t}$ is $\{\underline{v}| v\in V_\Sigma\}+ V_\portletter+\{0\}$.
-\item The interpretation of the predicates from $\underline \Sigma$ are inherited from the structures $\underline{v}$, where $v\in V_\Sigma$.
-\item Node $0$ satisfies $\Root{\tmonad\Sigma}$. The nodes $V_\portletter$ satisfy $\Port{\tmonad\Sigma}$, and they are ordered by $\prec_{\tmonad\Sigma}$ respecting their order in $t$. 
-\item The relation $\leq_{\tmonad\Sigma}$ 
-\end{enumerate}
-\begin{center}
-Picture
-\end{center}
- \end{itemize}  
-
-\begin{definition} Let $\Sigma, \Gamma\in \Tt$. We say that a function $f:\Sigma\to \Gamma$ is \emph{definable by an FO-transduction} if there is some FO-transduction $\varphi$ which makes the following diagram commutes:
-\[\begin{array}{lll}
-\Sigma& \stackrel{t\mapsto \underline{t}}{\xrightarrow{\hspace*{3cm}}} & \text{structures over }\underline \Sigma \\
-f&&\varphi\\
-\Gamma& \stackrel{t\mapsto \underline{t}}{\xrightarrow{\hspace*{3cm}}}  & \text{structures over }\underline \Gamma 
-\end{array}\]
+\begin{definition}[Associated models for terms, pairs, co-pairs and tensors.] Let $\rSigma$ be a type, as per Definition~\ref{def:types}.  Figure~\ref{fig:vocmodels} shows how we associate  to each $a \in \rSigma$ a model $\underline a$, which is a relational structure. The vocabulary of this relational structure, call it $\voctype \rSigma$, depends only  on $\rSigma$. The associated model is additionally equipped  with a distinguished sequence of elements called \emph{ports};  the number of ports is the arity of $a$.   
 \end{definition}
 
-\begin{proposition}
-Let $\Gamma, \Sigma \in \Tt$. If $f:\Sigma\to\Gamma$ is a first-order term function, then it is definable by an FO-transduction. 
-\end{proposition}
 
-\begin{proof}
-The proof is by induction, following the defintion of first-order term functions. The atomic functions $\llone$, constant functions, projection, co-projection and distributions are easily definable by FO-transductions.  
-We prove now that are also definable by FO-ransductions. 
-\\
+\newcommand{\vocline}[3]{\\ $#1$ & $#2$ & \begin{minipage}{0,6\textwidth}
+    #3
+\end{minipage}\\}
 
-In the following we adopt the following shortcuts:
-\begin{align*}
-\sf{FirstPort}_\Sigma (x)& := \Port\Sigma(x)\wedge \neg (\exists y. \Port\Sigma(y)\wedge y\prec_\Sigma x)\\
-y=\sf{succ}_< (x) &:=  y<x \wedge \neg (\exists z. y<z \wedge z<x)
-\end{align*} 
-\begin{enumerate}
-\item $\sf{Flat}$. Given a tree $t$ of type $\tmonad\tmonad\Sigma$, the fucntion $\sf{Flat}(t)$ can be implemented using an FO-transduction as follows: the copying constant is 1, the universe formula is 
-\[\varphi_1(x) = \neg (\Root{\tmonad\Sigma}(x) \vee \Port{\tmonad\Sigma}(x) )  \]
-For every relation symbol $R\in\underline \Sigma$ , we conserve the same interpretation:
-\[\varphi_R^{1,1}(x,y)=R(x,y) \text{ if $R$ is binary }
-\quad \text{ and } \quad\varphi_R^{1}(x)=R(x) \text{ if $R$ is unary }\] 
-For the other symbols of $\underline\tmonad\Sigma$, that is $\Root{\tmonad\Sigma},\Port{\tmonad\Sigma}, \prec_{\tmonad\Sigma}, \leq_{\tmonad\Sigma}$, we "shift by one $\tmonad$" their interpretation, more precisely, if $R\in\{\Root{}, \Port{}, \prec, \leq\}$, we set:
-\[ \varphi^1_{R_{\tmonad\Sigma}}(x) = R_{\tmonad\tmonad\Sigma}(x) \text{ if $R_{\tmonad\Sigma}$ is unary } \]
-\[\varphi^{1,1}_{R_{\tmonad\Sigma}}(x,y) = R_{\tmonad\tmonad\Sigma}(x,y) \text{ if it is binary. }\] 
-\item $\sf{Block}$. We show how to simulation the function $\sf{Block}:\tmonad (\Sigma + \Gamma) \to \tmonad (\tmonad \Sigma + \tmonad \Gamma)$ by an FO-transduction. 
-\item $\sf{Comb}$. The function $\sf{Comb}:\tmonad \llone\to\tmonad\llone$ is implemented by an FO-transduction as follows. Th copying constant is 4. 
-In the first copy we keep the root and the ports, and in the other 3 copies we keep all the ports exept the first one:
-\begin{align*}
-\varphi_1(x)&=\Root{\tmonad\llone}(x) \vee \Port{\tmonad\llone}(x)\\
-\varphi_i(x)&=\Port{\tmonad\llone}(x)\wedge \neg \sf{FirstPort}_{\tmonad\llone}(x)& i=2,3,4
-\end{align*}
+\begin{figure}
+    \begin{tabular}{l|l|l}
+        type $\rSigma$ & vocabulary $\voctype \rSigma$ & associated model $\underline a$ for $a \in \rSigma$ of arity $n$ \\ \hline
+        \vocline
+        {
+            \set{a_1,\ldots,a_k}
+            }  
+        {
+            \set{\overbrace{a_1,\ldots,a_k,P_1,P_2,\ldots}^{\text{unary relations}}}
+        }    
+        {
+         Let $a \in \rSigma$.   The universe of $\underline a$ is 
+            \begin{align*}
+               \set{0,\underbrace{1,2,\ldots,n}_{\text{ports}}}.
+            \end{align*}
+            The  relation $P_i$  is interpreted as $\set i$ when $i \in \set{1,\ldots,n}$ and as the empty set otherwise. The relation $a_i$ is interpreted as $\set 0$ when $a = a_i$ and as the empty set otherwise.  The ports are $1,\ldots,n$.
+        }
+        \vocline
+        {
+            \ranked{\Sigma_1 + \Sigma_2}
+            }  
+        {
+            \ranked{\voctype \Sigma_1 + \voctype \Sigma_2}
+        }    
+        {
+            For $a =(i,a_i)$, the associated model  is obtained by taking $\underline{a_i}$, viewed as a model over $\ranked{\voctype{\Sigma_i}}$, and  interpreting the remaining relations in $\ranked{\voctype \Sigma_1 + \voctype \Sigma_2}$  as empty sets.  The ports are inherited from  $\underline {a_i}$.
+        }
+        \vocline
+        {
+            \ranked{\Sigma_1 \otimes \Sigma_2}
+            }  
+        {
+            \ranked{\voctype \Sigma_1 + \voctype \Sigma_2}
+        }    
+        {
+            For  $ a =\tensorpair{a_1,a_2}$, the associated model is    the disjoint union $\underline{a_1} + \underline {a_2}$, with the relations of $\underline {a_1}$ using the    $\voctype{\ranked{\Sigma_1}}$  part of the vocabulary, and the relations of $\underline {a_2}$ using the the    $\voctype{\ranked{\Sigma_1}}$  part of the vocabulary. 
+            If $n_1$ is the arity of $a_1$, then the first $n_1$ ports are inherited from  $\underline {a_1}$ and the remaining ports are inherited from  $\underline {a_2}$.
+        }
+        \vocline
+        {
+            \ranked{\Sigma_1 \times \Sigma_2}
+            }  
+        {
+            \ranked{\voctype \Sigma_1 + \voctype \Sigma_2} + \overbrace{\set R}^{\text{binary}}
+        }    
+        {
+            For  $ a =(a_1,a_2)$, the associated model is      the disjoint union $\underline{a_1} +  \underline {a_2}$, in the same sense as in the previous item for $\otimes$,  with $R$ interpreted as 
+            \begin{align*}
+                \set{(\text{$i$-th port of $\underline {a_1}$}, \text{$i$-th port of $\underline a_2$}): i \in \set{1,\ldots,n}} 
+            \end{align*}
+            The ports are inherited from   $\underline {a_1}$.
+        }
+        \vocline
+        {
+            \ranked{\tmonad \rSigma}
+            }  
+        {
+            \voctype \rSigma + \overbrace{\set <}^{\text{binary}}
+        }    
+        {
+            Let $a \in \tmonad \rSigma$. Consider the structure
+            \begin{align*}
+                 \coprod_{x} \underline{a(x)}
+            \end{align*}
+            where $x$ ranges  over  (port or non-port) nodes $x$ in $a$. In the above, $\underline a(x)$ is a structure over vocabulary $\voctype \rSigma$ that  is defined by induction assumption for non-port nodes, and otherwise has a single element with all relations empty.  The disjoint union $\coprod$ uses the same vocabulary $\voctype \rSigma$ for all structures in the disjoint union.  The binary relation $<$ consists of all pairs $(u,v)$ such that $u$ is the $i$-th port of $\underline{a(x)}$  some non-port node $x$, and $v$ belongs to $\underline{a(y)}$ for some node (possibly a port) $y$ which is a descendant (not necessarily proper) of the $i$-th child of $x$.
+            The $i$-th port is the unique node in $\underline {a(x)}$, where $x$ is the $i$-th port of $a$.
+        }
+    \end{tabular}
+    \caption{\label{fig:vocmodels}
+     Associated models for elements of the types.}
+\end{figure}
 
-\begin{align*}
-\varphi^1_{\Root{\tmonad\llone}}(x)=\Root{\tmonad\llone}(x) \qquad \varphi^1_{\Port{\tmonad\llone}}(x)=\Port{\tmonad\llone}(x)
-\qquad\varphi^{1,1}_{\prec_{\tmonad\llone}}(x,y)=\prec_{\tmonad\llone}(x,y) 
-\end{align*}
+  
+\begin{lemma}
+    For every first-order term function $\ranked f$, there is a first-order term interpetation 
+\end{lemma}
 
-\begin{align*}
-\varphi^{2,3}_{\leq_\llone}(x,y) = \varphi^{2,4}_{\leq_\llone}(x,y) = (x=y)\\
-\varphi^{4,3}_{\prec_\llone}(x,y) =(x=y)
-\end{align*}
 
-\begin{align*}
-\varphi^{2,3}_{<_{\tmonad\llone}}(x,y)= \varphi^{2,4}_{<_{\tmonad\llone}}(x,y)= ((x=y) \vee (x\prec_{\tmonad\llone} y))\\
-\varphi^{4,2}_{<_{\tmonad\llone}}(x,y)=\varphi^{4,3}_{<_{\tmonad\llone}}(x,y)=\varphi^{2,2}_{<_{\tmonad\llone}}(x,y)= \varphi^{4,4}_{<_{\tmonad\llone}}(x,y)= (x\prec_{\tmonad\llone} y)\\
-\varphi^{1,1}_{<_{\tmonad\llone}}(x,y)=\varphi^{1,2}_{<_{\tmonad\llone}}(x,y)= \Root{\tmonad\llone}(x)\\
-\varphi^{2,1}_{<_{\tmonad\llone}}(x,y)=\varphi^{3,1}_{<_{\tmonad\llone}}(x,y)=(x=y) \vee (y\prec_{\tmonad\llone} x)\qquad 
-\varphi^{4,1}_{<_{\tmonad\llone}}(x,y)=(y\prec_{\tmonad\llone} x)
-\end{align*}
-\begin{center}
-Add pictures and explanations.
-\end{center}
-\item $\sf{Unfold}$. Let us now consider the function $\sf{Unfold}:\tmonad(\Sigma\otimes \Gamma)\to \tmonad\Sigma\otimes\tmonad\Gamma$. The copying constant is 2. 
-\begin{align*}
-\varphi_1(x)=\neg [\Root{\Sigma\otimes\Gamma}(x)\vee (\Port{\Sigma\otimes\Gamma}(x)\wedge \exists y. y=succ_{<_{\tmonad(\Sigma\otimes\Gamma)}}(x) \wedge \Root{\Sigma\otimes\Gamma}(y))]\\
-\varphi_2(x)=\exists r, y. \Root{\tmonad(\Sigma\otimes\Gamma)}(r) \wedge y=succ_{<_{\tmonad(\Sigma\otimes\Gamma)}}(r) \wedge x= succ_{<_{\tmonad(\Sigma\otimes\Gamma)}}(x) 
-\end{align*}
-In the first copy, all the relations of $\underline{\Sigma}$ and $\underline{\Gamma}$ are interpreted in the same way. 
-Let us discuss the relation of $\tmonad\Sigma$ and $\tmonad\Gamma$.
-\[\varphi^{1,1}_{\tmonad\Sigma}(x,y)=\] 
-\end{enumerate} 
-
- \end{proof}

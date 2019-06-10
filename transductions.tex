@@ -1,6 +1,6 @@
 \section{Trees, terms and their functions}
 \label{sec:trees-transductions}
-There are many definitions of trees: they can be rooted or not, they can be ranked (the label of a node determines the number of children) or not, they can have ordered  siblings or not. In this paper, we worked with trees that are rooted, ranked and sibling ordered. 
+ In this section, we describe the trees and tree-to-tree functions that are discussed in this paper. The  trees are rooted, node labelled, ranked (the label of a node determines the number of children) and sibling ordered (there is a first child, second child, etc.). 
 A \emph{ranked set} is a set where each element has an associated \emph{arity} in $\set{0,1,2,\ldots}$. We adopt the convention that ranked sets are written in red, e.g.~$\rSigma$ or $\rGamma$.  We use ranked sets as building blocks for trees. The following picture describes the notion of trees that we use and some terminology:
 \mypic{1}
 % When talking about elements of a ranked set, we mean elements of the underlying set.   For a ranked set $A$ and a finite set of variables $X \subseteq \varnames$, we write $\slice A X$ for the elements of $A$ that have arity $X$. 
@@ -13,7 +13,7 @@ A tree language can be viewed as the special case of a tree-to-tree function, wh
 
   
 \subsection{First-order logic and transductions}
-In this section we  describe how logics -- such as first-order logic or monadic second-order logic \mso -- can be used to define tree-to-tree functions and tree languages. The basic idea is to view a tree as a model, and then to use logics to describe properties and transformations of such models\footnote{For more about these logics in the context of defining properties of trees, see~\cite[Section 3]{thomas1997languages}.}. 
+In this section we  describe how logics -- such as first-order logic or monadic second-order logic -- can be used to define tree-to-tree functions and tree languages. The basic idea is to view a tree as a model, and to use logic to describe properties and transformations of such models\footnote{For more about these logics in the context of defining properties of trees, see~\cite[Section 3]{thomas1997languages}.}. 
 
 A \emph{relational vocabulary} is defined to be a set of relation names, each one with associated arity (we do not use function symbols in this paper). Formally speaking, a relational vocabulary is the same as a ranked set, which is why we write relational vocabularies in red, using letters like $\ranked \sigma, \ranked \tau$. 
 
@@ -88,12 +88,12 @@ This is a first-order tree-to-tree transduction, which needs no copying (formall
 \end{align*}
 This function could not be implemented by a first-order transduction if we replaced the descendant relation by a binary parent-child relation.
 \end{example}
-\begin{example}
+\begin{example}\label{ex:pre-order}
     Consider a ranked alphabet
     \mypic{21}
     and the tree-to-tree function which does a pre-order traversal of the input tree, as described in the following picture:
-    \mypic{22}
-     The above function is first-order tree-to-tree transduction. We use two copies of the input tree: one for the gray nodes, and one for the remaining nodes. The key observation is that the pre-order  is first-order definable: a node $x$ is before $y$ in the pre-order if either $x \le y$, or there exist nodes $x',y'$ such that 
+    \mypic{30}
+     The above function is first-order tree-to-tree transduction. We use four copies of the input tree: one for the binary gray nodes, two for the gray nodes of arity zero, and one for the nodes of the input tree. The key observation is that the pre-order  is first-order definable: a node $x$ is before $y$ in the pre-order if either $x \le y$, or there exist nodes $x',y'$ such that 
      \begin{align*}
          x' \le x \quad \land \quad  y' \le y \quad \land \quad \underbrace{\forall z \ z < x' \Leftrightarrow z < y'}_{\text{$x',y'$ are siblings}} \quad \land \quad \underbrace{\bigvee_{i<j}\child i (x') \land \child j(y').}_{\text{$x'$ is an earlier sibling than $y'$}}
      \end{align*}

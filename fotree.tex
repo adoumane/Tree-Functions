@@ -9,22 +9,23 @@ For our purposes, the datatype of trees will be insufficient, because  we will n
 which will be assumed to be disjoint with all other sets.  We view the variables as a ranked set, where each variable has arity zero, i.e.~it can only be used in leaves. 
 
 \begin{definition}[Terms]\label{def:terms}
-    An $n$-ary term over a ranked set $\rSigma$ is defined to be a tree over the ranked alphabet $\rSigma + \termvars$ where each variable from $x_1,\ldots,x_n$ appears exactly once, in left-to-right order,  and the other variables do not appear at all.    We write $\tmonad \rSigma$ for the ranked set of terms over $\rSigma$. 
+    An $n$-ary term over a ranked set $\rSigma$ is defined to be a tree over the ranked alphabet $\rSigma + \termvars$ where each of the  variables $x_1,\ldots,x_n$ appears exactly once,  and the other variables do not appear at all.    We write $\tmonad \rSigma$ for the ranked set of terms over $\rSigma$. 
 \end{definition}
-
+ 
 We adopt the following convention for drawing terms. The term is drawn inside a box, and the dangling edges which leave the box at the bottom are its variables, ordered left-to-right, as in the following picture: \mypic{7}
 % If we disallow crossing edges in the pictures, then the above drawing convention can only represent terms where the variables are ordered $x_1,\ldots,x_n$ from left to right. 
- The restriction that each variable appears exactly one, sometimes called \emph{linearity}, is connected to the fact that first-order transductions have linear size increase. Because the set of terms is itself a ranked set,  we can create terms of terms, which will be useful in the constructions of this paper. 
+ The restriction that each variable appears exactly one, sometimes called \emph{linearity}, is connected to the fact that first-order transductions have linear size increase. Because the set of terms is itself a ranked set,  we can create terms of terms, which will be important for the constructions we use.  
 
-To see the need for terms, suppose that we want to group the nodes of a tree into connected parts, called factors. Then the factors are not trees, because they have dangling edges, but they can be viewed as terms, as explained in the following picture:
+To see the need for terms, suppose that we want to group the nodes of a tree into connected parts, called \emph{factors} (a factor in a tree is defined to be a set of nodes that is connected by the parent-child relation). The factors are not trees, because they have dangling edges, but they can be viewed as terms, as explained in the following picture:
 \mypic{15}
         
 A consequence of using terms is that we will work in the category of ranked sets; i.e.~the types we use will be ranked sets and the functions we consider are arity-preserving functions between ranked sets. We adopt the notation that arity-preserving functions are written in red, like this: $\ranked{f : \Sigma \to \Gamma}$. 
 
 
 \subsection{Types}
-The  main goal of this paper is to  describe first-order tree-to-tree functions using a certain atomic functions and combinators on them. These functions will be arity preserving functions on ranked sets. In this section, we describe the kinds of ranked sets that will be allowed as domains and co-domains of our functions. The general idea is that we start with finite ranked sets, and close these under the following type constructors: coproducts, two kinds of product (Cartesian and tensor), taking terms, and the matrix power. 
-The  matrix power -- which is possibly the least natural type constructor -- will be motivated and discussed in more detail later on.
+The  main goal of this paper is to  show how every first-order tree-to-tree function can be obtained by starting with certain atomic functions, and composing the using certain combinators. The atomic functions and combinators will be based on arity preserving functions on ranked sets. In this section, we describe the kinds of ranked sets that will be allowed as domains and co-domains of our functions. The general idea is that we start with finite ranked sets, and close these under the following type constructors: coproducts, two kinds of product (Cartesian and tensor), taking terms.
+%  and the matrix power. 
+% The  matrix power -- which is possibly the least natural type constructor -- will be motivated and discussed in more detail later on.
 
 
 \begin{definition}[Types] \label{def:types} The following ranked sets are called \emph{types}:
@@ -46,31 +47,71 @@ The  matrix power -- which is possibly the least natural type constructor -- wil
         \end{align*}
         Note how we use  angular brackets to distinguish tensor $\tensorpair{a_1,a_2}$ pairs from Cartesian pairs $(a_1,a_2)$.
         \item \emph{Terms.} If $\ranked \Sigma$ is a type, then  the ranked sets of terms  $\tmonad \rSigma$ is also a type.
-       \item \emph{Matrix power.}  If  $\rSigma$ is a type and $k \in \set{1,2,\ldots}$, then the \emph{$k$-th matrix power of $\rSigma$}, denoted by $\ranked{\Sigma^{[k]}}$, is also a type.  An $n$-ary element of $\ranked{\Sigma^{[k]}}$ is a (tensor) tuple
-       \begin{align*}
-           \tensorpair{a_1,\ldots,a_k} \in \overbrace{\ranked{\Sigma \otimes \cdots \otimes \Sigma}}^{\text{$k$ times}} 
-       \end{align*}
-       of arity $kn$ (note the difference between the arities $n$ and $kn$), together with a function
-       \begin{align*}
-           f : \set{1,\ldots,kn} \to \set{1,\ldots,n} \qquad \text{such that $f^{-1}(i)$ has size exactly $k$ for every $i$.}
-       \end{align*}
-       Here is a picture of an $n$-ary element of  $\ranked{\Sigma^{[2]}}$ for $n=3$ and $k=2$:
-       \mypic{16}
     \end{enumerate}
 \end{definition}
 
-\subsection{The main result}
-In this section, we state the main result of this paper, which is that every first-order tree-to-tree function can be obtained by starting with certain simple functions and combining them using combinators. The atomic functions and combinators are listed in Figure~\ref{fig:fo-term}. Their precise definitions, along with some justification for their use,   will be given in more detail in Section~\ref{sec:atomic-and-combinators}.
-
-Many of the operations are very natural given their underlying types, e.g.~we include constructors and destructors that are usually associated to products and coproducts, we also have various kinds of distributivity laws (e.g.~both products distribute across coproducts). Several operations for  the type of terms arise from the fact that the term construction is a monad. There are, however, some operations which require more explanation; the same is true also for the matrix power construction. 
+\subsection{Atomic functions and combinators}
+The atomic functions and combinators are listed in Figure~\ref{fig:fo-term}. 
+The first two items in the figure, namely function composition and functions with finite domains should be self-explanatory. There are also no surprises for the remaining items which do not involve the term constructor $\tmonad$:
+\begin{center}
+    \newcommand{\fotitemsmall}[2]{$ #1$ & $#2$ \\ }
+\begin{tabular}{ll}
+        \fotitemsmall{
+            \ranked{\iota_i : \Sigma_i \to \Sigma_1 + \Sigma_2}
+            }
+            {
+                a \mapsto (i,a)
+            }
+    \fotitemsmall{
+        {\ranked{f_1 \text{or} f_2 :  (\Sigma_1 + \Sigma_2) \to  \Gamma}}
+        }
+        {
+            (i,a) \mapsto {\ranked{f_i}(a)}
+        }
+        \fotitemsmall{
+            \ranked{\pi_i : \Sigma_1 \times \Sigma_2 \to \Sigma_i}
+            }
+            {
+                (a_1,a_2) \mapsto a_i
+            }
+    \fotitemsmall{
+        {\ranked{(f_1,f_2) :  \Sigma \to  \Gamma_1 \times \Gamma_2}}
+        }
+        {
+            a \mapsto (\ranked{f_1}(a_1), \ranked{f_2}(a_2))
+        }
+        \fotitemsmall{
+            \ranked{\distrcart : (\Sigma_1 + \Sigma_2)\times \Gamma \to (\Sigma_1 \times \Gamma) + (\Sigma_2 \times \Gamma)}
+            }
+            {
+                \tensorpair{(i,a),b} \mapsto (i,\tensorpair{a,b})
+            }
+        \fotitemsmall{
+        {\ranked{ \tensorpair{f_1,f_2}  :  \Sigma_1 \otimes \Sigma_2 \to  \Gamma_1 \otimes \Gamma_2}}
+        }
+        {
+            \tensorpair{a_1,a_2} \mapsto \tensorpair {\ranked{f_1}(a_1), \ranked{f_2}(a_2)}
+        }
+        \fotitemsmall{
+            \ranked{\distrtensor : (\Sigma_1 + \Sigma_2)\otimes \Gamma \to (\Sigma_1 \otimes \Gamma) + (\Sigma_2 \otimes \Gamma)}
+            }
+            {
+                \tensorpair{(i,a),b} \mapsto (i,\tensorpair{a,b})
+            }
+\end{tabular}
+\end{center}
+The functions and combinators involving terms    will be described in more detail in Section~\ref{sec:atomic-and-combinators}. 
 
 \begin{definition}
     A \emph{first-order term function} is any function that can be constructed using the atomic functions and combinators described in Figure~\ref{fig:fo-term}.
 \end{definition}
 
-Since all atomic functions are arity preserving functions between types (as per Definition~\ref{def:types}), and the combinators preserve this property, it follows that all first-order term functions are arity preserving functions between types. We are now ready to state the main theorem of this paper. 
+Since all atomic functions are arity preserving functions between types (as per Definition~\ref{def:types}), and the combinators preserve this property, it follows that all first-order term functions are arity preserving functions between types. 
 
-\begin{theorem}
+\subsection{The main result}
+We are now ready to state the main theorem of this paper. 
+
+\begin{theorem}\label{thm:main}
     Let $\rSigma,\rGamma$ be finite ranked sets. A function 
     \begin{align*}
         f : \trees \rSigma \to \trees \rGamma
