@@ -100,15 +100,8 @@ The first two items in the figure, namely function composition and functions wit
             }
 \end{tabular}
 \end{center}
-The functions and combinators involving terms    will be described in more detail in Section~\ref{sec:atomic-and-combinators}. 
+The functions and combinators involving terms    will be described in more detail in  Section~\ref{sec:atomic-and-combinators}. For the rest of this paper, whenever we refer to ``atomic functions and combinators'', we mean those from Figure~\ref{fig:vocmodels}.  Since all atomic functions are arity preserving functions between types (as per Definition~\ref{def:types}), and the combinators preserve this property, it follows that all functions that can be derived from the atomic functions using combinators are arity preserving. 
 
-\begin{definition}
-    A \emph{first-order term function} is any function that can be constructed using the atomic functions and combinators described in Figure~\ref{fig:fo-term}.
-\end{definition}
-
-Since all atomic functions are arity preserving functions between types (as per Definition~\ref{def:types}), and the combinators preserve this property, it follows that all first-order term functions are arity preserving functions between types. 
-
-\subsection{The main result}
 We are now ready to state the main theorem of this paper. 
 
 \begin{theorem}\label{thm:main}
@@ -116,11 +109,11 @@ We are now ready to state the main theorem of this paper.
     \begin{align*}
         f : \trees \rSigma \to \trees \rGamma
     \end{align*}
-    is a first-order tree-to-tree transduction if and only if it can be obtained by taking a first-order term function
+    is a first-order tree-to-tree transduction if and only if it is the restriction to trees of some  function
     \begin{align*}
         \ranked {g : \tmonad \Sigma \to \tmonad \Gamma}
     \end{align*}
-    and restricting it to trees (i.e.~terms of arity zero).
+    which can be derived from the atomic functions using combinators.
 \end{theorem}
 
 
@@ -129,4 +122,74 @@ We are now ready to state the main theorem of this paper.
 
 
 
+
+\subsection{The atomic functions and combinators for terms}
+\label{sec:atomic-and-combinators}
+In this section, we define the atomic functions and combinators from Figure~\ref{fig:fo-term} which involve the term type constructor $\tmonad$. 
+
+
+
+
+
+\subsubsection{Terms as an algebraic data type} Let $\ranked \Sigma$ be a ranked set. If $a \in \Sigma$ is a letter of arity $n$, and $t_1,\ldots,t_n$ are terms in $\tmonad \rSigma$, then also 
+\begin{align*}
+    a \tensorpair{t_1,\ldots,t_n}
+\end{align*}
+is a term, which has $a$ in the root and child subterms $t_1,\ldots,t_n$. We use the tensor brackets $\tensorpair{t_1,\ldots,t_n}$ because the arity of the term is the sum of the arities of $t_1,\ldots,t_n$, as in the tensor product. Another way of constructing a term is to simply have a port $\portletter$ in the root. The above observations explain the function 
+\begin{align*}     
+    \set * + \coprod_{a \in \Sigma} \overbrace{\tmonad \rSigma \otimes \cdots \otimes \tmonad \rSigma}^{\text{arity of $a$ times}}   \qquad \ranked{\xymatrix{
+        \ar[r]^{\composeterm}& 
+        %  \ar@<.5ex>[l]^{\composeterm} 
+    }} \qquad \tmonad \rSigma
+\end{align*}
+from Figure~\ref{fig:fo-term}. Note that the coproduct above can only be viewed as a legitimate type when $\rSigma$ is finite; and therefore the function $\composeterm$ is only allowed when $\rSigma$ is finite. The function $\composeterm$ is not injective but not surjective, because its image will contain only the terms that satisfy condition (*) explained in the following picture: 
+\mypic{28}
+If we assumed, in definition~\ref{def:terms}, that the variables in a term are ordered left-to-right, then $\composeterm$ would be a bijection. The operation 
+\begin{align*}     
+    \set {\bot,*} + \coprod_{a \in \Sigma} \overbrace{\tmonad \rSigma \otimes \cdots \otimes \tmonad \rSigma}^{\text{arity of $a$ times}}   \qquad \ranked{\xymatrix{
+&          \ar[l]^{\decomposeterm} 
+    }} \qquad \tmonad \rSigma
+\end{align*}
+is a one-sided inverse of $\composeterm$, i.e.~it is output is the inverse of $\composeterm$ for terms that satisfy (*) and otherwise it is $\bot$. 
+
+
+\subsubsection{Terms as a monad.} Three of the operations associated to the type constructor $\tmonad$, namely  
+\begin{align*}
+        \underbrace{\ranked {\tmonad f : \tmonad \Sigma \to \tmonad \Gamma}}_{\text{$\tmonad$ is a functor}} \qquad  \underbrace{\unit_\rSigma : \rSigma \rto \tmonad \rSigma}_{\text{the unit in the monad}} \qquad  \underbrace{\flatt_\rSigma : \tmonad \tmonad \rSigma \rto \tmonad \rSigma}_{\text{the product operation in the monad}}
+\end{align*}
+induce a monad structure on terms (in the category of ranked sets). The lifting $\tmonad f$ should be self-explanatory: one simply changes the labels in the term according to $f$. The  unit operation interprets each letter as a term with one non-variable node, with the variables ordered left-to-right,  as illustrated below:
+        \mypic{10}
+Finally, the  \emph{flattening} operation $\flatt_\rSigma$ 
+        maps a term of terms into a term, by using substitution as illustrated in the following picture:  \mypic{9}
+% A more formal definition is the flattening of $\portletter$ is $\portletter$, while the flattening of a term of the form 
+% \begin{align*}
+%     t \tensorpair{t_1,\ldots,t_n} \qquad t \in \tmonad \rSigma, t_1,\ldots,t_n \in \tmonad \tmonad \rSigma    
+% \end{align*}
+%  is the term obtained by taking $t$, and replacing each port $x_i$ by the flattening of $t_i$.
+    
+\subsubsection{Factorisations}
+    Let $t \in \tmonad \rSigma$ be a term. 
+    There are two equivalent definitions of factorisations of $t$. One definition is that a factorisation is an equivalence relation on non-port nodes where every equivalence class is a factor; the other definition is that it is any term $s  \in \tmonad \tmonad \rSigma$ which flattens to $t$. 
+    The two definitions are easily seen to be equivalent equivalent, in the sense that there is a one-to-one correspondence between factorisation equivalences and factorisation terms.
+    %  which is explained in the following picture:
+    % \mypic{14}
+    Suppose that $\ranked{\Sigma_1}$ and $\ranked{\Sigma_2}$ are ranked sets. The ancestor and descendant factorisations 
+        \begin{align*}
+            \overbrace{\ancfact}^{\text{ancestor}}, \overbrace{\decfact}^{\text{descendant}}  : \ranked{\tmonad(\Sigma_1+\Sigma_2) \to \tmonad(\tmonad \Sigma_1 + \tmonad \Sigma_2)}
+        \end{align*}
+        are defined as follows. Consider an input term
+        \begin{align*}
+            t \in \ranked{\tmonad(\Sigma_1+\Sigma_2)}.
+        \end{align*}
+        We say that two non-port nodes have \emph{same type} if both have labels in the same  $\ranked{\Sigma_i}$; otherwise we say that non-port nodes have \emph{opposing type}.  Call two non-port nodes \emph{ancestor equivalent}  if they  same proper ancestors of opposing type. Call two non-port nodes \emph{descendant equivalent}  if they  are ancestor equivalent and they have the same proper descendants of opposing type. Here is a picture, with $\ranked{\Sigma_1}$ being red and $\ranked{\Sigma_2}$ being blue:
+        \mypic{11}
+        Both ancestor and descendant equivalences are factorisations; and in each case equivalence classes contain only nodes of same type.  The function $\ancfact$ maps a term to (the term of terms corresponding to) its ancestor equivalence relation, likewise we define $\decfact$ for  descendant factorisations.
+    
+        \subsubsection{Pre-order traversal.} Let  $\rSigma$ be a ranked set. Let \grayball and \grayballbin be two letters, of arities zero and two. Define 
+        \begin{align*}
+            \ranked{\preorder : \tmonad \Sigma \to \tmonad (\rSigma + \set{\grayball, \grayballbin})}
+        \end{align*}
+        to be the extension to  terms of the pre-order function discussed in Example~\ref{ex:pre-order}, as explained below:
+        \mypic{13}
+        
 

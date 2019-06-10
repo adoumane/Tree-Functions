@@ -1,17 +1,17 @@
 \newcommand{\Root}[1]{\mathsf{root}_{#1}}
 \newcommand{\Port}[1]{\mathsf{port}_{#1}}
 \newcommand{\Interface}[1]{\mathsf{Interface}_{#1}}
-\section{To transductions}
+\section{Atomic functions and combinators to first-order transductions}
 \label{sec:to-transductions}
 In this section, we prove the right-to-left implication in Theorem~\ref{thm:main}, namely that if $\rSigma,\rGamma$ are finite ranked sets and 
 \begin{align*}
     \ranked {f : \tmonad \Sigma \to \tmonad \Gamma} 
 \end{align*}
-is a first-order term function, then its restriction to trees 
+ can be derived using combinators from the atomic functions, then its restriction to trees 
 \begin{align*}
     f : \trees \rSigma \to \trees \rGamma
 \end{align*}
-is a first-order tree-to-tree transduction. The proof is a relatively straightforward induction on the way that $\ranked f$ is constructed from the atomic functions using the combinators. Recall that first-order tree-to-tree transductions were defined by applying the notion of first-order transduction (Definition~\ref{def:fo-transduction}) to models associated to trees (Definition~\ref{def:tree-model}). To apply first-order transductions to more complicated types, such as terms, pairs of terms, tensors of terms of pairs, etc, we need to explain how those types are modeled as relational structures; this is done in the following definition. 
+is a first-order tree-to-tree transduction. The proof is a simple induction on the derivation of  $\ranked f$. In the induction, we must deal with functions that manipulate types that are more complex than trees, e.g.~tensor pairs of terms of coproducts.  To operate on such types with first-order transductions, we need to show how such types can be modelled as relational structures.
 
 
 % We do this by assigning to each element $a$ in a type $\rSigma$ an associated model $\underline a$. 
@@ -23,9 +23,16 @@ is a first-order tree-to-tree transduction. The proof is a relatively straightfo
 % \end{itemize}
 
 
-\begin{definition}[Associated models for terms, pairs, co-pairs and tensors.] Let $\rSigma$ be a type, as per Definition~\ref{def:types}.  Figure~\ref{fig:vocmodels} shows how we associate  to each $a \in \rSigma$ a model $\underline a$, which is a relational structure. The vocabulary of this relational structure, call it $\voctype \rSigma$, depends only  on $\rSigma$. The associated model is additionally equipped  with a distinguished sequence of elements called \emph{ports};  the number of ports is the arity of $a$.   
+\begin{definition}[Associated models for terms, pairs, co-pairs and tensors.] \label{def:type-model} Let $\rSigma$ be a type, as per Definition~\ref{def:types}.  Figure~\ref{fig:vocmodels} defines a relational vocabulary $\voctype \rSigma$ and a mapping
+    \begin{align*}
+        a \in \rSigma \qquad \mapsto \qquad \underbrace{\underline a \in \text{relational structures over $\voctype \rSigma$}}_{\text{associated model of $a$}}.
+    \end{align*}
+    Furthermore, if $a$ has arity $n$, then its associated has a sequence of  $n$ distinguished elements, called ports.   
 \end{definition}
 
+The above  definition creates a certain ambiguity for trees, because if $t$ is a tree alphabet $\rSigma$, then $\underline t$ can be understood in two ways: as per  Definition~\ref{def:tree-model} for trees, or as per Definition~\ref{def:type-model} when $t$ is viewed as a special case of a term $t \in \tmonad \rSigma$. Since we only use first-order transductions to manipulate transform relational structures,  this ambiguity is not a problem, because one can easily define first-order transductions which map one version of $\underline t$ to the other.
+
+The following lemma immediately yields the right-to-left implication in Theorem~\ref{thm:main}. It proof, which is a straightforward case analysis of all atomic functions and combinators, is relegated to the appendix. 
 
 \newcommand{\vocline}[3]{\\ $#1$ & $#2$ & \begin{minipage}{0,6\textwidth}
     #3
@@ -104,8 +111,15 @@ is a first-order tree-to-tree transduction. The proof is a relatively straightfo
 \end{figure}
 
   
-\begin{lemma}
-    For every first-order term function $\ranked f$, there is a first-order term interpetation 
+\begin{lemma}\label{lem:to-logic} If $f : \rSigma \to \rGamma$ can be derived from the atomic functions using combinators, then there is a first-order transduction $g$ 
+    which makes the following diagram commute
+    \begin{align*}
+        \xymatrix@C=3cm{
+            \rSigma \ar[d]_{a \mapsto \underline a}\ar[r]^f &  \rGamma \ar[d]^{a \mapsto \underline a} \\
+            \text{relational structures over $\voctype \rSigma$} \ar[r]_g &  \text{relational structures over $\voctype \rGamma$}.
+        } 
+    \end{align*}
+    
 \end{lemma}
 
 
