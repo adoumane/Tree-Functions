@@ -19,63 +19,74 @@ The automaton model is based on streaming tree transducers~\cite{alur2017streami
 
 
 \paragraph*{Register valuations and updates.}   Let $\ranked{\Gamma, R}$ be finite ranked sets, which are called the \emph{output alphabet} and \emph{register names} respectively.  
-A \emph{register valuation} (over $\rGamma$ and $\ranked R$) is defined to be any arity-preserving function
+A \emph{register valuation} (over $\rGamma$ and $\ranked R$) is defined to be any arity-preserving function from the register names $\regnames$ to terms $\tmonad \rGamma$. We write $\regvals \rGamma \regnames$ for the set of register valuations. For  $n \in \set{0,1,\ldots}$, an \emph{$n$-ary register update} (over $\Gamma$ and $R$) is defined to be any arity-preserving function
 \begin{align*}
-    \ranked{v : R \to \tmonad \Gamma}
+    \ranked {u : \regnames \rto \tmonad ( \rGamma + \underbrace{{\regnames + \cdots + \regnames}}_{\text{$n$ times}})}
 \end{align*}
-For  $k \in \set{0,1,\ldots}$, a \emph{$k$-ary register update} (over $\Gamma$ and $R$) is defined to be any an arity-preserving function
+A register valuation can be seen as the special case of an $n$-ary register update when $n=0$. 
+A $n$-ary register update can be seen as an $n$-ary operation on  register valuations,
 \begin{align*}
-    u : R \to \tmonad ( \Gamma + \underbrace{R + \cdots +R}_{\text{$k$ times}})
+    [\ranked u] : (\regvals \rGamma \regnames \times \cdots \times \regvals \rGamma \regnames) \to \regvals \rGamma \regnames
 \end{align*}
-A $k$-ary register update can be applied to a $k$-tuple of register valuations, yielding a single register valuation, as illustrated in the following picture:
+as illustrated in the following picture:
 \begin{center}
     picture here
 \end{center}
-In other words, if we fix the an output alphabet $\Gamma$ and a set of registers $R$, then we can talk about an algebra, where the unvierse is the register valuations, and the operations are the register updates.
-
-\paragraph*{Streaming tree transducers.} A register update is called \emph{copyless} if each copy of a register name is used at most once. More formally, for each $i \in \set{1,\ldots,k}$ and each register name $r \in R$, there is at most one $s \in R$ such that the $i$-th copy of $r$ appears in $u(s)$, and furthermore this copy appears at most once in $u(s)$. 
+Note that although $\ranked u$ is an arity-preserving function between ranked sets, this is no longer true for $[\ranked u]$, which is simply a function on (non-ranked) sets. On the other hand, $[\ranked u]$ has an arity, and therefore we can view the set of register updates as a ranked set which acts on register updates. 
 
 
-\begin{definition}[Streaming Tree Transducer]\label{def:stt}
-    The syntax of a  \emph{streaming tree transducer} consists of 
-\begin{itemize}
-    \item Input and output alphabets $\Sigma$ and $\Gamma$, which are finite ranked sets;
-    \item A finite set of states $Q$, not ranked.
-    \item A finite set of regsiters $R$, ranked.
-    \item For each input letter $a \in \Sigma$, of arity $n$, a transition function
- \begin{align*}
-     Q^n \to Q \times \text{($n$-ary register updates over $\Gamma$ and $R$)}
- \end{align*}
- \item An ouptut function
- \begin{align*}
-     Q \to \trees(\Gamma + R)
- \end{align*}
-\end{itemize}
+\begin{definition}[Abstract Streaming Tree Transducer]\label{def:stt}
+\ 
+    \begin{itemize}
+        \item An  \emph{abstract streaming tree transducer} consists of finite ranked sets
+        \begin{align*}
+           \underbrace{\rSigma}_{\text{input alphabet}} \quad 
+           \underbrace{\rGamma}_{\text{output alphabet}} \quad 
+           \underbrace{\ranked R}_{\text{registers}} \quad 
+           \underbrace{\rDelta \subseteq \text{register updates over $\rGamma$ and $\ranked R$},}_{\text{register updates}}
+        \end{align*}
+           together with an \emph{update function} $\delta : \trees \rSigma \to \trees \rDelta$ and an \emph{output tree} $\outtree \in \trees \ranked{(\Gamma + R)}$. 
+           The semantics of the transducer is the composition of the functions
+    \begin{align*}
+        \xymatrix{
+            \trees \rSigma \ar[r]^{\delta} & \trees \rDelta \ar[r]^{t \mapsto [t]} & (\tmonad \rGamma)^\regnames \ar[r]^{[\outtree]} & \trees \rGamma
+        }
+    \end{align*}
+    where the middle function is defined by 
+    \begin{align*}
+        [\ranked u \tensorpair{t_1,\ldots,t_n}] = [\ranked u]([t_1],\ldots,[t_n])
+    \end{align*}
+    and the out function applies a register valuation to the output tree. 
+    \item A \emph{first-order streaming tree transducer} is the special case of the above when the following conditions are satisfied:
+    \begin{enumerate}
+        \item \emph{First-order rational updates.} The function $\delta$ is a first-order rational tree function.
+        \item \emph{Copyless.} Every register update $\ranked u \in \rDelta$ is \emph{copyless}\footnote{The copyless restriction does not apply to the output tree, but imposing it also on the output tree would give a model with the same expressive power.}, which means that for every
+        \begin{align*}
+            r \in \ranked{\underbrace{\regnames + \cdots + \regnames}_{\text{arity of $u$ times}}}
+        \end{align*}
+        there is at most one $s \in \regnames$ such that $r$ appears in the term  $\ranked u(s)$, and furthermore $r$ appears at most once in that term. 
+        \item \emph{Montone.} One can equip the registers $\regnames$ with a total order so that for every update $\ranked u \in \rDelta$ and  every $i \in \set{1,\ldots,\text{arity of $\ranked u$}}$,
+        \begin{align*}
+            r \in \regnames \qquad \mapsto \quad \text{the unique $s \in \regnames$ such that the $i$-th copy of $r$ appears in $\ranked u(s)$},
+        \end{align*}
+        which is a well-defined partial function thanks to the copyless assumption, is monotone in the following sense:
+        \begin{align*}
+            r \leq s \qquad \text{implies} \qquad  \ranked u_i(r) \le  \ranked u_i(s) \text{ or one of the values is undefined.}
+        \end{align*}
+    \end{enumerate}
+    \end{itemize}
+    
 \end{definition}
 
-The semantics of a streaming tree transducer are defined as follows. For a tree over the input alphabet, one defines a pair (state, register valuation)
-by induction on the size of the tree, using the transition function, in the natural way. Suppose that $t$  is a tree over the input alphabet, and let $(q,v)$ be the associated states and register  valuations. To obtain the output for the tree $t$, one applies the output function to $q$, yielding a tree over $\Gamma + R$, and then substitutes the register names according to the register valuation $v$. 
 
-
-\begin{definition}[First-order Definable Streaming Tree Transducer]\ 
-    A streaming tree-to-tree transducer is called \emph{first-order definable} if for every state $q$, the set of trees which get evaluated to state $q$ is a first-order definable tree language.
-\end{definition}    
 \begin{proposition}\label{prop:stt}
-    The following classes of tree-to-tree transductions are the same:
-    \begin{itemize}
-        \item  \mso tree-to-tree transductions;
-        \item streaming tree transducers.
-    \end{itemize}
-    First-order  tree-to-tree transductions are equal to first-order definable streaming tree transducers.
+    Every first-order tree transduction is recognised by a first-order streaming tree transducer. 
 \end{proposition}
 
 The result for \mso, adjusting for a different syntax,  was proved in~\cite[Theorem 4.6]{alur2017streaming}. The result for fo uses the same ideas. A proof is in the appendix.
 \begin{center}
     do this appendix 
 \end{center}
-
-\subsection{The proof strategy}
-Having defined streaming tree transducers, we can present the proof strategy for the top-down inclusion in Theorem~\ref{thm:main}. By Theorem~\ref{thm:sst}, it is enough to show that every first-order streaming tree transducer can be simulated using the atomic functions and combinators. To simulate streaming tree transducers, we use the following persepective on a run of such a transducer: (a)  replace each node in the input tree by an operation in the algebra of register updates; (b) evaluate the resulting term in the algebra of register upates; (c) apply the output function to the resulting register valuation. In the rest of the paper, we show that each of the steps (a), (b) and (c) can be simulated using our atomic funcitons and combinators. 
 
 
 

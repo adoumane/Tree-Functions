@@ -1,7 +1,6 @@
-\section{First-order transductions to  atomic functions and combinators}
+\section{Proof strategy}
 \label{sec:strategy}
-The rest of this paper is devoted to the harder left-to-right implication in Theorem~\ref{thm:main}, which says that every  first-order tree-to-tree transduction
-can be derived from the atomic functions using the combinators. This proof has several steps:
+In this section, we present an overview of the proof of Theorem~\ref{thm:main}. The proof has five steps, which are spread across Sections~\ref{sec:to-transductions}--\ref{sec:matrix-power}, and summarised below.
 
 \newcommand{\announce}[2]{
 \begin{center}
@@ -9,25 +8,34 @@ can be derived from the atomic functions using the combinators. This proof has s
 \end{center}
 }
 \begin{enumerate}
-    \item \emph{Section~\ref{sec:fo-translation}: first-order rational tree functions.} We begin the proof with a special case of first-order transductions, which we call \emph{first-order rational tree functions.} In a first-order rational tree functions, each node is replaced by a term, with the choice of term depending on first-order definable properties of the node. Example of first-order rational tree function include  ``remove every node with a unary label'', or ``if a leaf $x$ has at least one ancestor with label $a$, then replace the label of $x$ with the letter $c$''. First-order rational tree functions do not cover all first-order transductions, for example the pre-order function is not a rational tree function, but they are an important subcase.
+\item \emph{Section~\ref{sec:to-transductions}: from the atomic functions and combinators to first-order transductions.} The easier part of Theorem~\ref{thm:main} is the  right-to-left implication:
+\announce
+{Proposition~\ref{prop:to-logic}}
+{If a function can be derived from the atomic functions using combinators, then it is a first-order transduction.}
+ The proof is a simple induction on the derivation of the function.
+ 
+ The remaining four steps in the proof, namely Sections~\ref{sec:fo-translation}--\ref{sec:matrix-power}, are devoted to the left-to-right implication, i.e.~showing how every first-order tree transduction can be derived using combinators from the atomic functions.
+
+    \item \emph{Section~\ref{sec:fo-translation}: first-order rational tree functions.} We begin the proof of the left-to-right  implication  with a special case of first-order tree transductions, which we call \emph{first-order rational tree functions.} In a first-order rational tree functions, each node is replaced by a term, with the choice of term depending on first-order definable properties of the node. Example of first-order rational tree function include  ``remove every node with a unary label'', or ``if a leaf $x$ has at least one ancestor with label $a$, then replace the label of $x$ with the letter $c$''. First-order rational tree functions do not cover all first-order transductions, for example the pre-order function is not a rational tree function, but they are an important subcase.
     The main result of Section~\ref{sec:fo-translation} is:
     \announce
     {Proposition~\ref{prop:forat}}
-    {Every first-order rational tree function can be derived using combinators for the atomic functions.}
+    {Every first-order rational tree function can be derived.}
     The main tool used in the proof of Proposition~\ref{prop:forat} is a theorem of Schlingloff~\cite[Theorem 2.6]{schlingloff1992expressive}, which can be seen as tree version of the Kamp theorem about {\sc ltl} being  expressively complete for first-order logic.  
-    \item \emph{Section~\ref{sec:stt}: streaming tree transducers. }In Section~\ref{sec:stt}, we present an automaton model that is equivalent to  first-order tree-to-tree transduction. This  is a bottom-up tree automaton, which uses registers to store parts of the output tree. The model is based on~\cite{alur2017streaming}, but it is  appropriately restricted so that it matches first-order logic, as opposed to monadic second-order logic which was used in~\cite{alur2017streaming}. The main result of Section~\ref{sec:stt} is:
+    \item \emph{Section~\ref{sec:stt}: streaming tree transducers. }Instead of dealing with first-order transductions, we use an automaton model that is equivalent to them. In Section~\ref{sec:stt}, we present  this  automaton model, which we call \emph{first-order streaming tree transducers}. This  is a bottom-up tree automaton, which uses registers to store parts of the output tree. The model is based on~\cite{alur2017streaming}, but it is  appropriately restricted so that it matches first-order logic, as opposed to monadic second-order logic which was used in~\cite{alur2017streaming}. The main result of Section~\ref{sec:stt} is:
     \announce
     {Proposition~\ref{prop:stt}}
-    {Every first-order rational tree function can be computed by a first-order streaming tree transducer.}
+    {Every first-order  tree transduction can be computed by a first-order streaming tree transducer.}
+    The converse implication is also true, and follows from Propositions~\ref{prop:to-logic} and~\ref{prop:many-register}.
     
-     \item \emph{Section~\ref{sec:one-register}: streaming tree transducers with one register.} 
-     
+     \item \emph{Section~\ref{sec:one-register}: streaming tree transducers with one register.} By Proposition~\ref{sec:stt}, in order to prove the left-to-right implication in Theorem~\ref{thm:main}, it is enough to show that first-order streaming tree transducers can be derived using combinators from the atomic functions. As a first step, we prove the special case of one register only:
      \announce
     {Proposition~\ref{prop:one-register}}
-    {If a first-order streaming tree transducer has one register, then the function it computes can be derived using the combinators from the atomic functions.}
-    
-     
-     The control structure (which states are used in which nodes of the input tree) of a first-order streaming tree transducer can be computed 
-    \item \emph{Section~\ref{sec:matrix-power}: reduction to one register.} By the results of Section~\ref{sec:stt}, every first-order tree transduction can be computed by a first-order streaming tree transducer. In Section~\ref{sec:}
-    
+    {For every first-order streaming tree transducer with one register, the function it computes can be derived using the combinators from the atomic functions.}
+    The proof of the above result uses two main ingredients: (a) the control structure of a streaming string transducer can be simulated using first-order rational tree functions, which are covered by Proposition~\ref{prop:forat}; and (b) when there is one register only, the register updates correspond to a restricted form of $\beta$-reduction in $\lambda$-terms, which can be simulated using the atomic functions and combinators.  
+    \item \emph{Section~\ref{sec:matrix-power}: reduction to one register.}  In Section~\ref{sec:matrix-power}, we complete the proof of Theorem~\ref{thm:main}, by showing that every first-order streaming tree transducer can be obtained by using the combinators and atomic functions:
+    \announce
+    {Proposition~\ref{prop:many-register}}
+    {For every first-order streaming tree transducer, the function it computes can be derived using the combinators from the atomic functions.}
+    The above result, together with Proposition~\ref{prop:stt}, completes the proof of the left-to-right implication in Theorem~\ref{thm:main}. The proof of Proposition~\ref{prop:many-register} uses a reduction to the single register case that was treated in Proposition~\ref{prop:one-register}. In the reduction, we use a type constructor called the \emph{matrix power}, which has origins in universal algebra. In Section~\ref{sec:matrix-power}, we show that (a) a transducer with many registers can be simulated by using matrix power and transducers with a single register; and (b) the matrix power and its associated operations can be simulated using our atomic operations and combinators. The proof of (b) uses a the Factorisation Forest Theorem of Imre Simon~\cite{simon_factorization_1990}.
 \end{enumerate}

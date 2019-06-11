@@ -1,6 +1,5 @@
 \section{First-order rational tree functions}\label{sec:fo-translation}
-
-To formalise the replacement mentioned in step (a), we use the following definition. The definition is more general than needed for step (a), since it allows the new label of a node to depend not just on the node's subtree, but also no the rest of the tree. These sort of two-way dependencies will play a role in Section~\ref{sec:one-register}.
+In this section, we discuss first-order rational tree functions. These are compositions of two types of tree transformations: (a) characteristic functions of first-order query, which annotate nodes of the input tree with first-order definable information; (b) and tree homomorphisms, which replace letters in the input tree  by terms. 
 
 
 \begin{definition}[First-order rational tree functions] \label{def:forat}\ 
@@ -15,7 +14,8 @@ To formalise the replacement mentioned in step (a), we use the following definit
             f : \trees \rSigma \to \trees \rGamma
         \end{align*} 
         which applies some arity preserving function $\ranked f : \rSigma \to \tmonad \rGamma$ to each node in the input tree. 
-        \item \emph{First-order rational tree function}. A first-order rational tree function is defined to be any composition $f_1 \circ \cdots \circ f_n$, where each $f_i$ is either a characteristic function or a tree homomorphism.
+        \item \emph{First-order rational tree function}. A first-order rational tree function is defined to be any composition $f_1 \circ \cdots \circ f_n$, where each $f_i$ is either a characteristic function or a tree homomorphism\footnote{One can show that, without loss of generality, we can assume the composition $f_1 \circ \cdots \circ f_n$ to be such that $f_1$ is a tree homomorphism and the remaining functions are  characteristic functions. We do not need this result, so we do not prove it.
+        }.
     \end{itemize}
       \end{definition}
 
@@ -23,7 +23,7 @@ To formalise the replacement mentioned in step (a), we use the following definit
 %     Every first-order streaming tree transducer is equivalent to one where all registers have arity 1.
 % \end{lemma}
 
-
+First-order rational functions will be used several times later in the paper, as a basic pre-processing step. For example, the automaton model defined in Section~\ref{sec:stt} will use first-order rational functions to compute its run.
 The main  result of Section~\ref{sec:fo-translation} is the following proposition, which says  that all first-order rational tree functions can be derived from the atomic functions using the combinators. 
 \begin{proposition} \label{prop:forat}    
     Let $\rSigma,\rGamma$ be finite ranked sets. 
@@ -31,22 +31,23 @@ The main  result of Section~\ref{sec:fo-translation} is the following propositio
     \begin{align*}
         f : \trees \rSigma \to \trees \rGamma,
     \end{align*}
-    there is a function $\ranked f : \tmonad \rSigma \to \tmonad \rGamma$ which agrees with $f$ on trees, and which can be derived from the atomic functions using the combinators. 
+    there is a derivable function $\ranked f : \tmonad \rSigma \rto \tmonad \rGamma$ which agrees with $f$ on trees.
 \end{proposition}       
 Since the combinators include function composition, it is enough to show the above proposition for the case when $f$ is either a characteristic function, or a tree homomorphism. 
 
 For tree homomorphisms, we use the composition of the two functions
 \begin{align*}
+    \ranked{
     \xymatrix{
         \tmonad \rSigma \ar[r]^{\tmonad \ranked f} & \tmonad \tmonad \rGamma \ar[r]^{\flatt_\rGamma} & \tmonad \rGamma,
-    }
+    }}
 \end{align*}
-where $\ranked f : \rSigma \to \tmonad \rGamma$ is an atomic function because it has a finite domain.  
+where $\ranked f : \rSigma \rto \tmonad \rGamma$ is an atomic function because it has a finite domain.  
 
-The interesting case in Proposition~\ref{prop:forat} is when $f$ is a characteristic function. Here, the key step is a tree version of Kamp's Theorem, which is stated in the following lemma. The lemma is an immediate corollary of a result by Schlingloff~\cite[Theorem 2.6]{schlingloff1992expressive}, which says that a tree version of {\sc ltl} for trees is expressively complete for first-order logic.  
+The interesting case in Proposition~\ref{prop:forat} is when $f$ is a characteristic function, associated to some first-order formula with one free variable. Here, the key step is a lemma based on Schlingloff~\cite[Theorem 2.6]{schlingloff1992expressive}, which says that  over trees, every formula of first-order logic can be decomposed into simple formulas.  The lemma can be seen as a tree version of Kamp's theorem on the expressive completeness of linear temporal logic.
 
 
-\begin{lemma}\label{lem:schlingloff} Every characteristic function (of a first-order query on trees) can be decomposed as a composition of characteristic functions of the following three kinds of  queries:
+\begin{lemma}\label{lem:schlingloff} Every characteristic function (of a first-order query with one free variable on trees) can be decomposed as a composition of characteristic functions of the following three kinds of  query:
     \begin{enumerate}
         \item \emph{Child.} For every $\rSigma$ and  $i \in \set{1,2,\ldots}$, a query $\varphi(x)$ defined by
         \begin{align*}
@@ -63,3 +64,4 @@ The interesting case in Proposition~\ref{prop:forat} is when $f$ is a characteri
     \end{enumerate}
 \end{lemma}
 
+In light of the above lemma, in order to prove Proposition~\ref{prop:forat}, it is enough to show how to derive the three types of characteristic functions in the lemma. 
