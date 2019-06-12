@@ -20,6 +20,8 @@ We set $\ranked{\Lambda_{S,V,\Sigma}}:=\tmonad(\ranked{\mathcal{A}_{S,V,\Sigma}}
 \end{definition}
  \newcommand{\rlambda}{\ranked{\Lambda}}
  \newcommand{\rlambdalin}{\ranked{\Lambda^{\sf{lin}}}}
+ \newcommand{\rlambdathin}{\ranked{\Lambda^{\sf{thin}}}}
+
 An element of $\ranked{\Lambda_{S,V,\Sigma}}$ is said to be a well-formed $\lambda$-term (or simply a $\lambda$-term) if the type of the $i^{th}$ output of each node matches the type of the input of its $it^{th}$ sibling (if it exists).
 
 The notion of free and bound variables for $\lambda$-terms are as usual. The operation of $\beta$-reduction is standard, and can be described by the following shema:
@@ -51,4 +53,51 @@ So if we are able to show that the function that evaluates all the redexes of a 
 There is an fo tree-to-tree function ${\sf{Eval}_{x^\sigma,\tau}}:\rlambda \to\rlambda$ such that its restriction to $\rlambdalin$ evaluates the redexes of type $\tau$ and of variable $x^\sigma$.
 \end{theorem}
 
+\subsection{Evaluation of thin $\lambda$-terms}
+
 The first step is to 
+
+\begin{definition}[Thin $\lambda$-terms]
+A thin $\lambda$-terms is a term from $\rlambdalin$ such that every branching node (ie a node having at least two sons which are not ports) is a node $\text{@}$, whose left son is a node $\lambda x^\sigma$. We denote by $\rlambdathin$ the set of thin $\lambda$ terms.
+\end{definition}
+
+\begin{proposition}
+There is an fo tree-to-tree function ${\sf{Eval}^{\sf{thin}}}:\rlambda\to\rlambda$, whose restriction to $\rlambdathin$ computes the normal form.
+\end{proposition}
+
+\begin{proof}
+For thin $\lambda$-terms, evaluation is the same thing as DFS.
+\end{proof}
+
+\subsection{$\beta$-reduction commutes with factorization.}
+We can generalise the fliting of functions to the lifting of relations. 
+Let $\Sigma$ be a ranked set. If $R\subseteq \ranked{\Sigma}\times\ranked{\Sigma}$ is an arity preseving relation (that is $\arity{u}=\arity{v}$ whenever $(u,v)\in R$), then $R$ can be lifted to $\tmonad R\subseteq \ranked{\tmonad \Sigma} \times \ranked{\tmonad \Sigma}$ in a natural way. 
+
+\begin{proposition}
+For every foctorization $f:\rlambda \to \tmonad \rlambda$, the following diagram commutes:
+\begin{align*}
+        \xymatrix{
+     \rlambdalin \ar[d]_{\beta^*}\ar[r]^f& \tmonad \rlambdalin \ar[d]^{\tmonad\beta^*} \\
+           \rlambdalin  &\ar[l]_{\sf{flat}} \tmonad \rlambdalin
+        }
+        \end{align*}
+\end{proposition}
+
+
+
+\subsection{Factorizing $\lambda$-terms into blocks of thin $\lambda$-terms.}
+
+\begin{definition}[Full redex]
+Let $t$ be a linear $\lambda$-term. A full-redex is a set of nodes  containing a redex, together with the set of nodes between the binder of the redex and its free variable.  
+\end{definition}
+
+Example.
+
+
+\begin{proposition}
+There is a factorisation $f:\rlambda \to \tmonad\rlambda$ such that for every $t\in\rlambdalin$
+\begin{itemize}
+\item any full redex of $t$ is entirely contained in one of the factors of $f(t)$;
+\item the factors of $f(t)$ are thin $\lambda$-terms.
+\end{itemize}
+\end{proposition}
