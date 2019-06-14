@@ -1,20 +1,33 @@
 \section{Reduction to one register}
 \label{sec:matrix-power}
-
+In this 
 \begin{proposition}
     \label{prop:many-register} 
+    If a  tree-to-tree function is recognised by a tree transducer, then it is derivable. 
 \end{proposition}
 
 
+To prove the proposition, we describe a type constructor, called the \emph{matrix power}, which can be used to reduce transducers with many registers to transducers with a single register. 
 \begin{definition}[Matrix power]
-    If  $\rSigma$ is a type and $k \in \set{1,2,\ldots}$, then the \emph{$k$-th matrix power of $\rSigma$}, denoted by $\ranked{\Sigma^{[k]}}$, is also a type.  An $n$-ary element of $\ranked{\Sigma^{[k]}}$ is a (tensor) tuple
+    If  $\rSigma$ is a type and $k \in \set{1,2,\ldots}$, then the \emph{$k$-th matrix power of $\rSigma$}, denoted by $\ranked{\Sigma^{[k]}}$, is the following ranked set. An $n$-ary element of $\ranked{\Sigma^{[k]}}$ consists of $k$ trees 
+\begin{align*}
+    t_1,\ldots,t_k \in \trees (\rSigma + \set{1,\ldots,k} \times \set{1,\ldots,n})
+\end{align*}
+such that every letter from the set $nk$ appears in exactly one tree and exactly once. We also require the following \emph{monotonicity} requirement: for every $i \in \set{1,\ldots,n}$ the function
+\begin{align}
+    j \in \set{1,\ldots,k} \quad \mapsto \quad \text{the unique $l \in \set{1,\ldots,k}$ such that $t_l$ contains variable $(i,j)$}
+\end{align}
+    
+    
+    An  $n$-ary element of $\ranked{\Sigma^{[k]}}$ consists of elements $a_1,\ldots,a_k \in \Sigma$ together with  a bijection 
     \begin{align*}
-        \tensorpair{a_1,\ldots,a_k} \in \overbrace{\ranked{\Sigma \otimes \cdots \otimes \Sigma}}^{\text{$k$ times}} 
+        \underbrace{\set{1,\ldots,k} + \cdots + \set{1,\ldots,k}}_{\text{$n$ times}} \to        \set{1,\ldots,\arity {a_1}} + \cdots + \set{1,\ldots,\arity{a_k}}. 
     \end{align*}
-    of arity $kn$ (note the difference between the arities $n$ and $kn$), together with a function
+    We require the following monotonicity requirement: for every $i \in \set{1,\ldots,n}$ the function
     \begin{align*}
-        f : \set{1,\ldots,kn} \to \set{1,\ldots,n} \qquad \text{such that $f^{-1}(i)$ has size exactly $k$ for every $i$.}
+\pi \circ  f \circ \iota_i : \set{1,\ldots,k}  \to   \set{1,\ldots,k}
     \end{align*}
+    is monotone, where $\pi$ says which part of the disjoint union is used. 
     Here is a picture of an $n$-ary element of  $\ranked{\Sigma^{[2]}}$ for $n=3$ and $k=2$:
     \mypic{16}  
 \end{definition}

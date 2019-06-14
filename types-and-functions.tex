@@ -1,4 +1,4 @@
-\section{First-order term functions}
+\section{Derivable functions}
 The goal of this paper is to characterise the first-order tree-to-tree functions in terms of some atomic functions and combinators which produce new functions from previously defined ones. A typical combinator is composition of functions.
 
 \subsection{Terms}
@@ -51,7 +51,14 @@ The  main goal of this paper is to  show how every first-order tree-to-tree func
 \end{definition}
 
 \subsection{Atomic functions and combinators}
-The atomic functions and combinators are listed in Figure~\ref{fig:fo-term}. 
+We now introduce the main new definition of this paper.
+
+\begin{definition}[Derivable function]
+    A function is called \emph{derivable} if it can be constructed using the atomic functions and combinators listed in Figure~\ref{fig:fo-term}. 
+\end{definition}
+
+
+
 The first two items in the figure, namely function composition and functions with finite domains should be self-explanatory. There are also no surprises for the remaining items which do not involve the term constructor $\tmonad$:
 \begin{center}
     \newcommand{\fotitemsmall}[2]{$ #1$ & $#2$ \\ }
@@ -100,7 +107,10 @@ The first two items in the figure, namely function composition and functions wit
             }
 \end{tabular}
 \end{center}
-The functions and combinators involving terms    will be described in more detail in  Section~\ref{sec:atomic-and-combinators}. For the rest of this paper, whenever we refer to ``atomic functions and combinators'', we mean those from Figure~\ref{fig:vocmodels}.  Since all atomic functions are arity preserving functions between types (as per Definition~\ref{def:types}), and the combinators preserve this property, it follows that all functions that can be derived from the atomic functions using combinators are arity preserving. 
+The functions and combinators involving terms    will be described in more detail in  Section~\ref{sec:atomic-and-combinators}.   
+
+For a derivable function, its domain and co-domain are types as in Definition~\ref{def:types}, in particular the domain and co-domain are ranked sets. The atomic functions are arity-preserving and the combinators preserve this property, and therefore all derivable functions are arity-preserving. 
+
 
 We are now ready to state the main theorem of this paper. 
 
@@ -109,11 +119,11 @@ We are now ready to state the main theorem of this paper.
     \begin{align*}
         f : \trees \rSigma \to \trees \rGamma
     \end{align*}
-    is a first-order tree-to-tree transduction if and only if it is the restriction to trees of some  function
+    is a first-order tree-to-tree transduction if and only if it is the restriction to trees of some derivable
     \begin{align*}
-        \ranked {g : \tmonad \Sigma \to \tmonad \Gamma}
+        \ranked {f : \tmonad \Sigma \to \tmonad \Gamma}.
     \end{align*}
-    which can be derived from the atomic functions using combinators.
+    
 \end{theorem}
 
 

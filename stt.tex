@@ -1,10 +1,10 @@
 
 
 
-\section{Streaming tree transducers}
+\section{Register tree transducers}
 \label{sec:stt}
-The automaton model is based on streaming tree transducers~\cite{alur2017streaming}, although our syntax is based more on notions from universal algebra such as terms and substituion.
-% We use an algebraic syntax for streaming tree transducers. 
+The automaton model is based on register tree transducers~\cite{alur2017streaming}, although our syntax is based more on notions from universal algebra such as terms and substituion.
+% We use an algebraic syntax for register tree transducers. 
 % \emph{Linear polynomials.} Suppose that $\Sigma$ is a finite ranked alphabet.  For a ranked set $X$, define a \emph{polynomial with variables $X$ over $\Sigma$} to be any term in $\tmonad (\Sigma + X)$. Given such a polynomial $p$, and an arity preserving valuation $v : X \to \tmonad \Sigma$, we define $p(v)\in \tmonad \Sigma$ to be the term obtained from $p$ by replacing each variable with its value under $v$. The arity of $p(v)$ is the same as the arity of $p$.  A polynomial is called \emph{linear}, or non-duplicating, if each variable from $X$ is used at most once.
 
 % \begin{definition}
@@ -19,26 +19,25 @@ The automaton model is based on streaming tree transducers~\cite{alur2017streami
 
 
 \paragraph*{Register valuations and updates.}   Let $\ranked{\Gamma, R}$ be finite ranked sets, which are called the \emph{output alphabet} and \emph{register names} respectively.  
-A \emph{register valuation} (over $\rGamma$ and $\ranked R$) is defined to be any arity-preserving function from the register names $\regnames$ to terms $\tmonad \rGamma$. We write $\regvals \rGamma \regnames$ for the set of register valuations. For  $n \in \set{0,1,\ldots}$, an \emph{$n$-ary register update} (over $\Gamma$ and $R$) is defined to be any arity-preserving function
-\begin{align*}
+A \emph{register valuation} (over output alphabet $\rGamma$ and register names $\ranked R$) is defined to be any arity-preserving function from the register names $\regnames$ to terms $\tmonad \rGamma$. Here is an example, which uses registers $r,s$ of arities two and zero:
+\mypic{31}
+We write $\regvals \rGamma \regnames$ for the set of register valuations. For  $n \in \set{0,1,\ldots}$, an \emph{$n$-ary register update} (over $\Gamma$ and $R$) is defined to be any arity-preserving function
+\begin{align}\label{eq:reg-operation}
     \ranked {u : \regnames \rto \tmonad ( \rGamma + \underbrace{{\regnames + \cdots + \regnames}}_{\text{$n$ times}})}
-\end{align*}
-A register valuation can be seen as the special case of an $n$-ary register update when $n=0$. 
-A $n$-ary register update can be seen as an $n$-ary operation on  register valuations,
+\end{align}
+Here is a picture of a binary register update:
+\mypic{32}
+Register updates act on register valuations, in the sense that an $n$-ary register update can be seen as an $n$-ary operation on  register valuations
 \begin{align*}
-    [\ranked u] : (\regvals \rGamma \regnames \times \cdots \times \regvals \rGamma \regnames) \to \regvals \rGamma \regnames
+    [\ranked u] : (\regvals \rGamma \regnames \times \cdots \times \regvals \rGamma \regnames) \to \regvals \rGamma \regnames,
 \end{align*}
-as illustrated in the following picture:
-\begin{center}
-    picture here
-\end{center}
-Note that although $\ranked u$ is an arity-preserving function between ranked sets, this is no longer true for $[\ranked u]$, which is simply a function on (non-ranked) sets. On the other hand, $[\ranked u]$ has an arity, and therefore we can view the set of register updates as a ranked set which acts on register updates. 
+which inputs a tuple of register valuations $(\ranked u_1,\ldots,\ranked u_2)$ and outputs the register valuation obtained from $\ranked u$ by replacing, for each $r \in \regnames$ and $i \in \set{1,\ldots,n}$, all occurrences of the $i$-th copy of register $r$  by the contents of register $r$ in $\ranked u_i$. The set of register updates can be viewed as a ranked set, because each register update has an arity. 
 
 
-\begin{definition}[Abstract Streaming Tree Transducer]\label{def:stt}
+\begin{definition}[Register Tree Transducer]\label{def:stt}
 \ 
     \begin{itemize}
-        \item An  \emph{abstract streaming tree transducer} consists of finite ranked sets
+        \item An  \emph{abstract register tree transducer} consists of finite ranked sets
         \begin{align*}
            \underbrace{\rSigma}_{\text{input alphabet}} \quad 
            \underbrace{\rGamma}_{\text{output alphabet}} \quad 
@@ -52,19 +51,19 @@ Note that although $\ranked u$ is an arity-preserving function between ranked se
             \trees \rSigma \ar[r]^{\delta} & \trees \rDelta \ar[r]^{t \mapsto [t]} & (\tmonad \rGamma)^\regnames \ar[r]^{[\outtree]} & \trees \rGamma
         }
     \end{align*}
-    where the middle function is defined by 
+    where the middle function is the tree extension of the action from~\eqref{eq:reg-operation} that is defined by 
     \begin{align*}
         [\ranked u \tensorpair{t_1,\ldots,t_n}] = [\ranked u]([t_1],\ldots,[t_n])
     \end{align*}
     and the out function applies a register valuation to the output tree. 
-    \item A \emph{first-order streaming tree transducer} is the special case of the above when the following conditions are satisfied:
+    \item A \emph{first-order register tree transducer} is the special case of the above when the following conditions are satisfied:
     \begin{enumerate}
         \item \emph{First-order rational updates.} The function $\delta$ is a first-order rational tree function.
         \item \emph{Copyless.} Every register update $\ranked u \in \rDelta$ is \emph{copyless}\footnote{The copyless restriction does not apply to the output tree, but imposing it also on the output tree would give a model with the same expressive power.}, which means that for every
         \begin{align*}
             r \in \ranked{\underbrace{\regnames + \cdots + \regnames}_{\text{arity of $u$ times}}}
         \end{align*}
-        there is at most one $s \in \regnames$ such that $r$ appears in the term  $\ranked u(s)$, and furthermore $r$ appears at most once in that term. 
+        there is at most one $s \in \regnames$ such that $r$ appears in the term  $\ranked u(s)$, and furthermore $r$ appears at most once in that term.  
         \item \emph{Montone.} One can equip the registers $\regnames$ with a total order so that for every update $\ranked u \in \rDelta$ and  every $i \in \set{1,\ldots,\text{arity of $\ranked u$}}$,
         \begin{align*} 
             r \in \regnames \qquad \mapsto \quad \text{the unique $s \in \regnames$ such that the $i$-th copy of $r$ appears in $\ranked u(s)$},
@@ -73,23 +72,54 @@ Note that although $\ranked u$ is an arity-preserving function between ranked se
         \begin{align*}
             r \leq s \qquad \text{implies} \qquad  \ranked u_i(r) \le  \ranked u_i(s) \text{ or one of the values is undefined.}
         \end{align*}
+        The reason for the monotonicity restriction is to ensure that the recognised function can be recognised in first-order logic; without monotonicity one could swap around registers in a way that 
     \end{enumerate}
     \end{itemize}
-
-    
 \end{definition}
+The above definition can be seen as a variant of streaming tree transducers considered in~\cite{alur2017streaming}, with two differences:
+\begin{enumerate}
+    \item Our model has a monotonicity requirement, which is not present in~\cite{alur2017streaming} but needed to stay within first-order transductions, see Example~\ref{ex:monotone} below. 
+    \item Our model  computes register updates using  a first-order tree function, as opposed~\cite{alur2017streaming} which uses a deterministic bottom-up tree automaton. Our model can be viewed as having \emph{lookahead}, in the sense that  the register updates assigned to a node $x$ in the input tree might depend not just on the subtree of $x$, but also on other parts of the input tree\footnote{For streaming tree transducers as in~\cite{alur2017streaming}, lookahead can be added without changing the expressive power. For all we know, a  similar result might be true in our setting, but we do not need it, since absence of lookahead would not help in any of our constructions.  }. 
 
+\end{enumerate}
+ 
+The following two examples explain the copyless and monotonicity restrictions from the above definition. 
+\begin{example}\label{ex:copyless}
+    To see the need for the copyless restriction, consider the following abstract register tree transducer, which is not copyless. The input alphabet has two letters of arities zero and one. There is one register $r$ of arity zero, and the update function is the following tree homomorphism \mypic{33}
+The output tree has one node labelled by  $r$. This function recognised by this transducer maps an input tree (which is a sequence of unary nodes followed by a leaf)  to a complete binary tree of same depth. In particular this, function has exponential size increase, and therefore it cannot be a first-order tree-to-tree transduction, since the latter have linear size increase\footnote{Copyless updates imply linear size outputs, but the converse implication is also true: a corollary of~\cite[Theorem 7.1]{engelfriet_macro_2003} is that  if a  register tree transducer has linear size increase but not necessarily copyless updates, then it is equivalent to a register tree transducer   which has copyless updates.}.
+\end{example}
+
+\begin{example}\label{ex:monotone}
+    To see the need for the monotonicity restriction, consider the following abstract register tree transducer, which violates monotonicity. The input alphabet is the same as in Example~\ref{ex:copyless}, i.e.~there are two letters of arities zero and one. There are two registers $r,s$ of arity zero, and the update function is the following tree homomorphism \mypic{35}
+    The output tree has one node labelled by  $r$. 
+Because the two registers get swapped in every step (which is a violation of monotonicity), the output  tree will have a unary (blue)  node if and only if the input tree has an even number of nodes. It follows that the recognised function is not a first-order tree-to-tree transducer, because first-order logic cannot compute parity. 
+\end{example}
+
+The following example shows a first-order register tree transducer which implements pre-order traversal, as considered in Example~\ref{ex:pre-order}.
+\begin{example}\label{ex:preorder-register}
+    The input alphabet has two letters, of arities zero and two. There is one register of arity one, and the update function is the following tree homomorphism:
+    \mypic{34}
+    When reading a node, the automaton creates in its uniqure register $r$ a unary term, which is obtained by composing the register contents in the  children (copies $r_1$ and $r_2$ of the register in the case of the red binary node, and no registers in the case of the white node of arity zero), and adding information about the current node. 
+    The general idea is that a tree is transformed into a unary term, which describes its pre-order traversal. The output tree is obtained by plugging the port in this unary term with a dummy symbol of arity zero, i.e.~the output tree is 
+    \mypic{36}
+\end{example}
+
+The main result of this section is Proposition~\ref{prop:stt} below, which says that first-order register tree transducers are expressively complete for first-order tree-to-tree transductions. The proof uses the composition method for logic,  following the same lines as  similar results for monadic second-order logic which can be found in~\cite[Theorem 4.6]{alur2017streaming} and~\cite[Theorem 14]{bloem_comparison_2000}. 
 
 \begin{proposition}\label{prop:stt}
-    Every first-order tree transduction is recognised by a first-order streaming tree transducer. 
+    Every first-order tree-to-tree transduction is recognised by a first-order register tree transducer. 
 \end{proposition}
+The converse inclusion in the above lemma is also true, i.e.~every first-order register tree transducer recognises a first-order tree transduction; this will follow from Propositions~\ref{prop:forat} and~\ref{prop:many-register}. 
 
-The result for \mso, adjusting for a different syntax,  was proved in~\cite[Theorem 4.6]{alur2017streaming}. The result for fo uses the same ideas. A proof is in the appendix.
-\begin{center}
-    do this appendix 
-\end{center}
-
-
+The following straightforward lemma shows that, without loss of generality, one can assume that all registers store unary terms. 
+\begin{lemma}\label{lem:unary-registers}
+    For every first-order register tree transducer there is an equivalent one (i.e.~recognising the same function) where all registers have arity one. 
+\end{lemma}
+\begin{proof}
+    Consider a term. A branching node is defined to be a node which has at least two subtrees that contain a port. Define the  \emph{unary factorisation} to be the coarsest factorisation where branching nodes are in separate factors, here is a picture:
+    \mypic{37}
+    If the term has arity $n$, then the unary factorisation has at most $n-1$ factors with branching nodes, and at most $2n-1$ factors without branching nodes, and all of the later factors are unary. Therefore, instead of storing an $n$-ary term in a register, one can store the unary factors of its its unary factorisation, plus some finite information about how these unary factors should be put together. 
+\end{proof}
 
 % Thanks to the above lemma, to prove Proposition~\ref{prop:forat} it is enough to show that the atomic functions and combinators can derive the (characteristic functions of) the child, until and since queries mentioned in the lemma. This is proved in the appendix. 
 
@@ -101,8 +131,8 @@ The result for \mso, adjusting for a different syntax,  was proved in~\cite[Theo
 %     \begin{itemize}
 %         \item $\Delta$ is a finite ranked alphabet and $k \in \set{1,2,\ldots}$;
 %         \item $g$ is an fo-translation;
-%         \item $h$ is recognised by a first-order streaming transducer which has one register, and that register has arity one.
+%         \item $h$ is recognised by a first-order register transducer which has one register, and that register has arity one.
 %     \end{itemize}
 % \end{lemma}
 
-% By the above lemma, it remains to deal with first-order translations and streaming tree transducers with one unary register. We do this in Sections~\ref{sec:fo-translation} and~\ref{sec:one-register}, respectively.
+% By the above lemma, it remains to deal with first-order translations and register tree transducers with one unary register. We do this in Sections~\ref{sec:fo-translation} and~\ref{sec:one-register}, respectively.

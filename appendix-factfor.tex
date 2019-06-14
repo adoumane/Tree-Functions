@@ -1,0 +1,37 @@
+\section{Factorisation forests}
+
+\newcommand{\branches}{\mathsf{B}}
+Define a \emph{branch} to be a term together with a distinguished port. Branches over a  ranked alphabet $\rSigma$ form a semigroup, which we denote by $\branches \rSigma$. Branches have no arities; they form a set and not a ranked set, hence the black font for $\branches$. The branches of a term are defined to be those branches which can be obtained by distinguishing some port in that term. A term of arity zero has no branches. 
+
+For a factorisation in $\tmonad \tmonad \rSigma$, define a subbranch to be any branch of any term from $\tmonad \rSigma$ that appears as a label in the factorisation. We distinguish two kinds of subbranches: internal subbranches are connected to internal nodes, and external subbranches are connected to ports. The same branch from $\branches \rSigma$  might appear as a subbranch of a facorisation in $\tmonad \tmonad \rSigma$ several times, sometimes as an internal subbranch and sometimes as an external subbranch.
+Here is a picture:
+\begin{center}
+    picture
+\end{center}
+
+\begin{definition}[Homogeneous factorisations]
+    Let $h : \branches \rSigma \to S$ be a semigroup homomorphism.
+    \begin{itemize}
+\item     We say that $t \in \tmonad \tmonad \rSigma$ is \emph{$h$-homogeneous} if either:
+\begin{enumerate}
+    \item  it has depth at most two, i.e.~all branches have at most two non-port nodes; or
+    \item  all internal subbranches of $t$ have the same value under $h$.
+\end{enumerate}        
+\item For $k = 1$, we say that $t \in \tmonadn k \Sigma$ is \emph{hereditarily $h$-homogeneous} if it is the unit of some letter;
+\item For $k \ge  2$, we say that $t \in \tmonadn k  \rSigma$ is \emph{hereditarily $h$-homogeneous} if both:
+\begin{enumerate}
+    \item  after applying $\tmonad \flatn {k-1}$,   the resulting term in $\tmonad \tmonad \rSigma$ is $h$-homogeneous; and 
+    \item every node has a label in $\tmonadn {k-1} \rSigma$ that is hereditarily $h$-homogeneous. 
+\end{enumerate}
+    \end{itemize}
+\end{definition}
+
+
+\begin{lemma}
+    Let $\rSigma$ be a finite ranked set and let $h : \branches \rSigma \to M$ be a monoid homomorphism into a finite aperiodic monoid $M$. There is some $k \in \set{1,2,\ldots}$ and a derivable function
+    \begin{align*}
+        \ranked {f : \tmonad \rSigma \to \tmonad^k \rSigma}  
+    \end{align*}
+such that $\flatn k \circ \ranked f$ is the identity on $\tmonad \rSigma$, and  all outputs of  $\ranked f$ are hereditarily $h$-homogeneous.
+\end{lemma}
+
