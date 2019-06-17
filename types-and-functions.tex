@@ -46,6 +46,10 @@ The  main goal of this paper is to  show how every first-order tree-to-tree func
             n = \arity{a_1} + \arity{a_2}.
         \end{align*}
         Note how we use  angular brackets to distinguish tensor $\tensorpair{a_1,a_2}$ pairs from Cartesian pairs $(a_1,a_2)$.
+        \item \emph{Arity reduction.} If $\rSigma$ is a type and $k \in \set{1,2,\ldots}$ then $\reduce k \rSigma$ is a type. An $n$-ary element of this type consists of an $a \in \rSigma$ of arity $nk$ and a function
+        \begin{align*}
+            f : \set{1,\ldots,nk} \to \set{1,\ldots,n} \qquad \text{every inverse image $f^{-1}(i)$ has size exactly $k$}
+        \end{align*}
         \item \emph{Terms.} If $\ranked \Sigma$ is a type, then  the ranked sets of terms  $\tmonad \rSigma$ is also a type.
     \end{enumerate}
 \end{definition}
@@ -203,3 +207,33 @@ Finally, the  \emph{flattening} operation $\flatt_\rSigma$
         \mypic{13}
         
 
+\subsubsection{Unfolding}
+The general idea behind the unfolding operation 
+\begin{align*}
+    \ranked{\unfold : \tmonad  \reduce k (\Sigma \otimes \cdots \otimes \Sigma) \to \reduce k ( \tmonad \rSigma \otimes \cdots \otimes \tmonad \rSigma)} 
+\end{align*}
+is to unfold directed acyclic graphs representing trees, as illustrated below for $k=2$:
+\mypic{40}
+We have to be careful with unfolding, since we want the derived  operations to have linear and not exponential growth. This is the reason why the nodes of the input tree are labelled by tensor $k$-tuples:  even though each subtree of the input tree before is used in  $k$ subtrees of the output tree, this duplication is spread out across $k$ components of the node labels; leading to a linear $k$-fold increase in the number of nodes. 
+
+A more precise definition of the $\unfold$ operation follows below. Consider a term 
+\begin{align*}
+    t \in \reduce k \overbrace{\ranked{(\Sigma \otimes \cdots \otimes \Sigma)}}^\text{$k$ times}.
+\end{align*}
+Define \emph{subnodes} of $t$ to be pairs  $(v,i)$ such that $v$ is a node of $t$ and $i \in \set{1,\ldots,k}$. There is a natural parent-child relation on subnodes, which is illustrated in the following picture:
+
+
+
+\begin{align*}
+    \text{subnodes of $t$} \to \set{1,\ldots,k} \times \text{(edges of $t$)}
+\end{align*}
+Suppose that $(v,i)$ is a subnode, and the $j$-th child of the $i$-th component in the label of $v$ is the $l$-th edge which enters the $m$-th port of $v$, as illustrated in the following picture:
+
+
+There is a natural tree structure on subnodes, as illustrated in the following picture:
+
+For a subnode $(v,i)$, its $j$-th child is defined as follows: Define a parent relation on such pairs: we say that $(v,i)$ is the parent of $(u,j)$ if $v$ is the parent of $v$, and furthermore 
+
+Consider the parent of $v$ in $t$, call it $u$. The tree edge which connects $v$ and $u$ in $t$. In the label of $u$, this tree edge splits into $k$ parts, and the $i$-th part of this edge leads 
+
+\mypic{39}
