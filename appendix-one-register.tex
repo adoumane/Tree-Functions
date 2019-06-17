@@ -147,11 +147,14 @@ After that, we apply a flattening, to get a term in $\ranked{\tmonad(\Gamma+\#)}
  
 \end{proof}
 
-\subsection{$\beta$-reduction commutes with factorization.}
-We can generalise the lifting of functions to the lifting of relations. 
+\subsection{$\beta$-reduction commutes with factorization} The second ingredient to show Thm.~\ref{thm:evalOneType} is to notice  that factorizing a term (in the sens of Def.~\ref{}), applying some $\beta$-reduction steps to the factors, then flattening, can be simulated by appliying  $\beta$-reduction steps directly to the original $\lambda$-term.
+
+Let us state this property more formally. For that, we can generalise the lifting of functions to the lifting of relations as follows. 
 Let $\Sigma$ be a ranked set. If $R\subseteq \ranked{\Sigma}\times\ranked{\Sigma}$ is an arity preseving relation (that is $\arity{u}=\arity{v}$ whenever $(u,v)\in R$), then $R$ can be lifted to $\tmonad R\subseteq \ranked{\tmonad \Sigma} \times \ranked{\tmonad \Sigma}$ in a natural way. 
 
 Since $\beta$-reduction is an arity preserving relation  over linear $\lambda$-terms, its reflexive transitive closure $\beta^*$ is arity preserving as well.  We can lift then the later to $\tmonad \beta^*\subseteq \rlambdalin\times\rlambdalin$.
+The following proposition is a direct consequence from the fact that $\beta$ is a congruence on terms.
+  
 \begin{proposition}\label{prop:betaCommutesWithFacto}
 For every foctorization $f:\rlambda \to \tmonad \rlambda$, the following diagram commutes:
 \begin{align*}
@@ -164,7 +167,7 @@ For every foctorization $f:\rlambda \to \tmonad \rlambda$, the following diagram
 
 
 
-\subsection{Factorizing $\lambda$-terms into blocks of thin $\lambda$-terms.}
+\subsection{Factorizing $\lambda$-terms into blocks of thin $\lambda$-terms}
 
 \begin{definition}[Full redex]
 Let $t$ be a linear $\lambda$-term. A full-redex is a set of nodes  containing an $x^\sigma$-redex of type $\sigma\rightarrow\tau$, the node $x^\sigma$ it binds, together with the set of nodes between the binder of the redex and its bound variable.  
@@ -200,6 +203,7 @@ Let us constract an fo derivable factorization satisfying the two conditions of 
    \end{tabular}
    
 \end{proof}
+
 \subsection{Gathering all the pieces.}
 Theorem~\ref{thm:evalOneType} follows easily from Propositions~\ref{prop:EvaluateThin},\ref{prop:betaCommutesWithFacto} and \ref{prop:FactoIntoThin}.
 
