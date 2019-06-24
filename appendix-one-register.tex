@@ -21,7 +21,7 @@ where $M|_u$ is the subterm of $M$ rooted in $u$.
 Let us show that checking whether the type of a $\lambda$-term is $\tau$ is a first-order query. For that, notice that the type of a term depends only on its left-most branch. In fact, the type of a term is exactly the type of its left-most branch in the following sens.
 
 Consider the (unranked) alphabet $ X_\lambda:= X\cup \{\text{@}, \lambda x | x\in X\}$. We can equip the words over $X_\lambda$ with the following typing rules:
-$$\frac{}{x: \sigma} \qquad \frac{u:\tau}{u\lambda x: \sigma\rightarrow \tau} \qquad \frac{u:\sigma\rightarrow\tau}{u\text{@}:\tau}\qquad\text{(where $x$ is of type $\sigma$)}$$
+$$\frac{}{x: \sigma} \qquad \frac{u:\tau}{u\lambda x: \sigma\rightarrow \tau} \qquad \frac{u:\sigma\rightarrow\tau}{u\text{@}:\tau}\qquad\text{(where $x$ is of type $\sigma$ and $\sigma,\tau \in S$)}$$
 We say that $w$ is of type $\tau$ and write $w:\tau$ if there is a typing derivation for $w:\tau$.
 
 We can associate to every branch of a $\lambda$-term a word over $X_\lambda$ corresponding to the sequence of its labels read bottom-up. By induction on $\lambda$-terms, we can easily show that the type of a $\lambda$-term is the type of the word corresponding to its leftmost branch. 
@@ -75,9 +75,9 @@ For every word $w\in X.\{\text{@},\lambda x | x\in X \}^*$, we have that:
 w:\sigma_1\rightarrow\dots\rightarrow\sigma_n$$ 
 \end{lemma}
 
-Using this lemma, we can easily show that $A_\tau$ recognizes $W_\tau$. Another direct consequence of Lemma~\ref{} is that the stack height of $A_\tau$ is bounded, since the set $S$ used to type the words is finite. Thus $A_\tau$ can be turned into an NFA, by encoding the stack information in the states. More precisely, the states of $N_\tau$ are pairs $(r,s)$ where $r\in Q$ and $s$ is a stack of height at most $m$, the initial state is $(i,\perp)$ and there is a transition $(r,s)\xrightarrow{a}(r',s')$ where $a\in X_\lambda\cup\{\epsilon\}$ if there is a corresponding run in $A_\tau$. Let us show that $N_\tau$ is counter free. 
+A direct consequence of this lemma is that $A_\tau$ recognizes $W_\tau$. Another direct consequence is that the stack height of $A_\tau$ is bounded (let us say by a number $m$), since the set $S$ used to type the words is finite. Thus $A_\tau$ can be turned into an NFA $N_\tau$, by encoding the stack information in the states. More precisely, the states of $N_\tau$ are pairs $(r,s)$ where $r\in Q$ and $s$ is a stack of height at most $m$, the initial state is $(i,\perp)$ and there is a transition $(r,s)\xrightarrow{a}(r',s')$ where $a\in X_\lambda\cup\{\epsilon\}$ if there is a corresponding run in $A_\tau$. We show in the following that $N_\tau$ is counter-free. 
 
-Let us start with some observations. In the automaton $A_\tau$, the effect of a word $w$ on a stack $s$, starting from the state $p$ is the following: it erases the first $n$ top level elements of $s$, and replaces them by a word $u$. The number $n$ does not depend on the stack $s$, nor on the word $u$ but only on $w$. This is exactly what the following lemma claims.
+Let us start with some observations. In the automaton $A_\tau$, the effect of a word $w$ on a stack $s$, starting from the state $p$ is the following: it erases the first $n$ top level elements of $s$, and replaces them by a word $u$. The number $n$ and the word $u$ do not depend on the stack $s$ but only on the word $w$. This is exactly what the following lemma claims.
 
 \begin{lemma}
 For every word $w$ over ${X_\lambda}^*$, there is a natural number $n$ and a word $u\in S^*$ such that if $(p,s)\xrightarrow{w}(p,s')$ then $s$ and $s'$ can be decomposed as follows:
