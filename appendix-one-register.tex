@@ -1,12 +1,99 @@
 \section{Evaluation of $\lambda$-terms}
 \label{sec:eval}
-test
+
+\newcommand{\NonLinTerms}[2]{\Lambda_{#1} #2}
  \newcommand{\rlambda}{\ranked{\Lambda}}
  \newcommand{\rlambdalin}{\ranked{\Lambda^{\sf{lin}}}}
  \newcommand{\rlambdathin}{\ranked{\Lambda^{\sf{thin}}}}
 \newcommand{\pictureline}[2]{\\   \begin{minipage}{0,6\textwidth}
     #1 
 \end{minipage} & \begin{minipage}{0,4\textwidth}#2\end{minipage} \\}
+
+
+
+\begin{lemma}
+For every simple type $\tau$ in $S$, there is a first-order query $\varphi_\tau$ such that:
+$$ \forall M\in \NonLinTerms S X \qquad M,u \models \varphi_\tau \Longleftrightarrow M|_u:\tau$$
+where $M|_u$ is the subterm of $M$ rooted in $u$. 
+\end{lemma}
+
+\begin{proof}
+Let us show that checking whether the type of a $\lambda$-term is $\tau$ is a first-order query. For that, notice that the type of a term depends only on its left-most branch. In fact, the type of a term is exactly the type of its left-most branch in the following sens.
+
+Consider the (unranked) alphabet $ X_\lambda:= X\cup \{\text{@}, \lambda x | x\in X\}$. We can equip the words over $X_\lambda$ with the following typing rules:
+$$\frac{}{x: \sigma} \qquad \frac{u:\tau}{u\lambda x: \sigma\rightarrow \tau} \qquad \frac{u:\sigma\rightarrow\tau}{u\text{@}:\tau}\qquad\text{(where $x$ is of type $\sigma$)}$$
+We say that $w$ is of type $\tau$ and write $w:\tau$ if there is a typing derivation for $w:\tau$.
+
+We can associate to every branch of a $\lambda$-term a word over $X_\lambda$ corresponding to the sequence of its labels read bottom-up. By induction on $\lambda$-terms, we can easily show that the type of a $\lambda$-term is the type of the word corresponding to its leftmost branch. 
+
+By this last observation, we can reduce the query asking if the type of a term is $\tau$, to the same query but on $X_\lambda$ words. To show that the former is a first-order query, it is then sufficient to show that the following word language 
+\begin{align*}
+W_\tau = \{w\in X.\{\text{@}, \lambda x | x\in X\}^*\ |\ w:\tau \} 
+\end{align*}
+is first-order definable, or equivalently that  $W_\tau$ is recognized by a counter-free NFA. For that we proceed as follows: first, we show that $W_\tau$ is recognized by a pushdown automaton $A_\tau$. Then we will show that the its stack height is bounded, thus $A_\tau$ can be turned into a non-deterministic finite automaton $N_\tau$. Finally, we show that the obtained automaton $N_\tau$ is actually counter-free.  
+
+For a formal definition of pushdown automata (PDA) and (counter-free) non-deterministic finite automata (NFA) see~\ref{}.
+
+Consider the following PDA $A_\tau$ whose
+\begin{itemize}
+\item set of states $Q$ is $\{i, p, q\}$, where $q$ is accepting;
+\item input alphabet is $X_\lambda$;
+\item stack alphabet is $S$, with initial stack alphabet $\bot$;
+\item and whose transition function is described by the following figure:
+\begin{center}
+
+\begin{tikzpicture}[->, % makes the edges directed
+%stealth’, % makes the arrow heads bold
+node distance=4cm, % specifies the minimum distance between two nodes. Change if necessary.
+every state/.style={thick, fill=gray!10, inner sep=1pt,minimum size=0pt}, % sets the properties for each ’state’ node
+initial text=$ $,]
+\node[state, initial] (q1) {${\scriptstyle i}$};
+\node[state,  right of=q1] (q2) {${\scriptstyle p}$};
+\node[state, accepting,right of=q2] (q3) {${\scriptstyle q}$};
+\draw 
+(q1) edge[above] node{$
+{\scriptstyle x, \perp\mapsto \sf{push}(\sigma_n),\dots,\sf{push}(\sigma_1)}$} (q2)
+(q1) edge[below] node{$
+{\scriptstyle \text{if } x: \sigma_1\rightarrow\dots\rightarrow\sigma_n}$} (q2)
+(q2) edge[loop above] node{ $\begin{array}{rr}
+{\scriptstyle\lambda y, \_\mapsto \sf{push}(\sigma)} & {\scriptstyle\text{if } y:\sigma}\\
+{\scriptstyle\text{@}, \gamma\in S \mapsto \sf{pop}}&
+\end{array}$} (q2)
+(q2) edge[above] node{$
+\scriptstyle{\epsilon, \tau \mapsto \sf{pop}}
+$} (q3);
+\end{tikzpicture}
+\end{center}
+\end{itemize}
+A word $w$ is accepted by $A_\tau$ if there is a run that reaches the end of $w$ in the accepting state $q$ with an empty stack. We write $(r, s)\xrightarrow{w} (r', s')$ if there is a run over the word $w$ which starts in the state $r\in Q$ and with a stack $s$ and ends up in the state $r'$ and with a stack $s'$.
+
+
+By induction on the lenght of the word $w$, we can easily show that:
+\begin{lemma}
+For every word $w\in X.\{\text{@},\lambda x | x\in X \}^*$, we have that:
+ $$(i, \perp)\xrightarrow{w} (p, \sigma_n\dots\sigma_1) \qquad\text{iff} \qquad 
+w:\sigma_1\rightarrow\dots\rightarrow\sigma_n$$ 
+\end{lemma}
+
+Using this lemma, we can easily show that $A_\tau$ recognizes $W_\tau$. Another direct consequence of Lemma~\ref{} is that the stack height of $A_\tau$ is bounded, since the set $S$ used to type the words is finite. Thus $A_\tau$ can be turned into an NFA, by encoding the stack information in the states. More precisely, the states of $N_\tau$ are pairs $(r,s)$ where $r\in Q$ and $s$ is a stack of height at most $m$, the initial state is $(i,\perp)$ and there is a transition $(r,s)\xrightarrow{a}(r',s')$ where $a\in X_\lambda\cup\{\epsilon\}$ if there is a corresponding run in $A_\tau$. Let us show that $N_\tau$ is counter free. 
+
+Let us start with some observations. In the automaton $A_\tau$, the effect of a word $w$ on a stack $s$, starting from the state $p$ is the following: it erases the first $n$ top level elements of $s$, and replaces them by a word $u$. The number $n$ does not depend on the stack $s$, nor on the word $u$ but only on $w$. This is exactly what the following lemma claims.
+
+\begin{lemma}
+For every word $w$ over ${X_\lambda}^*$, there is a natural number $n$ and a word $u\in S^*$ such that if $(p,s)\xrightarrow{w}(p,s')$ then $s$ and $s'$ can be decomposed as follows:
+$$s=t.v,\qquad s'=t.u\qquad \text{ and }\qquad |v|=n.$$
+\end{lemma}
+The proof is an easy induction on the lenght of $w$. As a consequence we have that:
+\begin{itemize}
+\item If $(p,s_1)\xrightarrow{w}(p,s_2)\xrightarrow{w}(p,s_3)$ and $|s_2|>|s_1|$ then $|s_3|>|s_2|$.
+\item If $(p,s_1)\xrightarrow{w}(p,s_2)\xrightarrow{w}(p,s_3)$ and $|s_2|<|s_1|$ then $|s_3|<|s_2|$.
+\item If $(p,s_1)\xrightarrow{w}(p,s_2)\xrightarrow{w}(p,s_3)$ and $|s_2|=|s_1|$ then $s_3 =s_2$.
+\end{itemize}
+
+Let us show that $N_\tau$ is counter-free. Suppose by contradiction that there is a word $w$ and stacks $s_1,\dots, s_n$ such that 
+$(p,s_1)\xrightarrow{w}(p,s_2)\xrightarrow{w}\dots(p,s_n)\xrightarrow{w}(p,s_1)$. By the first two properties above, we have necessarily that $|s_1|=\dots=|s_n|$. Thus by the third property, we have that $s_1=\dots=s_n$
+\end{proof}
+
 
 \begin{definition}[Simple types]
 Let $B$ be a set of basic types. Simple types are generated by the following syntax: 
@@ -55,7 +142,7 @@ We set $\beta_{\sf{left}}$ to be the function that reduces the outermost and lef
 There is an fo tree-to-tree functions ${\sf{Eval}}:\rlambda \to\rlambda$ such that its restriction to $\rlambdalin$ computes the normal form.
 \end{theorem}
 
-The proof proceeds by induction on the set of types $S$. The main observation is that if the evaluation of a redex of type $\sigma\rightarrow \tau$ creates a new redex, then the type of teh latter is $\sigma$, in particular it is in $S\setminus\{\sigma\rightarrow\tau\}$. Thus, we only need to show that the function that evaluates all the redexes of a fixed type $\sigma\rightarrow\tau$ is an fo tree-to-tree function.  To show the last point, and since we have only finitely many typed variables, it is enough to show that the function that evaluates all the redexes of a fixed type $\sigma\rightarrow\tau$ and a fixed variable $x^\sigma$ is an fo tree-to-tree function (we call such redexes $x^\sigma$-redexes of type $\sigma\rightarrow\tau$). This will be the goal of the rest of this section. 
+The proof proceeds by induction on the set of types $S$. The main observation is that if the evaluation of a redex of type $\sigma\rightarrow \tau$ creates a new redex, then the type of the latter is $\sigma$, in particular it is in $S\setminus\{\sigma\rightarrow\tau\}$. Thus, we only need to show that the function that evaluates all the redexes of a fixed type $\sigma\rightarrow\tau$ is an fo tree-to-tree function.  To show the last point, and since we have only finitely many typed variables, it is enough to show that the function that evaluates all the redexes of a fixed type $\sigma\rightarrow\tau$ and a fixed variable $x^\sigma$ is an fo tree-to-tree function (we call such redexes $x^\sigma$-redexes of type $\sigma\rightarrow\tau$). This will be the goal of the rest of this section. 
 
 \begin{theorem}\label{thm:evalOneType}
 There is an fo tree-to-tree function ${\sf{Eval}_{x^\sigma,\sigma\rightarrow\tau}}:\rlambda \to\rlambda$ whose restriction to $\rlambdalin$ evaluates the  $x^\sigma$-redexes of type $\sigma\rightarrow\tau$.
