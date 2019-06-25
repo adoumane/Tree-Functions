@@ -10,6 +10,7 @@
     #1 
 \end{minipage} & \begin{minipage}{0,4\textwidth}#2\end{minipage} \\}
 
+\newcommand{\thinterm}[1]{\ranked{\mathsf{Thin}_{#1}}}
 
 \subsection{Well-typedeness}
 A natural question to ask about $\lambda$-terms in our framework is whether their well-typedeness is a first-order property. Without restriction on the terms, the answer is negative as shown by the following example.
@@ -152,8 +153,13 @@ The proof proceeds by induction on the set of types $S$. The main observation is
   Since we have only finitely many typed variables, it is enough to show that the function that evaluates all the redexes of a fixed type $\sigma$ and a fixed variable $x$ is derivable. This will be our goal in the rest of this section.
 
 \begin{theorem}\label{thm:evalOneType}
-The function ${\sf{Eval}_{x,\sigma}}:\linterm S X \to\linterm S X$ which evaluates the redexes of type $\sigma$ and variable $x$ is derivable.
+ For every typed set $X$, every finite set $S$ of simple types and every $x\in X$ and $\sigma\in S$, the function 
+    \begin{align*}
+        M \in  \linterm S X \quad \mapsto \quad N \in \linterm S X \text{ obtained by reducing all the redexes of type $\sigma$ and variable $x$ in $M$} 
+    \end{align*}
+    is derivable.
 \end{theorem}
+
 
 
 \subsubsection{Evaluation of thin $\lambda$-terms}
@@ -161,10 +167,12 @@ The function ${\sf{Eval}_{x,\sigma}}:\linterm S X \to\linterm S X$ which evaluat
 We start by showing that the evaluation of a restricted class of linear $\lambda$-terms, which we call thin, is an fo tree-to-tree function.   
 
 \begin{definition}[Thin $\lambda$-terms]
-A thin $\lambda$-terms is a term from $\rlambdalin$ in which a node is branching (ie a node having at least two sons which are not ports) if and only if it is a $\text{@}$ node, whose left son is a $\lambda x^\sigma$ node. We denote by $\rlambdathin$ the set of thin $\lambda$-terms.
+We say that the node of a $\lambda$-term is \emph{branching} if its has at least two children which are not ports.
+ 
+A \emph{thin $\lambda$-term} is a term from $\linterm S X$ in which, if a node is branching, then it is an application node of a redex. We denote by $\thinterm S X$ the set of thin $\lambda$-terms.
 \end{definition}
 
-Since thin $\lambda$-terms branch only on redexes, the result of their evaluation is a word (that is, a term where every node has at most one son).  We will show that this word can actually be obtained by a pre-order traversal of the original $\lambda$-term. 
+Since thin $\lambda$-terms branch only on redexes, the result of their evaluation is word-like (that is, a term where every node has at most one son).  We will show that this word can actually be obtained by a pre-order traversal of the original $\lambda$-term. 
 Since pre-order traversal is a basic fo tree-to-tree function, we can conclude that evaluation of thin $\lambda$-terms is a tree-to-tree function as well. 
 
 \begin{center}
@@ -172,25 +180,34 @@ Picture 5
 \end{center}
 
 \begin{proposition}\label{prop:EvaluateThin}
-There is an fo tree-to-tree function ${\sf{Eval}^{\sf{thin}}_{x^\sigma,\sigma\rightarrow\tau}}:\rlambda\to\rlambda$, whose restriction to $\rlambdathin$ evaluates the $x^\sigma$-redexes of type $\sigma\rightarrow\tau$.
+ For every typed set $X$ and every finite set $S$ of simple types, the function 
+    \begin{align*}
+        M \in  \thinterm S X \qquad \mapsto \qquad \text{normal form of $M$} \in  \thinterm S X
+    \end{align*}
+    is derivable.
 \end{proposition}
 
 \begin{proof}
-Let $t$ be a thin $\lambda$-term and let $u$ be its normal form. As noticed before, $u$ has the shape of a word. Moreover, since $t$ is linear, the nodes of $u$ are exactly the nodes of $t$ which are not $x^\sigma$-redexes of type $\sigma\rightarrow\tau$, nor the nodes $x^\sigma$ they bind (ie. there is a label-preserving bijection $f$ between theses two sets of nodes).
-We show that:
+Let us show that the evaluation of thin $\lambda$-terms is derivable. We will consider an additional hypothesis on thin $\lambda$-terms:
+\begin{center}
+\textit{If a node is an application node of a redex, then it is branching.}$\qquad\qquad (H)$
+\end{center}
+Hypothesis $H$ is the converse of the condition on thin $\lambda$-terms. We will first show that normalisation of thin $\lambda$-terms with this additional condition (let us call them strongly thin $\lambda$-terms) is derivable, then we will show later how to get rid of it.
+
+Let $t$ be a strongly thin $\lambda$-term and let $u$ be its normal form. As noticed before, $u$ has the shape of a word. Moreover, since $t$ is linear, the nodes of $u$ are exactly the nodes of $t$ which are not redexes, nor the variable nodes bound by these redexes. We show that:
 \noindent \begin{enumerate}
 \item The order in which the inner nodes (ie. non ports) of $u$ appear is the tree order of $t$.
-\item Let $n$ be a node of $u$ and $m$ be its corresponding node in $t$. The port $x$ of $u$ is the $i^{th}$ son of $n$ if and only if it the port $x$ of $t$ is the $i^{th}$ port of $m$.  
+\item Let $n$ be a node of $u$ and $m$ be its corresponding node in $t$. The port $p$ of $u$ is the $i^{th}$ child of $n$ if and only if it the port $p$ of $t$ is the $i^{th}$ port of $m$.  
 \end{enumerate} 
 
-To establish the second claim, it is enough to show it for one step of $\beta$-reduction. But this last point is clear by a simple analysis of $\beta$-reduction, as far as we consider that the right son of the $\text{@}$ node of every redex is not a port. This is is guaranteed by the definition of thin $\lambda$-terms. 
+To establish the second claim, it is enough to show it for one step of $\beta$-reduction. But this last point is clear by a simple analysis of $\beta$-reduction, as far as we consider that the right child of the $\text{@}$ node of every redex is not a port. This is is guaranteed by the condition $(H)$ of strongly thin $\lambda$-terms. 
 
 To establish the first claim, let us consider two inner nodes $n, m$ of $t$ which are also nodes of $u$, and such that $n$ is smaller than $m$ is the tree order of $t$. We show that $n$ is a descendent of $m$ in $u$. There is two cases to consider:
 
 \textbf{Case 1.} Either $n$ is a descendent of $m$ in $t$, in which case we can conclude easily since $\beta$-reduction preserves the descendent relation. Indeed, by a small analysis of $\beta$-reduction, one can notice that a reduction step may extend the descendent relation, but can never change (or break) the order of two comparable nodes in the original $\lambda$-term.    
 
-\textbf{Case 2.} Otherwise, let us consider the lowest common ancestor $p$ of $m$ and $n$. We proceed by induction on the lenght of the path between $m$ and $p$. Notice first that since the only branching nodes of a thin term are $x^\sigma$-redexes, then $p$ is necessarily an $\text{@}$ node, whose left son $q$ is a $\lambda x^\sigma$ node. 
-Notice first that $m$ is smaller than the free variable $r$ bound by $q$ w.r.t. the tree order. Indeed, if this was not the case, the free variable $r$ would not be bound by the node $q$, as illustrated by the following figure.
+\textbf{Case 2.} Otherwise, let us consider the lowest common ancestor $p$ of $m$ and $n$. We proceed by induction on the lenght of the path between $m$ and $p$. By definition of thin $\lambda$-terms, since $p$ is branching it is necessarily an $\text{@}$ node, whose left child $q$ is a binder node, let us say $\lambda x$. 
+Notice first that $m$ is smaller (w.r.t. the tree order) than the node $r$ of the variable bound by $q$ . Indeed, if this was not the case, the free variable $r$ would not be bound by the node $q$, as illustrated by the following figure.
 \begin{center}
 Picture 6
 \end{center}
@@ -198,8 +215,9 @@ We are then left with the following two situations:
 \begin{center}
 Picture 7
 \end{center}    
+And this concludes the proof of the second claim.
 
-Using these ingredients, let us construct now an fo tree-to-tree transduction which evaluates the $x^\sigma$-redexes of type $\sigma\rightarrow\tau$.
+Using these ingredients, let us construct an fo tree-to-tree transduction which computes the normal form of thin $\lambda$-terms.
 \begin{center}
 Picture 8
 \end{center}
@@ -213,7 +231,7 @@ Picture 8
     {We apply the pre-order traversal function. We get a term in $\tmonad \ranked{\Gamma}$ where $\ranked{\Gamma}:=\ranked{\mathcal{A}}+\ranked{\mathcal{A}^r}+\bullet+\bullet+\bullet$.}
     { \text{picture b}}
  \pictureline
-    {Now we need to eliminate the tagged nodes. For that we start by adding the unary symbol $\#$ as a right son of each $\bullet$ node, getting a term in $\tmonad(\ranked{\Gamma+\#})$. This function is clearly derivable. }
+    {Now we need to eliminate the tagged nodes. For that we start by adding the unary symbol $\#$ as a right child of each $\bullet$ node, getting a term in $\tmonad(\ranked{\Gamma+\#})$. This function is clearly derivable. }
     { \text{picture c}}
  \pictureline
     {We apply $\sf{block}^\uparrow$ to separate the symbol $\#$ from the others. We obtain a term in $\ranked{\tmonad(\tmonad \Gamma+\tmonad\#)}$}
@@ -245,15 +263,15 @@ After that, we apply a flattening, to get a term in $\ranked{\tmonad(\Gamma+\#)}
 Let us state this property more formally. For that, we can generalise the lifting of functions to the lifting of relations as follows. 
 Let $\Sigma$ be a ranked set. If $R\subseteq \ranked{\Sigma}\times\ranked{\Sigma}$ is an arity preseving relation (that is $\arity{u}=\arity{v}$ whenever $(u,v)\in R$), then $R$ can be lifted to $\tmonad R\subseteq \ranked{\tmonad \Sigma} \times \ranked{\tmonad \Sigma}$ in a natural way. 
 
-Since $\beta$-reduction is an arity preserving relation  over linear $\lambda$-terms, its reflexive transitive closure $\beta^*$ is arity preserving as well.  We can lift then the later to $\tmonad \beta^*\subseteq \rlambdalin\times\rlambdalin$.
+Since $\beta$-reduction is an arity preserving relation  over linear $\lambda$-terms, its reflexive transitive closure $\beta^*$ is arity preserving as well.  We can lift then the later to $\tmonad \beta^*\subseteq \linterm S X\times\linterm S X$.
 The following proposition is a direct consequence from the fact that $\beta$ is a congruence on terms.
   
 \begin{proposition}\label{prop:betaCommutesWithFacto}
 For every foctorization $f:\rlambda \to \tmonad \rlambda$, the following diagram commutes:
 \begin{align*}
         \xymatrix{
-     \rlambdalin \ar[d]_{\beta^*}\ar[r]^f& \tmonad \rlambdalin \ar[d]^{\tmonad\beta^*} \\
-           \rlambdalin  &\ar[l]_{\sf{flat}} \tmonad \rlambdalin
+     \linterm S X \ar[d]_{\beta^*}\ar[r]^f& \tmonad \linterm S X \ar[d]^{\tmonad\beta^*} \\
+           \linterm S X  &\ar[l]_{\sf{flat}} \tmonad \linterm S X
         }
         \end{align*}
 \end{proposition}
@@ -271,7 +289,7 @@ Picture 9
 
 
 \begin{proposition}\label{prop:FactoIntoThin}
-There is an fo tree-to-tree factorisation $f:\rlambda \to \tmonad\rlambda$ such that for every $t\in\rlambdalin$
+There is an fo tree-to-tree factorisation $f:\rlambda \to \tmonad\rlambda$ such that for every $t\in\linterm S X$
 \begin{itemize}
 \item any full redex of $t$ is entirely contained in one of the factors of $f(t)$;
 \item the factors of $f(t)$ are thin $\lambda$-terms.
@@ -289,7 +307,7 @@ Let us constract an fo derivable factorization satisfying the two conditions of 
     }{}
     \pictureline{Now, we erase the blocks $\ranked{\tmonad{\#}}$ and apply flat. We get a term in $\ranked{\tmonad(\tmonad(\mathcal{A}'_+)+\tmonad(\mathcal{A}'_-))}$.}{}
     \pictureline{We apply $\sf{block}^\uparrow:  \ranked{\tmonad(\tmonad(\mathcal{A}'_+)+\tmonad(\mathcal{A}'_-))}\to \ranked{\tmonad(\tmonad\tmonad(\mathcal{A}'_+)+\tmonad\tmonad(\mathcal{A}'_-))}$, then flat each block $\ranked{\tmonad\tmonad(\mathcal{A}'_+)}$ and $\ranked{\tmonad\tmonad(\mathcal{A}'_-)}$. We obtain a term in $\ranked{\tmonad(\tmonad(\mathcal{A}'_+)+\mathcal{A}'_-)}$, where each block $\ranked{\tmonad(\mathcal{A}'_+)}$ is a thin $\lambda$-term. Moreover, every redex is contained in a $\ranked{\tmonad(\mathcal{A}'_+)}$ block, except for the redexes whose binders are the roots of the  $\ranked{\tmonad(\mathcal{A}'_+)}$ blocks. To conclude, one only needs to add the $\text{@}$ above each such binder to its correponding block. }{}
-    \pictureline{For that, we add the unary symbol $\#$ as a right son of each tagged $\text{@}$ symbol of $\mathcal{A}'_-$. We obtain a term in $\ranked{\tmonad(\tmonad(\mathcal{A}'_+)+\mathcal{A}'_-+\#)}$. Then we apply $\sf{block}^\uparrow:\ranked{\tmonad(\tmonad(\mathcal{A}'_+)+\mathcal{A}'_-+\#)}\to \ranked{\tmonad(\tmonad(\tmonad(\mathcal{A}'_+)+\mathcal{A}'_-)+\tmonad{\#})}$}{}
+    \pictureline{For that, we add the unary symbol $\#$ as a right child of each tagged $\text{@}$ symbol of $\mathcal{A}'_-$. We obtain a term in $\ranked{\tmonad(\tmonad(\mathcal{A}'_+)+\mathcal{A}'_-+\#)}$. Then we apply $\sf{block}^\uparrow:\ranked{\tmonad(\tmonad(\mathcal{A}'_+)+\mathcal{A}'_-+\#)}\to \ranked{\tmonad(\tmonad(\tmonad(\mathcal{A}'_+)+\mathcal{A}'_-)+\tmonad{\#})}$}{}
     \pictureline{We eliminate the blocks $\ranked{\tmonad{\#}}$ and apply flat, thus getting a term in $\ranked{\tmonad(\tmonad(\mathcal{A}'_+)+\mathcal{A}'_-)}$. We reapply block to seperate the blocks $\ranked{\tmonad(\mathcal{A}'_-})$ from the others, apply some flatening and eliminate all the taggs ($r$, +, -), in orther to get a term in $\ranked{\tmonad(\tmonad(\mathcal{A}))}$.}{}
     
     
