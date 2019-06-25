@@ -1,44 +1,111 @@
 \section{Reduction to one register}
 \label{sec:matrix-power}
-In this 
+In this section, we prove that first-order  tree transducers can only recognise derivable functions. 
 \begin{proposition}
     \label{prop:many-register} 
-    If a  tree-to-tree function is recognised by a tree transducer, then it is derivable. 
+For every first-order  tree transducer, the computed function is derivable. 
 \end{proposition}
 
-
-To prove the proposition, we describe a type constructor, called the \emph{matrix power}, which can be used to reduce transducers with many registers to transducers with a single register. 
-\begin{definition}[Matrix power]
-    If  $\rSigma$ is a type and $k \in \set{1,2,\ldots}$, then the \emph{$k$-th matrix power of $\rSigma$}, denoted by $\ranked{\Sigma^{[k]}}$, is the following ranked set. An $n$-ary element of $\ranked{\Sigma^{[k]}}$ consists of $k$ trees 
+The above proposition finishes the proof of the left-to-right implication in Theorem~\ref{thm:main}, according to the following reasoning:
 \begin{align*}
-    t_1,\ldots,t_k \in \trees (\rSigma + \set{1,\ldots,k} \times \set{1,\ldots,n})
+\text{first-order tree-to-tree transductions}  \stackrel {\text{Theorem~\ref{thm:stt}}}\subseteq  \text{first-order tree transducers} \stackrel {\text{Proposition~\ref{prop:many-register}}} \subseteq \text{derivable}
 \end{align*}
-such that every letter from the set $nk$ appears in exactly one tree and exactly once. We also require the following \emph{monotonicity} requirement: for every $i \in \set{1,\ldots,n}$ the function
-\begin{align}
-    j \in \set{1,\ldots,k} \quad \mapsto \quad \text{the unique $l \in \set{1,\ldots,k}$ such that $t_l$ contains variable $(i,j)$}
-\end{align}
-    
-    
-    An  $n$-ary element of $\ranked{\Sigma^{[k]}}$ consists of elements $a_1,\ldots,a_k \in \Sigma$ together with  a bijection 
-    \begin{align*}
-        \underbrace{\set{1,\ldots,k} + \cdots + \set{1,\ldots,k}}_{\text{$n$ times}} \to        \set{1,\ldots,\arity {a_1}} + \cdots + \set{1,\ldots,\arity{a_k}}. 
-    \end{align*}
-    We require the following monotonicity requirement: for every $i \in \set{1,\ldots,n}$ the function
-    \begin{align*}
-\pi \circ  f \circ \iota_i : \set{1,\ldots,k}  \to   \set{1,\ldots,k}
-    \end{align*}
-    is monotone, where $\pi$ says which part of the disjoint union is used. 
-    Here is a picture of an $n$-ary element of  $\ranked{\Sigma^{[2]}}$ for $n=3$ and $k=2$:
-    \mypic{16}  
-\end{definition}
-  
-We now describe the final type constructor, the matrix power, which might be the most unexpected one. The significance of matrix power will become clear when we start studying register automata.  
+The rest of this section is devoted to proving Proposition~\ref{prop:many-register}. Although slightly long, the proof is essentially symbol-pushing, and mainly consists of observing that the register update mechanism in a register transducer can be seen as syntactic sugar for normalisation of $\lambda$-terms and unfolding of the matrix power. 
 
-Consider a tree, where every node is labelled by a t
-\mypic{26}
+\newcommand{\regup}[2]{\ranked{\mathsf{U}_{#2}#1}}
 
-an element is a tensor tuple $\tensorpair{a_1,\ldots,a_k}$ and nondecreasing functions 
+
+\subsection{Reduction to registers of arity one}
+The following straightforward lemma shows that, without loss of generality, one can assume that all registers store unary terms. 
+\begin{lemma}\label{lem:unary-registers}
+    For every first-order register tree transducer there is an equivalent one (i.e.~recognising the same function) where all registers have arity one. 
+\end{lemma}
+\begin{proof}
+    Consider a term. A branching node is defined to be a node which has at least two subtrees that contain a port. Define the  \emph{unary factorisation} to be the coarsest factorisation where branching nodes are in separate factors, here is a picture:
+    \mypic{37}
+    If the term has arity $n$, then the unary factorisation has at most $n-1$ factors with branching nodes, and at most $2n-1$ factors without branching nodes, and all of the later factors are unary. Therefore, instead of storing an $n$-ary term in a register, one can store the unary factors of its its unary factorisation, plus some finite information about how these unary factors should be put together. 
+\end{proof}
+\subsection{One register of arity one}
+To get an idea of the constructions, we begin with a special case, when the register transducer has one register, which is of arity one. Here is an example of a ternary register update in such a transducer:
+\mypic{49}
+The semantics of an $n$-ary update is that it inputs $n$ terms of arity one, and substitutes the $i$-th one into the variable $i$. For a register update $\ranked u$, define its dual to be the term over the alphabet
 \begin{align*}
-    f_1,\ldots,f_n : \set{1,\ldots,k} \to \set{1,\ldots,k}
+\ranked{\rGamma^\lambda} \quad \eqdef \quad \rGamma + \set{x,\lambda x, @}, \qquad \text{where $x,\lambda x, @$ have arities $0,1,2$}
 \end{align*}
+ which is described in the following picture:
+\mypic{50}
+We use the name dual, because the roles of variables and ports are swapped. (The definition of dual in the presence of more than one registers is more complicated, and will be given in Section~\ref{sec:many-registers-subsect}.)
+The dual can be viewed as a $\lambda$-term with ports. The letters from $\rGamma$ are viewed as term constructors in the following sense: an $n$-ary letter of $\rGamma$ is used to combine $n$ terms of type $\otype$ into a single term also of type $\otype$. We extend the notion of $\beta$-reduction and normalisation to $\lambda$-terms extended with symbols from $\rGamma$ in the natural way; there are no reduction rules for the symbols from $\rGamma$. An immediate corollary of Theorem~\ref{thm:normalise} is that normalisation for such extended $\lambda$-terms is also a derivable function.
+
+The following lemma, which is proved by a simple inspection  of the definitions, says that when the dual is applied, applying register updates corresponds to computing the normal form. 
+
+\begin{lemma}\label{lem:one-register}
+    The following diagram commutes for every ranked set $\rGamma$:
+    \begin{align*}\ranked{
+        \xymatrix@C=2cm{ 
+          \tmonad  \regup \rGamma 1  \ar[rr]^-{\regupt} \ar[d]_{\tmonad \dualt}  &  & \ar[d]^-{\dualt}  \regup \rGamma 1\\
+          \tmonad \tmonad \rGamma^\lambda \ar[r]^{\flatt}  &  \tmonad \rGamma^\lambda \ar[r]^{\normt} & \tmonad \rGamma^\lambda  \\
+        }}
+        \end{align*}
+\end{lemma}
+The purpose of the above lemma is to describe the computation of  register updates  in terms of operations that are already known to be derivable, namely flattening and normalisation. More details will be given in Section~\ref{sec:many-registers-endagme}, where a generalisation of the above lemma will be used to prove Proposition~\ref{prop:many-register}.
+
+
+\subsection{Many registers of arity one}
+\label{sec:many-registers-subsect}
+
+In this section, we show that also for in the presence of many registers (all of them of arity one), the evaluation operation is derivable.  We develop the 
+
+Consider an $n$-ary register update $\ranked u \in \regup  \Gamma k$ which uses $k$ registers. We now define its $k$-dual
+\begin{align*}
+\ranked { \dualt(u) \in \reduce k {(\matrixpower{(\tmonad \rGamma^\lambda)}k)}}.
+\end{align*}
+The dual also has arity $n$, and its definition is illustrated in the following picture, which uses $n=3$ and $k=2$:
+\mypic{29}
+Roughly speaking, the dual is obtained by taking the tensor tuple of the duals (in the sense of Section~\ref{sec:many-registers-subsect}) of the $k$ components of the register update, and then grouping the ports using a reducer into groups of $k$; with the each group corresponding to the $k$ registers produced by one of the children. 
+
+The following lemma shows that, in the dual, evaluation of register updates corresponds to unfolding the matrix power followed by normalisation of $\lambda$-terms. As in the case of Lemma~\ref{lem:one-register}, the proof of the lemma is a simple inspection of the definitions. 
+\begin{lemma}\label{lem:many-register}
+    The following diagram commutes for every ranked set $\rGamma$ and $k \in \set{1,2,\ldots}$:
+        \begin{align*}\ranked{
+            \xymatrix@C=2cm{ 
+              \tmonad  \regup \rGamma k  \ar[d]_-{\tmonad \dualt} \ar[rrr]^{\regupt} & &&
+              \regup \rGamma k   \ar[d]^{\dualt}
+              \\
+              \tmonad (\matrixpower  {(\tmonad \rGamma^\lambda)}  k) \ar[r]^{\unfold} &\matrixpower  {(\tmonad \tmonad \rGamma^\lambda)}  k \ar[r]^{\matrixpower \flatt k} &
+              \ar[r]^{\matrixpower \normt k}  \matrixpower  {( \tmonad \rGamma^\lambda)}  k
+                  & \matrixpower  {( \tmonad \rGamma^\lambda)}  k  
+            }}
+            \end{align*}
+\end{lemma}
+
+
+\subsection{Proof of Proposition~\ref{prop:many-register}}
+\label{sec:many-registers-endagme}
+Let us use the above lemma to complete the proof of Proposition~\ref{prop:many-register}. Fix a first-order register transducer which defines a function
+\begin{align*}
+ f : \trees \rSigma \to \trees \rGamma,
+\end{align*}
+using $k$ registers, with all registers having arity one. 
+ which says that every first-order register transducer defines a derivable function.  Suppose that we are given an input tree $t \in \trees \rSigma$. 
+\begin{enumerate}
+    \item Let $\rDelta \subseteq \regup \rGamma k$ be the finite set of register updates that is used by the transducer. To the input tree, apply the first-order rational update function of the transducer -- which is  derivable thanks to Proposition~\ref{prop:forat} --   yielding a tree
+    \begin{align*}
+    t_1 \in \trees \rDelta.
+    \end{align*}
+    \item  To the tree $t_1$ from the  previous item, apply the function $\tmonad \dualt$ -- which is derivable because the set $\rDelta$ of register updates is finite -- yielding a tree 
+    \begin{align*}
+    t_2 \in \trees (\matrixpower{(\tmonad \rGamma^\lambda)} k).
+    \end{align*}
+    \item To the tree $t_2$ from the previous item, apply the 
+     three derivable functions on the bottom face of the diagram in Lemma~\ref{lem:many-register}, yielding an arity zero element 
+     \begin{align*}
+        t_3 \in (\tmonad \rGamma^\lambda)^{[k]}.
+     \end{align*}
+     \item Since $t_3$ produced in the previous item has arity zero, it is nothing but $k$ trees
+\begin{align*}
+s_1,\ldots,s_k \in \trees \ranked{\rGamma^\lambda}.
+\end{align*}
+     Thanks to Lemma~\ref{lem:many-register}, the tree $s_i$ is the dual of the contents of register $i$ in the register valuation $\regupt(t_1)$. In particular, the output tree is obtained by combining the trees $s_1,\ldots,s_n$ in a derivable way. 
+\end{enumerate}
 

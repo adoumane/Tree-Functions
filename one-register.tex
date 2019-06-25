@@ -1,58 +1,105 @@
-\section{Normalisation of linear terms}
+\section{Evaluation of simply typed linear terms}
 \label{sec:one-register}
 
-In this section, we consider an important example of derivable term transformations, namely computing the $\beta$-normal form of a  $\lambda$-term. Apart from its independent interest, computing the $\beta$-normal form will be used in the proof our main theorem, since the 
+In this section, we consider an important example of derivable term transformations, namely evaluating (i.e.~computing $\beta$-normal forms of)  simply typed  $\lambda$-terms that are linear in the sense that each bound variable is used exactly once in its scope. Apart from its independent interest, evaluation of $\lambda$-terms will  be used in the proof our main theorem. 
 
 
 
 \newcommand{\otype}{o}
-We assume that the reader is familiar with the basic notions of the simply typed $\lambda$-calculus; more detailed definitions can be found in~\cite{sorensen_lectures_2006}. 
-Define  \emph{simple types} to be expressions which are generated from an atomic type $\otype$ using a binary arrow constructor, as in the following examples:
+We assume that the reader is familiar with the basic notions of the simply typed $\lambda$-calculus; more detailed definitions can be found in~\cite{sorensen_lectures_2006}. Define  \emph{simple types} to be expressions  generated from an atomic type $\otype$ using a binary arrow constructor, as in the following examples:
     \begin{align*}
         \otype \qquad \otype \to \otype \qquad (\otype \to \otype) \to (\otype \to \otype) \qquad \cdots 
     \end{align*}
-Let $X$ be a set of variables, each one with an associated simple type. A $\lambda$-term over these variables can be seen as a tree over the ranked alphabet
+Let $X$ be a set of variables, each one with an associated simple type.  A $\lambda$-term over these variables can be seen as a tree over the ranked alphabet
 \begin{align*}
-    \lamrank X \quad \eqdef \quad  \overbrace{\set{x : x \in X}}^{\text{arity 0}} \cup \overbrace{\set{\lambda x : x \in X}}^{\text{arity 1}} \cup  \overbrace{\set @}^{\text{arity 2}}
+      \overbrace{\set{x : x \in X}}^{\text{arity 0}} \cup \overbrace{\set{\lambda x : x \in X}}^{\text{arity 1}} \cup  \overbrace{\set @}^{\text{arity 2}}
 \end{align*}
-We say that a term is \emph{well-typed} if one can associate  to it  a simple type according to the usual typing rules of simply typed $\lambda$-calculus, see~\cite[Definition 3.2.1]{sorensen_lectures_2006}. Here is an example of a well-typed $\lambda$-term, with the red annotation describing the type of each subterm:
-\mypic{43}
+where @ is the application symbol that is used to apply one term to another.
+We say that a $\lambda$-term is \emph{well-typed} if one can associate  to it  a simple type according to the usual typing rules of simply typed $\lambda$-calculus\footnote{
+    Here we assume that the variables are typed, but the types for the remaining $\lambda$-terms need to be inferred. We could adopt a different approach, more thoroughly in the style of Church, where all term constructors (application and $\lambda$-abstraction) come decorated with the type of the resulting term. We do not do this to make  notation lighter, and also because one show -- see the appendix -- that first-order logic is enough to reconstruct the type of a term once the types of the variables are known. 
+}, see~\cite[Definition 3.2.1]{sorensen_lectures_2006}. Because the variables are typed, a  $\lambda$-term can have either a unique type, or it is not well-typed.  Here is an example of a well-typed $\lambda$-term: 
+\mypic{45}
 We use the standard notion of $\beta$-reduction for $\lambda$-terms, see~\cite[Definition 1.2.1]{sorensen_lectures_2006}. 
-Every well-typed $\lambda$-term has a unique normal form, i.e~a $\lambda$-term to which it $\beta$-reduces in multiple steps, and which cannot be further $\beta$-reduced.
+Because of normalisation and confluence for the simply typed $\lambda$-calculus, every well-typed $\lambda$-term has a unique normal form, i.e~a $\lambda$-term to which it $\beta$-reduces (in zero or more steps), and which cannot be further $\beta$-reduced.
+
 
 \begin{example}\label{ex:exponential}
-    Because of iterated duplication, the normal form of a $\lambda$-term can be exponential, as shown in the following picture, which uses variables $x : \otype$ and  $z : \otype \to \otype \to \otype$.
-    \mypic{44}
-    Growth beyond exponential can also be achieved,  see~\cite[Section 3.6]{sorensen_lectures_2006}.
+    Because of iterated duplication, the normal form of a $\lambda$-term can be exponential. Assume that we have two variables $\typevar x  \otype$ and $\typevar y {\otype \to \otype \to \otype}$ and consider the $\lambda$-terms defined by:
+    \begin{align*}
+        M_0 \eqdef \typevar x \otype \qquad M_{n+1} = (\lambda \typevar x  \otype . \typevar y {\otype \to \otype \to \otype}  \typevar x  \otype \typevar x  \otype)M_n.
+    \end{align*}
+    The $\lambda$-term $M_n$ is well-typed and of type $\otype$. It has size linear in $n$, but its normal form has size exponential in $n$. 
+    % as shown in the following picture, which uses variables $x : \otype$ and  $z : \otype \to \otype \to \otype$.
+    % \mypic{44}
 \end{example}
-As witnessed by the above example, normal forms can be super-linear, and therefore they cannot be computed  using derivable functions or first-order transductions, because the latter have linear size outputs. To avoid this problem, we can limit attention to linear $\lambda$-terms: a $\lambda$-term is called \emph{linear} if every bound variable is used exactly once in its scope. Here is an example: 
+As witnessed by the above example, normal forms can be exponential size (or worse, see~\cite[Section 3.6]{sorensen_lectures_2006}), and therefore they cannot be computed  using derivable functions or first-order transductions, because the latter have linear size outputs. To avoid this problem, we  limit attention to linear $\lambda$-terms: a $\lambda$-term is called \emph{linear} if every bound variable is used exactly once in its scope. Here is an example: 
 \mypic{43}
 For linear $\lambda$-terms, each step of $\beta$-reduction reduces the number of nodes by exactly 3, and therefore the normal form is linear in the size of (in fact, smaller or equal to) the original term. 
 
-Linearity alone is not sufficient to normalise terms using first-order logic or derivable functions. Another obstacle is that, despite using a fixed set of variables, the types that appear in the term might be arbitrarily large (due to $\lambda$-abstraction). 
+Linearity alone is not enough to normalise terms with first-order transductions. Another obstacle is terms that use types of unbounded complexity, as illustrated in the following example. 
 
-Computing the normal form is beyond the scope of first-order transductions, the principal reason being that first-order transductions have linear size outputs, while normalisation can incur a blowup that is exponential or larger,
- In Section~\ref{sec:lambda}, we will show that normalisation can be computed by a first-order transduction, assuming that: (a) the input terms are linear, which means that each bound variable is used exactly once in its scope; (b) we place an upper bound on the complexity of types used in subterms. 
-
-as discussed in Example~\ref{ex:labmda-terms}.  We show that the tree-to-tree function which inputs a  term and outputs its normal form can be derived, assuming that bound variables are used exactly one and there is a bound on the number of distinct terms types that can appear in the term. 
-
-Let $X$ be a typed set, i.e.~a set of variables with associated simple types. As in  Example~\ref{ex:labmda-terms},  we view $\lambda$-terms with variables of $X$ as trees over an ranked alphabet $\lamrank X$. 
-
-\begin{lemma}
-    For every typed set $X$ and every finite set $S$ of simple types, the tree language 
-    \begin{align*}
-        \set{ M \in \trees \lamrank X : \text{$M$ is well-typed and all subterms have type in $S$}}
+\begin{example}
+Consider the following $\lambda$-terms, which have types of unbounded size:     \begin{align*}
+        M_0 \eqdef \typevar u {\otype \to \otype}  \qquad M_{n+1} \eqdef \overbrace{\lambda \typevar x {\otype}. \lambda \typevar y {\otype}.   M_n (\typevar z {\otype \to \otype \to \otype}  \typevar x {\otype} \typevar y {\otype}).}^{\text{type} \overbrace{\otype \to \otype \to \cdots \to \otype}^{\text{$n+1$ arrows}}}
     \end{align*}
-    is first-order definable 
-\end{lemma}
+    Apart from having large types (although still of rank 1, as described in~\cite[Exercise 3.6.7]{sorensen_lectures_2006}), these  $\lambda$-terms are simple: they use four variables (although the bound variables are reused), and are linear, because each bound variable is used exactly once in its scope. 
+    To $M_n$, apply  $m$ arguments of type $\otype$:
+    \begin{align}\label{eq:complicated-term}
+    M_n \overbrace{\typevar v \otype \ \typevar v {\otype} \cdots \typevar v{\otype} }^{\text{$m$ times}}.
+    \end{align}
+    We claim that the above $\lambda$-term cannot be normalised using a first-order transduction, or even a monadic second-order transduction. In order to normalise, a transduction would need to be able to compare the numbers $n$ and $m$ as follows:  if $m < n$  the normal form contains $\lambda$, if $m=n$  the normal form does not contain $\lambda$, and if $m > n$ then the normal form is undefined because the $\lambda$-term is not well-typed.  Whether or not a $\lambda$-term (seen as a tree over a finite alphabet) contains $\lambda$ is a first-order definable property, and first-order definable properties are preserved under inverse images of first-order transductions. Therefore, if normalisation would be a first-order transduction,
+then there would be a first-order formula which would be true for terms of the form~\eqref{eq:complicated-term} with $m>n$ and which would be false for terms of the form~\eqref{eq:complicated-term} with $m=n$. Such a formula cannot exist (even if we allow monadic second-order logic), which can be shown using a pumping argument or Ehrenfeucht-Fra\"iss\'e games. 
+\end{example}
 
+The above example explains why we need to bound the size of types that occur in subterms, motivating the following definition:  we say that a $\lambda$-term uses only types from a finite set of simple types $\typeset$ if all  subterms have types in $\typeset$.  Once we assume that $\lambda$-terms are linear, use a fixed finite set of bound variables, and use only types from a fixed finite set of simple types, then normalisation can be done by a derivable function, and therefore also by a first-order tree-to-tree transduction: 
 
-
-We say that a function $\ranked f : \linterm S X \rto \linterm S Y$ is \emph{derivable} if it can be extended to a derivable function $\ranked g : \tmonad \lamrank X \rto \tmonad \lamrank X$. The main result of this section is that normalisation is derivable, for every fixed finite $X$ and $S$. 
-\begin{proposition}\label{prop:one-register} 
-    For every typed set $X$ and every finite set $S$ of simple types, the function 
+\begin{theorem}\label{thm:normalise} Let $X$ be a finite set of simply typed variables, and let $\typeset$ be a finite set of simple types.
+    The following tree-to-tree function is derivable (i.e.~it is the tree restriction of a derivable function on terms):
     \begin{align*}
-        M \in  \linterm S X \qquad \mapsto \qquad \text{normal form of $M$} \in  \linterm S X
+        M \in \text{$\lambda$-terms over variables $X$} \qquad \mapsto \qquad \begin{cases}
+            \text{normal form of $M$} & \text{if $M$ is linear, well-typed,}\\
+            & \text{and uses only types from $\typeset$;}\\
+            M & \text{otherwise}.
+        \end{cases}
     \end{align*}
-    is derivable.
-\end{proposition}
+\end{theorem}
+
+% Actually, we prove a stronger result, namely that the above function is derivable. In the end, of course, we will prove that all first-order tree-to-tree transductions are derivable, but our proof of this fact will use the derivability of normalisation as stated in Theorem~\ref{thm:normalise}.
+
+
+
+% Recall that elements of $\tmonad \rSigma$ are defined to be trees over $\rSigma + \varnames$, where 
+% \begin{align*}
+%     \varnames = \set{x_1,x_2,\ldots}
+% \end{align*}
+% is a fixed set of  variable names that are used for ports. In this section, we view $\varnames$ as a simply typed set, where all variables $x_1,x_2,\ldots$ have the same simple type $\otype$.  Under this convention, we can view
+% \begin{align*}
+%     \tmonad (\overbrace{\set{x : x \in X}}^{\text{arity 0}} \cup \overbrace{\set{\lambda x : x \in X}}^{\text{arity 1}} \cup  \overbrace{\set @}^{\text{arity 2}})
+% \end{align*}
+% as a set of $\lambda$-terms. This is exactly the set of those $\lambda$-terms over variables $X + \varnames$ where: (a) variables from $\varnames$ are never bound; and (b) there is some $n$ such that each of the variables $x_1,\ldots,x_n \in \varnames$  appears as a free variable exactly once  and the remaining variables in $\varnames$ do not appear at all. If $S$ is a finite set of simple types, then define  $\linterm S X$ to be those terms in .. which are linear and $S$-typed. 
+
+% Computing the normal form is beyond the scope of first-order transductions, the principal reason being that first-order transductions have linear size outputs, while normalisation can incur a blowup that is exponential or larger,
+%  In Section~\ref{sec:lambda}, we will show that normalisation can be computed by a first-order transduction, assuming that: (a) the input terms are linear, which means that each bound variable is used exactly once in its scope; (b) we place an upper bound on the complexity of types used in subterms. 
+
+% as discussed in Example~\ref{ex:labmda-terms}.  We show that the tree-to-tree function which inputs a  term and outputs its normal form can be derived, assuming that bound variables are used exactly one and there is a bound on the number of distinct terms types that can appear in the term. 
+
+% Let $X$ be a typed set, i.e.~a set of variables with associated simple types. As in  Example~\ref{ex:labmda-terms},  we view $\lambda$-terms with variables of $X$ as trees over an ranked alphabet $\lamrank X$. 
+
+% \begin{lemma}
+%     For every typed set $X$ and every finite set $S$ of simple types, the tree language 
+%     \begin{align*}
+%         \set{ M \in \trees \lamrank X : \text{$M$ is well-typed and all subterms have type in $S$}}
+%     \end{align*}
+%     is first-order definable 
+% \end{lemma}
+
+
+
+% We say that a function $\ranked f : \linterm S X \rto \linterm S Y$ is \emph{derivable} if it can be extended to a derivable function $\ranked g : \tmonad \lamrank X \rto \tmonad \lamrank X$. The main result of this section is that normalisation is derivable, for every fixed finite $X$ and $S$. 
+% \begin{proposition}\label{prop:one-register} 
+%     For every typed set $X$ and every finite set $S$ of simple types, the function 
+%     \begin{align*}
+%         M \in  \linterm S X \qquad \mapsto \qquad \text{normal form of $M$} \in  \linterm S X
+%     \end{align*}
+%     is derivable.
+% \end{proposition}
