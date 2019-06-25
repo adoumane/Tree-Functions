@@ -147,40 +147,16 @@ In this section we show that computing the normal form of $\linterm S X$ terms (
     is derivable.
 \end{proposition}
 
-The proof proceeds by induction on the set of types $S$. The main observation is that if the evaluation of a redex of type $\sigma\rightarrow \tau$ creates a new redex, then the type of the latter is $\sigma$, in particular it is in $S\setminus\{\sigma\rightarrow\tau\}$. Thus, we only need to show that the function that evaluates all the redexes of a fixed type $\sigma\rightarrow\tau$ is an fo tree-to-tree function.  To show the last point, and since we have only finitely many typed variables, it is enough to show that the function that evaluates all the redexes of a fixed type $\sigma\rightarrow\tau$ and a fixed variable $x^\sigma$ is an fo tree-to-tree function (we call such redexes $x^\sigma$-redexes of type $\sigma\rightarrow\tau$). This will be the goal of the rest of this section. 
+The proof proceeds by induction on the set of types $S$. The main observation is that, if the evaluation of a redex of type $\sigma\rightarrow \tau$ creates new redexes, then their types are either $\sigma$ or $\tau$ (see Figure~\ref{}), they are in particular in $S\setminus\{\sigma\rightarrow\tau\}$. Thus, we only need to show that the function that evaluates all the redexes of a fixed type is derivable. As we only create stricty smaller redexes, we need to iterate this process only finitely many times, the bound being the size of $S$. 
+
+  Since we have only finitely many typed variables, it is enough to show that the function that evaluates all the redexes of a fixed type $\sigma$ and a fixed variable $x$ is derivable. This will be our goal in the rest of this section.
 
 \begin{theorem}\label{thm:evalOneType}
-There is an fo tree-to-tree function ${\sf{Eval}_{x^\sigma,\sigma\rightarrow\tau}}:\rlambda \to\rlambda$ whose restriction to $\rlambdalin$ evaluates the  $x^\sigma$-redexes of type $\sigma\rightarrow\tau$.
+The function ${\sf{Eval}_{x,\sigma}}:\linterm S X \to\linterm S X$ which evaluates the redexes of type $\sigma$ and variable $x$ is derivable.
 \end{theorem}
 
 
-
-
-
- The operation of $\beta$-reduction is standard: it is the smallest congruence on terms (with no restriction on the use of variables) over $\mathcal{A}$ containing the following relation:
- \begin{center}
- Picture 3
- \end{center}
-Note that the application of a $\beta$-reduction to a $\lambda$-term may result in a term which is not in $\rlambda$ since ports may be duplicated. If applied to a linear $\lambda$-terms, $\beta$-reduction produces a linear $\lambda$-term having the same arity. 
-\begin{center}
-Picture 4
-\end{center}
-
-\medskip
-For linear $\lambda$-terms, $\beta$ reduction is terminating since the size of the term desreases stricty by 3 (corresponding to the nodes $\text{@}, \lambda x^\sigma$ and $x^\sigma$ of the eliminated redex) after each reduction. As $\beta$-reduction is confluent, we can talk then about the normal form of a linear $\lambda$-term.
-
-\medskip
-We set $\beta_{\sf{left}}$ to be the function that reduces the outermost and leftmost redex of a linear $\lambda$-term (this is an easy way to transform the relation $\beta$ into a function). The function $\beta_{\sf{left}}$  is clearly an fo tree-to-tree function. However, computing the normal form requires an iteration of $\beta_{\sf{left}}$ which is a typical non fo operation. Despite this, we will show that the evaluation of linear $\lambda$-terms is an fo tree-to-tree function. More precisely:
-
-
-\begin{theorem}
-There is an fo tree-to-tree functions ${\sf{Eval}}:\rlambda \to\rlambda$ such that its restriction to $\rlambdalin$ computes the normal form.
-\end{theorem}
-
-
-We fix in the rest of this section the types $\sigma$ and $\tau$ and the typed variable $x^\sigma$.
-
-\subsection{Evaluation of thin $\lambda$-terms}
+\subsubsection{Evaluation of thin $\lambda$-terms}
 
 We start by showing that the evaluation of a restricted class of linear $\lambda$-terms, which we call thin, is an fo tree-to-tree function.   
 
@@ -264,7 +240,7 @@ After that, we apply a flattening, to get a term in $\ranked{\tmonad(\Gamma+\#)}
  
 \end{proof}
 
-\subsection{$\beta$-reduction commutes with factorization} The second ingredient to show Thm.~\ref{thm:evalOneType} is to notice  that factorizing a term (in the sens of Def.~\ref{}), applying some $\beta$-reduction steps to the factors, then flattening, can be simulated by appliying  $\beta$-reduction steps directly to the original $\lambda$-term.
+\subsubsection{$\beta$-reduction commutes with factorization} The second ingredient to show Thm.~\ref{thm:evalOneType} is to notice  that factorizing a term (in the sens of Def.~\ref{}), applying some $\beta$-reduction steps to the factors, then flattening, can be simulated by appliying  $\beta$-reduction steps directly to the original $\lambda$-term.
 
 Let us state this property more formally. For that, we can generalise the lifting of functions to the lifting of relations as follows. 
 Let $\Sigma$ be a ranked set. If $R\subseteq \ranked{\Sigma}\times\ranked{\Sigma}$ is an arity preseving relation (that is $\arity{u}=\arity{v}$ whenever $(u,v)\in R$), then $R$ can be lifted to $\tmonad R\subseteq \ranked{\tmonad \Sigma} \times \ranked{\tmonad \Sigma}$ in a natural way. 
@@ -284,7 +260,7 @@ For every foctorization $f:\rlambda \to \tmonad \rlambda$, the following diagram
 
 
 
-\subsection{Factorizing $\lambda$-terms into blocks of thin $\lambda$-terms}
+\subsubsection{Factorizing $\lambda$-terms into blocks of thin $\lambda$-terms}
 
 \begin{definition}[Full redex]
 Let $t$ be a linear $\lambda$-term. A full-redex is a set of nodes  containing an $x^\sigma$-redex of type $\sigma\rightarrow\tau$, the node $x^\sigma$ it binds, together with the set of nodes between the binder of the redex and its bound variable.  
@@ -321,7 +297,7 @@ Let us constract an fo derivable factorization satisfying the two conditions of 
    
 \end{proof}
 
-\subsection{Gathering all the pieces.}
+\subsubsection{Gathering all the pieces.}
 Theorem~\ref{thm:evalOneType} follows easily from Propositions~\ref{prop:EvaluateThin},\ref{prop:betaCommutesWithFacto} and \ref{prop:FactoIntoThin}.
 
 \begin{proof}[Proof of Theorem.~\ref{thm:evalOneType}]
