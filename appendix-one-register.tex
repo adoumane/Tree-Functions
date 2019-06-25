@@ -1,5 +1,6 @@
-\section{Evaluation of $\lambda$-terms}
+\section{Well-typedeness and normalisation of $\lambda$-terms in first-order logic}
 \label{sec:eval}
+
 
 \newcommand{\NonLinTerms}[2]{\Lambda_{#1} #2}
  \newcommand{\rlambda}{\ranked{\Lambda}}
@@ -10,15 +11,47 @@
 \end{minipage} & \begin{minipage}{0,4\textwidth}#2\end{minipage} \\}
 
 
+\subsection{Well-typedeness}
+A natural question to ask about $\lambda$-terms in our framework is whether their well-typedeness is a first-order property. Without restriction on the terms, the answer is negative as shown by the following example.
 
-\begin{lemma}
+\begin{example}
+Consider the set of typed variables $X=\{x:o, y:o\rightarrow o, z:o\rightarrow(o\rightarrow o), t:o, u:o\rightarrow o\}$ and the set of $\lambda$-terms $(M_n)_{n\in \mathbb{N}}$ defined by induction as follows: 
+\begin{align*}
+M_0 &= u(yx)\\
+M_{n+1}&= (\lambda y.\lambda x. M_n)(z(yx))
+\end{align*}
+The type of $M_n$ is $o^n\rightarrow o$ where $o^n\rightarrow o$ is a shortcut for $\underbrace{o\rightarrow\dots\rightarrow o}_{n \text{ times}}\rightarrow o$ when $n>0$ and for $o$ otherwise. 
+
+Consider now the set of $\lambda$-terms $(L_{m,n})_{m,n\in \mathbb{N}}$ defined by induction on $m$ as follows:
+\begin{align*}
+L_{0,n}&= M_n \\
+L_{m+1, n}&=L_{m,n}t
+\end{align*}
+When $m\leq n$, the $\lambda$-term $L_{m,n}$ is well-typed and its type is $o^{m-n}\rightarrow o$, otherwise it is not well-typed. If well-typedeness was an fo property, we would be able to make such tests on natural numbers which is clearely not the case. 
+\end{example}
+
+When we restrict our attention to those $\lambda$-terms whose subterms have types in a fixed finite set of types $S$, well-typedeness becomes first-order. Note that contarily to $\beta$-reduction, well-typedeness does not require linearity to be in fo.
+
+\begin{proposition}\label{prop:WellTypedFo}
+    For every typed set $X$ and every finite set $S$ of simple types, the tree language 
+    \begin{align*}
+    \NonLinTerms S X  := \set{ M \in \trees \lamrank X : \text{$M$ is well-typed and all subterms have type in $S$}}
+    \end{align*}
+    is first-order definable 
+\end{proposition}
+
+To prove this property, we will start by showing that for $\NonLinTerms S X$ terms (that is if we already know that a term is well-typed and that all its sub-terms have types in $S$), checking if their type is $\tau$ where $\tau$ is a type in $S$, is a first order property:
+\begin{lemma}\label{lem:IsTypeTauFo}
 For every simple type $\tau$ in $S$, there is a first-order query $\varphi_\tau$ such that:
 $$ \forall M\in \NonLinTerms S X \qquad M,u \models \varphi_\tau \Longleftrightarrow M|_u:\tau$$
 where $M|_u$ is the subterm of $M$ rooted in $u$. 
 \end{lemma}
+Before establishing this lemma, let us see how property~\ref{prop:WellTypedFo} can be derived from it.
 
-\begin{proof}
-Let us show that checking whether the type of a $\lambda$-term is $\tau$ is a first-order query. For that, notice that the type of a term depends only on its left-most branch. In fact, the type of a term is exactly the type of its left-most branch in the following sens.
+
+We can go back now to the proof of Lemma~\ref{lem:IsTypeTauFo}.
+\begin{proof}[Proof of Lemma~\ref{lem:IsTypeTauFo}]
+Let us show that checking whether the type of a $\NonLinTerms S X$ term is $\tau$ is a first-order query. For that, notice that the type of a well-typed term depends only on its left-most branch. In fact, the type of a term is exactly the type of its left-most branch in the following sens.
 
 Consider the (unranked) alphabet $ X_\lambda:= X\cup \{\text{@}, \lambda x | x\in X\}$. We can equip the words over $X_\lambda$ with the following typing rules:
 $$\frac{}{x: \sigma} \qquad \frac{u:\tau}{u\lambda x: \sigma\rightarrow \tau} \qquad \frac{u:\sigma\rightarrow\tau}{u\text{@}:\tau}\qquad\text{(where $x$ is of type $\sigma$ and $\sigma,\tau \in S$)}$$
@@ -30,7 +63,7 @@ By this last observation, we can reduce the query asking if the type of a term i
 \begin{align*}
 W_\tau = \{w\in X.\{\text{@}, \lambda x | x\in X\}^*\ |\ w:\tau \} 
 \end{align*}
-is first-order definable, or equivalently that  $W_\tau$ is recognized by a counter-free non-deterministic finite automaton. For that we proceed as follows: first, we show that $W_\tau$ is recognized by a pushdown automaton $A_\tau$. Then we will show that the its stack height is bounded, thus $A_\tau$ can be turned into a non-deterministic finite automaton $N_\tau$. Finally, we show that the obtained automaton $N_\tau$ is actually counter-free.  
+is first-order definable, or equivalently that  $W_\tau$ is recognized by a counter-free non-deterministic finite automaton. For that we proceed as follows: first, we show that $W_\tau$ is recognized by a pushdown automaton $A_\tau$. Then we will show that the stack height of $A_\tau$ is bounded, thus it can be turned into a non-deterministic finite automaton $N_\tau$. Finally, we show that the obtained automaton $N_\tau$ is actually counter-free.  
 
 For a formal definition of pushdown automata (PDA) and (counter-free) non-deterministic finite automata (NFA) see~\ref{}.
 
@@ -90,9 +123,31 @@ The proof is an easy induction on the lenght of $w$. As a consequence we have th
 \item If $(p,s_1)\xrightarrow{w}(p,s_2)\xrightarrow{w}(p,s_3)$ and $|s_2|=|s_1|$ then $s_3 =s_2$.
 \end{itemize}
 
-Let us show that $N_\tau$ is counter-free. Suppose by contradiction that there is a word $w$ and stacks $s_1,\dots, s_n$ such that 
-$(p,s_1)\xrightarrow{w}(p,s_2)\xrightarrow{w}\dots(p,s_n)\xrightarrow{w}(p,s_1)$. By the first two properties above, we have necessarily that $|s_1|=\dots=|s_n|$. Thus by the third property, we have that $s_1=\dots=s_n$
+Let us show that $N_\tau$ is counter-free. Suppose by contradiction that there is a word $w$ and pairwise distinct stacks $s_1,\dots, s_n$ such that 
+$(p,s_1)\xrightarrow{w}(p,s_2)\xrightarrow{w}\dots(p,s_n)\xrightarrow{w}(p,s_1)$. By the first two properties above, we have necessarily that $|s_1|=\dots=|s_n|$. Thus by the third property, we have that $s_1=\dots=s_n$, which concludes the proof.
 \end{proof}
+
+
+
+\subsection{Evaluation of linear $\lambda$-terms}
+
+In this section we show that computing the normal form of $\linterm S X$ terms (that is well-typed linear $\lambda$-terms whose subterms have all types in $S$) is a derivable function:
+
+ \begin{proposition}\label{prop:one-register} 
+    For every typed set $X$ and every finite set $S$ of simple types, the function 
+    \begin{align*}
+        M \in  \linterm S X \qquad \mapsto \qquad \text{normal form of $M$} \in  \linterm S X
+    \end{align*}
+    is derivable.
+\end{proposition}
+
+The proof proceeds by induction on the set of types $S$. The main observation is that if the evaluation of a redex of type $\sigma\rightarrow \tau$ creates a new redex, then the type of the latter is $\sigma$, in particular it is in $S\setminus\{\sigma\rightarrow\tau\}$. Thus, we only need to show that the function that evaluates all the redexes of a fixed type $\sigma\rightarrow\tau$ is an fo tree-to-tree function.  To show the last point, and since we have only finitely many typed variables, it is enough to show that the function that evaluates all the redexes of a fixed type $\sigma\rightarrow\tau$ and a fixed variable $x^\sigma$ is an fo tree-to-tree function (we call such redexes $x^\sigma$-redexes of type $\sigma\rightarrow\tau$). This will be the goal of the rest of this section. 
+
+\begin{theorem}\label{thm:evalOneType}
+There is an fo tree-to-tree function ${\sf{Eval}_{x^\sigma,\sigma\rightarrow\tau}}:\rlambda \to\rlambda$ whose restriction to $\rlambdalin$ evaluates the  $x^\sigma$-redexes of type $\sigma\rightarrow\tau$.
+\end{theorem}
+
+
 
 
 
@@ -116,11 +171,6 @@ We set $\beta_{\sf{left}}$ to be the function that reduces the outermost and lef
 There is an fo tree-to-tree functions ${\sf{Eval}}:\rlambda \to\rlambda$ such that its restriction to $\rlambdalin$ computes the normal form.
 \end{theorem}
 
-The proof proceeds by induction on the set of types $S$. The main observation is that if the evaluation of a redex of type $\sigma\rightarrow \tau$ creates a new redex, then the type of the latter is $\sigma$, in particular it is in $S\setminus\{\sigma\rightarrow\tau\}$. Thus, we only need to show that the function that evaluates all the redexes of a fixed type $\sigma\rightarrow\tau$ is an fo tree-to-tree function.  To show the last point, and since we have only finitely many typed variables, it is enough to show that the function that evaluates all the redexes of a fixed type $\sigma\rightarrow\tau$ and a fixed variable $x^\sigma$ is an fo tree-to-tree function (we call such redexes $x^\sigma$-redexes of type $\sigma\rightarrow\tau$). This will be the goal of the rest of this section. 
-
-\begin{theorem}\label{thm:evalOneType}
-There is an fo tree-to-tree function ${\sf{Eval}_{x^\sigma,\sigma\rightarrow\tau}}:\rlambda \to\rlambda$ whose restriction to $\rlambdalin$ evaluates the  $x^\sigma$-redexes of type $\sigma\rightarrow\tau$.
-\end{theorem}
 
 We fix in the rest of this section the types $\sigma$ and $\tau$ and the typed variable $x^\sigma$.
 
