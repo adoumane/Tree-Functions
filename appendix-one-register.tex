@@ -40,7 +40,7 @@ When we restrict our attention to those $\lambda$-terms whose subterms have type
     is first-order definable 
 \end{proposition}
 
-To prove this property, we will start by showing that for $\NonLinTerms S X$ terms (that is if we already know that a term is well-typed and that all its sub-terms have types in $S$), checking if their type is $\tau$ where $\tau$ is a type in $S$, is a first order property:
+To prove this property, we will start by showing that for $\NonLinTerms S X$ terms (that is if we already know that a term is well-typed and that all its sub-terms have types in $S$) checking if their type is $\tau$, where $\tau$ is a type in $S$, is a first order property:
 \begin{lemma}\label{lem:IsTypeTauFo}
 For every simple type $\tau$ in $S$, there is a first-order query $\varphi_\tau$ such that:
 $$ \forall M\in \NonLinTerms S X \qquad M,u \models \varphi_\tau \Longleftrightarrow M|_u:\tau$$
@@ -48,6 +48,9 @@ where $M|_u$ is the subterm of $M$ rooted in $u$.
 \end{lemma}
 Before establishing this lemma, let us see how property~\ref{prop:WellTypedFo} can be derived from it.
 
+\begin{align*}
+\varphi=\forall u \ \underbrace{\bigvee_{\tau\in S} \varphi_\tau (u)}_{\text{all subterms have types in $S$}} \wedge \text{@}(u) \Rightarrow \bigvee_{\sigma,\tau\in S} \varphi_{\sigma\rightarrow\tau} (\mathrm{child}_i(x))\wedge 
+\end{align*}
 
 We can go back now to the proof of Lemma~\ref{lem:IsTypeTauFo}.
 \begin{proof}[Proof of Lemma~\ref{lem:IsTypeTauFo}]
