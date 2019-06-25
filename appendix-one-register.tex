@@ -30,7 +30,7 @@ L_{m+1, n}&=L_{m,n}t
 When $m\leq n$, the $\lambda$-term $L_{m,n}$ is well-typed and its type is $o^{m-n}\rightarrow o$, otherwise it is not well-typed. If well-typedeness was an fo property, we would be able to make such tests on natural numbers which is clearely not the case. 
 \end{example}
 
-When we restrict our attention to those $\lambda$-terms whose subterms have types in a fixed finite set of types $S$, well-typedeness becomes first-order. Note that contarily to $\beta$-reduction, well-typedeness does not require linearity to be in fo.
+When we restrict our attention to those $\lambda$-terms whose subterms have types in a fixed finite set of types $S$, well-typedeness becomes a first-order property. Note that contrarily to $\beta$-reduction, well-typedeness does not require linearity to be in fo.
 
 \begin{proposition}\label{prop:WellTypedFo}
     For every typed set $X$ and every finite set $S$ of simple types, the tree language 
@@ -46,12 +46,15 @@ For every simple type $\tau$ in $S$, there is a first-order query $\varphi_\tau$
 $$ \forall M\in \NonLinTerms S X \qquad M,u \models \varphi_\tau \Longleftrightarrow M|_u:\tau$$
 where $M|_u$ is the subterm of $M$ rooted in $u$. 
 \end{lemma}
-Before establishing this lemma, let us see how property~\ref{prop:WellTypedFo} can be derived from it.
-
+Before establishing this lemma, let us see how property~\ref{prop:WellTypedFo} can be derived from it. Suppose for convenience that the types of the variables of $X$  are in $S$, and that $S$ is downward closed. Let $\varphi$ be the following first-order formula:
 \begin{align*}
-\varphi=\forall u \ \underbrace{\bigvee_{\tau\in S} \varphi_\tau (u)}_{\text{all subterms have types in $S$}} \wedge \text{@}(u) \Rightarrow \bigvee_{\sigma,\tau\in S} \varphi_{\sigma\rightarrow\tau} (\mathrm{child}_i(x))\wedge 
+\forall u \left(\lambda x(u) \Rightarrow \bigvee_{\sigma\rightarrow\tau\in S, x:\sigma}
+ \varphi_{\sigma\rightarrow\tau}(u)\wedge\varphi_\tau(\mathrm{child}_1(u))\right) \wedge 
+\left(\text{@}(u) \Rightarrow \bigvee_{\sigma\rightarrow\tau\in S} \varphi_{\sigma\rightarrow\tau}(\mathrm{child}_1(u))\wedge\varphi_\sigma(\mathrm{child}_2(u))\right)
 \end{align*}
-
+If a $\lambda$-term is in $\NonLinTerms S X$, then it clearly satisfies $\varphi$. Suppose by contradiction that there is a $\lambda$-term $M$ which is not in $\NonLinTerms S X$ and yet satisfies $\varphi$. let $u$  be the deapest node of $M$ which is not in $\NonLinTerms S X$ (we identify in this proof a node $u$ and the subterm $M|_u$). In particular, the descendents of $u$ are all in $\NonLinTerms S X$. The node $u$ cannot be a variable, since we supposed that the types of the variables $X$ are in $S$. If $u$ was labeled by $\lambda x$, where $x$ is of type $\sigma$, then by the first conjunct of $\varphi$ there is a type $\tau$ such that $\sigma\rightarrow\tau\in S$ and the child $v$ of $u$  satisfies $\varphi_\tau$. Since $v$ is in $\NonLinTerms S X$, its type is $\tau$ by Lemma~\ref{lem:IsTypeTauFo}. Hence $u$ is well-typed and its type is $\sigma\rightarrow\tau\in S$. As a consequence $u$ is in $\NonLinTerms S X$ which is a contradiction.  Finally, if $u$ was labeled by @, then by the second conjunct of $\varphi$, its two children $u_1$ and $u_2$
+would satisfy respectively $\varphi_{\sigma\rightarrow\tau}$ and  $\varphi_{\sigma}$ and by Lemma~\ref{lem:IsTypeTauFo} they are of type $\sigma\rightarrow\tau$ and $\sigma$ respectively. The node $u$ is then well-typed and its type is $\tau$ (which is a type of $S$ thanks to downward closeness). As a consequence, $u$ is in $\NonLinTerms S X$, wich gives a contradiction and concludes the proof.
+ 
 We can go back now to the proof of Lemma~\ref{lem:IsTypeTauFo}.
 \begin{proof}[Proof of Lemma~\ref{lem:IsTypeTauFo}]
 Let us show that checking whether the type of a $\NonLinTerms S X$ term is $\tau$ is a first-order query. For that, notice that the type of a well-typed term depends only on its left-most branch. In fact, the type of a term is exactly the type of its left-most branch in the following sens.
