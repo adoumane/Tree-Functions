@@ -37,6 +37,36 @@ The descendent relation $<$ connects the $i^{th}$ port of $\underline{x}$ to the
 \begin{align*}
 \varphi_<^{1,2}(x,y)=x=y
 \end{align*}
-    \end{enumerate} 
+    \end{enumerate}
     
+       \end{proof}
+   If $k$ is an integer, we set $\mathsf{Mon}^k$ to be the monoid whose ground set is 
+   \begin{align*}
+   \{f:[1,k]\to [1,k] \ | f \text{ is monotonic}\}
+\end{align*}    
+
+and whose multiplication is functions composition.  The elements of $\mathsf{Mon}^k$ can be represented graphically as:
+     
+
+We show that the monoid $\mathsf{Mon}^k$ is aperiodic.
+     \begin{proposition}\label{prop:MonIsFo}
+Given an integer $k$, the monoid $\mathsf{Mon}^k$ is aperiodic.     
+     \end{proposition}
+     
+     \begin{proof}
+     Let $f$ be an element of $\mathsf{Mon}^k$. We define \emph {its graph} as the directed graph whose vertices are $\set{1,\dots, k}$, and which contains an edge $i\rightarrow j$ if $f(i)=j$. Note that the out-degree of the nodes is 1. To show Proposition~\ref{prop:MonIsFo}, we start by extracting some properties of these graphs.
+     
+The first one is that the weakly connected components of these graphs are intervals. With this property, we can treat only the graphs with only one weakly connected component, since those are independent. 
+     \begin{lemma}
+     If $f$ is an element of $\mathsf{Mon}^k$ and $I\subseteq \set{1,\dots,k}$ is a weakly connected component of the graph of $f$, then $I$ is an interval. 
+     \end{lemma}
+     
+     \begin{lemma}
+     If $f$ is an element of $\mathsf{Mon}^k$ whose graph is weakly connected, then there is a node $n$ 
+\begin{itemize}
+\item having a self loop in $G$,
+\item there is a directed path from any node of $G$ to $n$. 
+\end{itemize}     
+     \end{lemma}  
+     We call $n$ the \emph{attractor} of $f$.
      \end{proof}
