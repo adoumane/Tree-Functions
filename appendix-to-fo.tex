@@ -22,7 +22,7 @@ We show in this section that first-order tree-to-tree functions can be implement
     \item $\unit_\rSigma$. Given an element $x$ of $\Sigma$, let us show how the fucntion $\unit_\rSigma(x)$ can be implemented using an fo transduction.  The copying constant is 2,
     the first copy will contain the whole structure $\underline{x}$ and the second copy will select only the ports of $\underline{x}$ which will serve as the ports of the structure $\underline{\unit_\rSigma(x)}$.  The universe formulas are then:
     \begin{align*}
-    \varphi_1(x)=\mathsf{true} \qquad \varphi_2(x)=\mathsf{Port}_\Sigma(x)
+    \varphi_1(x)=\mathsf{True} \qquad \varphi_2(x)=\mathsf{Port}_\Sigma(x)
     \end{align*}
     In the first copy, the vocabulary $\voctype \rSigma$ will be interpreted as in the original structure, and as the empty set in the second one. That is, for every unary relation $R\in \voctype \rSigma$ and for every binary relation $S \in \voctype \rSigma$, we set:
     \begin{align*}
@@ -37,40 +37,56 @@ The descendent relation $<$ connects the $i^{th}$ port of $\underline{x}$ to the
 \begin{align*}
 \varphi_<^{1,2}(x,y)=x=y
 \end{align*}
-    \end{enumerate}
+\item $\ranked{\unfold}_k$. Let us consider now the function   $\ranked{\unfold_k}$. For the sake of readability, we will consider here only the case where $k=2$.
+Recall that 
+\newcommand{\voc}[1]{\mathrm{voc}#1}
+\begin{align*}
+\text{Input vocabulary} \qquad& \ranked{\voctype(\tmonad  \reduce 2 (\Sigma \otimes \Sigma))} := \color{blue}{\voc \Sigma} + \color{green}{\voc \Sigma}  \color{black}{+ \rightarrow + < + \sqsubset}\\
+\text{Output vocabulay} \qquad&
+\ranked{\voctype(\reduce 2 (\tmonad\Sigma \otimes \tmonad  \Sigma))} := \color{blue}{\voc \Sigma} \color{black}{+} \color{blue}{<} \color{black}{+}\color{blue}{\sqsubset} \color{black}{+} \color{green}{\voc \Sigma} \color{black}{+} \color{green}{<} \color{black}{+}\color{green}{\sqsubset}  \color{black}{+ \rightarrow}
+\end{align*} 
+Let $a$ be un element of $\ranked{\tmonad  \reduce 2 (\Sigma \otimes \Sigma)}$. We will explain how
+ $\underline{\unfold(a)}$ can be obtained from $\underline{a}$ via a first-order transduction. For that we will need two copies of $\underline{a}$. 
+In the first copy, we keep all the nodes except the (intermediary) $\ranked {\reduce 2 (\rSigma \otimes \rSigma)}$ ports. In the second copy, we keep only the $\rSigma$ ports which are "directly" connected to the ports of the structure $\underline{a}$.    
+\begin{align*}
+\varphi_1(x)=& \neg \mathsf{port}_{\ranked {\reduce 2 (\rSigma \otimes \rSigma)}}(x) \\
+\varphi_2(x)= &\mathsf{port}_{\color{blue}{\Sigma}}(x) \vee \mathsf{port}_{\color{green}{\Sigma}}(x) \wedge  
+\end{align*}
+\end{enumerate}
     
        \end{proof}
-   If $k$ is an integer, we set $\mathsf{Mon}^k$ to be the monoid whose ground set is 
+   Let $E$ be a totaly ordered set. We set $\mathsf{Mon}^E$ to be the monoid whose ground set is 
    \begin{align*}
-   \{f:[1,k]\to [1,k] \ | f \text{ is monotonic}\}
+   \{f:E\to E \ | f \text{ is monotonic}\}
 \end{align*}    
 
-and whose multiplication is functions composition.  The elements of $\mathsf{Mon}^k$ can be represented graphically as:
+and whose multiplication is functions composition.  The elements of $\mathsf{Mon}^E$ can be represented graphically as:
      
 
-We show that the monoid $\mathsf{Mon}^k$ is aperiodic.
+We show that the monoid $\mathsf{Mon}^E$ is aperiodic.
      \begin{proposition}\label{prop:MonIsFo}
-Given an integer $k$, the monoid $\mathsf{Mon}^k$ is aperiodic.     
+The monoid $\mathsf{Mon}^E$ is aperiodic.     
      \end{proposition}
      
      \begin{proof}
-     Let $f$ be an element of $\mathsf{Mon}^k$. We define \emph {its graph} as the directed graph whose vertices are $\set{1,\dots, k}$, and which contains an edge $i\rightarrow j$ if $f(i)=j$. Note that the out-degree of the nodes is 1. To show Proposition~\ref{prop:MonIsFo}, we start by extracting some properties of these graphs.
+     Let $f$ be an element of $\mathsf{Mon}^E$. We define \emph {its graph} as the directed graph whose set of vertices is $E$, and which contains an edge $i\rightarrow j$ if $f(i)=j$. Note that the out-degree of the nodes is 1. To show Proposition~\ref{prop:MonIsFo}, we start by extracting some properties of these graphs.
      
 The first one is that the weakly connected components of these graphs are intervals. With this property, we can treat only the graphs with only one weakly connected component, since those are independent. 
      \begin{lemma}
-     If $f$ is an element of $\mathsf{Mon}^k$ and $I\subseteq \set{1,\dots,k}$ is a weakly connected component of the graph of $f$, then $I$ is an interval. 
+     If $f$ is an element of $\mathsf{Mon}^E$ and $I\subseteq E$ is a weakly connected component of the graph of $f$, then $I$ is an interval. 
      \end{lemma}
      
      \begin{lemma}
-     If $f$ is an element of $\mathsf{Mon}^k$ whose graph is weakly connected, then 
+     If $f$ is an element of $\mathsf{Mon}^E$ whose graph $G$ is weakly connected, then 
 \begin{itemize}
 \item there is a node $n$  having a self loop in $G$,
 \item there is a directed path from any node of $G$ to $n$. 
 \end{itemize}     
  We call $n$ the \emph{attractor} of $f$.    
      \end{lemma}  
-    
+     The attractor is unique. Indeed if we had two attractors $m$ and $n$, we would have a directed path from $m$ to $n$. And since $m$ has a self loop, its out-degree would be at least 2 which is not possible. 
+      
     \begin{lemma}
-    Let $f$ be an element of $\mathsf{Mon}^k$.  If there is a directed path of lenght $p$ from $m$ to $n$ in the graph of $f$, the there is a directed path of lenght $1$ from $m$ to $n$ in the graph of $f^p$.
+    Let $f$ be an element of $\mathsf{Mon}^E$.  If there is a directed path of lenght $p$ from $m$ to $n$ in the graph of $f$, the there is a directed path of lenght $1$ from $m$ to $n$ in the graph of $f^p$.
     \end{lemma}
      \end{proof}
