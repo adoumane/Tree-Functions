@@ -62,11 +62,15 @@ The first one is that the weakly connected components of these graphs are interv
      \end{lemma}
      
      \begin{lemma}
-     If $f$ is an element of $\mathsf{Mon}^k$ whose graph is weakly connected, then there is a node $n$ 
+     If $f$ is an element of $\mathsf{Mon}^k$ whose graph is weakly connected, then 
 \begin{itemize}
-\item having a self loop in $G$,
+\item there is a node $n$  having a self loop in $G$,
 \item there is a directed path from any node of $G$ to $n$. 
 \end{itemize}     
+ We call $n$ the \emph{attractor} of $f$.    
      \end{lemma}  
-     We call $n$ the \emph{attractor} of $f$.
+    
+    \begin{lemma}
+    Let $f$ be an element of $\mathsf{Mon}^k$.  If there is a directed path of lenght $p$ from $m$ to $n$ in the graph of $f$, the there is a directed path of lenght $1$ from $m$ to $n$ in the graph of $f^p$.
+    \end{lemma}
      \end{proof}
