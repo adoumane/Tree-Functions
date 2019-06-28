@@ -46,12 +46,17 @@ Recall that
 \ranked{\voctype(\reduce 2 (\tmonad\Sigma \otimes \tmonad  \Sigma))} := \color{blue}{\voc \Sigma} \color{black}{+} \color{blue}{<} \color{black}{+}\color{blue}{\sqsubset} \color{black}{+} \color{green}{\voc \Sigma} \color{black}{+} \color{green}{<} \color{black}{+}\color{green}{\sqsubset}  \color{black}{+ \rightarrow}
 \end{align*} 
 Let $a$ be un element of $\ranked{\tmonad  \reduce 2 (\Sigma \otimes \Sigma)}$. We will explain how
- $\underline{\unfold(a)}$ can be obtained from $\underline{a}$ via a first-order transduction. For that we will need two copies of $\underline{a}$. 
+ $\underline{\unfold(a)}$ can be obtained from $\underline{a}$ via a first-order transduction. 
+\begin{itemize}
+\item The universe.  We will need two copies of $\underline{a}$. 
 In the first copy, we keep all the nodes except the (intermediary) $\ranked {\reduce 2 (\rSigma \otimes \rSigma)}$ ports. In the second copy, we keep only the $\rSigma$ ports which are "directly" connected to the ports of the structure $\underline{a}$.    
 \begin{align*}
 \varphi_1(x)=& \neg \mathsf{port}_{\ranked {\reduce 2 (\rSigma \otimes \rSigma)}}(x) \\
-\varphi_2(x)= &\mathsf{port}_{\color{blue}{\Sigma}}(x) \vee \mathsf{port}_{\color{green}{\Sigma}}(x) \wedge  
+\varphi_2(x)= &\mathsf{port}_{\color{blue}{\Sigma}}(x) \vee \mathsf{port}_{\color{green}{\Sigma}}(x) \wedge ( \exists y\  \ x \rightarrow y\ \wedge\ z=\mathsf{succ_<}(y)\ \wedge\ \mathsf{port}_{\ranked{\tmonad \reduce 2 (\Sigma \otimes \Sigma)}}(z) )
 \end{align*}
+\item Interpretation of the vacabularies $\color{blue}{\Sigma}$ and $\color{green}{\Sigma}$. In the first copy, the interpretation of these vacabularies is exactly the same as in the original structure. In the second copy 
+\end{itemize} 
+ 
 \end{enumerate}
     
        \end{proof}

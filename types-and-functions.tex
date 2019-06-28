@@ -11,7 +11,7 @@ Fix a set of variables
 which will be assumed to be disjoint with all other sets.  We view the variables as a ranked set, where each variable has arity zero, i.e.~it can only be used in leaves. 
 
 \begin{definition}[Terms]\label{def:terms}
-    An $n$-ary term over a ranked set $\rSigma$ is defined to be a tree over the ranked alphabet $\rSigma + \termvars$ where each of the  variables $x_1,\ldots,x_n$ appears exactly once,  and the other variables do not appear at all.    We write $\tmonad \rSigma$ for the ranked set of terms over $\rSigma$. 
+    An $n$-ary term over a ranked set $\rSigma$ is defined to be a tree over the ranked alphabet $\rSigma + \termvars$ where each of the  variables $x_1,\ldots,x_n$ appears exactly once,  and the other variables do not appear at all.  We call \emph{ports} the nodes labeled by $\termvars$.  We write $\tmonad \rSigma$ for the ranked set of terms over $\rSigma$.  
 \end{definition}
 
 In universal algebra, the restriction that each variable of a term appears exactly once is sometimes called \emph{linearity}; since we do not consider non-linear terms, we use the word term without additionally specifying that it is linear.  The linearity restriction is connected to the fact that first-order transductions have linear size increase.
@@ -27,7 +27,7 @@ A consequence of using terms is that we will work in the category of ranked sets
 
 
 \subsection{Types}
-The  main goal of this paper is to  show how every first-order tree-to-tree function can be obtained by starting with certain atomic functions, and composing the using certain combinators. The atomic functions and combinators will be based on arity preserving functions on ranked sets. In this section, we describe the types of ranked sets that will be allowed as domains and co-domains of our functions. The general idea is that we start with finite ranked sets, and close these under the following type constructors: coproducts, two kinds of product (Cartesian and tensor), taking terms, and a type constructor that allows to merge ports.
+The  main goal of this paper is to  show how every first-order tree-to-tree function can be obtained by starting with certain atomic functions, and composing them using certain combinators. The atomic functions and combinators will be based on arity preserving functions on ranked sets. In this section, we describe the types of ranked sets that will be allowed as domains and co-domains of our functions. The general idea is that we start with finite ranked sets, and close these under the following type constructors: coproducts, two kinds of product (Cartesian and tensor), taking terms, and a type constructor that allows to merge ports.
 %  and the matrix power. 
 % The  matrix power -- which is possibly the least natural type constructor -- will be motivated and discussed in more detail later on.
 
@@ -54,11 +54,11 @@ The  main goal of this paper is to  show how every first-order tree-to-tree func
         Note how we use  angular brackets to distinguish tensor $\tensorpair{a_1,a_2}$ pairs from Cartesian pairs $(a_1,a_2)$.         We draw tensor pairs like this:
         \mypic{52}
 
-        \item \emph{Folding.} If $\rSigma$ is a type and $k \in \set{2,3,\ldots}$ then $\reduce k \rSigma$ is a type. Elements of this set are called $k$-folds of $\rSigma$. A $k$-merge of arity $n$ consists of an element   $a \in \rSigma$ of arity $nk$ and  a function
+        \item \emph{Folding.} If $\rSigma$ is a type and $k \in \set{2,3,\ldots}$ then $\reduce k \rSigma$ is a type. Elements of this set are called $k$-folds of $\rSigma$. A $k$-fold of arity $n$ consists of an element   $a \in \rSigma$ of arity $nk$ and  a function
         \begin{align*}
             f : \set{1,\ldots,nk} \to \set{1,\ldots,n} \qquad \text{every inverse image $f^{-1}(i)$ has size exactly $k$}
         \end{align*}
-        We write $a/f$ for the $k$-merge given by $a$ and $f$.  We draw $k$-folds like this:
+        We write $a/f$ for the $k$-fold given by $a$ and $f$.  We draw $k$-folds like this:
         \mypic{53}
         \item \emph{Terms.} If $\ranked \Sigma$ is a type, then  the ranked sets of terms  $\tmonad \rSigma$ is also a type.
     \end{enumerate}
@@ -105,7 +105,7 @@ The first two items in the figure, namely function composition and functions wit
             \ranked{\distrcart : (\Sigma_1 + \Sigma_2)\times \Gamma \to (\Sigma_1 \times \Gamma) + (\Sigma_2 \times \Gamma)}
             }
             {
-                \tensorpair{(i,a),b} \mapsto (i,\tensorpair{a,b})
+                ((i,a),b) \mapsto (i,(a,b))
             }
         \fotitemsmall{
         {\ranked{ \tensorpair{f_1,f_2}  :  \Sigma_1 \otimes \Sigma_2 \to  \Gamma_1 \otimes \Gamma_2}}
@@ -172,7 +172,7 @@ is a term, which has $a$ in the root and child subterms $t_1,\ldots,t_n$. We use
         %  \ar@<.5ex>[l]^{\composeterm} 
     }} \qquad \tmonad \rSigma
 \end{align*}
-from Figure~\ref{fig:fo-term}. Note that the coproduct above can only be viewed as a legitimate type when $\rSigma$ is finite; and therefore the function $\composeterm$ is only allowed when $\rSigma$ is finite. The function $\composeterm$ is not injective but not surjective, because its image will contain only the terms that satisfy condition (*) explained in the following picture: 
+from Figure~\ref{fig:fo-term}. Note that the coproduct above can only be viewed as a legitimate type when $\rSigma$ is finite; and therefore the function $\composeterm$ is only allowed when $\rSigma$ is finite. The function $\composeterm$ is injective but not surjective, because its image will contain only the terms that satisfy condition (*) explained in the following picture: 
 \mypic{28}
 If we assumed, in definition~\ref{def:terms}, that the variables in a term are ordered left-to-right, then $\composeterm$ would be a bijection. The operation 
 \begin{align*}     
@@ -200,7 +200,7 @@ Finally, the  \emph{flattening} operation $\flatt_\rSigma$
 \subsubsection{Factorisations}
     Let $t \in \tmonad \rSigma$ be a term. 
     There are two equivalent definitions of factorisations of $t$. One definition is that a factorisation is an equivalence relation on non-port nodes where every equivalence class is a factor; the other definition is that it is any term $s  \in \tmonad \tmonad \rSigma$ which flattens to $t$. 
-    The two definitions are easily seen to be equivalent equivalent, in the sense that there is a one-to-one correspondence between factorisation equivalences and factorisation terms.
+    The two definitions are easily seen to be equivalent, in the sense that there is a one-to-one correspondence between factorisation equivalences and factorisation terms.
     %  which is explained in the following picture:
     % \mypic{14}
     Suppose that $\ranked{\Sigma_1}$ and $\ranked{\Sigma_2}$ are ranked sets. The ancestor and descendant factorisations 
@@ -211,7 +211,7 @@ Finally, the  \emph{flattening} operation $\flatt_\rSigma$
         \begin{align*}
             t \in \ranked{\tmonad(\Sigma_1+\Sigma_2)}.
         \end{align*}
-        We say that two non-port nodes have \emph{same type} if both have labels in the same  $\ranked{\Sigma_i}$; otherwise we say that non-port nodes have \emph{opposing type}.  Call two non-port nodes \emph{ancestor equivalent}  if they  same proper ancestors of opposing type. Call two non-port nodes \emph{descendant equivalent}  if they  are ancestor equivalent and they have the same proper descendants of opposing type. Here is a picture, with $\ranked{\Sigma_1}$ being red and $\ranked{\Sigma_2}$ being blue:
+        We say that two non-port nodes have \emph{same type} if both have labels in the same  $\ranked{\Sigma_i}$; otherwise we say that non-port nodes have \emph{opposing type}.  Call two non-port nodes \emph{ancestor equivalent}  if they have the same proper ancestors of opposing type. Call two non-port nodes \emph{descendant equivalent}  if they  are ancestor equivalent and they have the same proper descendants of opposing type. Here is a picture, with $\ranked{\Sigma_1}$ being red and $\ranked{\Sigma_2}$ being blue: \todo{les images no collent pas avec la def.}
         \mypic{11}
         Both ancestor and descendant equivalences are factorisations; and in each case equivalence classes contain only nodes of same type.  The function $\ancfact$ maps a term to (the term of terms corresponding to) its ancestor equivalence relation, likewise we define $\decfact$ for  descendant factorisations.
     
