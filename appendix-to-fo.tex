@@ -14,7 +14,7 @@ We show in this section that derivable functions can be implemented by first-ord
 \end{proposition}
     
     \begin{proof}
-    The proof is by induction, following the definition of derivable functions. The proof is easy, and consists mainly unfolding of the definition. We will treat only the cases of $\unit$ and $\unfold$ to illustrate this process.
+    The proof is by induction, following the definition of derivable functions. The proof is easy, and consists mainly unfolding of the definition. We will treat only the cases of $\unit_\rSigma$ and $\flatt_\rSigma$ to illustrate this process.
     
     In the following, it will be convenient to use, as part of the vocabulary of $\rSigma$, the unary relation  $\mathsf{Port}_\rSigma$ which selects the ports of the structures over $\voctype\rSigma$; and the binary relation $\sqsubset_\rSigma$ which orders these ports. By induction on $\rSigma$, we can show that both relations are definable by first-order formulas over  $\voctype \rSigma$.
     
@@ -37,6 +37,18 @@ The descendent relation $<$ connects the $i^{th}$ port of $\underline{x}$ to the
 \begin{align*}
 \varphi_<^{1,2}(x,y)=x=y
 \end{align*}
+ \item {$\flatt_\rSigma$}. Let us consider now the function $\flatt_\rSigma$. We need only one copy. The universe will contain all the elements of $\underline{t}$ except those which are (intermediary) ports of $\underline{t(x)}$, where $x$ is a node of $t$.    
+ \begin{align*}
+ \varphi_1(x)=\neg \mathsf{Port}_{\tmonad \rSigma}(x)
+ \end{align*}
+The relations of the vocabulary $\voctype\rSigma$ are interpreted as in the original structure. The ports of $\underline{\flatt_\rSigma(t)}$ are the ports of $\underline{t}$ and their ordering is the same, meaning that
+\begin{align*}
+\varphi^{1,1}_{\sqsubset}(x,y)= x\sqsubset y
+\end{align*}
+Let us interpret the descendent relation $<$. 
+\begin{align*}
+\varphi^{1,1}_<(x,y)= x<_{\tmonad\tmonad \rSigma}y \vee \exists z\ \ \ (x<_{\tmonad \rSigma}z \wedge z<_{\tmonad\tmonad \rSigma} y) \vee (x<_{\tmonad \tmonad\rSigma}z \wedge z<_{\tmonad \rSigma} y)
+\end{align*}
 \item $\ranked{\unfold}_k$. Let us consider now the function   $\ranked{\unfold_k}$. For the sake of readability, we will consider here only the case where $k=2$.
 Recall that 
 \newcommand{\voc}[1]{\mathrm{voc}#1}
@@ -56,7 +68,6 @@ In the first copy, we keep all the nodes except the (intermediary) $\ranked {\re
 \end{align*}
 \item Interpretation of the vacabularies $\color{blue}{\Sigma}$ and $\color{green}{\Sigma}$. In the first copy, the interpretation of these vacabularies is exactly the same as in the original structure. In the second copy 
 \end{itemize} 
- 
 \end{enumerate}
     
        \end{proof}
