@@ -1,7 +1,7 @@
 \newcommand{\Root}[1]{\mathsf{root}_{#1}}
 \newcommand{\Port}[1]{\mathsf{port}_{#1}}
 \newcommand{\Interface}[1]{\mathsf{Interface}_{#1}}
-\section{Atomic functions and combinators to first-order transductions}
+\section{Atomic functions and combinators to first-orderf transductions}
 \label{sec:to-transductions}
 In this section, we prove the right-to-left implication in Theorem~\ref{thm:main}, namely that if $\rSigma,\rGamma$ are finite ranked sets, then for every derivable function $\ranked {f : \tmonad \rSigma \to \tmonad \rGamma}$, its restriction to trees $f : \trees \rSigma \to \trees \rGamma$
 is a first-order tree-to-tree transduction. The proof is a simple induction on the derivation of  $\ranked f$. In the induction, we must deal with functions that manipulate types that are more complex than trees, e.g.~tensor pairs of terms of coproducts.  To operate on such types with first-order transductions, we need to show how such types can be modelled as relational structures.
@@ -47,13 +47,22 @@ whose elements are used as the ports, and interpreting the binary relation $R$ a
         \end{align*}
                 
                 
-        \item \emph{Terms.}  Terms in $\tmonad \rSigma$ are modelled using vocabulary of $\rSigma$ extended with two fresh binary relations $\anceord$ and $\portord$. 
-          Let $t \in \tmonad \rSigma$. The model of $t$ is defined by taking the disjoint union of the models 
+        \item \emph{Terms.}   Terms in $\tmonad \rSigma$ are modelled using vocabulary of $\rSigma$ extended with two fresh binary relations $\anceord$ and $\portord$. 
+          Let $t \in \tmonad \rSigma$. Consider the disjoint union of models
             \begin{align}\label{eq:non-port}
                  \coprod_{x \in \text{non-port nodes in $t$}} \underline{a(x)},
             \end{align}
-         where  $\underline a(x)$ is the model over the vocabulary of $\rSigma$ that  is defined by induction assumption.   In the above  disjoint union, the same vocabulary, namely the vocabulary of $\rSigma$,  is used  for all parts of the disjoint union. 
-The ports of $\underline{a}$ are defined as follows: if the $i$-{th} child of a node $x$ of $a$ is a port, then the $i$-{th} port of $\underline{a(x)}$ is a port of $\underline{a}$. The order of these ports, $\sqsubset$, is inherited from the ports of $a$.  The descndent relation $\anceord$ consists of the pairs $(u,v)$ where $u$ is the $i$-th port of $\underline{a(x)}$, $v$ is a port of $\underline{a(y)}$ and $y$ is a descendent of the $i$-th child of $x$.
+         where  $\underline a(x)$ is the model over vocabulary of $\rSigma$ that  is defined by induction assumption.   In the above  disjoint union, the same vocabulary, namely the vocabulary of $\rSigma$,  is used  for all parts of the disjoint union. Next, consider  the model
+            \begin{align}\label{eq:ports}
+            (\set{1,\ldots,n}, \portord)
+            \end{align}
+            where $\portord$ is the natural ordering on $\set{1,\ldots,n}$. 
+            The model of $t$ is defined by taking the disjoint union of the models in~\eqref{eq:non-port} and~\eqref{eq:ports}, and defining the descendent relation $\anceord$ as the set of pairs $(u,v)$ such that:
+            \begin{itemize}
+            \item either $u$ is the $i$-th port of $\underline{a(x)}$ for some node $x$ of $a$, $v$ is a port of $\underline{a(y)}$ for some node $y$ which is a descendent of the $i$-th child of $x$.
+            \item or $u$ is the $i$-th port of $\underline{a(x)}$ for some node $x$ of $a$, $v=j\in\{1,\dots,n\}$ and the $j$-th port of $a$ is a descendent of the $i$-th child of $x$.
+            \end{itemize} 
+
             % It  consists of all pairs $(u,v)$ such that $u$ is the $i$-th port of $\underline{a(x)}$  some non-port node $x$, and $v$ belongs to $\underline{a(y)}$ for some node (possibly a port) $y$ which is a descendant (not necessarily proper) of the $i$-th child of $x$. The binary relation $\portletter$ is the total order 
            % The ports are taken from the structure~\eqref{eq:ports}.
     \end{itemize}

@@ -1,7 +1,7 @@
 
-\section{First-order term functions can be described in logic}
+\section{DErivable functions can be described in first-order logic}
 \label{sec:to-logic}
-We show in this section that first-order tree-to-tree functions can be implemented by first-order transductions.
+We show in this section that derivable functions can be implemented by first-order transductions. We write $\voctype \rSigma$ for the vocabulary of a type $\rSigma$ as given in Definition~\ref{def:type-model}.
 
 \begin{proposition}\label{prop:to-logic} If $f : \rSigma \to \rGamma$ can be derived from the atomic functions using combinators, then there is a first-order transduction $g$ 
     which makes the following diagram commute
@@ -14,24 +14,24 @@ We show in this section that first-order tree-to-tree functions can be implement
 \end{proposition}
     
     \begin{proof}
-    The proof is by induction, following the definition of first-order tree-to-tree functions. The basic functions with finite domain, projections, co-projections and distribution laws are easily definable by first-order transductions.  
+    The proof is by induction, following the definition of derivable functions. The proof is easy, and consists mainly unfolding of the definition. We will treat only the cases of $\unit$ and $\unfold$ to illustrate this process.
     
-    In the following, it will be convenient to use, as part of the vocabulary $\voctype \rSigma$ of every type $\rSigma$, the unary relation  $\mathsf{Port}_\Sigma$ which selects the ports of the structures over $\voctype\rSigma$; and the binary relation $\sqsubseteq_\Sigma$ which orders these ports. By induction on $\rSigma$, both relations can be defined by first-order formulas over  $\voctype \rSigma$.
+    In the following, it will be convenient to use, as part of the vocabulary of $\rSigma$, the unary relation  $\mathsf{Port}_\rSigma$ which selects the ports of the structures over $\voctype\rSigma$; and the binary relation $\sqsubset_\rSigma$ which orders these ports. By induction on $\rSigma$, we can show that both relations are definable by first-order formulas over  $\voctype \rSigma$.
     
     \begin{enumerate}
     \item $\unit_\rSigma$. Given an element $x$ of $\Sigma$, let us show how the fucntion $\unit_\rSigma(x)$ can be implemented using an fo transduction.  The copying constant is 2,
     the first copy will contain the whole structure $\underline{x}$ and the second copy will select only the ports of $\underline{x}$ which will serve as the ports of the structure $\underline{\unit_\rSigma(x)}$.  The universe formulas are then:
     \begin{align*}
-    \varphi_1(x)=\mathsf{True} \qquad \varphi_2(x)=\mathsf{Port}_\Sigma(x)
+    \varphi_1(x)=\mathsf{True} \qquad \varphi_2(x)=\mathsf{Port}_\rSigma(x)
     \end{align*}
-    In the first copy, the vocabulary $\voctype \rSigma$ will be interpreted as in the original structure, and as the empty set in the second one. That is, for every unary relation $R\in \voctype \rSigma$ and for every binary relation $S \in \voctype \rSigma$, we set:
+    In the first copy, the vocabulary of $\rSigma$ will be interpreted as in the original structure, and as the empty set in the second copy. That is, for every unary relation $R\in \voctype \rSigma$ and for every binary relation $S \in \voctype \rSigma$, we set:
     \begin{align*}
    \varphi_R^{1}(x)=R(x) \quad&\quad \varphi_S^{1,1}(x,y)=S(x,y)\\
    \varphi_R^{2}(x)=\mathsf{False} \quad&\quad \varphi_S^{2,2}(x,y)=\mathsf{False}
 \end{align*}      
-Let us interpret the relations $<$ and $\sqsubseteq$ of $\voctype \tmonad\rSigma$. The  ports of $\underline{\unit_\rSigma(x)}$ inherit the order of the ports of $\underline{x}$, this is why we set:
+Let us interpret the relations $<$ and $\sqsubset$ of $\voctype \tmonad\rSigma$. The  ports of $\underline{\unit_\rSigma(x)}$ inherit the order of the ports of $\underline{x}$, this is why we set:
 \begin{align*}
-\varphi_\sqsubseteq^{2,2}(x,y)=x\sqsubseteq_\Sigma y
+\varphi_\sqsubset^{2,2}(x,y)=x\sqsubset_\rSigma y
 \end{align*}
 The descendent relation $<$ connects the $i^{th}$ port of $\underline{x}$ to the $i^{th}$ port of $\underline{\unit_\rSigma(x)}$. Since these nodes come from the same node in the original structure, we set:
 \begin{align*}
