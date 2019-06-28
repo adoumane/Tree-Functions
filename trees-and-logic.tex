@@ -28,7 +28,7 @@ A \emph{relational vocabulary} is defined to be a set of relation names, each on
 The $i$-th child predicates are only needed for $i$ up to the maximal arity letters in the ranked alphabet, and hence the vocabulary in the above definition is finite. 
  A sentence of first-order logic (or of \mso)  over this vocabulary   describes a tree language, namely the set of trees whose associated models satisfy the sentence.  For example, the sentence 
  \begin{align*}
- \forall x \ a(x) \ \exists y \ x < y \land b(x)
+ \forall x \ a(x) \Rightarrow \exists y \ x < y \land b(x)
  \end{align*} 
  is true in (the models associated to)  trees $t$ where every node with label $a$ has a descendant with label $b$.  
  
