@@ -1,8 +1,10 @@
 \section{Derivable functions}
-The goal of this paper is to characterise the first-order tree-to-tree functions in terms of some atomic functions and combinators which produce new functions from previously defined ones. A typical combinator is composition of functions.
+The goal of this paper is to characterise the first-order tree-to-tree functions in terms of a set of  atomic functions together with combinators which produce new functions from previously defined ones. A typical combinator is composition of functions.
 
 \subsection{Terms}
-For our purposes, the datatype of trees will be insufficient, because  we will need a generalisation of trees where some leaves  are ports   where other trees can be substituted. We use the name \emph{terms} for this generalisation. Fix a set of variables
+We begin by introducing terms, which are a generalisation of trees, where some parts of the tree are unknown. We will need to use terms instead of trees, because we will be splitting  trees into smaller pieces, and such smaller pieces are going to be terms. This is a difference of trees as opposed to strings: while a piece  of a string is also a string, a piece of a tree is a term.
+
+Fix a set of variables
 \begin{align*}
     \termvars = \set{x_1,x_2,\ldots}
 \end{align*}
@@ -11,10 +13,12 @@ which will be assumed to be disjoint with all other sets.  We view the variables
 \begin{definition}[Terms]\label{def:terms}
     An $n$-ary term over a ranked set $\rSigma$ is defined to be a tree over the ranked alphabet $\rSigma + \termvars$ where each of the  variables $x_1,\ldots,x_n$ appears exactly once,  and the other variables do not appear at all.    We write $\tmonad \rSigma$ for the ranked set of terms over $\rSigma$. 
 \end{definition}
- 
+
+In universal algebra, the restriction that each variable of a term appears exactly once is sometimes called \emph{linearity}; since we do not consider non-linear terms, we use the word term without additionally specifying that it is linear.  The linearity restriction is connected to the fact that first-order transductions have linear size increase.
+
 We adopt the following convention for drawing terms. The term is drawn inside a box, and the dangling edges which leave the box at the bottom are its variables, ordered left-to-right, as in the following picture: \mypic{7}
 % If we disallow crossing edges in the pictures, then the above drawing convention can only represent terms where the variables are ordered $x_1,\ldots,x_n$ from left to right. 
- The restriction that each variable appears exactly one, sometimes called \emph{linearity}, is connected to the fact that first-order transductions have linear size increase. Because the set of terms is itself a ranked set,  we can create terms of terms, which will be important for the constructions we use.  
+ Because the set of terms is itself a ranked set,  we can create terms of terms, which will be useful.
 
 To see the need for terms, suppose that we want to group the nodes of a tree into connected parts, called \emph{factors} (a factor in a tree is defined to be a set of nodes that is connected by the parent-child relation). The factors are not trees, because they have dangling edges, but they can be viewed as terms, as explained in the following picture:
 \mypic{15}
@@ -23,7 +27,7 @@ A consequence of using terms is that we will work in the category of ranked sets
 
 
 \subsection{Types}
-The  main goal of this paper is to  show how every first-order tree-to-tree function can be obtained by starting with certain atomic functions, and composing the using certain combinators. The atomic functions and combinators will be based on arity preserving functions on ranked sets. In this section, we describe the kinds of ranked sets that will be allowed as domains and co-domains of our functions. The general idea is that we start with finite ranked sets, and close these under the following type constructors: coproducts, two kinds of product (Cartesian and tensor), taking terms.
+The  main goal of this paper is to  show how every first-order tree-to-tree function can be obtained by starting with certain atomic functions, and composing the using certain combinators. The atomic functions and combinators will be based on arity preserving functions on ranked sets. In this section, we describe the types of ranked sets that will be allowed as domains and co-domains of our functions. The general idea is that we start with finite ranked sets, and close these under the following type constructors: coproducts, two kinds of product (Cartesian and tensor), taking terms, and a type constructor that allows to merge ports.
 %  and the matrix power. 
 % The  matrix power -- which is possibly the least natural type constructor -- will be motivated and discussed in more detail later on.
 
@@ -39,17 +43,23 @@ The  main goal of this paper is to  show how every first-order tree-to-tree func
         \begin{align*}
             n = \arity{a_1} = \arity{a_2}.
         \end{align*}
+        We draw Cartesian pairs like this:
+        \mypic{51}
         \item \emph{Tensor product.} If $\ranked{\Sigma_1}$ and $\ranked{\Sigma_2}$ are types, then  their \emph{tensor product}
         $ \ranked{\Sigma_1 \otimes \Sigma_2}$
         is also a type. An $n$-ary element of the Cartesian product is a pair $\tensorpair{a_1,a_2}$ such that $a_i \in \ranked{\Sigma_i}$ and 
         \begin{align*}
             n = \arity{a_1} + \arity{a_2}.
         \end{align*}
-        Note how we use  angular brackets to distinguish tensor $\tensorpair{a_1,a_2}$ pairs from Cartesian pairs $(a_1,a_2)$.
-        \item \emph{Arity reduction.} If $\rSigma$ is a type and $k \in \set{1,2,\ldots}$ then $\reduce k \rSigma$ is a type. An $n$-ary element of this type consists of an $a \in \rSigma$ of arity $nk$ and a function
+        Note how we use  angular brackets to distinguish tensor $\tensorpair{a_1,a_2}$ pairs from Cartesian pairs $(a_1,a_2)$.         We draw tensor pairs like this:
+        \mypic{52}
+
+        \item \emph{Folding.} If $\rSigma$ is a type and $k \in \set{2,3,\ldots}$ then $\reduce k \rSigma$ is a type. Elements of this set are called $k$-folds of $\rSigma$. A $k$-merge of arity $n$ consists of an element   $a \in \rSigma$ of arity $nk$ and  a function
         \begin{align*}
             f : \set{1,\ldots,nk} \to \set{1,\ldots,n} \qquad \text{every inverse image $f^{-1}(i)$ has size exactly $k$}
         \end{align*}
+        We write $a/f$ for the $k$-merge given by $a$ and $f$.  We draw $k$-folds like this:
+        \mypic{53}
         \item \emph{Terms.} If $\ranked \Sigma$ is a type, then  the ranked sets of terms  $\tmonad \rSigma$ is also a type.
     \end{enumerate}
 \end{definition}
@@ -108,6 +118,12 @@ The first two items in the figure, namely function composition and functions wit
             }
             {
                 \tensorpair{(i,a),b} \mapsto (i,\tensorpair{a,b})
+            }
+        \fotitemsmall{
+            \ranked{\reduce k f : \reduce k \Sigma \to \reduce k \Gamma }
+            }
+            {
+                a/g \mapsto \ranked f(a)/g
             }
 \end{tabular}
 \end{center}
@@ -208,32 +224,98 @@ Finally, the  \emph{flattening} operation $\flatt_\rSigma$
         
 
 \subsubsection{Unfolding}
-The general idea behind the unfolding operation 
+The general idea behind the  operation 
 \begin{align*}
     \ranked{\unfold : \tmonad  \reduce k (\Sigma \otimes \cdots \otimes \Sigma) \to \reduce k ( \tmonad \rSigma \otimes \cdots \otimes \tmonad \rSigma)} 
 \end{align*}
-is to unfold directed acyclic graphs representing trees, as illustrated below for $k=2$:
-\mypic{40}
-We have to be careful with unfolding, since we want the derived  operations to have linear and not exponential growth. This is the reason why the nodes of the input tree are labelled by tensor $k$-tuples:  even though each subtree of the input tree before is used in  $k$ subtrees of the output tree, this duplication is spread out across $k$ components of the node labels; leading to a linear $k$-fold increase in the number of nodes. 
-
-A more precise definition of the $\unfold$ operation follows below. Consider a term 
-\begin{align*}
-    t \in \reduce k \overbrace{\ranked{(\Sigma \otimes \cdots \otimes \Sigma)}}^\text{$k$ times}.
-\end{align*}
-Define \emph{subnodes} of $t$ to be pairs  $(v,i)$ such that $v$ is a node of $t$ and $i \in \set{1,\ldots,k}$. There is a natural parent-child relation on subnodes, which is illustrated in the following picture:
-
-
-
-\begin{align*}
-    \text{subnodes of $t$} \to \set{1,\ldots,k} \times \text{(edges of $t$)}
-\end{align*}
-Suppose that $(v,i)$ is a subnode, and the $j$-th child of the $i$-th component in the label of $v$ is the $l$-th edge which enters the $m$-th port of $v$, as illustrated in the following picture:
-
-
-There is a natural tree structure on subnodes, as illustrated in the following picture:
-
-For a subnode $(v,i)$, its $j$-th child is defined as follows: Define a parent relation on such pairs: we say that $(v,i)$ is the parent of $(u,j)$ if $v$ is the parent of $v$, and furthermore 
-
-Consider the parent of $v$ in $t$, call it $u$. The tree edge which connects $v$ and $u$ in $t$. In the label of $u$, this tree edge splits into $k$ parts, and the $i$-th part of this edge leads 
-
+is to unfold the edges that are joined using the fold constructor, by matching them with different coordinates of the tensor power in the alphabet. This operation is described in the following picture:
 \mypic{39}
+To explain unfolding more precisely, we reduce it to simpler parts, by using a special case of terms, called shallow terms. Define a \emph{shallow term} over a ranked set $\rSigma$ and $\rGamma$ to be the special case of  a term over $\rSigma + \rGamma$ where:  the root has label from $\rGamma$, all children of the root are non-port nodes from $\rGamma$, and all grand-children are ports. Here is a picture of a shallow term:
+\mypic{54}
+It will be easier to define the unfold operation for shallow terms, and then unfolding can be lifted to general terms using structural induction. 
+Before explaining the unfolding operation, we describe  the operations associated to flat terms. First, we can lift functions on the underlying types to flat terms in the natural way:
+\begin{align*}
+    \frac
+    { \ranked{f : \Sigma \to \Sigma'} \quad \ranked{g : \Gamma \to \Gamma'}}
+    {\ranked{\shallowterm f g : \shallowterm \Sigma \Gamma \to \shallowterm {\Sigma'} {\Gamma'}}}
+\end{align*}
+Every term over $\rSigma$ is either a port, or it is a shallow term over $\rSigma$ and $\tmonad \rSigma$, leading to the following operations:
+\begin{align*}
+    \ranked{\decomposeterm : \tmonad \Sigma \to 1 +  
+\shallowterm \Sigma {\tmonad \Sigma}} \qquad  \ranked{\composeterm : 1 +  
+\shallowterm \Sigma {\tmonad \Sigma} \to \tmonad \Sigma }
+\end{align*}
+We can distribute fold across shallow terms using the  operation
+\begin{align*}
+    \ranked{\distrfold : \shallowterm \Sigma {\reduce k \Gamma} \to \reduce k (\shallowterm \Sigma  \Gamma})
+\end{align*}
+as explained in the following picture:
+\mypic{55}
+Finally, we have the shallow unfolding operation, which eliminates folding   by matching it with $k$-th tensor power in a shallow term:
+\begin{align*}
+\ranked{
+    \unfoldsmall : \shallowterm {\reduce k   \Sigma} {(\overbrace{\Gamma \otimes \cdots \otimes \Gamma}^{\text{$k$ times}})} \to \shallowterm \Sigma \Gamma
+}
+\end{align*}
+The unfolding operation is explained in the following picture for $k=3$:
+\mypic{56}
+
+\newcommand{\expmatrix}[1]{\reduce k \kpower{#1}}
+\newcommand{\kpower}[1]{ \overbrace{(#1 \otimes \cdots \otimes #1)}^{\text{$k$ times}}}
+
+
+Using the shallow unfold operation described above, we now give a formal definition of the unfold operation. Suppose that we want to compute the unfold of a term of type 
+\begin{align*}
+\ranked{\tmonad \expmatrix \Sigma}.
+\end{align*}
+If the input is the identity term ,  then its unfolding
+ is  unfold is 
+\begin{align*}
+    \tensorpair{\portletter,\ldots,\portletter}/(i \mapsto 1),
+\end{align*}
+i.e.~it consists of $k$ identity terms with their ports folded into a single one.  Otherwise, the term can can be decomposed as a shallow term of the form: 
+\begin{align*}
+ \ranked{
+    \shallowterm{ \expmatrix \Sigma} { \tmonad \expmatrix \Sigma}
+}
+\end{align*}
+Unfold inductively  the children in the shallow term above, yielding a result in
+\begin{align*}
+   \ranked{
+        \shallowterm{ \expmatrix \Sigma} {  \expmatrix {\tmonad \Sigma}}
+    }
+    \end{align*}
+To the result, apply the composition of the following operations, yielding the final result
+\begin{align*}
+\ranked{
+    \xymatrix@C=2cm{
+        \shallowterm{\expmatrix \Sigma}{\expmatrix  \Sigma} \ar[r]^{\distrfold} &
+        \reduce k (\shallowterm {\expmatrix \Sigma } {\kpower \Sigma}) \ar[d]^-{\reduce k \unfoldsmall}\\
+        \reduce k \kpower{\shallowterm \Sigma \Sigma} &
+        \reduce k (\shallowterm {\kpower \Sigma} \Sigma) \ar[l]_{\reduce k \distrtensor}
+    }
+}
+\end{align*}
+
+% Distribute out the fold in the children of the shallow term, yielding  a result in
+% \begin{align*}
+%       \ranked{ \reduce k(
+%         \shallowterm{ \expmatrix \Sigma} { \kpower{\tmonad \Sigma})}
+%     }
+%     \end{align*}
+% Apply the shallow unfold (inside the fold), yielding  a result of type
+% \begin{align*}
+%   \ranked{ \reduce k(
+%     \shallowterm{ \kpower \Sigma} {\tmonad \Sigma})}
+% \end{align*}
+% Distribute the tensor across the shallow term, yielding a result of type
+% \begin{align*}
+%     \ranked{ \reduce k
+%       \kpower {(\shallowterm \Sigma {\tmonad \Sigma})}}
+%   \end{align*}
+% Compose the shallow terms into (not shallow) terms, yielding the final result  in
+% \begin{align*}
+%     \ranked{ \reduce k
+%       \kpower {(\tmonad \Sigma)}}
+%   \end{align*}
+This completes the definition of the unfold operation. 

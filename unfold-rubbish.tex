@@ -1,0 +1,56 @@
+is to unfold directed acyclic graphs representing trees, as illustrated below for $k=2$:
+\mypic{40}
+We have to be careful with unfolding, since we want the derived  operations to have linear and not exponential growth. This is the reason why the nodes of the input tree are labelled by tensor $k$-tuples:  even though each subtree of the input tree before is used in  $k$ subtrees of the output tree, this duplication is spread out across $k$ components of the node labels; leading to a linear $k$-fold increase in the number of nodes. 
+
+A more precise definition of the $\unfold$ operation follows below. Consider a term 
+\begin{align*}
+    t \in \reduce k \overbrace{\ranked{(\Sigma \otimes \cdots \otimes \Sigma)}}^\text{$k$ times}.
+\end{align*}
+Define \emph{subnodes} of $t$ to be pairs  $(v,i)$ such that $v$ is a node of $t$ and $i \in \set{1,\ldots,k}$. There is a natural parent-child relation on subnodes, which is illustrated in the following picture:
+
+
+
+\begin{align*}
+    \text{subnodes of $t$} \to \set{1,\ldots,k} \times \text{(edges of $t$)}
+\end{align*}
+Suppose that $(v,i)$ is a subnode, and the $j$-th child of the $i$-th component in the label of $v$ is the $l$-th edge which enters the $m$-th port of $v$, as illustrated in the following picture:
+
+
+There is a natural tree structure on subnodes, as illustrated in the following picture:
+
+For a subnode $(v,i)$, its $j$-th child is defined as follows: Define a parent relation on such pairs: we say that $(v,i)$ is the parent of $(u,j)$ if $v$ is the parent of $v$, and furthermore 
+
+Consider the parent of $v$ in $t$, call it $u$. The tree edge which connects $v$ and $u$ in $t$. In the label of $u$, this tree edge splits into $k$ parts, and the $i$-th part of this edge leads 
+
+\mypic{39}
+
+
+\newcommand{\expmatrix}[1]{\reduce k \overbrace{(#1 \otimes \cdots \otimes #1)}^{\text{$k$ times}}}
+Suppose we want to unfold a term $t \in \matrixpower \Sigma k$
+\begin{align*}
+t \in \ranked{\tmonad \expmatrix \Sigma}
+\end{align*}
+Decompose $t$ into its root and child list, using the operation
+\begin{align*}
+\ranked{\decomposeterm : \tmonad \Sigma \to \set{*} + \Sigma \cdot (\tmonad \Sigma)^*}
+\end{align*}
+If $t$ is just a single port, there is nothing to do, i.e.~the result of unfolding is also a term with a single port. We now describe when the input is not a single port, in which case the ouptut of the decompose operation is of the form
+\begin{align*}
+t_1 \in \ranked{(\expmatrix \Sigma) \cdot (\tmonad \expmatrix \Sigma)^*}
+\end{align*}
+To each of the child subterms, recursively apply unfolding, yielding a result
+\begin{align*}
+    t_2 \in \ranked{(\expmatrix \Sigma) \cdot (\reduce k (\overbrace{\tmonad \Sigma \otimes \cdots \otimes \tmonad \Sigma}^{\text{$k$ times}}))^*}
+    \end{align*}
+Distribute the second occurrence of $\reduce k$ using the operation 
+\begin{align*}
+ \ranked{\Sigma \cdot (\reduce k \Gamma)^* \to \reduce k (\Sigma \cdot \Gamma^*) }
+\end{align*}
+giving a result of the form
+\begin{align*}
+    t_3 \in \ranked{\reduce k ((\expmatrix \Sigma) \cdot ( \overbrace{\tmonad \Sigma \otimes \cdots \otimes \tmonad \Sigma}^{\text{$k$ times}})^*)}
+    \end{align*}
+To the above, apply the operation
+\begin{align*}
+\ranked{(\reduce k \Sigma) \cdot (\Gamma \otimes \cdots \otimes \Gamma)^* \to \Sigma \cdot \Gamma^* \otimes \cdots \otimes \Sigma \cdot \Gamma^*}
+\end{align*}

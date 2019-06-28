@@ -1,37 +1,45 @@
-\section{First-order rational tree functions}\label{sec:fo-translation}
-In this section, we discuss first-order rational tree functions. These are compositions of two types of tree transformations: (a) characteristic functions of first-order query, which annotate nodes of the input tree with first-order definable information; (b) and tree homomorphisms, which replace letters in the input tree  by terms. 
+\section{First-order tree relabellings}\label{sec:fo-translation}
+The rest of the paper is devoted to the left-to-right implication in Theorem~\ref{thm:main}, which says that every first-order tree-to-tree transduction is derivable. As discussed in the proof strategy from Section~\ref{sec:strategy}, we begin with a special case of first-order tree-to-tree transductions, namely first-order relabellings. 
 
 
-\begin{definition}[First-order rational tree functions] \label{def:forat}\ 
-    \begin{itemize}
-        \item \emph{Characteristic functions.}  Let $\rSigma$ be a finite ranked set, and let $\varphi(x)$ be a first-order formula with one free variable over the vocabulary associated to tree models over alphabet $\rSigma$. The \emph{characteristic function of $\varphi$} 
-        \begin{align*}
-            \mathrm{char}_\varphi : \trees \rSigma \to \trees (\rSigma + \rSigma)
-        \end{align*}
-        is defined to be the function which inputs a tree, and returns a tree with the same nodes, but where the labels are changed so that the first copy of $\rSigma$ is used for nodes that satisfy  $\varphi(x)$, and the second copy is used for the other nodes.
-        \item \emph{Homomorphism.} A \emph{tree homomorphism} is defined to be any function
-        \begin{align*}
-            f : \trees \rSigma \to \trees \rGamma
-        \end{align*} 
-        which applies some arity preserving function $\ranked f : \rSigma \to \tmonad \rGamma$ to each node in the input tree. 
-        \item \emph{First-order rational tree function}. A first-order rational tree function is defined to be any composition $f_1 \circ \cdots \circ f_n$, where each $f_i$ is either a characteristic function or a tree homomorphism\footnote{One can show that, without loss of generality, we can assume the composition $f_1 \circ \cdots \circ f_n$ to be such that $f_1$ is a tree homomorphism and the remaining functions are  characteristic functions. We do not need this result, so we do not prove it.
-        }.
-    \end{itemize}
+\begin{definition}[First-order tree relabelling] \label{def:forat} For a ranked set $\rSigma$, define a \emph{unary tree query over $\rSigma$} to be a first-order formula with one free variable, over the vocabulary of trees over $\rSigma$. A unary tree query selects nodes in trees over $\rSigma$.  Let $\rSigma, \rGamma$ be finite ranked sets. A \emph{first-order tree relabelling} is given by two finite ranked sets, called the \emph{input and output alphabets}, and a family of unary queries $\varphi_a(x)$ over the input alphabet, one for each letter of the output alphabet, such that:
+    \begin{enumerate}
+        \item[(*)] for every tree over the input alphabet, every node is selected by exactly one of the queries $\varphi_a(x)$; furthermore, the arity of $a$ is the same as the arity of (the label of) the node. 
+    \end{enumerate}
+A first-order tree relabelling yields a function
+\begin{align*}
+f : \trees \rSigma \to \trees \rGamma,
+\end{align*}
+which changes the label of every node in the input tree to the unique letter described in  (*). 
       \end{definition}
+% In this section, we discuss first-order rational tree functions. These are compositions of two types of tree transformations: (a) characteristic functions of first-order query, which annotate nodes of the input tree with first-order definable information; (b) and tree homomorphisms, which replace letters in the input tree  by terms. 
+
+
+% \begin{definition}[First-order rational tree functions] \label{def:forat}\ 
+%     \begin{itemize}
+%         \item \emph{Characteristic functions.}  Let $\rSigma$ be a finite ranked set, and let $\varphi(x)$ be a first-order formula with one free variable over the vocabulary associated to tree models over alphabet $\rSigma$. The \emph{characteristic function of $\varphi$} 
+%         \begin{align*}
+%             \mathrm{char}_\varphi : \trees \rSigma \to \trees (\rSigma + \rSigma)
+%         \end{align*}
+%         is defined to be the function which inputs a tree, and returns a tree with the same nodes, but where the labels are changed so that the first copy of $\rSigma$ is used for nodes that satisfy  $\varphi(x)$, and the second copy is used for the other nodes.
+%         \item \emph{Homomorphism.} A \emph{tree homomorphism} is defined to be any function
+%         \begin{align*}
+%             f : \trees \rSigma \to \trees \rGamma
+%         \end{align*} 
+%         which applies some arity preserving function $\ranked f : \rSigma \to \tmonad \rGamma$ to each node in the input tree. 
+%         \item \emph{First-order rational tree function}. A first-order rational tree function is defined to be any composition $f_1 \circ \cdots \circ f_n$, where each $f_i$ is either a characteristic function or a tree homomorphism\footnote{One can show that, without loss of generality, we can assume the composition $f_1 \circ \cdots \circ f_n$ to be such that $f_1$ is a tree homomorphism and the remaining functions are  characteristic functions. We do not need this result, so we do not prove it.
+%         }.
+%     \end{itemize}
+%       \end{definition}
 
 % \begin{lemma}
 %     Every first-order streaming tree transducer is equivalent to one where all registers have arity 1.
 % \end{lemma}
 
-First-order rational functions will be used several times later in the paper, as a basic pre-processing step. For example, the automaton model defined in Section~\ref{sec:stt} will use first-order rational functions to compute its run.
-The main  result of Section~\ref{sec:fo-translation} is the following proposition, which says  that all first-order rational tree functions can be derived from the atomic functions using the combinators. 
+First-order tree relabellings will be used as a basic pre-processing step in the automaton model that will be defined in Section~\ref{sec:stt}.
+The main  result of Section~\ref{sec:fo-translation} is the following proposition. 
 \begin{proposition} \label{prop:forat}    
-    Let $\rSigma,\rGamma$ be finite ranked sets. 
-    For every  first-order rational tree function 
-    \begin{align*}
-        f : \trees \rSigma \to \trees \rGamma,
-    \end{align*}
-    there is a derivable function $\ranked f : \tmonad \rSigma \rto \tmonad \rGamma$ which agrees with $f$ on trees.
+    Every first-order tree relabelling is derivable.
 \end{proposition}       
 Since the combinators include function composition, it is enough to show the above proposition for the case when $f$ is either a characteristic function, or a tree homomorphism. 
 

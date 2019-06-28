@@ -23,15 +23,17 @@
 
 \newcommand{\typeset}{\mathcal T}
 \newcommand{\typevar}[2]{{#1}^{\color{blue}{#2}}}
-\newcommand{\tensorpower}[2]{\overbrace{#1 \otimes \cdots \otimes #1}^{\text{$#2$ times}}}
-\newcommand{\matrixpower}[2]{#1^{[#2]}}
+\newcommand{\matrixpower}[2]{{#2}^{[#1]}}
 \newcommand{\normt}{\ranked{\mathrm{norm}}}
 \newcommand{\dualt}{\ranked{\mathrm{dual}}}
 \newcommand{\dualtk}{\ranked{\mathrm{dual}_{k}}}
 \newcommand{\regupt}{\ranked{\mathrm{regup}}}
 
+\newcommand{\tensorpower}[1]{\ranked{#1^{\tiny \textcircled {$k$}}}}
+\newcommand{\tensorstar}[1]{#1^{\tiny \textcircled {$*$}}}
 
-\newcommand{\reduce}[2]{\ranked{\mathsf R_{#1}}#2}
+\newcommand{\idfun}{\mathrm{id}}
+\newcommand{\reduce}[2]{\ranked{\mathsf F_{#1}}#2}
 \newcommand{\outtree}{\mathrm{out}}
 \newcommand{\eval}{\mathrm{eval}}
 \newcommand{\ranked}[1]{{\color{red}{#1}}}
@@ -53,8 +55,14 @@
 \newcommand{\preorder}{\ranked{\mathrm{preorder}}}
 \newcommand{\distrcart}{\ranked{\mathrm{distr}}}
 \newcommand{\distrtensor}{\ranked{\mathrm{distr}}}
-
+\newcommand{\distrfold}{\ranked{\mathrm{distr}}}
+\newcommand{\unfoldsmall}{\ranked{\mathrm{unfold}_0}}
+\newcommand{\shallowterm}[2]{\ranked{#1 . #2}}
 \newcommand{\child}[1]{\mathrm{child}_{#1}}
+\newcommand{\matpower}[1]{#1^{[k]}}
+
+\newcommand{\anceord}{<_{\mathrm{ancestor}}}
+\newcommand{\portord}{<_{\mathrm{port}}}
 
 \newcommand{\unfold}{\ranked{\mathrm{unfold}}}
 \newcommand{\blueball}{\includegraphics[scale=0.3,page=20]{pics}}

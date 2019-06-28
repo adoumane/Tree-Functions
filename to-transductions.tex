@@ -3,14 +3,7 @@
 \newcommand{\Interface}[1]{\mathsf{Interface}_{#1}}
 \section{Atomic functions and combinators to first-order transductions}
 \label{sec:to-transductions}
-In this section, we prove the right-to-left implication in Theorem~\ref{thm:main}, namely that if $\rSigma,\rGamma$ are finite ranked sets and 
-\begin{align*}
-    \ranked {f : \tmonad \Sigma \to \tmonad \Gamma} 
-\end{align*}
- can be derived using combinators from the atomic functions, then its restriction to trees 
-\begin{align*}
-    f : \trees \rSigma \to \trees \rGamma
-\end{align*}
+In this section, we prove the right-to-left implication in Theorem~\ref{thm:main}, namely that if $\rSigma,\rGamma$ are finite ranked sets, then for every derivable function $\ranked {f : \tmonad \rSigma \to \tmonad \rGamma}$, its restriction to trees $f : \trees \rSigma \to \trees \rGamma$
 is a first-order tree-to-tree transduction. The proof is a simple induction on the derivation of  $\ranked f$. In the induction, we must deal with functions that manipulate types that are more complex than trees, e.g.~tensor pairs of terms of coproducts.  To operate on such types with first-order transductions, we need to show how such types can be modelled as relational structures.
 
 
@@ -23,103 +16,74 @@ is a first-order tree-to-tree transduction. The proof is a simple induction on t
 % \end{itemize}
 
 
-\begin{definition}[Associated models for terms, pairs, co-pairs and tensors.] \label{def:type-model} Let $\rSigma$ be a type, as per Definition~\ref{def:types}.  Figure~\ref{fig:vocmodels} defines a relational vocabulary $\voctype \rSigma$ and a mapping
+\begin{definition}[Associated models for terms, pairs, co-pairs and tensors.] \label{def:type-model} To each type  $\rSigma$ be a vocabulary, called the \emph{vocabulary of $\rSigma$}, and a map 
     \begin{align*}
-        a \in \rSigma \qquad \mapsto \qquad \underbrace{\underline a \in \text{relational structures over $\voctype \rSigma$}}_{\text{associated model of $a$}}.
+        a \in \rSigma \qquad \mapsto \qquad \underbrace{\underline a \in \text{models over the  vocabulary of  $\rSigma$}}_{\text{associated model of $a$}}.
     \end{align*}
-    Furthermore, if $a$ has arity $n$, then its associated has a sequence of  $n$ distinguished elements, called ports.   
+    Furthermore, for each $a \in \rSigma$ we  distinguish a  sequence (whose length is the arity of $a$) of distinguished elements in $\underline a$, which are called the ports $\underline a$.   The definitions are by induction on the structure of $\rSigma$, as given below.
+    \begin{itemize}
+        \item \emph{Finite ranked sets.} Elements of a ranked set   $\rSigma =  \set{a_1,\ldots,a_k}$ are modelled a using  vocabulary which has unary relations $A_1,\ldots,A_k$ and $P_1,\ldots,P_m$ where $m$ is the maximal arity of elements in $\rSigma$. 
+        For $a \in \rSigma$ of arity $n$, the  universe of $\underline a$ is $\set{0,1,\ldots,n}$, with the ports being $1,\ldots,n$. 
+            The  relation $P_i$  is interpreted as $\set i$ when $i \in \set{1,\ldots,n}$ and as the empty set otherwise. The relation $a_i$ is interpreted as $\set 0$ when $a = a_i$ and as the empty set otherwise. 
+        \item \emph{Coproduct.}  Elements of the coproduct $\ranked{\Sigma_1 + \Sigma_2}$ are modelled using the disjoint union of the vocabularies of $\ranked{\Sigma_1}$ and $\ranked{\Sigma_2}$. 
+            If an element of the coproduct comes from $\ranked{\Sigma_1}$, then its associated model is defined as for the type $\ranked{\Sigma_1}$, with  the remaining relations from the vocabulary of   $\ranked{\voctype \Sigma_2}$ interpreted   as empty sets. The definition is analogous for  elements from $\ranked{\Sigma_2}$. 
+        \item \emph{Tensor product.}   Tensor pairs in   $\ranked{\Sigma_1 \otimes \Sigma_2}$ are modelled
+        using the disjoint union of the vocabularies of $\ranked{\Sigma_1}$ and $\ranked{\Sigma_2}$. 
+            For  $\tensorpair{a_1,a_2}$, the associated model is    the disjoint union $\underline{a_1} + \underline {a_2}$, with the relations of $\underline {a_1}$ using the    $\voctype{\ranked{\Sigma_1}}$  part of the vocabulary, and the relations of $\underline {a_2}$ using the the    $\voctype{\ranked{\Sigma_1}}$  part of the vocabulary. 
+            If $n_1$ is the arity of $a_1$, then the first $n_1$ ports are inherited from  $\underline {a_1}$ and the remaining ports are inherited from  $\underline {a_2}$.
+        \item \emph{Cartesian product.}   Cartesian pairs in  $\ranked{\Sigma_1 \otimes \Sigma_2}$ are modelled  using the disjoint union of the vocabularies of $\ranked{\Sigma_1}$ and $\ranked{\Sigma_2}$, plus an extra binary relation $R$.  
+            The model associated to a Cartesian pair   $ (a_1,a_2)$,  is      the disjoint union $\underline{a_1} +  \underline {a_2}$, in the same sense as in the previous item for $\otimes$,  with the binary relation $R$ interpreted as 
+                \begin{align*}
+                    \set{(\text{$i$-th port of $\underline {a_1}$}, \text{$i$-th port of $\underline a_2$}): i \in \set{1,\ldots,\text{arity of $(a_1,a_2)$}}} 
+                \end{align*}
+                The ports are inherited from   $\underline {a_1}$.
+        \item \emph{Folding.}   For $k \in \set{1,2,\ldots}$, elements of   $\reduce k \rSigma$ are modelled using the  vocabulary of $\rSigma$ plus two extra binary relations $<$ and $R$. If $a \in \rSigma$ has arity $nk$, then the model associated to $a/f$ -- which has arity $n$ --   is obtained from  $\underline{a}$ by adding a copy of the model
+                \begin{align*}
+                (\set{1,\ldots,n}, <),
+                \end{align*}
+        whose elements are used as the ports, and interpreting the binary relation $R$ as
+        \begin{align*}
+        \set{(\text{$i$-th port of $\underline a$},f(i)) : i \in \set{1,\ldots,nk}}
+        \end{align*}
+                
+                
+        \item \emph{Terms.}  Terms in $\tmonad \rSigma$ are modelled using vocabulary of $\rSigma$ extended with two fresh binary relations $\anceord$ and $\portord$. 
+          Let $t \in \tmonad \rSigma$. Consider the disjoint union of models
+            \begin{align}\label{eq:non-port}
+                 \coprod_{x \in \text{non-port nodes in $t$}} \underline{a(x)},
+            \end{align}
+         where  $\underline a(x)$ is the model over vocabulary $\voctype \rSigma$ that  is defined by induction assumption.   In the above  disjoint union, the same vocabulary, namely the vocabulary of $\rSigma$,  is used  for all parts of the disjoint union. Next, consider  the model
+            \begin{align}\label{eq:ports}
+            (\set{1,\ldots,n}, \portord)
+            \end{align}
+            where $\portord$ is the natural ordering on $\set{1,\ldots,n}$. 
+            The model of $t$ is defined by taking the disjoint union of the models in~\eqref{eq:non-port} and~\eqref{eq:ports}, and defining the binary relation $\anceord$ as follows.
+            \begin{center}
+                (fill in the definition of $\anceord$)
+            \end{center}
+            % It  consists of all pairs $(u,v)$ such that $u$ is the $i$-th port of $\underline{a(x)}$  some non-port node $x$, and $v$ belongs to $\underline{a(y)}$ for some node (possibly a port) $y$ which is a descendant (not necessarily proper) of the $i$-th child of $x$. The binary relation $\portletter$ is the total order 
+            The ports are taken from the structure~\eqref{eq:ports}.
+    \end{itemize}
 \end{definition}
 
-The above  definition creates a certain ambiguity for trees, because if $t$ is a tree alphabet $\rSigma$, then $\underline t$ can be understood in two ways: as per  Definition~\ref{def:tree-model} for trees, or as per Definition~\ref{def:type-model} when $t$ is viewed as a special case of a term $t \in \tmonad \rSigma$. Since we only use first-order transductions to manipulate transform relational structures,  this ambiguity is not a problem, because one can easily define first-order transductions which map one version of $\underline t$ to the other.
+The above  definition creates a certain ambiguity for trees, because if $t$ is a tree over a finite ranked set $\rSigma$, then $\underline t$ can be understood in two ways: as per  Definition~\ref{def:tree-model} for trees, or as per Definition~\ref{def:type-model} when $t$ is viewed as a special case of a term $t \in \tmonad \rSigma$. Since we only use first-order transductions to transform relational structures,  this ambiguity is not a problem, because one can easily define first-order transductions which map one definition of $\underline t$ to the other.
 
-The following lemma immediately yields the right-to-left implication in Theorem~\ref{thm:main}. It proof, which is a straightforward case analysis of all atomic functions and combinators, is relegated to the appendix. 
+The following lemma immediately yields the right-to-left implication in Theorem~\ref{thm:main}. It proof, which is a straightforward case analysis of all atomic functions and combinators, is in the appendix. 
 
-\newcommand{\vocline}[3]{\\ $#1$ & $#2$ & \begin{minipage}{0,6\textwidth}
-    #3
-\end{minipage}\\}
 
-\begin{figure}
-    \begin{tabular}{l|l|l}
-        type $\rSigma$ & vocabulary $\voctype \rSigma$ & associated model $\underline a$ for $a \in \rSigma$ of arity $n$ \\ \hline
-        \vocline
-        {
-            \set{a_1,\ldots,a_k}
-            }  
-        {
-            \set{\overbrace{a_1,\ldots,a_k,P_1,P_2,\ldots}^{\text{unary relations}}}
-        }    
-        {
-         Let $a \in \rSigma$.   The universe of $\underline a$ is 
-            \begin{align*}
-               \set{0,\underbrace{1,2,\ldots,n}_{\text{ports}}}.
-            \end{align*}
-            The  relation $P_i$  is interpreted as $\set i$ when $i \in \set{1,\ldots,n}$ and as the empty set otherwise. The relation $a_i$ is interpreted as $\set 0$ when $a = a_i$ and as the empty set otherwise.  The ports are $1,\ldots,n$.
-        }
-        \vocline
-        {
-            \ranked{\Sigma_1 + \Sigma_2}
-            }  
-        {
-            \ranked{\voctype \Sigma_1 + \voctype \Sigma_2}
-        }    
-        {
-            For $a =(i,a_i)$, the associated model  is obtained by taking $\underline{a_i}$, viewed as a model over $\ranked{\voctype{\Sigma_i}}$, and  interpreting the remaining relations in $\ranked{\voctype \Sigma_1 + \voctype \Sigma_2}$  as empty sets.  The ports are inherited from  $\underline {a_i}$.
-        }
-        \vocline
-        {
-            \ranked{\Sigma_1 \otimes \Sigma_2}
-            }  
-        {
-            \ranked{\voctype \Sigma_1 + \voctype \Sigma_2}
-        }    
-        {
-            For  $ a =\tensorpair{a_1,a_2}$, the associated model is    the disjoint union $\underline{a_1} + \underline {a_2}$, with the relations of $\underline {a_1}$ using the    $\voctype{\ranked{\Sigma_1}}$  part of the vocabulary, and the relations of $\underline {a_2}$ using the the    $\voctype{\ranked{\Sigma_1}}$  part of the vocabulary. 
-            If $n_1$ is the arity of $a_1$, then the first $n_1$ ports are inherited from  $\underline {a_1}$ and the remaining ports are inherited from  $\underline {a_2}$.
-        }
-        \vocline
-        {
-            \ranked{\Sigma_1 \times \Sigma_2}
-            }  
-        {
-            \ranked{\voctype \Sigma_1 + \voctype \Sigma_2} + \overbrace{\set R}^{\text{binary}}
-        }    
-        {
-            For  $ a =(a_1,a_2)$, the associated model is      the disjoint union $\underline{a_1} +  \underline {a_2}$, in the same sense as in the previous item for $\otimes$,  with $R$ interpreted as 
-            \begin{align*}
-                \set{(\text{$i$-th port of $\underline {a_1}$}, \text{$i$-th port of $\underline a_2$}): i \in \set{1,\ldots,n}} 
-            \end{align*}
-            The ports are inherited from   $\underline {a_1}$.
-        }
-        \vocline
-        {
-            \ranked{\tmonad \rSigma}
-            }  
-        {
-            \voctype \rSigma + \overbrace{\set <}^{\text{binary}}
-        }    
-        {
-            Let $a \in \tmonad \rSigma$. Consider the structure
-            \begin{align*}
-                 \coprod_{x} \underline{a(x)}
-            \end{align*}
-            where $x$ ranges  over  (port or non-port) nodes $x$ in $a$. In the above, $\underline a(x)$ is a structure over vocabulary $\voctype \rSigma$ that  is defined by induction assumption for non-port nodes, and otherwise has a single element with all relations empty.  The disjoint union $\coprod$ uses the same vocabulary $\voctype \rSigma$ for all structures in the disjoint union.  The binary relation $<$ consists of all pairs $(u,v)$ such that $u$ is the $i$-th port of $\underline{a(x)}$  some non-port node $x$, and $v$ belongs to $\underline{a(y)}$ for some node (possibly a port) $y$ which is a descendant (not necessarily proper) of the $i$-th child of $x$.
-            The $i$-th port is the unique node in $\underline {a(x)}$, where $x$ is the $i$-th port of $a$.
-        }
-    \end{tabular}
-    \caption{\label{fig:vocmodels}
-     Associated models for elements of the types.}
-\end{figure}
+
 
   
-\begin{proposition}\label{prop:to-logic} If $f : \rSigma \to \rGamma$ can be derived from the atomic functions using combinators, then there is a first-order transduction $g$ 
+\begin{proposition}\label{prop:to-logic} If $f : \rSigma \to \rGamma$ is derivable, then there is a first-order transduction $g$ 
     which makes the following diagram commute
     \begin{align*}
         \xymatrix@C=3cm{
             \rSigma \ar[d]_{a \mapsto \underline a}\ar[r]^f &  \rGamma \ar[d]^{a \mapsto \underline a} \\
-            \text{relational structures over $\voctype \rSigma$} \ar[r]_g &  \text{relational structures over $\voctype \rGamma$}.
+            \text{models over the vocabulary of  $ \rSigma$} \ar[r]_g &  \text{models over the vocabulary of  $ \rGamma$}.
         } 
     \end{align*}
     
 \end{proposition}
+
 
 
