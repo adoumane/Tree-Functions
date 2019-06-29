@@ -3,7 +3,9 @@
 \newcommand{\sincemod}{\mathsf S}
 
 \newcommand{\regnames}{{\ranked R}}
-\newcommand{\regvals}[2]{\ranked{(\tmonad #1)^{#2}}}
+\newcommand{\regvals}[2]{\mathrm{regval}(\ranked{#2},\ranked{#1}}
+\newcommand{\regup}[2]{\ranked{\mathsf{U}_{#1}#2}}
+
 \newcommand{\opref}[1]{(\ref{#1})}
 \newcommand{\arity}[1]{\mathrm{arity}(#1)}
 \newcommand{\aalg}{\mathbf A}
