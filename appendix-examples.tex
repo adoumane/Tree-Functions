@@ -34,61 +34,62 @@ which adds to every node of a term in $\tmonad \rSigma$ the label  of its parent
 % from  $(\rGamma\cup\bot)^{\leq n}$, whose lenght is the arity of the node, and such that the $i^{th}$ element of the  list is the symbol of its $i^{th}$ sibling if it has one, otherwise it is $\bot$.
 Let us explain why $\ranked{\mathsf{Parent}}$ is derivable. 
 \begin{enumerate}
-\item For every symbol $a\in \rGamma$, consider the unary symbols $a_\#$ and $a_\flat$.
-We set $\ranked{\rGamma_\#}=\{a_\#\mid a\in\rGamma\}$ and $\ranked{\rGamma_\flat}=\{a_\flat\mid a\in\rGamma\}$.
+\item For every symbol $a\in \rGamma$, consider the unary symbols $a_\#$ and $a_\$$.
+We set $\ranked{\rGamma_\#}=\{a_\#\mid a\in\rGamma\}$ and $\ranked{\rGamma_\$}=\{a_\$\mid a\in\rGamma\}$.
 Let $g$ be the following function:
  \begin{align*}
-\ranked{  g: \rGamma} &\ranked{\to \tmonad(\rGamma+\rGamma_\#+\rGamma_\flat)}\\
-  a &\mapsto a_\#\tensorpair{a\tensorpair{a_\flat,\dots,a_\flat}}.
+\ranked{  g: \rGamma} &\ranked{\to \tmonad(\rGamma+\rGamma_\#+\rGamma_\$)}\\
+  a &\mapsto a_\#\tensorpair{a\tensorpair{a_\$,\dots,a_\$}}.
 \end{align*}
 The action of $\ranked{g}$ on a $\rGamma$ symbol looks like this:
 \begin{center}
-Picture
+\includegraphics[scale=.15]{MyPic1.jpg}
 \end{center}
-\item We lift $\ranked{g}$ to the terms of $\tmonad \rGamma$ using the combinator $\tmonad$, then we apply a flattenig. After this operation, a term in $\tmonad\rGamma$ is transformed to a term in $\ranked{\tmonad(\rGamma+\rGamma_\#+\rGamma_\flat)}$ this way:
+\item We lift $\ranked{g}$ to the terms of $\tmonad \rGamma$ using the combinator $\tmonad$, then we apply a flattenig. After this operation, a term in $\tmonad\rGamma$ is transformed to a term in $\ranked{\tmonad(\rGamma+\rGamma_\#+\rGamma_\$)}$ this way:
 \begin{center}
-Picture
+\includegraphics[scale=.15]{MyPic2.jpg}
 \end{center}
-\item We apply $\ancfact$, to separate the symbols of $\rGamma$ form the symbols of $\ranked{\rGamma_\#}$ and $\ranked{\rGamma_\flat}$, we get then a term in $\ranked{\tmonad(\tmonad\rGamma+\tmonad(\rGamma_\#+\rGamma_\flat))}$. Those terms look like this:
+\item We apply $\ancfact$, to separate the symbols of $\rGamma$ form the symbols of $\ranked{\rGamma_\#}$ and $\ranked{\rGamma_\$}$, we get then a term in $\ranked{\tmonad(\tmonad\rGamma+\tmonad(\rGamma_\#+\rGamma_\$))}$. Those terms look like this:
 \begin{center}
-Picture
+\includegraphics[scale=.15]{MyPic3.jpg}
 \end{center}
-\item Consider the function $\ranked{h:\tmonad(\rGamma_\#+\rGamma_\flat)\to \tmonad(\rGamma_\#+\rGamma_\flat)}$ which transforms the trees of the following shape as follows:
-\begin{center}
-Picture
-\end{center}
-and leaves the others unchanged. 
+\item Consider the function $\ranked{h:\tmonad(\rGamma_\#+\rGamma_\$)\to \tmonad(\rGamma_\#+\rGamma_\$)}$ which maps
+\begin{align*}
+a_\$\tensorpair{b_\#\tensorpair{x_1}} &\mapsto b_\$\tensorpair{a_\$\tensorpair{x_1}}&  a, b\in \rGamma\\
+a_\$\tensorpair{x_1} & \mapsto  x_1&  a\in\rGamma
+\end{align*}
+and leaves the other terms unchanged. 
 The function $\ranked{h}$ is derivable thanks to the pattern-matching construction of Example~\ref{ex:patternMatching}.
 
-\item To the factors of type $\tmonad \rGamma$ we apply the identity function, and to the factors $\ranked{\tmonad(\rGamma_\#+\rGamma_\flat)}$ we apply $\ranked{h}$. After that, we apply a flettening to get terms in $\ranked{\tmonad(\rGamma+\rGamma_\#+\rGamma_\flat)}$ of the form:
+\item To the factors of type $\tmonad \rGamma$ we apply the identity function, and to the factors $\ranked{\tmonad(\rGamma_\#+\rGamma_\$)}$ we apply $\ranked{h}$. After that, we inject the factors into $\ranked{\tmonad(\rGamma+\rGamma_\#+\rGamma_\$)}$ then we apply a flattening to get terms in $\ranked{\tmonad(\rGamma+\rGamma_\#+\rGamma_\$)}$ having the form:
 \begin{center}
-Picture
+\includegraphics[scale=.15]{MyPic4.jpg}
 \end{center} 
-\item We apply $\ancfact$ to separate the symbols of $\ranked{\rGamma_\flat}$ form the others. Doing so, every $\rGamma$ node ends up in the same factor as its parent (marked with $\#$):
+\item We apply $\ancfact$ to separate the symbols of $\ranked{\rGamma_\$}$ form the others. Doing so, every $\rGamma$ node ends up in the same factor as its parent (marked with $\$ $):
 \begin{center}
-Picture
+\includegraphics[scale=.15]{MyPic5.jpg}
 \end{center}
-\item Consider the function $\ranked{k:\tmonad(\rGamma+\rGamma_\#)\to \rGamma\times(\rGamma_0+\bot)}$ which transforms every tree of the following shape as follows:
+\item Consider the function $\ranked{k:\tmonad(\rGamma+\rGamma_\#)\to \rGamma\otimes(\rGamma_0+\bot)+\tmonad(\rGamma+\rGamma_\#)}$ which transforms every tree of the following shape as follows:
 \begin{center}
 Picture
 \end{center}
 and leaves the other unchanged. We apply the function $\ranked{k}$ to the $\ranked{\tmonad(\rGamma+\rGamma_\#)}$
-factors and the identity to the others. Then we apply a flattening and erase the symbols from $\rGamma_\flat$ using the filter function from Example~\ref{ex:filter}. Doing so we get the desired function.
+factors and the identity to the others. Then we apply a flattening and erase the symbols from $\rGamma_\$$ using the filter function from Example~\ref{ex:filter}. Doing so we get the desired function.
 \end{enumerate}
 \medskip
 
 Now consider the function $$Par:\tmonad\rGamma\to \tmonad (\rGamma\otimes \rGamma^{\leq 1})$$ which adds to every node of a tree in $\tmonad \rSigma$ the list (of lenght at most 1) containing the symbol of its parent. In particular, its root is labeled by the empty list. 
 The fuction $Par$ is a first order tree function. To see this, the same steps above can be followed, exept for steps 6 and 7 which should be adapted this way:
 \begin{enumerate}
-\item[6'] We apply block to separate the symbols of $\rGamma_\#$ form the others. Doing so, every $\rGamma$ node ends up in the same block as its parent (marked with $\flat$):
+\item[6'] We apply block to separate the symbols of $\rGamma_\#$ form the others. Doing so, every $\rGamma$ node ends up in the same block as its parent (marked with $\$$):
 \begin{center}
 Picture
 \end{center}
-\item[7'] Consider the function $k:\tmonad(\rGamma+\rGamma_\flat)\to (\rGamma\cup\bot)^{\leq 1}$ which transforms every tree of the following shape as follows:
+\item[7'] Consider the function $k:\tmonad(\rGamma+\rGamma_\$)\to (\rGamma\cup\bot)^{\leq 1}$ which transforms every tree of the following shape as follows:
 \begin{center}
 Picture
 \end{center}
-and leaves the other unchanged. We apply the function $k$ to the $\tmonad(\rGamma+\rGamma_\flat)$
+and leaves the other unchanged. We apply the function $k$ to the $\tmonad(\rGamma+\rGamma_\$)$
 blocks and the identity to the others. The we apply a flattening and erase the symbols from $\rGamma_\#$. Doing so we get the desired function.
 \end{enumerate} 
 \end{example}
