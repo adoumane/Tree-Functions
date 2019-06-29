@@ -39,7 +39,7 @@ We set $\ranked{\rGamma_\#}=\{a_\#\mid a\in\rGamma\}$ and $\ranked{\rGamma_\$}=\
 Let $g$ be the following function:
  \begin{align*}
 \ranked{  g: \rGamma} &\ranked{\to \tmonad(\rGamma+\rGamma_\#+\rGamma_\$)}\\
-  a &\mapsto a_\#\tensorpair{a\tensorpair{a_\$,\dots,a_\$}}.
+  a &\mapsto a_\#\tensorpair{a\tensorpair{a_\$\tensorpair{x_1},\dots,a_\$\tensorpair{x_{\mathsf{arity(a)}}}}}.
 \end{align*}
 The action of $\ranked{g}$ on a $\rGamma$ symbol looks like this:
 \begin{center}
@@ -69,12 +69,18 @@ The function $\ranked{h}$ is derivable thanks to the pattern-matching constructi
 \begin{center}
 \includegraphics[scale=.15]{MyPic5.jpg}
 \end{center}
-\item Consider the function $\ranked{k:\tmonad(\rGamma+\rGamma_\#)\to \rGamma\otimes(\rGamma_0+\bot)+\tmonad(\rGamma+\rGamma_\#)}$ which transforms every tree of the following shape as follows:
-\begin{center}
-Picture
-\end{center}
-and leaves the other unchanged. We apply the function $\ranked{k}$ to the $\ranked{\tmonad(\rGamma+\rGamma_\#)}$
-factors and the identity to the others. Then we apply a flattening and erase the symbols from $\rGamma_\$$ using the filter function from Example~\ref{ex:filter}. Doing so we get the desired function.
+\item Consider the function $\ranked{k:\tmonad(\rGamma+\rGamma_\#)\to \rGamma\otimes(\rGamma_0+\bot)+\tmonad(\rGamma+\rGamma_\#)}$ which maps
+\begin{align*}
+a\tensorpair{x_1,\dots,x_n} \mapsto \tensorpair{a,\bot}\tensorpair{x_1,\dots,x_n} \\
+b_\$\tensorpair{a\tensorpair{x_1,\dots,x_n}} \mapsto \tensorpair{a,b}\tensorpair{x_1,\dots,x_n} 
+\end{align*}
+and leaves the terms other unchanged. We apply the function $\ranked{k}$ to the $\ranked{\tmonad(\rGamma+\rGamma_\#)}$
+factors and the identity to the others. After several applications of injections and flattening, we get a term in $\ranked{\tmonad(\rGamma\otimes(\rGamma_0+\bot)+\rGamma_\#+\rGamma_\$+\rGamma)}$. We erase the symbols of $\ranked{\rGamma_\$}$ and $\ranked{\rGamma_\#}$  using the filter function from Example~\ref{ex:filter}, and obtain a term in $\ranked{\tmonad(\rGamma\otimes(\rGamma_0+\bot)+\rGamma)}$. 
+We get rid of the symbols of $\rGamma$ in the output type, we apply any derivable function of type $\ranked{\rGamma\to \rGamma\otimes(\rGamma_0+\bot)}$, for example the one defined by:
+\begin{align*}
+a \mapsto \tensorpair{a,\bot}
+\end{align*}
+ Doing so we get the desired function.
 \end{enumerate}
 \medskip
 
