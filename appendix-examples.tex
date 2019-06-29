@@ -10,7 +10,7 @@ the identity function over $\tmonad\rSigma$ and $\reduce k$ are constructed from
 \end{example}
 
 
-\bigskip
+\medskip
 \noindent\begin{example}[Filter]\label{ex:filter} Consider the types $\rGamma, \rSigma$  where $\rGamma$ is a finite type of unary symbols. Consider the function:
 $$ \ranked{f:\tmonad (\rSigma+\rGamma)\to\tmonad \rSigma}$$
 which erases the elements of $\rGamma$ from the inupt tree. This function is well defined since erasing unary symbols does not break the tree structure of the input. 
@@ -19,12 +19,12 @@ Consider the basic functions $\ranked{\unit_\rSigma:\rSigma\to\tmonad\rSigma}$ a
 \end{example}
 
 
-\bigskip
+\medskip
 \noindent \begin{example}[Pattern matching]\label{ex:patternMatching} 
 \end{example}
 
 
-\bigskip
+\medskip
 \noindent \begin{example}[Parent and sibling informations]  Let $\rGamma$ be a finite type. We define $\ranked{\rGamma_0}$  to be the ranked set obtained from $\rGamma$ by setting the arity of every element to $0$.  
 \medskip
 Consider the function:
@@ -61,7 +61,7 @@ a_\$\tensorpair{x_1} & \mapsto  x_1&  a\in\rGamma
 and leaves the other terms unchanged. 
 The function $\ranked{h}$ is derivable thanks to the pattern-matching construction of Example~\ref{ex:patternMatching}.
 
-\item To the factors of type $\tmonad \rGamma$ we apply the identity function, and to the factors $\ranked{\tmonad(\rGamma_\#+\rGamma_\$)}$ we apply $\ranked{h}$. After that, we inject the factors into $\ranked{\tmonad(\rGamma+\rGamma_\#+\rGamma_\$)}$ then we apply a flattening to get terms in $\ranked{\tmonad(\rGamma+\rGamma_\#+\rGamma_\$)}$ having the form:
+\item To the factors of type $\tmonad \rGamma$ we apply the identity function, and to the factors $\ranked{\tmonad(\rGamma_\#+\rGamma_\$)}$ we apply $\ranked{h}$. After that, we inject the factors into $\ranked{\tmonad(\rGamma+\rGamma_\#+\rGamma_\$)}$, then we apply a flattening to get terms in $\ranked{\tmonad(\rGamma+\rGamma_\#+\rGamma_\$)}$ having the form:
 \begin{center}
 \includegraphics[scale=.15]{MyPic4.jpg}
 \end{center} 
@@ -71,8 +71,8 @@ The function $\ranked{h}$ is derivable thanks to the pattern-matching constructi
 \end{center}
 \item Consider the function $\ranked{k:\tmonad(\rGamma+\rGamma_\#)\to \rGamma\otimes(\rGamma_0+\bot)+\tmonad(\rGamma+\rGamma_\#)}$ which maps
 \begin{align*}
-a\tensorpair{x_1,\dots,x_n} \mapsto \tensorpair{a,\bot}\tensorpair{x_1,\dots,x_n} \\
-b_\$\tensorpair{a\tensorpair{x_1,\dots,x_n}} \mapsto \tensorpair{a,b}\tensorpair{x_1,\dots,x_n} 
+a\tensorpair{x_1,\dots,x_n} \mapsto \tensorpair{a,\bot} \\
+b_\$\tensorpair{a\tensorpair{x_1,\dots,x_n}} \mapsto \tensorpair{a,b} 
 \end{align*}
 and leaves the terms other unchanged. We apply the function $\ranked{k}$ to the $\ranked{\tmonad(\rGamma+\rGamma_\#)}$
 factors and the identity to the others. After several applications of injections and flattening, we get a term in $\ranked{\tmonad(\rGamma\otimes(\rGamma_0+\bot)+\rGamma_\#+\rGamma_\$+\rGamma)}$. We erase the symbols of $\ranked{\rGamma_\$}$ and $\ranked{\rGamma_\#}$  using the filter function from Example~\ref{ex:filter}, and obtain a term in $\ranked{\tmonad(\rGamma\otimes(\rGamma_0+\bot)+\rGamma)}$. 
@@ -83,66 +83,52 @@ a \mapsto \tensorpair{a,\bot}
  Doing so we get the desired function.
 \end{enumerate}
 \medskip
-
-Now consider the function $$Par:\tmonad\rGamma\to \tmonad (\rGamma\otimes \rGamma^{\leq 1})$$ which adds to every node of a tree in $\tmonad \rSigma$ the list (of lenght at most 1) containing the symbol of its parent. In particular, its root is labeled by the empty list. 
-The fuction $Par$ is a first order tree function. To see this, the same steps above can be followed, exept for steps 6 and 7 which should be adapted this way:
-\begin{enumerate}
-\item[6'] We apply block to separate the symbols of $\rGamma_\#$ form the others. Doing so, every $\rGamma$ node ends up in the same block as its parent (marked with $\$$):
-\begin{center}
-Picture
-\end{center}
-\item[7'] Consider the function $k:\tmonad(\rGamma+\rGamma_\$)\to (\rGamma\cup\bot)^{\leq 1}$ which transforms every tree of the following shape as follows:
-\begin{center}
-Picture
-\end{center}
-and leaves the other unchanged. We apply the function $k$ to the $\tmonad(\rGamma+\rGamma_\$)$
-blocks and the identity to the others. The we apply a flattening and erase the symbols from $\rGamma_\#$. Doing so we get the desired function.
-\end{enumerate} 
+If $\rGamma$ is a finite ranked set, we define $\ranked{\Gamma^*}$ as
+$$\coprod_{i \leq \text{ maximal arity in } \rGamma} \underbrace{(\rGamma+\bot) \otimes \cdots \otimes (\rGamma+\bot)}_{i\text{ times}}$$
+Now consider the function $$\ranked{\mathsf{Sibling}:\tmonad\rGamma\to \tmonad (\rGamma\otimes \rGamma^*_0)}$$ which adds to every node of a term in $\tmonad \rSigma$ the list containing the symbols of its children. When a child is a port, it is marked by $\bot$ in the list.
+The fuction $\ranked{\mathsf{Sibling}}$ is derivable. To see this, the same steps above can be followed, exept for steps 6 and 7 which should be adapted to this case. 
 \end{example}
 
 
 
-\bigskip
-\noindent  \begin{example}[Root and leaves] Let $\rSigma$ be a finite type and $f:\rSigma \to \rGamma$, $g: \rSigma \to \rGamma$ be first order tree functions. 
-
-The function $\mathsf{root}_{f,g} : \tmonad\rSigma \to \tmonad(\rGamma)$
-which applies $f$ to the root and $g$ to the rest of the tree is a first order tree function.
+\medskip
+\noindent  \begin{example}[Root and leaves] Let $\rSigma$ be a finite type and $f:\rSigma \to \rGamma$, $g: \rSigma \to \rGamma$ be derivable functions. The function $\ranked{\mathsf{Root}_{f,g} : \tmonad\rSigma \to \tmonad\rGamma}$
+which applies $f$ to the root and $g$ to the rest of the tree is a derivable function.
  
-To show this, we first start by applying the function $Par:\tmonad\rSigma\to\tmonad(\rSigma\otimes\rSigma^{\leq 1})$ to the trees of $\tmonad \rSigma$. Doing so, the root can be distinghished from the other nodes since it will be tagged by the empty list, while the other nodes will be tagged by lists of lenght exactly $1$ (the set of lists of lenght exactly $n$ will be denoted by $\rSigma^{=n}$).  
+To show this, we first start by applying the function $\ranked{\mathsf{Parent}:\tmonad\rSigma\to\tmonad(\rSigma\otimes(\rSigma_0+\bot))}$. Doing so, the root can be distinghished from the other nodes since it will be tagged by $\bot$.  
 
-Consider the function $\chi:\rSigma\otimes\rSigma^{\leq 1}\to \llzero+\llone$ which associates $1$ to the elements of $\rSigma\otimes \rSigma^{=0}$ and $\llzero$ to the others.  This is a
-first order tree function since it is the characteristic function of a finite set.  Thus, the function: 
+The function $\ranked{h:\rSigma\otimes(\rSigma_0+\bot)\to \rGamma}$ defined by 
 \begin{align*}
   h\colon \rSigma &\to \rGamma \\
-  x &\mapsto f(x)  \text{ if } \chi(x)\in\llone\\
-  x &\mapsto g(x)  \text{ if } \chi(x)\in\llzero.
+  \tensorpair{a,\bot} &\mapsto f(a) \\
+  \tensorpair{a,b} &\mapsto g(a) \text{ if } b\neq \bot.
 \end{align*}
-is a first order tree function using the if then else construction. 
-We lift $h$ to the trees of $\tmonad\rGamma$ to conclude.
+is derivable since its domain is finite. 
+We lift $h$ to terms of $\tmonad\rGamma$ to conclude.
 
 
 %We lift the function $ditribute_\otimes: \rSigma\otimes\rSigma^{\leq 1}\to  \rSigma\otimes\rSigma^{=0}+ \rSigma\otimes\rSigma^{= 1}$ to the trees of $\tmonad \rSigma\otimes\rSigma^{\leq 1}$ to get trees in $\tmonad (\)$.
 
 \medskip
-The function $\mathsf{leaves}_{f,g} : \tmonad\rSigma \to \tmonad(\rGamma_0 + \rGamma_1)$
- which applies $f$ to the leaves and $g$ to the rest of the tree is a first order tree function. This is done using the same ideas as before, but invoquing the function $Sib$ instead of the function $Par$: leaves can be distingushed from the other nodes since there tags are in $\{\bot\}^{\leq n}$.
+The function $\ranked{\mathsf{Leaves}_{f,g} : \tmonad\rSigma \to \tmonad\rGamma}$
+ which applies $f$ to the leaves and $g$ to the rest of the tree is derivable. This is done using the same ideas as before, but invoquing the function $\ranked{\mathsf{Sibling}}$ instead of the function $\ranked{\mathsf{Parent}}$: leaves can be distingushed from the other nodes since there tags are lists of $\bot$.
 \end{example}
 
-\bigskip
-\noindent\begin{example}[Descendent and ancestors]
-~\\\begin{itemize}
-\item The function $\mathsf{Desc}_\rGamma: \tmonad \rSigma \to \tmonad (2\otimes\rSigma)$ which 
-adds $1$ to the label of each node depending on whether it has a descendent in $\rGamma$.
-\item The function $\mathsf{Anc}_\rGamma: \tmonad \rSigma \to \tmonad (2\otimes\rSigma)$ which 
-adds $1$ to the label of each node depending on whether it has an ancestor in $\rGamma$.
+\medskip
+\noindent\begin{example}[Descendent and ancestors] If $\rSigma$ is a finite type and $\rGamma\subseteq \rSigma$, then the functions 
+\begin{itemize}
+\item $\ranked{\mathsf{Descendant}_\rGamma: \tmonad \rSigma \to \tmonad (\rSigma+\rSigma)}$ which maps each node to one of the copies of $\rSigma$ depending on whether it has a descendent in $\rGamma$.
+\item $\ranked{\mathsf{Ancestor}_\rGamma: \tmonad \rSigma \to \tmonad (\rSigma+\rSigma)}$ which 
+ each node depending on whether it has an ancestor in $\rGamma$.
 \end{itemize}
+are derivable.
 \end{example}
-%\bigskip
+%\medskip
 %\noindent \begin{example}[Characteristic function of a finite type]
 %Let $\rSigma, \Delta\in \Tt$ and suppose that $\rSigma$ is finite. 
 %The order-preserving function $\chi_\rSigma:\Delta\to \llzero+\llone$ which satisfies $\chi_\rSigma(s)\in \llone$ if and only if $s\in \rSigma$ is a first-order tree function. 
 %\end{example}
-%\bigskip
+%\medskip
 %\noindent \begin{example}[If then else] Suppose that $f : \rSigma \to \llzero+\llone$ and $g_0, g_1 : \rSigma \to\rGamma$ are first-order tree functions. Then the function:
 % \begin{align*}
 %  g\colon \rSigma &\to \rGamma \\
