@@ -159,8 +159,6 @@ In this section, we define the atomic functions and combinators from Figure~\ref
 
 
 
-
-
 \subsubsection{Terms as an algebraic data type} Let $\ranked \Sigma$ be a ranked set. If $a \in \Sigma$ is a letter of arity $n$, and $t_1,\ldots,t_n$ are terms in $\tmonad \rSigma$, then also 
 \begin{align*}
     a \tensorpair{t_1,\ldots,t_n}
@@ -211,7 +209,7 @@ Finally, the  \emph{flattening} operation $\flatt_\rSigma$
         \begin{align*}
             t \in \ranked{\tmonad(\Sigma_1+\Sigma_2)}.
         \end{align*}
-        We say that two non-port nodes have \emph{same type} if both have labels in the same  $\ranked{\Sigma_i}$; otherwise we say that non-port nodes have \emph{opposing type}.  Call two non-port nodes \emph{ancestor equivalent}  if they have the same proper ancestors of opposing type. Call two non-port nodes \emph{descendant equivalent}  if they  are ancestor equivalent and they have the same proper descendants of opposing type. Here is a picture, with $\ranked{\Sigma_1}$ being red and $\ranked{\Sigma_2}$ being blue: \todo{les images no collent pas avec la def.}
+        We say that two non-port nodes have \emph{same type} if both have labels in the same  $\ranked{\Sigma_i}$; otherwise we say that non-port nodes have \emph{opposing type}.  Call two non-port nodes \emph{ancestor equivalent}  if they have the same proper ancestors of opposing type. Call two non-port nodes \emph{descendant equivalent}  if they  are ancestor equivalent and they have the same proper descendants of opposing type. Here is a picture, with $\ranked{\Sigma_1}$ being red and $\ranked{\Sigma_2}$ being blue: \todo{les images ne collent pas avec la def.}
         \mypic{11}
         Both ancestor and descendant equivalences are factorisations; and in each case equivalence classes contain only nodes of same type.  The function $\ancfact$ maps a term to (the term of terms corresponding to) its ancestor equivalence relation, likewise we define $\decfact$ for  descendant factorisations.
     
@@ -221,7 +219,8 @@ Finally, the  \emph{flattening} operation $\flatt_\rSigma$
         \end{align*}
         to be the extension to  terms of the pre-order function discussed in Example~\ref{ex:pre-order}, as explained below:
         \mypic{13}
-        
+
+\todo{Il me semble qu'il manque des operations sur le type Fold. Je propose de faire une section specifique a fold (comme celle pour les terms), avant une section specifique pour l'unfolding, ou on ajouterai, en plus de certaines operations de distributitivite, les operations de "quasi-monad'' sur fold. Il est necessaire d'ajouter la fonctorialite de fold, mais peut etre aussi ce qui ferait office de unit et de flat.}        
 
 \subsubsection{Unfolding}
 The general idea behind the  operation 
@@ -233,7 +232,7 @@ is to unfold the edges that are joined using the fold constructor, by matching t
 To explain unfolding more precisely, we reduce it to simpler parts, by using a special case of terms, called shallow terms. Define a \emph{shallow term} over a ranked set $\rSigma$ and $\rGamma$ to be the special case of  a term over $\rSigma + \rGamma$ where:  the root has label from $\rGamma$, all children of the root are non-port nodes from $\rGamma$, and all grand-children are ports. Here is a picture of a shallow term:
 \mypic{54}
 It will be easier to define the unfold operation for shallow terms, and then unfolding can be lifted to general terms using structural induction. 
-Before explaining the unfolding operation, we describe  the operations associated to flat terms. First, we can lift functions on the underlying types to flat terms in the natural way:
+Before explaining the unfolding operation, we describe  the operations associated to shallow terms. First, we can lift functions on the underlying types to shallow terms in the natural way:
 \begin{align*}
     \frac
     { \ranked{f : \Sigma \to \Sigma'} \quad \ranked{g : \Gamma \to \Gamma'}}
@@ -247,7 +246,7 @@ Every term over $\rSigma$ is either a port, or it is a shallow term over $\rSigm
 \end{align*}
 We can distribute fold across shallow terms using the  operation
 \begin{align*}
-    \ranked{\distrfold : \shallowterm \Sigma {\reduce k \Gamma} \to \reduce k (\shallowterm \Sigma  \Gamma})
+    \ranked{\distrfold : \shallowterm \Sigma {\reduce k \Gamma} \to \reduce k (\shallowterm \Sigma  \Gamma)}
 \end{align*}
 as explained in the following picture:
 \mypic{55}
@@ -268,8 +267,7 @@ Using the shallow unfold operation described above, we now give a formal definit
 \begin{align*}
 \ranked{\tmonad \expmatrix \Sigma}.
 \end{align*}
-If the input is the identity term ,  then its unfolding
- is  unfold is 
+If the input is the identity term ,  then its unfolding is 
 \begin{align*}
     \tensorpair{\portletter,\ldots,\portletter}/(i \mapsto 1),
 \end{align*}

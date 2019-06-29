@@ -111,6 +111,13 @@
                     Pre-order traversal.
                 }    
             \fotitem{
+            \frac{ \ranked{f : \Sigma \to \Gamma}}{\ranked{\reduce k f : \reduce k \Sigma \to \reduce k \Gamma}}
+            }
+            {
+                Lift a function from the alphabet  to its $k$-fold.
+            }
+
+            \fotitem{
                 \ranked{\unfold : \tmonad  \reduce k (\Sigma \otimes \cdots \otimes \Sigma) \to \reduce k ( \tmonad \rSigma \otimes \cdots \otimes \tmonad \rSigma)}
                 }
                 {
@@ -127,3 +134,4 @@
     \caption{Atomic functions and combinators}
     \label{fig:fo-term}
 \end{figure}
+
