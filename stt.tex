@@ -3,17 +3,17 @@
 
 \section{Register tree transducers}
 \label{sec:stt}
-In this section, we present an automaton model that is equivalent to first-order tree-to-tree transductions. 
+In this section, we introduce an automaton model for tree-to-tree functions, and prove that it defines the same functions as first-order tree-to-tree transductions. 
 The automaton model is roughly based on streaming tree transducers~\cite{alur2017streaming}.
-The general idea is that the automaton processes the input tree bottom-up, and uses registers to store parts of the output tree. A part of a tree is not necessarily a tree, some times it can be a term, and therefore some registers will store trees, but other registers will store unary terms, and some other registers will store binary terms, etc.  
-Before giving the formal definition, we present an example which  computes pre-order traversal, as considered in Example~\ref{ex:pre-order}.
-\begin{example}\label{ex:preorder-register} Recall the input and output alphabets:
+It processes the input tree bottom-up, and uses registers to store parts of the output tree.
+Before giving a formal definition, we present an example based on  pre-order traversal from Example~\ref{ex:pre-order}.
+\begin{example}\label{ex:preorder-register} In Example~\ref{ex:pre-order}, we considered a tree-to-tree function which computed pre-order traversal, using the following input and output alphabets:
     \mypic{21}
-The transducer has a single register, which stores unary terms. After reading an input tree, this register stores a term which represents the pre-order traversal of the  input tree, and which has a single port in the right most leaf. The updates of this transducer are illustrated as follows. If the input tree is a single leaf, then the register is set to the following term:
+We now show a transducer which recognises the same function, and which uses  a single register.  After reading processing an input tree, the register stores a unary term (not a tree), which represents the pre-order traversal of the  input tree, and which has a single port in the rightmost leaf. The updates of this transducer are illustrated as follows. If the input tree is a single leaf, then the register is set to the following term:
     \mypic{47}
-    For a tree which is not a single leaf, we first compute the register value  for each of the $n$  child subtrees (assuming that the root letter has arity $n$), resulting in unary terms $r_1,\ldots,r_n$,  and then we combine these terms into a single one, which is illustrated below for the case of $n=2$:
+    For a tree which is not a single leaf, and its root symbol has $n>0$ children, we first compute the register value  for each of the $n$  child subtrees, resulting in unary terms $r_1,\ldots,r_n$,  and then we combine these terms into a single one, which is illustrated below for the case of $n=2$:
     \mypic{34}
-    Finally, once the whole input tree has been processed, resulting in a register value $r$ in the root node, the output tree is obtained from this register value by plugging its port with a node, as illustrated in the following picture:
+    Once the whole input tree has been processed, resulting in a register value $r$ in the root node, the output tree is obtained from this register value by plugging its port with a node, as illustrated in the following picture:
     \mypic{48}
 \end{example}
 
@@ -33,91 +33,100 @@ The transducer has a single register, which stores unary terms. After reading an
 
 We now proceed with a more formal definition of register tree transducers.
 
-\paragraph*{Register valuations and updates.}   Let $\ranked{\Gamma, R}$ be finite ranked sets, which are called the \emph{output alphabet} and \emph{register names} respectively.  
-A \emph{register valuation} (over output alphabet $\rGamma$ and register names $\ranked R$) is defined to be any arity-preserving function from the register names $\regnames$ to terms $\tmonad \rGamma$. Here is an example, which uses registers $r,s$ of arities two and zero:
+\paragraph*{Register valuations and updates.}   Let $\ranked{\Gamma, R}$ be finite ranked sets.
+A \emph{register valuation} over output alphabet $\rGamma$ and register names $\ranked R$ is defined to be any arity-preserving function from the register names $\regnames$ to terms $\tmonad \rGamma$. Here is an example, which uses registers $r,s$ of arities two and zero:
 \mypic{31}
-We write $\regvals \rGamma \regnames$ for the set of register valuations; register valuations do not have arities and therefore $\regvals \rGamma \regnames$ is a set and not a ranked set. For  $n \in \set{0,1,\ldots}$, an \emph{$n$-ary register update} (over $\rGamma$ and $\ranked R$) is defined to be any arity-preserving function
+To transform register valuations, we use \emph{register updates}.  For  $n \in \set{0,1,\ldots}$, an \emph{$n$-ary register update} (over $\rGamma$ and $\ranked R$) is defined to be any arity-preserving function
 \begin{align}\label{eq:reg-operation}
     \ranked {u : \regnames \rto \tmonad ( \rGamma + \underbrace{{\regnames + \cdots + \regnames}}_{\text{$n$ times}})}
 \end{align}
+In particular, a register update of arity zero is the same as a register valuation.
 Here is a picture of a binary register update:
 \mypic{32}
-Register updates act on register valuations, in the sense that an $n$-ary register update $\ranked u$ can be seen as an $n$-ary operation on  register valuations
+Every $n$-ary register update $\ranked u$ induces a operation of type 
 \begin{align*}
-    [\ranked u] : (\regvals \rGamma \regnames \times \cdots \times \regvals \rGamma \regnames) \to \regvals \rGamma \regnames,
+\text{(register valuations)}^n \to \text{register valuations},
 \end{align*}
-which inputs a tuple of register valuations $(\ranked u_1,\ldots,\ranked u_2)$ and outputs the register valuation obtained from $\ranked u$ by replacing, for each $r \in \regnames$ and $i \in \set{1,\ldots,n}$, all occurrences of the $i$-th copy of register $r$  by the contents of register $r$ in $\ranked u_i$. The set of register updates can be viewed as a ranked set, because each register update has an arity. 
+which outputs the register valuation obtained from $\ranked u$ by replacing  the $i$-th copy of a register name with the  contents of that register in the $i$-th input register valuation. 
 
-We are now ready to define the model of register tree transducer. The general idea is that:
-\begin{enumerate}
-    \item the transducer assigns to each node of the input tree a register update;
-    \item  after evaluating all of these updates we get a register valuation in the root;
-    \item this register valuation is used to define the output tree.
-\end{enumerate}
- A feature of the model is that, the evaluation phase in item 2 above is bottom up (i.e.~the register valuation in  node $v$ depends only on the register valuations in its children), the choice of register operations in item 1 is not  (i.e.~the register update chosen in node  $v$ might depend on nodes  that are not in the subtree of $v$). 
+Since register updates have arities, the register updates are a ranked set, and therefore  we can build trees  with nodes labelled by register updates. For such a  tree 
+\begin{align*}
+    t \in  \trees(\ranked{\text{register updates}}),
+\end{align*}
+define its \emph{evaluation} to be the register valuation defined by induction in the natural way: the evaluation of a tree with root label $\ranked u$ and child subtrees $t_1,\ldots,t_n$ is obtained  by applying the register update $\ranked u$ to the evaluations of the $t_1,\ldots, t_n$. In the special case of $n=0$, the tree $t$ consists of a register update of arity zero, which is the same thing as a register valuation. 
 
-\begin{definition}[Register Tree Transducer]\label{def:stt}
-\ 
-    \begin{itemize}
-        \item An  \emph{abstract register tree transducer} consists of finite ranked sets
-        \begin{align*}
-           \underbrace{\rSigma}_{\text{input alphabet}} \quad 
-           \underbrace{\rGamma}_{\text{output alphabet}} \quad 
-           \underbrace{\ranked R}_{\text{registers}} \quad 
-           \underbrace{\rDelta \subseteq \text{register updates over $\rGamma$ and $\ranked R$},}_{\text{register updates}}
-        \end{align*}
-           together with an \emph{update function} $\delta : \trees \rSigma \to \trees \rDelta$ and an \emph{output tree} $\outtree \in \trees \ranked{(\Gamma + R)}$. 
-           The semantics of the transducer is the composition of the functions
+% A register update can be applied not only to register valuations, but also to register updates (which generalise register valuations, since register valuations are register updates of arity 0): if $\ranked{u}$ is an $n$-ary register update, and $\ranked{u_1,\ldots,u_n}$ are register updates of arities $m_1,\ldots,m_n$, then the register update
+% \begin{align*}
+% \ranked{u}(\ranked {u_1},\ldots,\ranked{u_n})  \qquad \text{of arity $m_1+\cdots + m_n$}
+% \end{align*}
+
+\paragraph*{Register transducers.} Having defined a registers and their updates, we proceed to define register transducers. The general idea is that the transducer assigns to each node of the input tree a register update using a first-order tree relabelling, these register updates are then evaluated, and the output tree is found in a designated output register. 
+
+
+
+\begin{definition}[Register  Transducer]\label{def:stt}
+The syntax of a register transducer consists of: 
+\begin{itemize}
+    \item Input and output alphabets $\rSigma$ and $\rGamma$, which are finite ranked sets.
+    \item A finite ranked set of \emph{registers} $\regnames$, equipped with a total order.
+    \item A distinguished \emph{output register} in $\regnames$ of arity zero.
+    \item A \emph{transition function}, which is a  first-order tree relabelling of type
     \begin{align*}
-        \xymatrix{
-            \trees \rSigma \ar[r]^{\delta} & \trees \rDelta \ar[r]^{t \mapsto [t]} & (\tmonad \rGamma)^\regnames \ar[r]& \trees \rGamma
-        }
+      \trees{\rSigma} \to \trees{\rDelta}  \qquad \text{for some finite set $\rDelta$ of  register updates over $\regnames$ and $\rGamma$}.
     \end{align*}
-    where the middle function is the tree extension of the action from~\eqref{eq:reg-operation} that is defined by 
-    \begin{align*}
-        [\ranked u \tensorpair{t_1,\ldots,t_n}] = [\ranked u]([t_1],\ldots,[t_n])
-    \end{align*}
-    and the last function applies a register valuation to the output tree. 
-    \item A \emph{first-order register tree transducer} is the special case of the above when:
+    such that all register updates in  $\rDelta$ are copyless and monotone, as defined below:
     \begin{enumerate}
-        \item \emph{First-order rational updates.} The function $\delta$ is a first-order rational tree function; and
-        \item \emph{Copyless.} Every register update $\ranked u \in \rDelta$ is \emph{copyless}\footnote{The copyless restriction does not apply to the output tree, but imposing it also on the output tree would give a model with the same expressive power.}, which means that for every
+        \item \emph{Copyless.}  An $n$-ary register update $\ranked{u}$ is  called  \emph{copyless} if   every
         \begin{align*}
-            r \in \ranked{\underbrace{\regnames + \cdots + \regnames}_{\text{arity of $u$ times}}}
+            r \in \ranked{\underbrace{\regnames + \cdots + \regnames}_{\text{$n$ times}}}
         \end{align*}
-        there is at most one $s \in \regnames$ such that $r$ appears in the term  $\ranked u(s)$, and furthermore $r$ appears at most once in that term; and 
-        \item \emph{Montone.} One can equip the registers $\regnames$ with a total order so that for every update $\ranked u \in \rDelta$ and  every $i \in \set{1,\ldots,\text{arity of $\ranked u$}}$,
+        appears in at most one of the terms $\set{\ranked u(s)}_{s \in \regnames}$, and it appears at most once in that term. 
+        \item \emph{Monotone.} An $n$-ary  register update $\ranked u$ is called monotone (with respect to the fixed total ordering on registers) if for every $i \in \set{1,\ldots,n}$, the relation defined by
         \begin{align*} 
-            r \in \regnames \qquad \mapsto \quad \text{the unique $s \in \regnames$ such that the $i$-th copy of $r$ appears in $\ranked u(s)$},
+            r \to_i s \quad \text{if} \quad  \text{the $i$-th copy of $r$ appears in $\ranked u(s)$},
         \end{align*}
-        which is a well-defined partial function thanks to the copyless assumption, is monotone in the following sense:
+        which is a partial function from $r$ to $s$ when $\ranked u$ is copyless, satisfies:
         \begin{align*}
-            r \leq s \qquad \text{implies} \qquad  \ranked u_i(r) \le  \ranked u_i(s) \text{ or one of the values is undefined.}
+            r_1 \leq r_2 \text{ and } r_1 \to_i s_1 \text{ and } r_2 \to_i s_2  \qquad \text{implies} \qquad  s_1 \leq s_2
         \end{align*}
-        The reason for the monotonicity restriction is to ensure that the recognised function can be recognised in first-order logic; without monotonicity one could swap around registers in a way that 
     \end{enumerate}
-    \end{itemize}
+\end{itemize}
 \end{definition}
-The above definition can be seen as a variant of streaming tree transducers considered in~\cite{alur2017streaming}, with two differences: (a) our model has a monotonicity requirement, which is not present in~\cite{alur2017streaming} but needed to stay within first-order transductions, see Example~\ref{ex:monotone} below; (b)  our model  computes register updates using  a first-order rational tree function where the  label assigned to an input node $v$ might depend on labels of nodes that are not in the subtree of $v$, this is unlike~\cite{alur2017streaming} which uses a deterministic bottom-up tree automat\footnote{. Feature (b) is sometimes called  \emph{lookahead}. For streaming tree transducers as in~\cite{alur2017streaming}, lookahead can be added without changing the expressive power. For all we know, a  similar result might be true in our setting, but we do not need it, since absence of lookahead would not help in any of our constructions.  }. 
+
+The function computed by a register transducer is the composition the following three operations:
+\begin{align*}
+\xymatrix@C=2.5cm{
+    \trees {\rSigma} \ar[r]^{\text{transition function}} & \trees {\rDelta} \ar[r]^-{
+    \text{evaluate}
+    } & \text{register valuations} \ar[r]^-{\text{contents of output register}} & \trees \Gamma
+}
+\end{align*}
+
+The copyless restriction in the above definition is a standard feature of transducer models aimed at capturing transformations of linear size increase~\cite{alurStreamingStringTransducers2011,alur2017streaming}. It prohibits iterated duplication of registers, which would lead to exponential size outputs. The more unusual aspects of our model are the monotonicity requirement and the use of first-order tree relabellings. In fact, our model can be seen as a variant of  streaming tree transducers from~\cite{alur2017streaming} with the following two differences:
+\begin{enumerate}
+    \item  In~\cite{alur2017streaming}, there is no order on the registers and the monotonicity requirement is lifted. The monotonicity requirement in Definition~\ref{def:stt}  is related to our use of first-order logic, and not monadic second-order logic as in~\cite{alur2017streaming}. Monotonicity    prohibits swapping registers in cycles, which could be exploited by a transducer to do modulo counting (which can be done in monadic second-order logic, but not in first-order logic).
+    \item In~\cite{alur2017streaming}, the transition function is computed by a deterministic bottom-up tree automaton. The update mechanism used in Definition~\ref{def:stt} is incomparable: it  uses first-order logic (and not monadic second-order logic, which corresponds to  tree automata), but it allows a form of lookahead in the sense that the update assigned to a node $x$ can also depend on nodes that are not descendants of $x$ (unlike for deterministic bottom up tree automata).  The lookahead is used to ensure the monotonicity requirement. 
+\end{enumerate}
+
  
-The following two examples explain the copyless and monotonicity restrictions. 
-\begin{example}\label{ex:copyless}
-    To see the need for the copyless restriction, consider the following abstract register tree transducer, which is not copyless. The input alphabet has two letters of arities zero and one. There is one register $r$ of arity zero, and the update function is the following tree homomorphism \mypic{33}
-The output tree has one node labelled by  $r$. This function recognised by this transducer maps an input tree (which is a sequence of unary nodes followed by a leaf)  to a complete binary tree of same depth. In particular this, function has exponential size increase, and therefore it cannot be a first-order tree-to-tree transduction, since the latter have linear size increase\footnote{Copyless updates imply linear size outputs, but the converse implication is also true: a corollary of~\cite[Theorem 7.1]{engelfriet_macro_2003} is that  if a  register tree transducer has linear size increase but not necessarily copyless updates, then it is equivalent to a register tree transducer   which has copyless updates.}.
-\end{example}
+% The following two examples explain the copyless and monotonicity restrictions. 
+% \begin{example}\label{ex:copyless}
+%     To see the need for the copyless restriction, consider the following abstract register tree transducer, which is not copyless. The input alphabet has two letters of arities zero and one. There is one register $r$ of arity zero, and the update function is the following tree homomorphism \mypic{33}
+% The output tree has one node labelled by  $r$. This function recognised by this transducer maps an input tree (which is a sequence of unary nodes followed by a leaf)  to a complete binary tree of same depth. In particular this, function has exponential size increase, and therefore it cannot be a first-order tree-to-tree transduction, since the latter have linear size increase\footnote{Copyless updates imply linear size outputs, but the converse implication is also true: a corollary of~\cite[Theorem 7.1]{engelfriet_macro_2003} is that  if a  register tree transducer has linear size increase but not necessarily copyless updates, then it is equivalent to a register tree transducer   which has copyless updates.}.
+% \end{example}
 
-\begin{example}\label{ex:monotone}
-    To see the need for the monotonicity restriction, consider the following abstract register tree transducer, which violates monotonicity. The input alphabet is the same as in Example~\ref{ex:copyless}, i.e.~there are two letters of arities zero and one. There are two registers $r,s$ of arity zero, and the update function is the following tree homomorphism \mypic{35}
-    The output tree has one node labelled by  $r$. 
-Because the two registers get swapped in every step (which is a violation of monotonicity), the output  tree will have a unary (blue)  node if and only if the input tree has an even number of nodes. It follows that the recognised function is not a first-order tree-to-tree transducer, because first-order logic cannot compute parity. 
-\end{example}
+% \begin{example}\label{ex:monotone}
+%     To see the need for the monotonicity restriction, consider the following abstract register tree transducer, which violates monotonicity. The input alphabet is the same as in Example~\ref{ex:copyless}, i.e.~there are two letters of arities zero and one. There are two registers $r,s$ of arity zero, and the update function is the following tree homomorphism \mypic{35}
+%     The output tree has one node labelled by  $r$. 
+% Because the two registers get swapped in every step (which is a violation of monotonicity), the output  tree will have a unary (blue)  node if and only if the input tree has an even number of nodes. It follows that the recognised function is not a first-order tree-to-tree transducer, because first-order logic cannot compute parity. 
+% \end{example}
 
-The main result of this section is Proposition~\ref{prop:stt} below, which says that first-order register tree transducers are expressively complete for first-order tree-to-tree transductions. The proof uses the composition method for logic,  following the same lines as  similar results for monadic second-order logic which can be found in~\cite[Theorem 4.6]{alur2017streaming} and~\cite[Theorem 14]{bloem_comparison_2000}. 
+The main result of this section is Theorem~\ref{thm:stt} below, which says that register transducers are expressively complete for first-order tree-to-tree transductions. The proof uses the composition method for logic,  following the same lines as  similar results for monadic second-order logic which can be found in~\cite[Theorem 4.6]{alur2017streaming} and~\cite[Theorem 14]{bloem_comparison_2000}. 
 
 \begin{theorem}\label{thm:stt}
-    Every first-order tree-to-tree transduction is recognised by a first-order register tree transducer. 
+    Every first-order tree-to-tree transduction is recognised by a  register transducer. 
 \end{theorem}
-The converse inclusion in the above lemma is also true, i.e.~every first-order register tree transducer recognises a first-order tree transduction; this will follow from Propositions~\ref{prop:forat} and~\ref{prop:many-register}. 
+The converse inclusion in the above theorem is also true, i.e.~every register transducer recognises a first-order tree-to-tree transduction; this will follow from Propositions~\ref{prop:forat} and~\ref{prop:many-register}. 
 
 
 
