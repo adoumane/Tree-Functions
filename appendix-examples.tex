@@ -28,7 +28,7 @@ Consider the basic functions $\ranked{\unit_\rSigma:\rSigma\to\tmonad\rSigma}$ a
 \noindent \begin{example}[Parent and sibling informations]  Let $\rGamma$ be a finite type. We define $\ranked{\rGamma_0}$  to be the ranked set obtained from $\rGamma$ by setting the arity of every element to $0$.  
 \medskip
 Consider the function:
-$$\ranked{ \mathsf{Parent}: \tmonad \rGamma \to \tmonad (\rGamma\otimes (\rGamma_0+\bot))}$$
+$$\ranked{ \mathsf{Parent}: \tmonad \rGamma \to \tmonad (\rGamma\otimes (\rGamma+\bot)_0)}$$
 which adds to every node of a term in $\tmonad \rSigma$ the label  of its parent if it has one and $\bot$ if it is the root.
 
 % from  $(\rGamma\cup\bot)^{\leq n}$, whose lenght is the arity of the node, and such that the $i^{th}$ element of the  list is the symbol of its $i^{th}$ sibling if it has one, otherwise it is $\bot$.
@@ -69,14 +69,14 @@ The function $\ranked{h}$ is derivable thanks to the pattern-matching constructi
 \begin{center}
 \includegraphics[scale=.15]{MyPic5.jpg}
 \end{center}
-\item Consider the function $\ranked{k:\tmonad(\rGamma+\rGamma_\#)\to \rGamma\otimes(\rGamma_0+\bot)+\tmonad(\rGamma+\rGamma_\#)}$ which maps
+\item Consider the function $\ranked{k:\tmonad(\rGamma+\rGamma_\#)\to \rGamma\otimes(\rGamma+\bot)_0+\tmonad(\rGamma+\rGamma_\#)}$ which maps
 \begin{align*}
 a\tensorpair{x_1,\dots,x_n} \mapsto \tensorpair{a,\bot} \\
 b_\$\tensorpair{a\tensorpair{x_1,\dots,x_n}} \mapsto \tensorpair{a,b} 
 \end{align*}
 and leaves the terms other unchanged. We apply the function $\ranked{k}$ to the $\ranked{\tmonad(\rGamma+\rGamma_\#)}$
-factors and the identity to the others. After several applications of injections and flattening, we get a term in $\ranked{\tmonad(\rGamma\otimes(\rGamma_0+\bot)+\rGamma_\#+\rGamma_\$+\rGamma)}$. We erase the symbols of $\ranked{\rGamma_\$}$ and $\ranked{\rGamma_\#}$  using the filter function from Example~\ref{ex:filter}, and obtain a term in $\ranked{\tmonad(\rGamma\otimes(\rGamma_0+\bot)+\rGamma)}$. 
-We get rid of the symbols of $\rGamma$ in the output type, we apply any derivable function of type $\ranked{\rGamma\to \rGamma\otimes(\rGamma_0+\bot)}$, for example the one defined by:
+factors and the identity to the others. After several applications of injections and flattening, we get a term in $\ranked{\tmonad(\rGamma\otimes(\rGamma+\bot)_0+\rGamma_\#+\rGamma_\$+\rGamma)}$. We erase the symbols of $\ranked{\rGamma_\$}$ and $\ranked{\rGamma_\#}$  using the filter function from Example~\ref{ex:filter}, and obtain a term in $\ranked{\tmonad(\rGamma\otimes(\rGamma+\bot)_0+\rGamma)}$. 
+We get rid of the symbols of $\rGamma$ in the output type, we apply any derivable function of type $\ranked{\rGamma\to \rGamma\otimes(\rGamma+\bot)_0}$, for example the one defined by:
 \begin{align*}
 a \mapsto \tensorpair{a,\bot}
 \end{align*}
@@ -84,22 +84,22 @@ a \mapsto \tensorpair{a,\bot}
 \end{enumerate}
 \medskip
 If $\rGamma$ is a finite ranked set, we define $\ranked{\Gamma^*}$ as
-$$\coprod_{i \leq \text{ maximal arity in } \rGamma} \underbrace{(\rGamma+\bot) \otimes \cdots \otimes (\rGamma+\bot)}_{i\text{ times}}$$
-Now consider the function $$\ranked{\mathsf{Sibling}:\tmonad\rGamma\to \tmonad (\rGamma\otimes \rGamma^*_0)}$$ which adds to every node of a term in $\tmonad \rSigma$ the list containing the symbols of its children. When a child is a port, it is marked by $\bot$ in the list.
+$$\ranked{\coprod_{i \leq \text{ maximal arity in } \rGamma} \underbrace{\rGamma\otimes \cdots \otimes \rGamma}_{i\text{ times}}}$$
+Now consider the function $$\ranked{\mathsf{Sibling}:\tmonad\rGamma\to \tmonad (\rGamma\otimes (\rGamma+\bot)^*_0)}$$ which taggs every node of a term in $\tmonad \rSigma$ by the list  of its children symbols. When a child is a port, it is marked by $\bot$ in the list.
 The fuction $\ranked{\mathsf{Sibling}}$ is derivable. To see this, the same steps above can be followed, exept for steps 6 and 7 which should be adapted to this case. 
 \end{example}
 
 
 
 \medskip
-\noindent  \begin{example}[Root and leaves] Let $\rSigma$ be a finite type and $f:\rSigma \to \rGamma$, $g: \rSigma \to \rGamma$ be derivable functions. The function $\ranked{\mathsf{Root}_{f,g} : \tmonad\rSigma \to \tmonad\rGamma}$
+\noindent  \begin{example}[Root and leaves] Let $\rSigma$ be a finite type and $f:\rSigma \to \rGamma$, $g: \rSigma \to \rGamma$ be derivable functions. The function $$\ranked{\mathsf{Root}_{f,g} : \tmonad\rSigma \to \tmonad\rGamma}$$
 which applies $f$ to the root and $g$ to the rest of the tree is a derivable function.
  
-To show this, we first start by applying the function $\ranked{\mathsf{Parent}:\tmonad\rSigma\to\tmonad(\rSigma\otimes(\rSigma_0+\bot))}$. Doing so, the root can be distinghished from the other nodes since it will be tagged by $\bot$.  
+To show this, we first start by applying the function $\ranked{\mathsf{Parent}:\tmonad\rSigma\to\tmonad(\rSigma\otimes(\rSigma+\bot)_0)}$. Doing so, the root can be distinghished from the other nodes since it will be tagged by $\bot$.  
 
-The function $\ranked{h:\rSigma\otimes(\rSigma_0+\bot)\to \rGamma}$ defined by 
+The function $\ranked{h}$ defined by 
 \begin{align*}
-  h\colon \rSigma &\to \rGamma \\
+\ranked{h:\rSigma\otimes(\rSigma+\bot)_0}&\ranked{\to \rGamma}\\
   \tensorpair{a,\bot} &\mapsto f(a) \\
   \tensorpair{a,b} &\mapsto g(a) \text{ if } b\neq \bot.
 \end{align*}
@@ -110,18 +110,56 @@ We lift $h$ to terms of $\tmonad\rGamma$ to conclude.
 %We lift the function $ditribute_\otimes: \rSigma\otimes\rSigma^{\leq 1}\to  \rSigma\otimes\rSigma^{=0}+ \rSigma\otimes\rSigma^{= 1}$ to the trees of $\tmonad \rSigma\otimes\rSigma^{\leq 1}$ to get trees in $\tmonad (\)$.
 
 \medskip
-The function $\ranked{\mathsf{Leaves}_{f,g} : \tmonad\rSigma \to \tmonad\rGamma}$
- which applies $f$ to the leaves and $g$ to the rest of the tree is derivable. This is done using the same ideas as before, but invoquing the function $\ranked{\mathsf{Sibling}}$ instead of the function $\ranked{\mathsf{Parent}}$: leaves can be distingushed from the other nodes since there tags are lists of $\bot$.
+The function $$\ranked{\mathsf{Leaves}_{f,g} : \tmonad\rSigma \to \tmonad\rGamma}$$
+ which applies $f$ to the leaves and $g$ to the rest of the tree is derivable. This is done using the same ideas as before, but invoquing the function $\ranked{\mathsf{Sibling}}$ instead of the function $\ranked{\mathsf{Parent}}$: leaves can be distingushed from the other nodes since they are tagged either by a list of $\bot$ or the empty list.
 \end{example}
 
 \medskip
 \noindent\begin{example}[Descendent and ancestors] If $\rSigma$ is a finite type and $\rGamma\subseteq \rSigma$, then the functions 
 \begin{itemize}
-\item $\ranked{\mathsf{Descendant}_\rGamma: \tmonad \rSigma \to \tmonad (\rSigma+\rSigma)}$ which maps each node to one of the copies of $\rSigma$ depending on whether it has a descendent in $\rGamma$.
-\item $\ranked{\mathsf{Ancestor}_\rGamma: \tmonad \rSigma \to \tmonad (\rSigma+\rSigma)}$ which 
- each node depending on whether it has an ancestor in $\rGamma$.
+\item $\ranked{\mathsf{Descendant}_\rGamma: \tmonad \rSigma \to \tmonad (\rSigma+\rSigma)}$ which replaces the label of each node by its first or second copy, depending on whether it has a descendent in $\rGamma$,
+\item $\ranked{\mathsf{Ancestor}_\rGamma: \tmonad \rSigma \to \tmonad (\rSigma+\rSigma)}$ which replaces the label of each node by its first or second copy, depending on whether it has a descendent in $\rGamma$,
 \end{itemize}
 are derivable.
+
+To derive $\ranked{\mathsf{Descendant}_\rGamma}$, we start by applying the factorisation $$\ranked{\decfact: \tmonad\rSigma\to \tmonad(\tmonad\rGamma+\tmonad(\rSigma\setminus\rGamma))}$$ which regroups the elements of $\rSigma$ and the elements of $\ranked{\rSigma\setminus\rGamma}$ into factors, as in the following figure, where $\rGamma$ is represented by the blue nodes and $\ranked{\rSigma\setminus \rGamma}$ by the red ones:
+\begin{center}
+\includegraphics[scale=.15]{MyPic6.jpg}
+\end{center}
+Obviously, all the nodes of the $\Gamma$ factors have a descendant in $\rGamma$. 
+In the $\ranked{\rSigma\setminus\rGamma}$ factors which are not leaves in the factorized term, all the nodes have a $\rGamma$ descendant in the original term. To show this, take $f$ to be one of these factors, and suppose by contradiction that one of its nodes does not have a descendant in $\rGamma$. By definition of $\ancfact$, all the elements of $f$ do not have a descendant in $\rGamma$ as well. Since $f$ is not a leaf, it has a child $g$. The factor $g$ cannot be a $\rGamma$
+factor as the nodes of $f$ would have a descendant in $\rGamma$. The factor $g$ is then necessarily  a $\ranked{\rSigma\setminus \rGamma}$ factor. If a node of $g$ has a descendant in $\rGamma$, this would give a $\rGamma$ descendant to one of the node of $f$. Thus all the nodes of $g$ are in $\ranked{\rSigma\setminus \rGamma}$ and do not have a descendant in $\rGamma$, meaning that $f$ and $g$ are actually the same factor, which gives a contradiction. Finally, the $\ranked{\rSigma\setminus\rGamma}$ factors which are leaves do not have a descendant in $\rGamma$. With these observations, we can now implement $\mathsf{Descendant}_\rGamma$. 
+
+Let us consider the functions 
+$$\begin{array}{llll}
+\ranked{\mathsf{Yes}_\rGamma :} & \rGamma &\ranked{\to} &\ranked{ \rSigma+\rSigma}\\
+ \ranked{\mathsf{Yes}_{\ranked{\rSigma\setminus\rGamma}:}}& \ranked{\rSigma\setminus\rGamma}&\ranked{\to} &\ranked{ \rSigma+\rSigma}\\
+\ranked{\mathsf{No}_{\ranked{\rSigma\setminus\rGamma}: }}&\ranked{\rSigma\setminus\rGamma} &\ranked{\to}& \ranked{ \rSigma+\rSigma}
+\end{array}$$
+which replaces the label of each node by its first copy for $\ranked{\mathsf{Yes}_\Gamma}$ and $\ranked{\mathsf{Yes}_{\rSigma\setminus\rGamma}}$, and by its second copy for $\ranked{\mathsf{No}_{\rSigma\setminus\rGamma}}$. The three functions are derivable as their domains are finite. 
+Consider the functions 
+\begin{align*}
+\ranked{f} &\ranked{: \tmonad\rGamma+\tmonad(\rSigma\setminus\rGamma) \to \tmonad (\rSigma+\rSigma)}\\
+&=\ranked{ \tmonad\mathsf{Yes}_\rGamma \text{ or } \tmonad\mathsf{No}_{\rSigma\setminus \rGamma}}\\
+\ranked{g} &\ranked{: \tmonad\rGamma+\tmonad(\rSigma\setminus\rGamma) \to \tmonad (\rSigma+\rSigma)}\\
+&=\ranked{ \tmonad\mathsf{Yes}_\rGamma \text{ or } \tmonad\mathsf{Yes}_{\rSigma\setminus \rGamma}} 
+\end{align*}
+The descendant function is obtained by applying $\ranked{\mathsf{leaves}_{f,g}}$ followed by a flattening.
+
+To derive the function $\ranked{\mathsf{Ancestor}_\Gamma}$, we apply first a the factorisation
+$$\ranked{\ancfact: \tmonad\rSigma\to \tmonad(\tmonad\rGamma+\tmonad(\rSigma\setminus\rGamma))}$$ which regroups the elements of $\rSigma$ and the elements of $\ranked{\rSigma\setminus\rGamma}$ into factors depending on whether they have the same descendant of the same type. Here is an example,  where $\rGamma$ is represented by the blue nodes and $\ranked{\rSigma\setminus \rGamma}$ by the red ones:
+\begin{center}
+\includegraphics[scale=.15]{MyPic7.jpg}
+\end{center}
+Using similar arguments as befor, we can conclude that:
+\begin{itemize}
+\item The nodes inside $\rGamma$ factors have $\rGamma$ ancestors.  
+\item If a $\ranked{\rSigma\setminus\rGamma}$ factor is the root of the factorized term, then its nodes do not have a $\rGamma$ ancestor.
+\item   If a $\ranked{\rSigma\setminus\rGamma}$ factor is not the root of the factorized term, then its nodes do have a $\rGamma$ ancestor.
+\end{itemize}
+The ancestor function is obtained by applying $\ranked{\mathsf{root}_{f,g}}$ followed by a flattening.
+
+Note here the importance of the basic function $\decfact$. If we had only the factorisation $\ancfact$, we would not be able to separate (at least easily) the red blocks having a blue descendent from the others in the figure above.  
 \end{example}
 %\medskip
 %\noindent \begin{example}[Characteristic function of a finite type]
@@ -135,7 +173,7 @@ are derivable.
 %  x &\mapsto g_0(x)  \text{ if } f(x)\in\llzero\\
 %  x &\mapsto g_1(x)  \text{ if } f(x)\in\llone.
 %\end{align*}
-% is also a first-order tree function. This is done as follows. On input
+% is also a first-order tree function. This is done as follows. On input!!
 %$x\in\rSigma$, we first apply the pairing of f and the identity function, yielding a result:
 %$$ (f(x),x)\in(\llzero+\llone)\times\rSigma$$
 %Next we apply the function distribute, transforming the type into:
