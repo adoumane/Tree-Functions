@@ -87,38 +87,38 @@ These situations are illustrated in Figure~\ref{fig:transductionFlat}. Thus, the
 %\end{itemize} 
 \end{enumerate}
            \end{proof}
-   Let $E$ be a totaly ordered set. We set $\mathsf{Mon}^E$ to be the monoid whose ground set is 
-   \begin{align*}
-   \{f:E\to E \ | f \text{ is monotonic}\}
-\end{align*}    
-
-and whose multiplication is functions composition.  The elements of $\mathsf{Mon}^E$ can be represented graphically as:
-     
-
-We show that the monoid $\mathsf{Mon}^E$ is aperiodic.
-     \begin{proposition}\label{prop:MonIsFo}
-The monoid $\mathsf{Mon}^E$ is aperiodic.     
-     \end{proposition}
-     
-     \begin{proof}
-     Let $f$ be an element of $\mathsf{Mon}^E$. We define \emph {its graph} as the directed graph whose set of vertices is $E$, and which contains an edge $i\rightarrow j$ if $f(i)=j$. Note that the out-degree of the nodes is 1. To show Proposition~\ref{prop:MonIsFo}, we start by extracting some properties of these graphs.
-     
-The first one is that the weakly connected components of these graphs are intervals. With this property, we can treat only the graphs with only one weakly connected component, since those are independent. 
-     \begin{lemma}
-     If $f$ is an element of $\mathsf{Mon}^E$ and $I\subseteq E$ is a weakly connected component of the graph of $f$, then $I$ is an interval. 
-     \end{lemma}
-     
-     \begin{lemma}
-     If $f$ is an element of $\mathsf{Mon}^E$ whose graph $G$ is weakly connected, then 
-\begin{itemize}
-\item there is a node $n$  having a self loop in $G$,
-\item there is a directed path from any node of $G$ to $n$. 
-\end{itemize}     
- We call $n$ the \emph{attractor} of $f$.    
-     \end{lemma}  
-     The attractor is unique. Indeed if we had two attractors $m$ and $n$, we would have a directed path from $m$ to $n$. And since $m$ has a self loop, its out-degree would be at least 2 which is not possible. 
-      
-    \begin{lemma}
-    Let $f$ be an element of $\mathsf{Mon}^E$.  If there is a directed path of lenght $p$ from $m$ to $n$ in the graph of $f$, then there is a directed path of lenght $1$ from $m$ to $n$ in the graph of $f^p$.
-    \end{lemma}
-     \end{proof}
+%   Let $E$ be a totaly ordered set. We set $\mathsf{Mon}^E$ to be the monoid whose ground set is 
+%   \begin{align*}
+%   \{f:E\to E \ | f \text{ is monotonic}\}
+%\end{align*}    
+%
+%and whose multiplication is functions composition.  The elements of $\mathsf{Mon}^E$ can be represented graphically as:
+%     
+%
+%We show that the monoid $\mathsf{Mon}^E$ is aperiodic.
+%     \begin{proposition}\label{prop:MonIsFo}
+%The monoid $\mathsf{Mon}^E$ is aperiodic.     
+%     \end{proposition}
+%     
+%     \begin{proof}
+%     Let $f$ be an element of $\mathsf{Mon}^E$. We define \emph {its graph} as the directed graph whose set of vertices is $E$, and which contains an edge $i\rightarrow j$ if $f(i)=j$. Note that the out-degree of the nodes is 1. To show Proposition~\ref{prop:MonIsFo}, we start by extracting some properties of these graphs.
+%     
+%The first one is that the weakly connected components of these graphs are intervals. With this property, we can treat only the graphs with only one weakly connected component, since those are independent. 
+%     \begin{lemma}
+%     If $f$ is an element of $\mathsf{Mon}^E$ and $I\subseteq E$ is a weakly connected component of the graph of $f$, then $I$ is an interval. 
+%     \end{lemma}
+%     
+%     \begin{lemma}
+%     If $f$ is an element of $\mathsf{Mon}^E$ whose graph $G$ is weakly connected, then 
+%\begin{itemize}
+%\item there is a node $n$  having a self loop in $G$,
+%\item there is a directed path from any node of $G$ to $n$. 
+%\end{itemize}     
+% We call $n$ the \emph{attractor} of $f$.    
+%     \end{lemma}  
+%     The attractor is unique. Indeed if we had two attractors $m$ and $n$, we would have a directed path from $m$ to $n$. And since $m$ has a self loop, its out-degree would be at least 2 which is not possible. 
+%      
+%    \begin{lemma}
+%    Let $f$ be an element of $\mathsf{Mon}^E$.  If there is a directed path of lenght $p$ from $m$ to $n$ in the graph of $f$, then there is a directed path of lenght $1$ from $m$ to $n$ in the graph of $f^p$.
+%    \end{lemma}
+%     \end{proof}

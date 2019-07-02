@@ -25,7 +25,7 @@ Consider the basic functions $\ranked{\unit_\rSigma:\rSigma\to\tmonad\rSigma}$ a
 
 
 \medskip
-\noindent \begin{example}[Parent and sibling informations]  Let $\rGamma$ be a finite type. We define $\ranked{\rGamma_0}$  to be the ranked set obtained from $\rGamma$ by setting the arity of every element to $0$.  
+\noindent \begin{example}[Parent and sibling informations]\label{ex:sibling}  Let $\rGamma$ be a finite type. We define $\ranked{\rGamma_0}$  to be the ranked set obtained from $\rGamma$ by setting the arity of every element to $0$.  
 \medskip
 Consider the function:
 $$\ranked{ \mathsf{Parent}: \tmonad \rGamma \to \tmonad (\rGamma\otimes (\rGamma+\bot)_0)}$$
@@ -33,43 +33,81 @@ which adds to every node of a term in $\tmonad \rSigma$ the label  of its parent
 
 % from  $(\rGamma\cup\bot)^{\leq n}$, whose lenght is the arity of the node, and such that the $i^{th}$ element of the  list is the symbol of its $i^{th}$ sibling if it has one, otherwise it is $\bot$.
 Let us explain why $\ranked{\mathsf{Parent}}$ is derivable. 
-\begin{enumerate}
-\item For every symbol $a\in \rGamma$, consider the unary symbols $a_\#$ and $a_\$$.
+%\begin{enumerate}
+%\item
+
+\begin{tabular}{l|l}
+    \pictureline 
+     {For every symbol $a\in \rGamma$, consider the unary symbols $a_\#$ and $a_\$$.
 We set $\ranked{\rGamma_\#}=\{a_\#\mid a\in\rGamma\}$ and $\ranked{\rGamma_\$}=\{a_\$\mid a\in\rGamma\}$.
 Let $g$ be the following function:
- \begin{align*}
+$$\begin{array}{ll}
 \ranked{  g: \rGamma} &\ranked{\to \tmonad(\rGamma+\rGamma_\#+\rGamma_\$)}\\
   a &\mapsto a_\#\tensorpair{a\tensorpair{a_\$\tensorpair{x_1},\dots,a_\$\tensorpair{x_{\mathsf{arity(a)}}}}}.
-\end{align*}
+\end{array}
+$$
 The action of $\ranked{g}$ on a $\rGamma$ symbol looks like this:
-\begin{center}
-\includegraphics[scale=.15]{MyPic1.jpg}
-\end{center}
-\item We lift $\ranked{g}$ to the terms of $\tmonad \rGamma$ using the combinator $\tmonad$, then we apply a flattenig. After this operation, a term in $\tmonad\rGamma$ is transformed to a term in $\ranked{\tmonad(\rGamma+\rGamma_\#+\rGamma_\$)}$ this way:
-\begin{center}
-\includegraphics[scale=.15]{MyPic2.jpg}
-\end{center}
-\item We apply $\ancfact$, to separate the symbols of $\rGamma$ form the symbols of $\ranked{\rGamma_\#}$ and $\ranked{\rGamma_\$}$, we get then a term in $\ranked{\tmonad(\tmonad\rGamma+\tmonad(\rGamma_\#+\rGamma_\$))}$. Those terms look like this:
-\begin{center}
-\includegraphics[scale=.15]{MyPic3.jpg}
-\end{center}
-\item Consider the function $\ranked{h:\tmonad(\rGamma_\#+\rGamma_\$)\to \tmonad(\rGamma_\#+\rGamma_\$)}$ which maps
-\begin{align*}
+	}
+	{
+		\begin{center}
+		\includegraphics[scale=.15]{MyPic1.jpg}
+		\end{center}
+	}
+    \pictureline 
+	{We lift $\ranked{g}$ to the terms of $\tmonad \rGamma$ using the combinator $\tmonad$, then we apply a flattenig. After this operation, a term in $\tmonad\rGamma$ is transformed to a term in $\ranked{\tmonad(\rGamma+\rGamma_\#+\rGamma_\$)}$ this way:
+	}
+	{
+		\begin{center}
+		\includegraphics[scale=.15]{MyPic2.jpg}
+		\end{center}
+	}
+	\pictureline
+%\item 
+	{We apply $\ancfact$, to separate the symbols of $\rGamma$ form the symbols of $\ranked{\rGamma_\#}$ and $\ranked{\rGamma_\$}$, we get then a term in $\ranked{\tmonad(\tmonad\rGamma+\tmonad(\rGamma_\#+\rGamma_\$))}$. Those terms look like this:
+	}
+	{
+	\begin{center}
+	\includegraphics[scale=.15]{MyPic3.jpg}
+	\end{center}
+	}
+%\item
+    \pictureline
+	{
+	Consider the function $\ranked{h:\tmonad(\rGamma_\#+\rGamma_\$)\to \tmonad(\rGamma_\#+\rGamma_\$)}$ which maps
+$$\begin{array}{rll}
 a_\$\tensorpair{b_\#\tensorpair{x_1}} &\mapsto b_\$\tensorpair{a_\$\tensorpair{x_1}}&  a, b\in \rGamma\\
 a_\$\tensorpair{x_1} & \mapsto  x_1&  a\in\rGamma
-\end{align*}
+\end{array}$$
 and leaves the other terms unchanged. 
 The function $\ranked{h}$ is derivable thanks to the pattern-matching construction of Example~\ref{ex:patternMatching}.
-
-\item To the factors of type $\tmonad \rGamma$ we apply the identity function, and to the factors $\ranked{\tmonad(\rGamma_\#+\rGamma_\$)}$ we apply $\ranked{h}$. After that, we inject the factors into $\ranked{\tmonad(\rGamma+\rGamma_\#+\rGamma_\$)}$, then we apply a flattening to get terms in $\ranked{\tmonad(\rGamma+\rGamma_\#+\rGamma_\$)}$ having the form:
-\begin{center}
-\includegraphics[scale=.15]{MyPic4.jpg}
-\end{center} 
-\item We apply $\ancfact$ to separate the symbols of $\ranked{\rGamma_\$}$ form the others. Doing so, every $\rGamma$ node ends up in the same factor as its parent (marked with $\$ $):
-\begin{center}
-\includegraphics[scale=.15]{MyPic5.jpg}
-\end{center}
-\item Consider the function $\ranked{k:\tmonad(\rGamma+\rGamma_\#)\to \rGamma\otimes(\rGamma+\bot)_0+\tmonad(\rGamma+\rGamma_\#)}$ which maps
+	}{}
+		\end{tabular}
+	
+	\begin{tabular}{l|l}
+    \pictureline
+	{
+%\item 
+	To the factors of type $\tmonad \rGamma$ we apply the identity function, and to the factors $\ranked{\tmonad(\rGamma_\#+\rGamma_\$)}$ we apply $\ranked{h}$. After that, we inject the factors into $\ranked{\tmonad(\rGamma+\rGamma_\#+\rGamma_\$)}$, then we apply a flattening to get terms in $\ranked{\tmonad(\rGamma+\rGamma_\#+\rGamma_\$)}$ having the form:
+	}
+	{
+		\begin{center}
+		\includegraphics[scale=.15]{MyPic4.jpg}
+		\end{center} 
+	}
+    \pictureline
+	{
+%\item
+	We apply $\ancfact$ to separate the symbols of $\ranked{\rGamma_\$}$ form the others. Doing so, every $\rGamma$ node ends up in the same factor as its parent (marked with $\$ $):
+	}
+	{
+		\begin{center}
+		\includegraphics[scale=.15]{MyPic5.jpg}
+		\end{center}
+	}
+    \pictureline
+	{
+%\item 
+	Consider the function $\ranked{k:\tmonad(\rGamma+\rGamma_\#)\to \rGamma\otimes(\rGamma+\bot)_0+\tmonad(\rGamma+\rGamma_\#)}$ which maps
 \begin{align*}
 a\tensorpair{x_1,\dots,x_n} \mapsto \tensorpair{a,\bot} \\
 b_\$\tensorpair{a\tensorpair{x_1,\dots,x_n}} \mapsto \tensorpair{a,b} 
@@ -80,8 +118,10 @@ We get rid of the symbols of $\rGamma$ in the output type, we apply any derivabl
 \begin{align*}
 a \mapsto \tensorpair{a,\bot}
 \end{align*}
- Doing so we get the desired function.
-\end{enumerate}
+ Doing so we get the desired function.}{}
+%\end{enumerate}
+\end{tabular}
+
 \medskip
 If $\rGamma$ is a finite ranked set, we define $\ranked{\Gamma^*}$ as
 $$\ranked{\coprod_{i \leq \text{ maximal arity in } \rGamma} \underbrace{\rGamma\otimes \cdots \otimes \rGamma}_{i\text{ times}}}$$
@@ -115,7 +155,7 @@ The function $$\ranked{\mathsf{Leaves}_{f,g} : \tmonad\rSigma \to \tmonad\rGamma
 \end{example}
 
 \medskip
-\noindent\begin{example}[Descendent and ancestors] If $\rSigma$ is a finite type and $\rGamma\subseteq \rSigma$, then the functions 
+\noindent\begin{example}[Descendent and ancestors]\label{ex:descendant} If $\rSigma$ is a finite type and $\rGamma\subseteq \rSigma$, then the functions 
 \begin{itemize}
 \item $\ranked{\mathsf{Descendant}_\rGamma: \tmonad \rSigma \to \tmonad (\rSigma+\rSigma)}$ which replaces the label of each node by its first or second copy, depending on whether it has a descendent in $\rGamma$,
 \item $\ranked{\mathsf{Ancestor}_\rGamma: \tmonad \rSigma \to \tmonad (\rSigma+\rSigma)}$ which replaces the label of each node by its first or second copy, depending on whether it has a descendent in $\rGamma$,

@@ -6,32 +6,32 @@
  \newcommand{\rlambda}{\ranked{\Lambda}}
  \newcommand{\rlambdalin}{\ranked{\Lambda^{\sf{lin}}}}
  \newcommand{\rlambdathin}{\ranked{\Lambda^{\sf{thin}}}}
-\newcommand{\pictureline}[2]{\\   \begin{minipage}{0,6\textwidth}
-    #1 
-\end{minipage} & \begin{minipage}{0,4\textwidth}#2\end{minipage} \\}
+
 
 \newcommand{\thinterm}[1]{\ranked{\mathsf{Thin}_{#1}}}
 
 \subsection{Well-typedeness}
-A natural question to ask about $\lambda$-terms in our framework is whether their well-typedeness is a first-order property. Without restriction on the terms, the answer is negative as shown by the following example.
-
-\begin{example}
-Consider the set of typed variables $X=\{x:o, y:o\rightarrow o, z:o\rightarrow(o\rightarrow o), t:o, u:o\rightarrow o\}$ and the set of $\lambda$-terms $(M_n)_{n\in \mathbb{N}}$ defined by induction as follows: 
-\begin{align*}
-M_0 &= u(yx)\\
-M_{n+1}&= (\lambda y.\lambda x. M_n)(z(yx))
-\end{align*}
-The type of $M_n$ is $o^n\rightarrow o$ where $o^n\rightarrow o$ stands for $\underbrace{o\rightarrow\dots\rightarrow o}_{n \text{ times}}\rightarrow o$ when $n>0$ and for $o$ otherwise. 
-
-Consider now the set of $\lambda$-terms $(L_{m,n})_{m,n\in \mathbb{N}}$ defined by induction on $m$ as follows:
-\begin{align*}
-L_{0,n}&= M_n \\
-L_{m+1, n}&=L_{m,n}t
-\end{align*}
-When $m\leq n$, the $\lambda$-term $L_{m,n}$ is well-typed and its type is $o^{m-n}\rightarrow o$, otherwise it is not well-typed. If well-typedeness was an fo property, we would be able to make such tests on natural numbers which is clearely not the case. 
-\end{example}
-
-When we restrict our attention to those $\lambda$-terms whose subterms have types in a fixed finite set of types $S$, well-typedeness becomes a first-order property. Note that contrarily to $\beta$-reduction, well-typedeness does not require linearity to be in fo.
+A natural question to ask about $\lambda$-terms in our framework is whether their well-typedeness is a first-order property. Without restriction on terms, the answer is negative as shown by 
+Example~\ref{ex:exponential}.
+%the following example.
+%
+%\begin{example}
+%Consider the set of typed variables $X=\{x:o, y:o\rightarrow o, z:o\rightarrow(o\rightarrow o), t:o, u:o\rightarrow o\}$ and the set of $\lambda$-terms $(M_n)_{n\in \mathbb{N}}$ defined by induction as follows: 
+%\begin{align*}
+%M_0 &= u(yx)\\
+%M_{n+1}&= (\lambda y.\lambda x. M_n)(z(yx))
+%\end{align*}
+%The type of $M_n$ is $o^n\rightarrow o$ where $o^n\rightarrow o$ stands for $\underbrace{o\rightarrow\dots\rightarrow o}_{n \text{ times}}\rightarrow o$ when $n>0$ and for $o$ otherwise. 
+%
+%Consider now the set of $\lambda$-terms $(L_{m,n})_{m,n\in \mathbb{N}}$ defined by induction on $m$ as follows:
+%\begin{align*}
+%L_{0,n}&= M_n \\
+%L_{m+1, n}&=L_{m,n}t
+%\end{align*}
+%When $m\leq n$, the $\lambda$-term $L_{m,n}$ is well-typed and its type is $o^{m-n}\rightarrow o$, otherwise it is not well-typed. If well-typedeness was an fo property, we would be able to make such tests on natural numbers which is clearely not the case. 
+%\end{example}
+%
+When we restrict our attention to those $\lambda$-terms whose subterms have types in a fixed finite set $S$, well-typedeness becomes a first-order property. Note that contrarily to $\beta$-reduction, well-typedeness does not require linearity to be in fo.
 
 \begin{proposition}\label{prop:WellTypedFo}
     For every typed set $X$ and every finite set $S$ of simple types, the tree language 
@@ -47,7 +47,16 @@ For every simple type $\tau$ in $S$, there is a first-order query $\varphi_\tau$
 $$ \forall M\in \NonLinTerms S X \qquad M,u \models \varphi_\tau \Longleftrightarrow M|_u:\tau$$
 where $M|_u$ is the subterm of $M$ rooted in $u$. 
 \end{lemma}
-Before establishing this lemma, let us see how property~\ref{prop:WellTypedFo} can be derived from it. Suppose for convenience that the types of the variables of $X$  are in $S$, and that $S$ is downward closed. Let $\varphi$ be the following first-order formula:
+Before establishing this lemma, let us see how Proposition~\ref{prop:WellTypedFo} can be derived from it. Suppose for convenience that the types of the variables of $X$  are in $S$, and that $S$ is downward closed. 
+Consider the unary formula $\mathsf{Lambda}_{\sigma\rightarrow\tau}(u)$, which expresses that $u$ is a binder node, and that its type and the type of its descendant match well: 
+\begin{align*}
+\mathsf{Lambda}_{\sigma\rightarrow\tau}(u) :=  \underbrace{\bigvee_{x:\sigma}\lambda x(u)}_{\substack{\text{the label of $u$ is $\lambda x$} \\ \text{where $x$ is a variable of type $\sigma$}}} \wedge \underbrace{\varphi_{\sigma\rightarrow\tau}(u)}_{\substack{\text{$u$ has type $\sigma\rightarrow\tau$}}}  \wedge \underbrace{\exists v\ \ \mathrm{Succ}_1(u, v) \wedge \varphi_\tau (v)}_{\substack{\text{the successor of $u$ has type $\tau$}}}
+\end{align*}
+The binary formula $\mathsf{Succ}_{i}(u,v)$ expresses that $v$ is the $i$-th chilld of $v$, and it can be easily expressed in first-order logic. For every type $\tau$, the formula $\varphi_\tau$ is the one  given by Lemma~\ref{lem:IsTypeTauFo}.
+Similarly, consider the unary formula $\mathsf{Application}_{\sigma\rightarrow\tau}(u)$ which checks that a node is ann application node, and that the type of its children match well: 
+
+Finally, consider the formula $\mathsf{variable}(u)$  
+Let $\varphi$ be the following first-order formula:
 \begin{align*}
 \forall u. \bigvee_{\sigma\rightarrow\tau\in S} \left(\bigvee_{x:\sigma}\lambda x(u) \Rightarrow
  \varphi_{\sigma\rightarrow\tau}(u)\wedge\varphi_\tau(\mathrm{child}_1(u))\right) \wedge 
