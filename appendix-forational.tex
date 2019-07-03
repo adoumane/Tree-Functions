@@ -44,46 +44,66 @@ $$ \overline{\bullet}: \trees\rGamma \to \trees_b\Gamma$$
 \subsection{First-order relabelling are derivable}
 
 \begin{lemma}\label{lem:nextmod}
-  For every $\rSigma$ and  $i \in \set{1,2,\ldots}$, the characteristic function of the  unary query 
+  For every finite $\rSigma$, $\rGamma\subseteq \rSigma$ and $i \in \set{1,2,\ldots}$, the characteristic function $\ranked{f:\tmonad \rSigma\to\tmonad(\rSigma+\rSigma)}$ of the  unary query 
         \begin{align*}
-            \underbrace{\child i (x).}_{\text{$x$ is an $i$-th child}}
+\text{``The }i\text{-th child of }x\text{ is in }\rGamma\text{''}
         \end{align*}
         is derivable.
 \end{lemma}
 \begin{proof}
-To show that $\chi_{\nextmod_i \Gamma}:\tmonad \Sigma\to \tmonad{(\Sigma_{\sf{Bool}})}$,  the characteristic function of $\nextmod_i \Gamma$, is a first order tree function, we start applying the sibling function $\sf{Sib}:\tmonad\Sigma\to \tmonad \Sigma^{\sf{Sib}}$. Consider the function $f$
-\begin{align*}
-f:\Sigma^{\sf{Sib}} &\to \Sigma_{\sf{Bool}}\\
-(a,l)& \mapsto (a,1) \qquad\text{if } l[i]\in\Gamma, \\
-& \mapsto (a,0) \qquad\text{otherwise.}   \end{align*}
-The function $f$ is clearly first order since it is arity preserving with finite domain.    
+To show that $\ranked{f}$ is derivable, we start applying the sibling function $$\ranked{\mathsf{Sibling}:\tmonad\rSigma\to \tmonad (\rSigma\otimes (\rSigma+\bot)^*_0)}$$ from Example~\ref{ex:sibling} which taggs every nodes by the list of its children. Consider the function $g$
+$$\begin{array}{rlll}
+\ranked{g:}  \ranked{\rSigma\otimes (\rSigma+\bot)^*_0} &\ranked{\to}& \ranked{\Sigma +\Sigma}&\\
+            \tensorpair{a,l}                           &
+     \mapsto& \tensorpair{a,1}              &\text{if } l[i]\in\rGamma, \\
+                    &   \mapsto& \tensorpair{a,2} &\text{otherwise.}   
+\end{array}$$
+which maps an element of $\rSigma$ tagged by a list to the first copy of $\rSigma$ if the $i$-th element of the list is in $\rGamma$ and to the second copy otherwise. The function $g$ is derivable since its domain is finite.
 
-We get $\chi_{\nextmod_i \Gamma}$ by liftinf $f$ to trees and composing it with $\sf{Sib}$. 
+We finally get $\ranked{f}$ by lifting $\ranked{g}$ to terms of $\ranked{\tmonad(\rSigma\otimes (\rSigma+\bot)^*_0)}$.
 \end{proof}
 
+\medskip
 \begin{lemma}\label{lem:untilmod}
-For every finite $\rGamma, \rDelta \subseteq \rSigma$,  the characteristic function of the unary query
+For every finite $\rGamma, \rDelta \subseteq \rSigma$,  the characteristic function $\ranked{f:\tmonad\rSigma\to\tmonad(\rSigma+\rSigma)}$ of the unary query
          \begin{align*}
-              \underbrace{\exists y\ y > x \land \rDelta(y) \land  \forall z \ (x < z < y \Rightarrow \rGamma(z)).}_{\substack{\text{$x$ has a descendant $y$ with label in $\rDelta$, such that}\\ \text{all nodes strictly between $x$ and $y$ have label in $\rGamma$}}} 
+              \underbrace{\exists y\ y \geq x \land \rDelta(y) \land  \forall z \ (x < z < y \Rightarrow \rGamma(z)).}_{\substack{\text{$x$ has a descendant $y$ with label in $\rDelta$, such that}\\ \text{all nodes between $x$ and $y$ have label in $\rGamma$}}} 
               \end{align*}
 is derivable.
 \end{lemma}
 \begin{proof}
-Let $\chi$ be the characteristic function of $\Gamma \untilmod \Delta$.
-We start by decomposing our tree into blocks, depending on whether their node labels are in $\Gamma\cup\Delta$ or not. We will show that the restriction of $\chi$ to $\tmonad (\Gamma\cup\Delta)$, denoted $\chi_1$; and the restriction of $\chi$ to $\tmonad (\Sigma\setminus(\Gamma\cup\Delta))$, denoted $\chi_2$, are first-order tree functions. The function $\chi$ is obtained by applying $\chi_1$ or $\chi_2$ to each block, depending on its type, then by applying a flattening.
-This decomposition is relevant because the value of a node depends only on the node labels of its block. %(it is constant equal to $0$ in the case of $\Sigma\setminus(\Gamma\cup\Delta)$ blocks).
+We start by applying the factorisation
+\begin{align*}
+\ranked{\ancfact : \tmonad \Sigma \to \tmonad(\tmonad(\Sigma\setminus(\Gamma\cup\Delta)) +\tmonad(\Gamma\cup\Delta))}
+\end{align*}
+which decomposes our terms into factors, depending on whether their node labels are in $\ranked{\Gamma\cup\Delta}$ or not. 
+Note that the value of a node w.r.t. the until query depends only on the node labels of its factor. %(it is constant equal to $0$ in the case of $\Sigma\setminus(\Gamma\cup\Delta)$ blocks).
 
-The function $\chi_2:\tmonad (\Sigma\setminus(\Gamma\cup\Delta))\to \tmonad(\Sigma_{\sf{Bool}})$ is clearly a first-order tree function, as it assigns uniformly $0$ to every node label. 
+The nodes of the $\ranked{\tmonad(\rSigma\setminus(\rGamma\cup\rDelta))}$ factors do not satisfy the query, thus we will apply to them the function $\ranked{\tmonad g}$ obtained by lifting the function 
+$$\begin{array}{rrll}
+ \ranked{g:}& \ranked{\rSigma\setminus(\rGamma\cup\rDelta)}& \ranked{\to} &\ranked{\rSigma+\rSigma}\\
+&a&\mapsto& \tensorpair{a,2}.
+\end{array}$$
+ 
+  
+Nodes of the $\ranked{\tmonad(\Gamma\cup\Delta)}$  factors satisfy the query if and only if they have a descendant in  $\rDelta$.
+Consider the function $\ranked{h}$ obtained by composing the descendant function $\ranked{\mathsf{Descendant}_\Delta}$ from Example~\ref{ex:descendant} with an injection $\ranked{i}$
+\begin{align*}
+\underbrace{\ranked{\tmonad(\Gamma\cup\Delta) \xrightarrow{\ranked{\mathsf{Descendant}_\Delta}} \tmonad(\Gamma\cup\Delta+\Gamma\cup\Delta) \xrightarrow{\ranked{\mathsf{i}_\Delta}}\tmonad(\Sigma+\Sigma)}}_{\ranked{h}}
+\end{align*}
+The last injection $\ranked{i}$ is derived by co-pairing the basic injection $\ranked{\iota:\Gamma\cup\Delta\to \Sigma}$ with itself and lifting it to terms.
 
-To see that $\chi_1:\tmonad (\Gamma\cup\Delta)\to \tmonad(\Sigma_{\sf{Bool}})$ 
-is a first-order function, we start by applying the function $\mathsf{Desc}_\Delta$ from
-Example~\ref{}, which adds $1$ to the node labels if they have a descendent in $\Delta$ and adds $0$ otherwise. Then we decompose the obtained tree into blocks, depending on whether their node labels contain $0$ or not. For the block of nodes having $0$ in their label, their value w.r.t. $\Gamma\untilmod \Delta$ is indeed $0$, since they do not have a descendent in $\Delta$. To these blocks we apply the identity function. For the blocks that received $1$, we assign $1$ to the nodes whose labels are in  $\Gamma$ and $0$ to the others (whose labels are in $\Delta\setminus\Gamma$). Indeed, inside these blocks, a node $n$ labeled from $\Gamma$ has by construction a descendent in $\Delta$, moreover the path connecting $n$ to such descendent lies in the same block as $n$. If we consider the nearest such descendent $m$, the path between $n$ and $m$  is labeled in $\Gamma$ (since we are in blocks having only $\Gamma\cup\Delta$ labels). Thus $n$ satisfies $\Gamma\untilmod\Delta$. Nodes labeled in $\Delta\setminus\Gamma$ have obviously value $0$.      
+Finally, to get the characteristic function $\ranked{f}$, we apply $\ranked{\tmonad{g}}$ to the $\ranked{\tmonad(\Sigma\setminus(\Gamma\cup\Delta))}$ factors and $\ranked{h}$ to the other factors using the co-pairing combinator, then we flat the obtained term. 
 \end{proof}
 
 
 \begin{lemma}\label{lem:sincemod}
-For every finite ranked sets $\Gamma, \Delta \subseteq \Sigma$  the characteristic function of $\Gamma \sincemod \Delta$ is a first-order tree function.
+For every finite $\rGamma, \rDelta \subseteq \rSigma$,    the characteristic function of the unary query
+         \begin{align*}
+              \underbrace{\exists y\ y \leq x \land \rDelta(y) \land  \forall z \ (y < z < x \Rightarrow \rGamma(z)).}_{\substack{\text{$x$ has a descendant $y$ with label in $\rDelta$, such that}\\ \text{all nodes strictly between $x$ and $y$ have label in $\rGamma$}}}  
+         \end{align*} 
+         is derivable.
 \end{lemma}
 \begin{proof}
-The same proof as above, one only needs to replace the use of $\mathsf{Desc}_\Delta$ by that of $\mathsf{Anc}_\Delta$.
+The same proof as above, one only needs to replace the use of the function $\ranked{\mathsf{Descendant}_\Delta}$ by that of $\ranked{\mathsf{Ancestor}_\Delta}$, introduced in Example~\ref{ex:descendant}.
 \end{proof}
