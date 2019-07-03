@@ -75,66 +75,52 @@ would satisfy respectively $\varphi_{\sigma\rightarrow\tau}$ and  $\varphi_{\sig
  
 We can go back now to the proof of Lemma~\ref{lem:IsTypeTauFo}.
 \begin{proof}[Proof of Lemma~\ref{lem:IsTypeTauFo}]
-Let us show that checking whether the type of a $\NonLinTerms S X$ term is $\tau$ is a first-order query. For that, notice that the type of a well-typed term depends only on its left-most branch. In fact, the type of a term is exactly the type of its left-most branch in the following sens.
+Let us show that the following unary query is expressible in first-order logic
+\begin{center}
+''if $t$ is a $\lambda$-term of $\NonLinTerms s X$, then its type is $\tau$ ``:
+\end{center}
+ For that, notice that the type of a well-typed term depends only on its left-most branch. In fact, the type of a term is exactly the type of its left-most branch in the following sens.
 
-Consider the (unranked) alphabet $ X_\lambda:= X\cup \{\text{@}, \lambda x | x\in X\}$. We can equip the words over $X_\lambda$ with the following typing rules:
-$$\frac{}{x: \sigma} \qquad \frac{u:\tau}{u\lambda x: \sigma\rightarrow \tau} \qquad \frac{u:\sigma\rightarrow\tau}{u\text{@}:\tau}\qquad\text{(where $x$ is of type $\sigma$ and $\sigma,\tau \in S$)}$$
+Consider the (unranked) alphabet $ X_\lambda:= X\cup \{@, \lambda x | x\in X\}$. We can equip the words over $X_\lambda$ with the following typing rules:
+$$\frac{}{x: \sigma} \qquad \frac{u:\tau}{u\lambda x: \sigma\rightarrow \tau} \qquad \frac{u:\sigma\rightarrow\tau}{u@:\tau}\qquad\text{(where $x$ is of type $\sigma$ and $\sigma,\tau \in S$)}$$
 We say that $w$ is of type $\tau$ and write $w:\tau$ if there is a typing derivation for $w:\tau$.
 
 We can associate to every branch of a $\lambda$-term a word over $X_\lambda$ corresponding to the sequence of its labels read bottom-up. By induction on $\lambda$-terms, we can easily show that the type of a $\lambda$-term is the type of the word corresponding to its leftmost branch. 
 
 By this last observation, we can reduce the query asking if the type of a term is $\tau$, to the same query but on $X_\lambda$ words. To show that the former is a first-order query, it is then sufficient to show that the following word language 
 \begin{align*}
-W_\tau = \{w\in X.\{\text{@}, \lambda x | x\in X\}^*\ |\ w:\tau \} 
+W_\tau = \{w\in X.\{@, \lambda x | x\in X\}^*\ |\ w:\tau \} 
 \end{align*}
-is first-order definable, or equivalently that  $W_\tau$ is recognized by a counter-free non-deterministic finite automaton. For that we proceed as follows: first, we show that $W_\tau$ is recognized by a pushdown automaton $A_\tau$. Then we will show that the stack height of $A_\tau$ is bounded, thus it can be turned into a non-deterministic finite automaton $N_\tau$. Finally, we show that the obtained automaton $N_\tau$ is actually counter-free.  
+is first-order definable, or equivalently that  $W_\tau$ is recognized by a counter-free non-deterministic finite automaton. For that we proceed as follows: first, we show that $W_\tau$ is recognized by a pushdown automaton $P_\tau$. Then we will show that the stack height of $P_\tau$ is bounded, thus it can be turned into a deterministic finite automaton $D_\tau$. Finally, we show that the obtained automaton $D_\tau$ is actually counter-free.  
 
-For a formal definition of pushdown automata (PDA) and (counter-free) non-deterministic finite automata (NFA) see~\ref{}.
+%For a formal definition of pushdown automata (PDA) and (counter-free) non-deterministic finite automata (NFA) see~\ref{}.
 
-Consider the following PDA $A_\tau$ whose
+Consider the pushdown automaton $P_\tau$ whose
 \begin{itemize}
-\item set of states $Q$ is $\{i, p, q\}$, where $q$ is accepting;
-\item input alphabet is $X_\lambda$;
-\item stack alphabet is $S$, with initial stack alphabet $\bot$;
-\item and whose transition function is described by the following figure:
-\begin{center}
-
-\begin{tikzpicture}[->, % makes the edges directed
-%stealth’, % makes the arrow heads bold
-node distance=5cm, % specifies the minimum distance between two nodes. Change if necessary.
-every state/.style={thick, fill=gray!10, inner sep=1pt,minimum size=0pt}, % sets the properties for each ’state’ node
-initial text=$ $,]
-\node[state, initial] (q1) {$ i$};
-\node[state,  right of=q1] (q2) {$ p$};
-\node[state, accepting,right of=q2] (q3) {$ q$};
-\draw 
-(q1) edge[above] node{$
- x, \perp\mapsto \sf{push}(\sigma_n),\dots,\sf{push}(\sigma_1)$} (q2)
-(q1) edge[below] node{$
- \text{if } x: \sigma_1\rightarrow\dots\rightarrow\sigma_n$} (q2)
-(q2) edge[loop above] node{ $\begin{array}{cccc}
-\lambda y, \_ &\mapsto& \sf{push}(\sigma) &   \text{if } y:\sigma\\
-\text{@}, \gamma\in S &\mapsto &\sf{pop}&
-\end{array}$} (q2)
-(q2) edge[above] node{$
-\epsilon, \tau \mapsto \sf{pop}
-$} (q3);
-\end{tikzpicture}
-\end{center}
+\item  set of states is $\{i, p, f\}$, where $i$ is the initial state and $f$ the accepting state;
+\item input alphabet is the alphabet $X_\lambda$;
+\item stack alphabet is the set of types $S$;
+\item and whose transition function is described as follows:
+\begin{itemize}
+\item If the automaton is in the initial state $i$ with an empty stack, and if the symbol it reads is a variable $x$ of type $\sigma_1\rightarrow\dots\rightarrow\sigma_n$, then we go to the state $p$ and push the symbols $\sigma_n,\dots,\sigma_1$  in the stack in this order. The toplevel symbol of the stack is then $\sigma_1$.
+\item If the automaton is in the state $p$ and it reads the symbol $\lambda y$, where $y$ is of type $\sigma$, then push the symbol $\sigma$ in the stack, and stay in the state $p$.
+\item  If the automaton is in the state $p$,  if it reads the symbol $@$ and if the stack is non empty, then pop the top-level symbol and stay in the state $p$.
+\item If the automaton reachs the end of the word being in state $p$, and if the stack contains only the symbol $\tau$, then pop it and go to the final state $f$.  
 \end{itemize}
-A word $w$ is accepted by $A_\tau$ if there is a run that reaches the end of $w$ in the accepting state $q$ with an empty stack. We write $(r, s)\xrightarrow{w} (r', s')$ if there is a run over the word $w$ which starts in the state $r\in Q$ and with a stack $s$ and ends up in the state $r'$ and with a stack $s'$.
+\end{itemize}
+A word $w$ is accepted by $P_\tau$ if there is a run that reaches the end of $w$ in the accepting state $f$ with an empty stack. We write $(r, s)\xrightarrow{w} (r', s')$ if there is a run over the word $w$ which starts in the state $r\in\set{i, p,f}$ and with a stack $s$ and ends up in the state $r'\in\set{i, p,f}$ and with a stack $s'$.
 
 
 By induction on the lenght of the word $w$, we can easily show that:
 \begin{lemma}
-For every word $w\in X.\{\text{@},\lambda x | x\in X \}^*$, we have that:
- $$(i, \perp)\xrightarrow{w} (p, \sigma_n\dots\sigma_1) \qquad\text{iff} \qquad 
+For every word $w\in X.\{@,\lambda x | x\in X \}^*$, we have that:
+ $$(i, \epsilon)\xrightarrow{w} (p, \sigma_n\dots\sigma_1) \qquad\text{iff} \qquad 
 w:\sigma_1\rightarrow\dots\rightarrow\sigma_n$$ 
 \end{lemma}
 
-A direct consequence of this lemma is that $A_\tau$ recognizes $W_\tau$. Another direct consequence is that the stack height of $A_\tau$ is bounded (let us say by a number $m$), since the set $S$ used to type the words is finite. Thus $A_\tau$ can be turned into an NFA $N_\tau$, by encoding the stack information in the states. More precisely, the states of $N_\tau$ are pairs $(r,s)$ where $r\in Q$ and $s$ is a stack of height at most $m$, the initial state is $(i,\perp)$ and there is a transition $(r,s)\xrightarrow{a}(r',s')$ where $a\in X_\lambda\cup\{\epsilon\}$ if there is a corresponding run in $A_\tau$. We show in the following that $N_\tau$ is counter-free. 
+A direct consequence of this lemma is that $P_\tau$ recognizes $W_\tau$. Another direct consequence is that the stack height of $P_\tau$ is bounded by $m$, the size of the longuest type in $S$. Thus $P_\tau$ can be turned into a DFA $D_\tau$, by encoding the stack information in the states. More precisely, the states of $D_\tau$ are pairs $(r,s)$ where $r\in \set{i,p,f}$ and $s$ is a stack of height at most $m$, the initial state is $(i,\epsilon)$ and there is a transition $(r,s)\xrightarrow{a}(r',s')$ where $a\in X_\lambda\cup\{\epsilon\}$ if there is a corresponding run in $P_\tau$. We show in the following that $D_\tau$ is counter-free. 
 
-Let us start with some observations. In the automaton $A_\tau$, the effect of a word $w$ on a stack $s$, starting from the state $p$ is the following: it erases the first $n$ top level elements of $s$, and replaces them by a word $u$. The number $n$ and the word $u$ do not depend on the stack $s$ but only on the word $w$. This is exactly what the following lemma claims.
+Let us start with some observations. In the pushdown automaton $P_\tau$, the effect of a word $w$ on a stack $s$, starting from the state $p$ is the following: it erases the first $n$ top level elements of $s$, and replaces them by a word $u$. The number $n$ and the word $u$ do not depend on the stack $s$ but only on the word $w$. This is exactly what the following lemma claims.
 
 \begin{lemma}
 For every word $w$ over ${X_\lambda}^*$, there is a natural number $n$ and a word $u\in S^*$ such that if $(p,s)\xrightarrow{w}(p,s')$ then $s$ and $s'$ can be decomposed as follows:
@@ -147,8 +133,19 @@ The proof is an easy induction on the lenght of $w$. As a consequence we have th
 \item If $(p,s_1)\xrightarrow{w}(p,s_2)\xrightarrow{w}(p,s_3)$ and $|s_2|=|s_1|$ then $s_3 =s_2$.
 \end{itemize}
 
-Let us show that $N_\tau$ is counter-free. Suppose by contradiction that there is a word $w$ and pairwise distinct stacks $s_1,\dots, s_n$ such that 
-$(p,s_1)\xrightarrow{w}(p,s_2)\xrightarrow{w}\dots(p,s_n)\xrightarrow{w}(p,s_1)$. By the first two properties above, we have necessarily that $|s_1|=\dots=|s_n|$. Thus by the third property, we have that $s_1=\dots=s_n$, which concludes the proof.
+Let us show that $D_\tau$ is counter-free. Suppose by contradiction that there is a word $w$ and pairwise distinct stacks $s_1,\dots, s_n$ such that 
+\begin{align*}
+(p,s_1)\xrightarrow{w}(p,s_2)\xrightarrow{w}\dots(p,s_n)\xrightarrow{w}(p,s_1).
+\end{align*} 
+By the first two properties above, we have necessarily that 
+\begin{align*}
+|s_1|=\dots=|s_n|
+\end{align*}
+ Thus by the third property, we have that 
+\begin{align*}
+ s_1=\dots=s_n
+\end{align*} 
+ which concludes the proof.
 \end{proof}
 
 
@@ -165,7 +162,7 @@ In this section we show that computing the normal form of $\linterm S X$ terms (
     is derivable.
 \end{proposition}
 
-The proof proceeds by induction on the set of types $S$. The main observation is that, if the evaluation of a redex of type $\sigma\rightarrow \tau$ creates new redexes, then their types are either $\sigma$ or $\tau$ (see Figure~\ref{}), they are in particular in $S\setminus\{\sigma\rightarrow\tau\}$. Thus, we only need to show that the function that evaluates all the redexes of a fixed type is derivable. As we only create stricty smaller redexes, we need to iterate this process only finitely many times, the bound being the size of $S$. 
+The proof proceeds by induction on the set of types $S$. The main observation is that, if the evaluation of a redex of type $\sigma\rightarrow \tau$ creates new redexes, then their types are either $\sigma$ or $\tau$, they are in particular in $S\setminus\{\sigma\rightarrow\tau\}$. Thus, we only need to show that the function that evaluates all the redexes of a fixed type is derivable. As we only create stricty smaller redexes, we need to iterate this process only finitely many times, the bound being the size of $S$. 
 
   Since we have only finitely many typed variables, it is enough to show that the function that evaluates all the redexes of a fixed type $\sigma$ and a fixed variable $x$ is derivable. This will be our goal in the rest of this section.
 
@@ -181,7 +178,7 @@ The proof proceeds by induction on the set of types $S$. The main observation is
 
 \subsubsection{Evaluation of thin $\lambda$-terms}
 
-We start by showing that the evaluation of a restricted class of linear $\lambda$-terms, which we call thin, is an fo tree-to-tree function.   
+We start by showing that the evaluation of a restricted class of linear $\lambda$-terms, which we call thin, is derivable.   
 
 \begin{definition}[Thin $\lambda$-terms]
 We say that the node of a $\lambda$-term is \emph{branching} if its has at least two children which are not ports.
@@ -189,12 +186,12 @@ We say that the node of a $\lambda$-term is \emph{branching} if its has at least
 A \emph{thin $\lambda$-term} is a term from $\linterm S X$ in which, if a node is branching, then it is an application node of a redex. We denote by $\thinterm S X$ the set of thin $\lambda$-terms.
 \end{definition}
 
-Since thin $\lambda$-terms branch only on redexes, the result of their evaluation is word-like (that is, a term where every node has at most one son).  We will show that this word can actually be obtained by a pre-order traversal of the original $\lambda$-term. 
-Since pre-order traversal is a basic fo tree-to-tree function, we can conclude that evaluation of thin $\lambda$-terms is a tree-to-tree function as well. 
+Since thin $\lambda$-terms branch only on redexes, the result of their evaluation is a ''word`` (in the sens that every node has at most one non-port child).  We will show that this word can actually be obtained by a pre-order traversal of the original $\lambda$-term. We will then use the basic pre-order traversal  function to show that evaluation of thin $\lambda$-terms is derivable. 
 
+The left $\lambda$-term belwo is thin. The coloured nodes are the ones which are not redexes, nor the variables they bind. The right $\lambda$-term is its normal form,  where we can see that the order of the nodes is the pre-order traversal of the original $\lambda$-term.  
 \begin{center}
-Picture 5
-\end{center}
+		\includegraphics[scale=.15]{MyPic10.jpg}
+		\end{center}
 
 \begin{proposition}\label{prop:EvaluateThin}
  For every typed set $X$ and every finite set $S$ of simple types, the function 
@@ -209,40 +206,55 @@ Let us show that the evaluation of thin $\lambda$-terms is derivable. We will co
 \begin{center}
 \textit{If a node is an application node of a redex, then it is branching.}$\qquad\qquad (H)$
 \end{center}
-Hypothesis $H$ is the converse of the condition on thin $\lambda$-terms. We will first show that normalisation of thin $\lambda$-terms with this additional condition (let us call them strongly thin $\lambda$-terms) is derivable, then we will show later how to get rid of it.
+Hypothesis $(H)$ is the converse of the condition on thin $\lambda$-terms. We will first show that normalisation of thin $\lambda$-terms with this additional condition (let us call them strongly thin $\lambda$-terms) is derivable, then we will show later how to get rid of it.
 
 Let $t$ be a strongly thin $\lambda$-term and let $u$ be its normal form. As noticed before, $u$ has the shape of a word. Moreover, since $t$ is linear, the nodes of $u$ are exactly the nodes of $t$ which are not redexes, nor the variable nodes bound by these redexes. We show that:
 \noindent \begin{enumerate}
 \item The order in which the inner nodes (ie. non ports) of $u$ appear is the tree order of $t$.
-\item Let $n$ be a node of $u$ and $m$ be its corresponding node in $t$. The port $p$ of $u$ is the $i^{th}$ child of $n$ if and only if it the port $p$ of $t$ is the $i^{th}$ port of $m$.  
+\item Let $n$ be a node of $u$ and $m$ be its corresponding node in $t$. The port $p$ of $u$ is the $i^{th}$ child of $n$ if and only if the port $p$ of $t$ is the $i^{th}$ child of $m$.  
 \end{enumerate} 
 
-To establish the second claim, it is enough to show it for one step of $\beta$-reduction. But this last point is clear by a simple analysis of $\beta$-reduction, as far as we consider that the right child of the $\text{@}$ node of every redex is not a port. This is is guaranteed by the condition $(H)$ of strongly thin $\lambda$-terms. 
+To establish the second claim, it is enough to show it for one step of $\beta$-reduction. But this last point is clear by a simple analysis of $\beta$-reduction, as far as we consider that the right child of the $@$ node of every redex is not a port. This is is guaranteed by the condition $(H)$ of strongly thin $\lambda$-terms. 
 
-To establish the first claim, let us consider two inner nodes $n, m$ of $t$ which are also nodes of $u$, and such that $n$ is smaller than $m$ is the tree order of $t$. We show that $n$ is a descendent of $m$ in $u$. There is two cases to consider:
+
+To establish the first claim, we need the following lemma.
+\begin{lemma}\label{lem:internalLemma}
+Let $t$ be a thin $\lambda$-term, let $m$ be the binder node of a redex of $t$ and let $n$ be the node of the variable bound by $m$.
+
+The node $n$ is the greatest node in the subterm $t|_m$ wrt. the tree order. 
+\end{lemma}
+\begin{proof}
+We proceed by induction on the lenght of the path between $m$ and $n$. When it is $0$ the result is clear. Suppose now that it is strictly greater than $0$ and that there is a node $o$ which is strictly greater than $n$. We take $o$ to be the smallest node which is greater than $n$. Since $t$ is thin, the least common ancestor $l$ between $n$ and $o$ is an application node of a redex. Since $n$ is smaller than $o$, $n$ is the left descendant  of $l$, in other words it is the descendant of the left child $p$
+of $l$, which is a binder. The node $m, n, o$ and $p$ are illustrated below:
+\begin{center}
+		\includegraphics[scale=.15]{MyPic11.jpg}
+\end{center} 
+ By induction hypothesis, the variable
+bound by $p$ is strictly greater than $n$. Is is also strictly smaller than $o$, which gives a contradiction and concludes the proof. 
+\end{proof}
+
+Let us go back to the proof of the first claim. Consider two inner nodes $n, m$ of $t$ which are also nodes of $u$, and such that $m$ is smaller than $n$ is the tree order of $t$. We show that $n$ is a descendant of $m$ in $u$. There is two cases to consider:
 
 \textbf{Case 1.} Either $n$ is a descendent of $m$ in $t$, in this case we can conclude easily since $\beta$-reduction preserves the descendent relation. Indeed, by a small analysis of $\beta$-reduction, one can notice that a reduction step may extend the descendent relation, but can never change (or break) the order of two comparable nodes in the original $\lambda$-term.    
 
-\textbf{Case 2.} Otherwise, let us consider the lowest common ancestor $p$ of $m$ and $n$. We proceed by induction on the lenght of the path between $m$ and $p$. By definition of thin $\lambda$-terms, since $p$ is branching it is necessarily an $\text{@}$ node, whose left child $q$ is a binder node, let us say $\lambda x$. 
-Notice first that $m$ is smaller (w.r.t. the tree order) than the node $r$ of the variable bound by $q$ . Indeed, if this was not the case, the free variable $r$ would not be bound by the node $q$, as illustrated by the following figure.
-\begin{center}
-Picture 6
-\end{center}
-We are then left with the following two situations:
-\begin{center}
-Picture 7
-\end{center}    
-And this concludes the proof of the second claim.
+\textbf{Case 2.} Otherwise, let us consider the lowest common ancestor $p$ of $m$ and $n$. We proceed by induction on the lenght of the path between $m$ and $p$. By definition of thin $\lambda$-terms, since $p$ is branching it is necessarily an $@$ node, whose left child $q$ is a binder node, let us say $\lambda x$. 
+By Lemma~\ref{lem:internalLemma}, $m$ is smaller wrt. the tree order than the node $r$ of the variable bound by $q$ . 
+We are then left with the following two situations. The first case, illustrated by the left figure below, is when $r$ is a descendant of $m$ in $t$. In this case, after one reduction step $n$ will be a desendant of of $m$. The other case is when $m$ is in the left of $r$ in $t$, as illustrated by the right figure below. In this case, after one reduction step, the lowest common ancestor between $m$ and $n$ will be a descendant of $p$, and we can conclude by induction hypothesis. This concludes the proof of the first claim.
 
-Using these ingredients, let us construct an fo tree-to-tree transduction which computes the normal form of thin $\lambda$-terms.
-\begin{center}
-Picture 8
-\end{center}
+$\qquad\qquad\quad$\includegraphics[scale=.15]{MyPic12.jpg}\includegraphics[scale=.15]{MyPic13.jpg}
+%\end{center}    
+
+Using these ingredients, let us construct a derivable function which computes the normal form of thin $\lambda$-terms.
 
 
     \begin{tabular}{ll}
     \pictureline
-    {We start by tagging all the redexes of $t$ and their bound variables by $r$. This is an fo rational function, thus it can be performed by a derivable function. The result as a term in $\tmonad (\ranked{\mathcal{A}}+\ranked{\mathcal{A}^r})$, $\ranked{\mathcal{A}^r}$ being a copy of $\ranked{\mathcal{A}}$ where each element is tagged by $r$. Note that the nodes of $u$, the normal form of $t$, are the non-tagged node.}
+    {We start by distinguishing the redexes of $t$ and their bound variables from the other nodes. For that, we apply the characteristic function of the following first-order query:
+    \begin{center}
+    ''The node $u$ is a redex or a variable bound by a redex``
+    \end{center}
+    This query is first-order expressible: being a redex is expressed by the fact that the label is 
+  The characteristic function of this query is then derivable by Proposition~\ref{}. }
     { \text{picture a}}
  \pictureline
     {We apply the pre-order traversal function. We get a term in $\tmonad \ranked{\Gamma}$ where $\ranked{\Gamma}:=\ranked{\mathcal{A}}+\ranked{\mathcal{A}^r}+\bullet+\bullet+\bullet$.}
@@ -256,7 +268,7 @@ Picture 8
 \pictureline
     {To each kind of blocks,  ($\ranked{\tmonad \Gamma}$ or $\ranked{\tmonad \#}$) we apply the functions $f: \ranked{\tmonad{\Gamma}} \to \ranked{\tmonad(\tmonad \Gamma+\tmonad\#)}$ and $g: \ranked{\tmonad{\#}} \to \ranked{\tmonad(\tmonad \Gamma+\tmonad\#)}$ which are both the identity function, except for the following elements:
     $$
-    f(\bullet[\text{@}[\bullet,\bullet],p_1])=f(\bullet[\lambda x^\sigma\bullet],p_1])=f(\bullet[x^\sigma,p_1])=\bullet[p_1]$$
+    f(\bullet[@[\bullet,\bullet],p_1])=f(\bullet[\lambda x^\sigma\bullet],p_1])=f(\bullet[x^\sigma,p_1])=\bullet[p_1]$$
     
     For every n-ary element of $\ranked{\mathcal{A}}$, we have that:
  $$\begin{array}{c}
@@ -269,7 +281,7 @@ After that, we apply a flattening, to get a term in $\ranked{\tmonad(\Gamma+\#)}
 }
 { \text{picture e}}
 \pictureline
-{We have got the desired term, but not with the desired type. To obtain a term in $\ranked{\tmonad{\mathcal{A}}}$, we transform each tagged element of $\ranked{\mathcal{A}^r}$ into its untagged version, transform $\bullet_2$ into $\text{@}$, and $\bullet_0$ into $x^\sigma$. Finally, we erase the symbols $\#$ and $\bullet_1$.}{}
+{We have got the desired term, but not with the desired type. To obtain a term in $\ranked{\tmonad{\mathcal{A}}}$, we transform each tagged element of $\ranked{\mathcal{A}^r}$ into its untagged version, transform $\bullet_2$ into $@$, and $\bullet_0$ into $x^\sigma$. Finally, we erase the symbols $\#$ and $\bullet_1$.}{}
     \end{tabular}
 
  
