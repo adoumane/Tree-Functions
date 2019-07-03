@@ -41,29 +41,37 @@ When we restrict our attention to those $\lambda$-terms whose subterms have type
     is first-order definable 
 \end{proposition}
 
-To prove this property, we will start by showing that for $\NonLinTerms S X$ terms (that is if we already know that a term is well-typed and that all its sub-terms have types in $S$) checking if their type is $\tau$, where $\tau$ is a type in $S$, is a first order property:
+To prove this property, we will start by showing that for $\lambda$-terms in $\NonLinTerms S X$ (that is if we already know that a $\lambda$-term is well-typed and that all its sub-terms have types in $S$) checking if their type is $\tau$, where $\tau$ is a type in $S$, is a first order property:
 \begin{lemma}\label{lem:IsTypeTauFo}
 For every simple type $\tau$ in $S$, there is a first-order query $\varphi_\tau$ such that:
 $$ \forall M\in \NonLinTerms S X \qquad M,u \models \varphi_\tau \Longleftrightarrow M|_u:\tau$$
-where $M|_u$ is the subterm of $M$ rooted in $u$. 
+where $M|_u$ is the subtree of $M$ rooted in $u$. 
 \end{lemma}
-Before establishing this lemma, let us see how Proposition~\ref{prop:WellTypedFo} can be derived from it. Suppose for convenience that the types of the variables of $X$  are in $S$, and that $S$ is downward closed. 
-Consider the unary formula $\mathsf{Lambda}_{\sigma\rightarrow\tau}(u)$, which expresses that $u$ is a binder node, and that its type and the type of its descendant match well: 
+Before establishing this lemma, let us see how Proposition~\ref{prop:WellTypedFo} can be derived from it. Suppose for convenience that $S$ is downward closed. For every type $\tau$ in $S$, let $\varphi_\tau$ be the formula given by Lemma~\ref{lem:IsTypeTauFo}. In the following, we use the binary formula
+ $\mathsf{Succ}_{i}(u,v)$ which is valid when $v$ is the $i$-th child of $u$, and which is easily expressible in first-order logic.
+ \smallskip
+ 
+Consider the unary formula $\mathsf{Lambda}(u)$, which expresses that $u$ is a binder node, that its type and the type of its child match well and both belong to $S$: 
 \begin{align*}
-\mathsf{Lambda}_{\sigma\rightarrow\tau}(u) :=  \underbrace{\bigvee_{x:\sigma}\lambda x(u)}_{\substack{\text{the label of $u$ is $\lambda x$} \\ \text{where $x$ is a variable of type $\sigma$}}} \wedge \underbrace{\varphi_{\sigma\rightarrow\tau}(u)}_{\substack{\text{$u$ has type $\sigma\rightarrow\tau$}}}  \wedge \underbrace{\exists v\ \ \mathrm{Succ}_1(u, v) \wedge \varphi_\tau (v)}_{\substack{\text{the successor of $u$ has type $\tau$}}}
+\mathsf{Lambda}(u) := \bigvee_{\substack{\sigma\rightarrow\tau \in S\\x:\sigma}} \underbrace{\lambda x(u)}_{\substack{\text{$u$ has label $\lambda x$}}} \wedge \underbrace{\varphi_{\sigma\rightarrow\tau}(u)}_{\substack{\text{$u$ has type $\sigma\rightarrow\tau$}}}  \wedge \underbrace{\exists v\ \ \mathrm{Succ}_1(u, v) \wedge \varphi_\tau (v)}_{\substack{\text{the child of $u$ has type $\tau$}}}
 \end{align*}
-The binary formula $\mathsf{Succ}_{i}(u,v)$ expresses that $v$ is the $i$-th chilld of $v$, and it can be easily expressed in first-order logic. For every type $\tau$, the formula $\varphi_\tau$ is the one  given by Lemma~\ref{lem:IsTypeTauFo}.
-Similarly, consider the unary formula $\mathsf{Application}_{\sigma\rightarrow\tau}(u)$ which checks that a node is ann application node, and that the type of its children match well: 
 
-Finally, consider the formula $\mathsf{variable}(u)$  
-Let $\varphi$ be the following first-order formula:
+Similarly, consider the unary formula $\mathsf{Application}(u)$ which checks that a node is an application node, that the type of its children match well and that both belong to $S$: 
 \begin{align*}
-\forall u. \bigvee_{\sigma\rightarrow\tau\in S} \left(\bigvee_{x:\sigma}\lambda x(u) \Rightarrow
- \varphi_{\sigma\rightarrow\tau}(u)\wedge\varphi_\tau(\mathrm{child}_1(u))\right) \wedge 
-\left(\text{@}(u) \Rightarrow \varphi_{\sigma\rightarrow\tau}(\mathrm{child}_1(u))\wedge\varphi_\sigma(\mathrm{child}_2(u))\right)
+\mathsf{Application}(u) := \bigvee_{\sigma\rightarrow\tau \in S} \underbrace{@(u)}_{\substack{\text{$u$ has label @}}}  \wedge \exists v, w\ \ \underbrace{\mathrm{Succ}_1(u, v) \wedge \varphi_{\sigma\rightarrow\tau} (v)}_{\substack{\text{the left child of $u$ has type $\sigma\rightarrow\tau$}}} \wedge \underbrace{\mathrm{Succ}_2(u, w) \wedge \varphi_{\sigma} (w)}_{\substack{\text{the right child of $u$ has type $\sigma$}}}
 \end{align*}
-If a $\lambda$-term is in $\NonLinTerms S X$, then it clearly satisfies $\varphi$. Suppose by contradiction that there is a $\lambda$-term $M$ which is not in $\NonLinTerms S X$ and yet satisfies $\varphi$. let $u$  be the deapest node of $M$ which is not in $\NonLinTerms S X$ (we identify in this proof a node $u$ and the subterm $M|_u$). In particular, the descendents of $u$ are all in $\NonLinTerms S X$. The node $u$ cannot be a variable, since we supposed that the types of the variables $X$ are in $S$. If $u$ was labeled by $\lambda x$, where $x$ is of type $\sigma$, then by the first conjunct of $\varphi$ there is a type $\tau$ such that $\sigma\rightarrow\tau\in S$ and the child $v$ of $u$  satisfies $\varphi_\tau$. Since $v$ is in $\NonLinTerms S X$, its type is $\tau$ by Lemma~\ref{lem:IsTypeTauFo}. Hence $u$ is well-typed and its type is $\sigma\rightarrow\tau\in S$. As a consequence $u$ is in $\NonLinTerms S X$ which is a contradiction.  Finally, if $u$ was labeled by @, then by the second conjunct of $\varphi$, its two children $u_1$ and $u_2$
+
+Finally, consider the formula $\mathsf{Variable}(u)$, which expresses that $u$ is a variable node, whose type is in $S$:
+\begin{align*}
+\mathsf{Variable}(u) :=  \bigvee_{x:\sigma\in S}\underbrace{x(u)}_{\substack{\text{$u$ has label $x$}}} 
+\end{align*}  
+We claim that the following (nullary) formula $\phi$ recognizes the tree language $\NonLinTerms S X$
+\begin{align*}
+\phi = \forall u.\ \mathsf{Variable}(u)\ \vee\ \mathsf{Lambda}(u)\ \vee\  \mathsf{Application}(u)
+\end{align*}
+If a $\lambda$-term is in $\NonLinTerms S X$, then it clearly satisfies $\phi$. Suppose by contradiction that there is a $\lambda$-term $M$ which is not in $\NonLinTerms S X$ and yet satisfies $\phi$. Let $u$  be the deapest node of $M$ which is not in $\NonLinTerms S X$ (we identify in this proof a node $u$ and the subterm $M|_u$). In particular, the descendents of $u$ are all in $\NonLinTerms S X$. The node $u$ cannot be a variable, since variable nodes are well-typed and their type is in $S$ by the first disjunct of $\phi$.  If $u$ was labeled by $\lambda x$, where $x$ is of type $\sigma$, then by the second disjunct of $\phi$ there is a type $\tau$ such that $\sigma\rightarrow\tau\in S$ and the child $v$ of $u$  satisfies $\varphi_\tau$. Since $v$ is in $\NonLinTerms S X$, its type is $\tau$ by Lemma~\ref{lem:IsTypeTauFo}. Hence $u$ is well-typed and its type is $\sigma\rightarrow\tau\in S$. As a consequence $u$ is in $\NonLinTerms S X$ which is a contradiction.  Finally, if $u$ was labeled by $@$, then by the third disjunct of $\phi$, its two children $u_1$ and $u_2$
 would satisfy respectively $\varphi_{\sigma\rightarrow\tau}$ and  $\varphi_{\sigma}$ and by Lemma~\ref{lem:IsTypeTauFo} they are of type $\sigma\rightarrow\tau$ and $\sigma$ respectively. The node $u$ is then well-typed and its type is $\tau$ (which is a type of $S$ thanks to downward closeness). As a consequence, $u$ is in $\NonLinTerms S X$, wich gives a contradiction and concludes the proof.
+ \smallskip
  
 We can go back now to the proof of Lemma~\ref{lem:IsTypeTauFo}.
 \begin{proof}[Proof of Lemma~\ref{lem:IsTypeTauFo}]
