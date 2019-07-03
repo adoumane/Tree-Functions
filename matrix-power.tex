@@ -1,111 +1,149 @@
 \section{Reduction to one register}
+
+\newcommand{\regalg}{{\alg_{\rGamma,\regnames}}}
+\newcommand{\alg}{{\color{black}\mathbf A}}
+\newcommand{\balg}{{\color{black}\mathbf B}}
+\newcommand{\algops}[1]{\ranked{\text{signature of }}#1}
+\newcommand{\algdom}[1]{{\color{black}\text{domain of }}#1}
+\newcommand{\redpar}[1]{\ranked(#1\ranked)}
+\newcommand{\treepar}[1]{\trees \redpar{#1}}
+\newcommand{\regups}{\ranked{\text{register updates}}}
+\newcommand{\regvalss}{{\text{register valuations}}}
 \label{sec:matrix-power}
 In this section, we prove that first-order  tree transducers can only recognise derivable functions. 
 \begin{proposition}
     \label{prop:many-register} 
 For every first-order  tree transducer, the computed function is derivable. 
 \end{proposition}
-
-The above proposition finishes the proof of the left-to-right implication in Theorem~\ref{thm:main}, according to the following reasoning:
+This completes the proof of the left-to-right implication in Theorem~\ref{thm:main}, as explained below:
 \begin{align*}
 \text{first-order tree-to-tree transductions}  \stackrel {\text{Theorem~\ref{thm:stt}}}\subseteq  \text{first-order tree transducers} \stackrel {\text{Proposition~\ref{prop:many-register}}} \subseteq \text{derivable}
 \end{align*}
-The rest of this section is devoted to proving Proposition~\ref{prop:many-register}. Although slightly long, the proof is essentially symbol-pushing, and mainly consists of observing that the register update mechanism in a register transducer can be seen as syntactic sugar for normalisation of $\lambda$-terms and unfolding of the matrix power. 
+The rest of this section is devoted to proving Proposition~\ref{prop:many-register}. There will be three main ingredients. Two of these ingredients have been introduced in Sections~\ref{sec:fo-translation} and~\ref{sec:one-register}:    Proposition~\ref{prop:forat} about  first-order tree relabellings will be used for the transition function of the transducer, while  Theorem~\ref{thm:normalise} about affine $\lambda$-terms will be used to handle the mechanics of iterated substitution used in a register transducer. The final ingredient, which is called the {matrix power} and described in Section~\ref{sec:matrix-power-subsec} below, will be used to handle the interplay between different registers.  To put these ingredients together, we use  terminology inspired by universal algebra, as given in the following definition. 
 
-
-
-
-\subsection{Reduction to registers of arity one}
-The following straightforward lemma shows that, without loss of generality, one can assume that all registers store unary terms. 
-\begin{lemma}\label{lem:unary-registers}
-    For every first-order register tree transducer there is an equivalent one (i.e.~recognising the same function) where all registers have arity one. 
-\end{lemma}
-\begin{proof}
-    Consider a term. A branching node is defined to be a node which has at least two subtrees that contain a port. Define the  \emph{unary factorisation} to be the coarsest factorisation where branching nodes are in separate factors, here is a picture:
-    \mypic{37}
-    If the term has arity $n$, then the unary factorisation has at most $n-1$ factors with branching nodes, and at most $2n-1$ factors without branching nodes, and all of the later factors are unary. Therefore, instead of storing an $n$-ary term in a register, one can store the unary factors of its its unary factorisation, plus some finite information about how these unary factors should be put together. 
-\end{proof}
-\subsection{One register of arity one}
-To get an idea of the constructions, we begin with a special case, when the register transducer has one register, which is of arity one. Here is an example of a ternary register update in such a transducer:
-\mypic{49}
-The semantics of an $n$-ary update is that it inputs $n$ terms of arity one, and substitutes the $i$-th one into the variable $i$. For a register update $\ranked u$, define its dual to be the term over the alphabet
+\begin{definition}
+    An \emph{algebra} $\alg$ consists of two sets 
+    \begin{align*}
+    \overbrace{\algdom \alg}^{\text{unranked}} \qquad \overbrace{\algops \alg}^{\text{ranked}},
+    \end{align*}
+equipped with a  \emph{shallow product}\footnote{
+    A more standard approach would be to use a family of operations indexed by the signature
+    \begin{align*}
+    \set{f^\alg : (\algdom \alg)^{\arity f} \to \algdom \alg}_{f \in \algops \alg}.
+    \end{align*}
+   Our approach is equivalent, i.e.~defining a shallow product is the same as defining a family of operations.
+}, which is function of type
 \begin{align*}
-\ranked{\rGamma^\lambda} \quad \eqdef \quad \rGamma + \set{x,\lambda x, @}, \qquad \text{where $x,\lambda x, @$ have arities $0,1,2$}
+ \shallowterm {(\algops \alg)}{\underbrace{(\algdom \alg)}_{\substack{\text{viewed as a ranked}\\ \text{set, with all elements}\\ \text{having arity zero}}}} \rto \redpar {\algdom \alg}.
 \end{align*}
- which is described in the following picture:
-\mypic{50}
-We use the name dual, because the roles of variables and ports are swapped. (The definition of dual in the presence of more than one registers is more complicated, and will be given in Section~\ref{sec:many-registers-subsect}.)
-The dual can be viewed as a $\lambda$-term with ports. The letters from $\rGamma$ are viewed as term constructors in the following sense: an $n$-ary letter of $\rGamma$ is used to combine $n$ terms of type $\otype$ into a single term also of type $\otype$. We extend the notion of $\beta$-reduction and normalisation to $\lambda$-terms extended with symbols from $\rGamma$ in the natural way; there are no reduction rules for the symbols from $\rGamma$. An immediate corollary of Theorem~\ref{thm:normalise} is that normalisation for such extended $\lambda$-terms is also a derivable function.
+    For an algebra $\alg$, define its \emph{product} to be the function of type
+    \begin{align*}
+        \treepar {\algops \alg} \to \algdom \alg
+    \end{align*}
+    defined in the natural way.
+    %  An algebra is called \emph{derivable} if its product  is derivable. 
+\end{definition}
 
-The following lemma, which is proved by a simple inspection  of the definitions, says that when the dual is applied, applying register updates corresponds to computing the normal form. 
 
-\begin{lemma}\label{lem:one-register}
-    The following diagram commutes for every ranked set $\rGamma$:
-    \begin{align*}\ranked{
-        \xymatrix@C=2cm{ 
-          \tmonad  \regup \rGamma 1  \ar[rr]^-{\regupt} \ar[d]_{\tmonad \dualt}  &  & \ar[d]^-{\dualt}  \regup \rGamma 1\\
-          \tmonad \tmonad \rGamma^\lambda \ar[r]^{\flatt}  &  \tmonad \rGamma^\lambda \ar[r]^{\normt} & \tmonad \rGamma^\lambda  \\
-        }}
+One example of an algebra is when the signature is some ranked set $\rSigma$, the domain is  $\trees \rSigma$, and the interpretation is defined in the natural way. In this case, the product operation is the identity. A variant of this algebra is when the signature is replaced by $\tmonad \rSigma$; in this case the product operation becomes flattening. 
+
+Another example of an algebra was implicit in the definition of register transducers: the domain is the register valuations and the signature is the  register updates. An important step in the proof of Proposition~\ref{prop:many-register} will be to decompose this algebra using an operation called the matrix power.
+
+
+
+\subsection{Matrix power} 
+\label{sec:matrix-power-subsec}
+Let $\alg$ be an algebra and let $k \in \set{1,2,\ldots}$. How should the $k$-th power of the algebra be defined? For the domain, we use  $k$-tuples from the domain of $\alg$.  What about the operations? A natural   approach is to define the $n$-ary operations to be  $k$-tuples of $n$-ary operations from $\alg$, acting coordinate-wise. Because of the coordinate-wise action,  the coordinates in the product are independent of each other. This will be insufficient for our intended application, where the algebra $\alg$ is meant to represent individual register automaton, since the contents of register $r$ in the output of a register update depend on the contents of other registers in the input valuation . To  model this interdependence, we use a more sophisticated notion of power, 
+defined below.
+\begin{definition}
+    For an algebra $\alg$ and $k \in \set{1,2,\ldots}$, the $k$-th matrix power\footnote{
+        The definition of matrix power that we use is a special case of the original definition of matrix power from universal algebra (for the latter, see~\cite{Taylor1975} or~\cite{szendrei1990simple}). Roughly speaking, the restrictions that we place on the original definition correspond to the single-use and monotone conditions from Definition~\ref{def:stt}. 
+    } of $\alg$ is defined as follows. The domain and signature are defined by
+    \begin{align*}
+    \overbrace{(\algdom \alg)^k}^{\text{domain}} \qquad \overbrace{
+        \ranked{\reduce k ((\algops \alg)^k)}}^{\text{signature}}
         \end{align*}
-\end{lemma}
-The purpose of the above lemma is to describe the computation of  register updates  in terms of operations that are already known to be derivable, namely flattening and normalisation. More details will be given in Section~\ref{sec:many-registers-endagme}, where a generalisation of the above lemma will be used to prove Proposition~\ref{prop:many-register}.
+        while the  shallow product operation is defined by
+        \begin{align*}
+            \ranked{
+        \xymatrix{
+            \shallowterm {\reduce k (\algops \alg)^{k}} {{(\algdom \alg)}^k} \ar[d] \\
+            \shallowterm {(\algops \alg)^{k}} {{(\algdom \alg)}} \ar[d] \\
+            (\shallowterm {(\algops \alg)} {{(\algdom \alg)}})^k
+         \ar[d]\\
+            (\algdom \alg)^k
+        }
+        }
+        \end{align*}
+\end{definition}
+
+By definition, if an algebra has a derivable shallow product, then the same is true for its  matrix powers, i.e.~for every $k$ the shallow product in the $k$-th matrix power is derivable. The following proposition -- which is much harder to show -- states a similar implication for  (not necessarily shallow) products.  
+\begin{proposition}\label{prop:matrix-power} If an algebra has a derivable product, then the same is true for its matrix powers.
+\end{proposition}
+The proof of the  proposition is one of the main technical contributions of this paper, and it is given in the appendix. One of the ingredients of the proof is a first-order (in fact, derivable) version of the Factorisation Forest Theorem for trees, which is based in Colcombet's splits from~\cite{colcombetCombinatorialTheoremTrees2007}.  
 
 
-\subsection{Many registers of arity one}
-\label{sec:many-registers-subsect}
-
-In this section, we show that also for in the presence of many registers (all of them of arity one), the evaluation operation is derivable.  We develop the 
-
-Consider an $n$-ary register update $\ranked u \in \regup  \Gamma k$ which uses $k$ registers. We now define its $k$-dual
-\begin{align*}
-\ranked { \dualt(u) \in \reduce k {(\matrixpower{(\tmonad \rGamma^\lambda)}k)}}.
-\end{align*}
-The dual also has arity $n$, and its definition is illustrated in the following picture, which uses $n=3$ and $k=2$:
-\mypic{29}
-Roughly speaking, the dual is obtained by taking the tensor tuple of the duals (in the sense of Section~\ref{sec:many-registers-subsect}) of the $k$ components of the register update, and then grouping the ports using a reducer into groups of $k$; with the each group corresponding to the $k$ registers produced by one of the children. 
-
-The following lemma shows that, in the dual, evaluation of register updates corresponds to unfolding the matrix power followed by normalisation of $\lambda$-terms. As in the case of Lemma~\ref{lem:one-register}, the proof of the lemma is a simple inspection of the definitions. 
-\begin{lemma}\label{lem:many-register}
-    The following diagram commutes for every ranked set $\rGamma$ and $k \in \set{1,2,\ldots}$:
-        \begin{align*}\ranked{
-            \xymatrix@C=2cm{ 
-              \tmonad  \regup \rGamma k  \ar[d]_-{\tmonad \dualt} \ar[rrr]^{\regupt} & &&
-              \regup \rGamma k   \ar[d]^{\dualt}
-              \\
-              \tmonad (\matrixpower  {(\tmonad \rGamma^\lambda)}  k) \ar[r]^{\unfold} &\matrixpower  {(\tmonad \tmonad \rGamma^\lambda)}  k \ar[r]^{\matrixpower \flatt k} &
-              \ar[r]^{\matrixpower \normt k}  \matrixpower  {( \tmonad \rGamma^\lambda)}  k
-                  & \matrixpower  {( \tmonad \rGamma^\lambda)}  k  
-            }}
-            \end{align*}
-\end{lemma}
-
-
+\newcommand{\nmax}{n_{\mathrm{max}}}
 \subsection{Proof of Proposition~\ref{prop:many-register}}
-\label{sec:many-registers-endagme}
-Let us use the above lemma to complete the proof of Proposition~\ref{prop:many-register}. Fix a first-order register transducer which defines a function
-\begin{align*}
- f : \trees \rSigma \to \trees \rGamma,
-\end{align*}
-using $k$ registers, with all registers having arity one. 
- which says that every first-order register transducer defines a derivable function.  Suppose that we are given an input tree $t \in \trees \rSigma$. 
-\begin{enumerate}
-    \item Let $\rDelta \subseteq \regup \rGamma k$ be the finite set of register updates that is used by the transducer. To the input tree, apply the first-order rational update function of the transducer -- which is  derivable thanks to Proposition~\ref{prop:forat} --   yielding a tree
-    \begin{align*}
-    t_1 \in \trees \rDelta.
-    \end{align*}
-    \item  To the tree $t_1$ from the  previous item, apply the function $\tmonad \dualt$ -- which is derivable because the set $\rDelta$ of register updates is finite -- yielding a tree 
-    \begin{align*}
-    t_2 \in \trees (\matrixpower{(\tmonad \rGamma^\lambda)} k).
-    \end{align*}
-    \item To the tree $t_2$ from the previous item, apply the 
-     three derivable functions on the bottom face of the diagram in Lemma~\ref{lem:many-register}, yielding an arity zero element 
-     \begin{align*}
-        t_3 \in (\tmonad \rGamma^\lambda)^{[k]}.
-     \end{align*}
-     \item Since $t_3$ produced in the previous item has arity zero, it is nothing but $k$ trees
-\begin{align*}
-s_1,\ldots,s_k \in \trees \ranked{\rGamma^\lambda}.
-\end{align*}
-     Thanks to Lemma~\ref{lem:many-register}, the tree $s_i$ is the dual of the contents of register $i$ in the register valuation $\regupt(t_1)$. In particular, the output tree is obtained by combining the trees $s_1,\ldots,s_n$ in a derivable way. 
-\end{enumerate}
+\label{sec:proof-of-prop}
+We now complete the proof of Proposition~\ref{prop:many-register}. 
+Fix a register transducer with $k$ registers. For the rest of this section, when talking about register valuations and register updates, we mean the registers of the fixed register transducer. To derive the function computed by the register transducer, we will embed the algebra of its register operations into the $k$-th matrix power of an algebra of $\lambda$-terms.  
 
+ The idea behind this algebra is to use  $\lambda$-terms to represent register contents, according to the following picture:
+    \mypic{59}  
+    Let  $\nmax$  be the maximal arity of registers in the fixed register transducer, and let  $\rGamma$ be its  output alphabet. For a term $t \in \tmonad \rGamma$ of arity at most $\nmax$, its representation as a  $\lambda$-term, which we denote by $t^\lambda$,  uses variables from the following finite set (we use the notation $\otype^i \to \otype$ defined in Example~\ref{ex:affine-not-enough}):
+\begin{align*}
+X  \quad \eqdef \quad \set{\typevar {x_a} {\otype^i \to \otype} : a \in \rGamma \text{ of arity $i$}} \cup \set{\typevar {x_i} \otype : i \in \set{1,2,\ldots,\nmax }}.
+\end{align*}
+Furthermore, $t^\lambda$ is affine and it can be typed using simple types  from  the following set finite set :
+\begin{align*}
+    \Tt \quad \eqdef \quad \set{\otype^i \to \otype : i \in \set{0,\ldots,\nmax}}
+\end{align*}
+This means that if $t$ has arity at most $\nmax$ -- which is true for any term that can appear in a register of our fixed register transducer -- then its $\lambda$-term representation $t^\lambda$ satisfies constraints as in Theorem~\ref{thm:normalise}.  On its own, $t^\lambda$ is already in normal form, so there is no need to normalise it, but we intend to compose  such $\lambda$-terms, leading to terms that are not in normal form (but which still use variables from $X$ and types from $\Tt$). 
+This motivates the  following definition of an algebra, call it $\alg$. Its domain and signature are given by 
+\begin{align*}
+\overbrace{\set \bot + \trees \lamrank X}^{\algdom \alg}  \qquad \overbrace{ \tmonad \lamrank X}^{\algops \alg} \qquad \text{where }\lamrank X = {\overbrace{\set{x : x \in X}}^{\text{arity 0}} \cup \overbrace{\set{\lambda x : x \in X}}^{\text{arity 1}} \cup  \overbrace{\set @}^{\text{arity 2}}}
+\end{align*}
+In other words, the domain is $\lambda$-terms plus an error element, and the signature is $\lambda$-terms  with ports. The   product operation is 
+\begin{align*}
+t^\alg(t_1,\ldots,t_n) = \begin{cases}
+    \text{normal form of $t(t_1,\ldots,t_n)$} & \text{if $t(t_1,\ldots,t_n)$ is affine and can be typed using $\Tt$}\\
+    \bot & \text{otherwise}
+\end{cases}
+\end{align*}
+In particular, if one of the inputs $t_1,\ldots,t_n$ is $\bot$, then the output is also $\bot$.  The algebra $\alg$ is designed so that we can apply Theorem~\ref{thm:normalise} about normalising $\lambda$-terms, hence the following result.
+
+\begin{corollary}[of Theorem~\ref{thm:normalise}]\label{lem:balg}
+    The product operation in the  algebra $\alg$ is derivable.
+\end{corollary}
+
+The next  observation is that the algebra of register valuations homomorphically embeds into a matrix power of the algebra $\alg$, as stated in the following lemma. 
+\begin{lemma}\label{lem:hom-matrix}
+    There is an arity preserving 
+    \begin{align*}
+    \ranked h : \regups \to \algops {\alg^{[k]}}
+    \end{align*}
+    which makes the following diagram commute
+    \begin{align*}
+    \xymatrix@C=2cm{
+        \treepar {\regups} \ar[r]^-{\trees \ranked h}\ar[d]_{\text{product}} & \trees (\algops {\alg^{[k]}})\ar[d]^{\text{product}} \\
+        \regvalss \ar[r]_{(t_1,\ldots,t_k) \mapsto (t^\lambda_1,\ldots,t^\lambda_k)}& \algdom {\alg^{[k]}}
+    }
+    \end{align*} 
+\end{lemma}
+The lemma is proved by simply unfolding the definition of register updates, and seeing how they can be represented using the matrix power.
+
+
+
+
+ We now use the above results to complete the proof of Proposition~\ref{prop:many-register}. We need to show that the function computed by our fixed register transducer is derivable. This function decomposes into the following steps, all of which are derivable:    
+%  By definition, the  register transducer  first applies to the input tree a first-order translation  -- which is derivable thanks to  -- and then to the resulting tree $t \in \trees \Delta$ of register updates it applies the function:
+%     \begin{align*}\label{eq:regup-fun}
+%         t \in \trees \Delta \qquad \mapsto \qquad \text{content of register 1 in the product of $t$}
+%         \end{align*}
+%     Therefore, to finish the proof, it is enough to derive the above function. By  Lemma~\ref{lem:hom-matrix}, this function is the composition of the following derivable functions:
+     \begin{enumerate}
+        \item Apply a first-order tree relabelling to the input tree, yielding a tree labelled by register updates. This step is derivable thanks to Proposition~\ref{prop:forat}.
+        \item  Thanks to Lemma~\ref{lem:hom-matrix}, instead of applying the product in the algebra of register updates, we can  apply  $\trees \ranked h$, followed by the product operation in the algebra $\alg^{[k]}$. The function $\ranked h$ restricted to the finite set of register updates used by the transducer is derivable, and therefore the same is true for its tree lifting $\trees \ranked h$. The product operation in $\alg^{[k]}$ is derivable, because the  underlying algebra has a derivable product  by Corollary~\ref{lem:balg}, and derivable products  are preserved under matrix power by  Proposition~\ref{prop:matrix-power}.
+        \item After the first two steps, we are left with a tuple $(t^\lambda_1,\ldots,t^\lambda_k)$ which contains the  $\lambda$-term representations of all register contents. We project this tuple to the first coordinate, and finally we undo the $\lambda$-term representation, yielding the underlying tree $t_1$. 
+    \end{enumerate} 
