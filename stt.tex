@@ -74,9 +74,9 @@ The syntax of a register transducer consists of:
     \begin{align*}
       \trees{\rSigma} \to \trees{\rDelta}  \qquad \text{for some finite set $\rDelta$ of  register updates over $\regnames$ and $\rGamma$}.
     \end{align*}
-    such that all register updates in  $\rDelta$ are copyless and monotone, as defined below:
+    such that all register updates in  $\rDelta$ are single-use and monotone, as defined below:
     \begin{enumerate}
-        \item \emph{Copyless.}  An $n$-ary register update $\ranked{u}$ is  called  \emph{copyless} if   every
+        \item \emph{Single-use.}  An $n$-ary register update $\ranked{u}$ is  called  \emph{single-use} if   every
         \begin{align*}
             r \in \ranked{\underbrace{\regnames + \cdots + \regnames}_{\text{$n$ times}}}
         \end{align*}
@@ -85,7 +85,7 @@ The syntax of a register transducer consists of:
         \begin{align*} 
             r \to_i s \quad \text{if} \quad  \text{the $i$-th copy of $r$ appears in $\ranked u(s)$},
         \end{align*}
-        which is a partial function from $r$ to $s$ when $\ranked u$ is copyless, satisfies:
+        which is a partial function from $r$ to $s$ when $\ranked u$ is single-use, satisfies:
         \begin{align*}
             r_1 \leq r_2 \text{ and } r_1 \to_i s_1 \text{ and } r_2 \to_i s_2  \qquad \text{implies} \qquad  s_1 \leq s_2
         \end{align*}
@@ -102,21 +102,21 @@ The function computed by a register transducer is the composition the following 
 }
 \end{align*}
 
-The copyless restriction in the above definition is a standard feature of transducer models aimed at capturing transformations of linear size increase~\cite{alurStreamingStringTransducers2011,alur2017streaming}. It prohibits iterated duplication of registers, which would lead to exponential size outputs. The more unusual aspects of our model are the monotonicity requirement and the use of first-order tree relabellings. In fact, our model can be seen as a variant of  streaming tree transducers from~\cite{alur2017streaming} with the following two differences:
+The  single-use restriction in the above definition is a standard feature of transducer models aimed at capturing transformations of linear size increase~\cite{alurStreamingStringTransducers2011,alur2017streaming}. It prohibits iterated duplication of registers, which would lead to exponential size outputs. The more unusual aspects of our model are the monotonicity requirement and the use of first-order tree relabellings. In fact, our model can be seen as a variant of  single-use streaming tree transducers from~\cite{alur2017streaming} with the following two differences (apart from less important differences in the employed syntax):
 \begin{enumerate}
     \item  In~\cite{alur2017streaming}, there is no order on the registers and the monotonicity requirement is lifted. The monotonicity requirement in Definition~\ref{def:stt}  is related to our use of first-order logic, and not monadic second-order logic as in~\cite{alur2017streaming}. Monotonicity    prohibits swapping registers in cycles, which could be exploited by a transducer to do modulo counting (which can be done in monadic second-order logic, but not in first-order logic).
-    \item In~\cite{alur2017streaming}, the transition function is computed by a deterministic bottom-up tree automaton. The update mechanism used in Definition~\ref{def:stt} is incomparable: it  uses first-order logic (and not monadic second-order logic, which corresponds to  tree automata), but it allows a form of lookahead in the sense that the update assigned to a node $x$ can also depend on nodes that are not descendants of $x$ (unlike for deterministic bottom up tree automata).  The lookahead is used to ensure the monotonicity requirement. 
+    \item In~\cite{alur2017streaming}, the transition function can use monadic second-order logic (as opposed to first-order logic as used in our model), but it does not have lookahead (as opposed to our model, where the update associated to a node  of the input tree can depend on the all other nodes in the input tree, and not just those that are earlier in pre-order traversal).  We conjecture that monotonicity -- which is essential to our model -- cannot be achieved without   lookahead.
 \end{enumerate}
 
  
-% The following two examples explain the copyless and monotonicity restrictions. 
-% \begin{example}\label{ex:copyless}
-%     To see the need for the copyless restriction, consider the following abstract register tree transducer, which is not copyless. The input alphabet has two letters of arities zero and one. There is one register $r$ of arity zero, and the update function is the following tree homomorphism \mypic{33}
-% The output tree has one node labelled by  $r$. This function recognised by this transducer maps an input tree (which is a sequence of unary nodes followed by a leaf)  to a complete binary tree of same depth. In particular this, function has exponential size increase, and therefore it cannot be a first-order tree-to-tree transduction, since the latter have linear size increase\footnote{Copyless updates imply linear size outputs, but the converse implication is also true: a corollary of~\cite[Theorem 7.1]{engelfriet_macro_2003} is that  if a  register tree transducer has linear size increase but not necessarily copyless updates, then it is equivalent to a register tree transducer   which has copyless updates.}.
+% The following two examples explain the single-use and monotonicity restrictions. 
+% \begin{example}\label{ex:single-use}
+%     To see the need for the single-use restriction, consider the following abstract register tree transducer, which is not single-use. The input alphabet has two letters of arities zero and one. There is one register $r$ of arity zero, and the update function is the following tree homomorphism \mypic{33}
+% The output tree has one node labelled by  $r$. This function recognised by this transducer maps an input tree (which is a sequence of unary nodes followed by a leaf)  to a complete binary tree of same depth. In particular this, function has exponential size increase, and therefore it cannot be a first-order tree-to-tree transduction, since the latter have linear size increase\footnote{single-use updates imply linear size outputs, but the converse implication is also true: a corollary of~\cite[Theorem 7.1]{engelfriet_macro_2003} is that  if a  register tree transducer has linear size increase but not necessarily single-use updates, then it is equivalent to a register tree transducer   which has single-use updates.}.
 % \end{example}
 
 % \begin{example}\label{ex:monotone}
-%     To see the need for the monotonicity restriction, consider the following abstract register tree transducer, which violates monotonicity. The input alphabet is the same as in Example~\ref{ex:copyless}, i.e.~there are two letters of arities zero and one. There are two registers $r,s$ of arity zero, and the update function is the following tree homomorphism \mypic{35}
+%     To see the need for the monotonicity restriction, consider the following abstract register tree transducer, which violates monotonicity. The input alphabet is the same as in Example~\ref{ex:single-use}, i.e.~there are two letters of arities zero and one. There are two registers $r,s$ of arity zero, and the update function is the following tree homomorphism \mypic{35}
 %     The output tree has one node labelled by  $r$. 
 % Because the two registers get swapped in every step (which is a violation of monotonicity), the output  tree will have a unary (blue)  node if and only if the input tree has an even number of nodes. It follows that the recognised function is not a first-order tree-to-tree transducer, because first-order logic cannot compute parity. 
 % \end{example}
