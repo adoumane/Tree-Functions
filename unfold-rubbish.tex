@@ -1,3 +1,63 @@
+
+\newcommand{\expmatrix}[1]{\reduce k \kpower{#1}}
+\newcommand{\kpower}[1]{ \overbrace{(#1 \otimes \cdots \otimes #1)}^{\text{$k$ times}}}
+ 
+
+Using the shallow unfold operation described above, we now give a formal definition of the unfold operation. Suppose that we want to compute the unfold of a term of type 
+\begin{align*}
+\ranked{\tmonad \expmatrix \Sigma}.
+\end{align*}
+If the input is the identity term ,  then its unfolding is 
+\begin{align*}
+    \tensorpair{\portletter,\ldots,\portletter}/(i \mapsto 1),
+\end{align*}
+i.e.~it consists of $k$ identity terms with their ports folded into a single one.  Otherwise, the term can can be decomposed as a shallow term of the form: 
+\begin{align*}
+ \ranked{
+    \shallowterm{ \expmatrix \Sigma} { \tmonad \expmatrix \Sigma}
+}
+\end{align*}
+Unfold inductively  the children in the shallow term above, yielding a result in
+\begin{align*}
+   \ranked{
+        \shallowterm{ \expmatrix \Sigma} {  \expmatrix {\tmonad \Sigma}}
+    }
+    \end{align*}
+To the result, apply the composition of the following operations, yielding the final result
+\begin{align*}
+\ranked{
+    \xymatrix@C=2cm{
+        \shallowterm{\expmatrix \Sigma}{\expmatrix  \Sigma} \ar[r]^{\distrfold} &
+        \reduce k (\shallowterm {\expmatrix \Sigma } {\kpower \Sigma}) \ar[d]^-{\reduce k \unfoldsmall}\\
+        \reduce k \kpower{\shallowterm \Sigma \Sigma} &
+        \reduce k (\shallowterm {\kpower \Sigma} \Sigma) \ar[l]_{\reduce k \distrtensor}
+    }
+}
+\end{align*}
+
+% Distribute out the fold in the children of the shallow term, yielding  a result in
+% \begin{align*}
+%       \ranked{ \reduce k(
+%         \shallowterm{ \expmatrix \Sigma} { \kpower{\tmonad \Sigma})}
+%     }
+%     \end{align*}
+% Apply the shallow unfold (inside the fold), yielding  a result of type
+% \begin{align*}
+%   \ranked{ \reduce k(
+%     \shallowterm{ \kpower \Sigma} {\tmonad \Sigma})}
+% \end{align*}
+% Distribute the tensor across the shallow term, yielding a result of type
+% \begin{align*}
+%     \ranked{ \reduce k
+%       \kpower {(\shallowterm \Sigma {\tmonad \Sigma})}}
+%   \end{align*}
+% Compose the shallow terms into (not shallow) terms, yielding the final result  in
+% \begin{align*}
+%     \ranked{ \reduce k
+%       \kpower {(\tmonad \Sigma)}}
+%   \end{align*}
+This completes the definition of the unfold operation. 
+ 
 is to unfold directed acyclic graphs representing trees, as illustrated below for $k=2$:
 \mypic{40}
 We have to be careful with unfolding, since we want the derived  operations to have linear and not exponential growth. This is the reason why the nodes of the input tree are labelled by tensor $k$-tuples:  even though each subtree of the input tree before is used in  $k$ subtrees of the output tree, this duplication is spread out across $k$ components of the node labels; leading to a linear $k$-fold increase in the number of nodes. 
