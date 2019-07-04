@@ -1,137 +1,157 @@
 
-\newcommand{\fotitem}[2]{$\displaystyle #1$ & #2 \\ \\ }
-\begin{figure}[h]
-    \centering 
-    \begin{tabular}{ll}
-        \fotitem{
-            \frac
-            { \ranked{f : \Sigma \to \Delta} \quad \ranked{g : \Delta \to \Gamma}}
-            {\ranked{g \circ f :  \Sigma \to  \Gamma}}
-            }
-            {
-                Composition of functions.
-            }
-        \fotitem{
-            \ranked{f : \Sigma \to \Gamma}
-            }
-            {
-                Every arity preserving function with finite domain $\rSigma$.
-            }
-            \fotitem{
-                \ranked{\iota_i : \Sigma_i \to \Sigma_1 + \Sigma_2}
-                }
-                {
-                    Coprojection for $i \in \set{1,2}$.
-                }
-        \fotitem{
-            \frac
-            { \ranked{f_1 : \Sigma_1 \to \Gamma} \quad \ranked{f_2 : \Sigma_2 \to \Gamma}}
-            {\ranked{f_1 \text{or} f_2 :  (\Sigma_1 + \Sigma_2) \to  \Gamma}}
-            }
-            {
-                Co-pairing of functions.
-            }
-            \fotitem{
-                \ranked{\pi_i : \Sigma_1 \times \Sigma_2 \to \Sigma_i}
-                }
-                {
-                    Projection for $i \in \set{1,2}$.
-                }
-        \fotitem{
-            \frac
-            { \ranked{f_1 : \Sigma \to \Gamma_1} \quad \ranked{f_2 : \Sigma \to \Gamma_2}}
-            {\ranked{(f_1,f_2) :  \Sigma \to  \Gamma_1 \times \Gamma_2}}
-            }
-            {
-                Pairing of functions.
-            }
-            \fotitem{
-                \ranked{\distrcart : (\Sigma_1 + \Sigma_2)\times \Gamma \to (\Sigma_1 \times \Gamma) + (\Sigma_2 \times \Gamma)}
-                }
-                {
-                    Cartesian product distributes across coproduct.
-                }
-            \fotitem{
-            \frac
-            { \ranked{f_1 : \Sigma_1 \to \Gamma_1} \quad \ranked{f_2 : \Sigma_2 \to \Gamma_2}}
-            {\ranked{ \tensorpair{f_1,f_2}  :  \Sigma_1 \otimes \Sigma_2 \to  \Gamma_1 \otimes \Gamma_2}}
-            }
-            {
-                Lifting functions to tensors.
-            }
-            \fotitem{
-                \ranked{\distrtensor : (\Sigma_1 + \Sigma_2)\otimes \Gamma \to (\Sigma_1 \otimes \Gamma) + (\Sigma_2 \otimes \Gamma)}
-                }
-                {
-                    Tensor product distributes across coproduct.
-                }
-            \fotitem{
-            \frac{ \ranked{f : \Sigma \to \Gamma}}{\ranked{\tmonad f : \tmonad \Sigma \to \tmonad \Gamma}}
-            }
-            {
-                Lift a function from the alphabet  to terms.
-            }
-            \fotitem{
-            \ranked{\unit_\Sigma : \Sigma \to \tmonad \Sigma}
-            }
-            {
-                View a letter as a term.
-            }
-            \fotitem{
-                \ranked{\flatt_\Sigma : \tmonad \tmonad \Sigma \to \tmonad \Sigma}
-                }
-                {
-                    Flatten a term of terms into a term.
-                }
-                \fotitem{
-                \ranked{ \composeterm :  
-                \set * + \coprod_{a \in \Sigma} \overbrace{\tmonad \rSigma \otimes \cdots \otimes \tmonad \rSigma}^{\text{arity of $a$ times}} \to \tmonad \rSigma }
-                }
-                {
-                        Compose a term from its list of children, for finite $\rSigma$.
-                }
-            \fotitem{
-                \ranked{ \decomposeterm : \tmonad \rSigma \to 
-                \set * + \coprod_{a \in \Sigma} \overbrace{\tmonad \rSigma \otimes \cdots \otimes \tmonad \rSigma}^{\text{arity of $a$ times}}}
-                }
-                {
-                        The inverse of $\composeterm$, for finite $\rSigma$.
-                }    
-    
-            \fotitem{
-                \ancfact, \decfact  : \ranked{\tmonad(\Sigma_1+\Sigma_2) \to \tmonad(\tmonad \Sigma_1 + \tmonad \Sigma_2)}
-            }
-                    {
-                        Ancestor and descendant factorisations.
-                    }
-            \fotitem{
-                \ranked{\preorder : \tmonad \Sigma \to \tmonad (\rSigma + \set{\grayball, \grayballbin})}
-                }
-                {
-                    Pre-order traversal.
-                }    
-            \fotitem{
-            \frac{ \ranked{f : \Sigma \to \Gamma}}{\ranked{\reduce k f : \reduce k \Sigma \to \reduce k \Gamma}}
-            }
-            {
-                Lift a function from the alphabet  to its $k$-fold.
-            }
+\newcommand{\simplefunfig}[4]{
+    \begin{tabular}{cc}
+        $\ranked{
+        \xymatrix@C=1.5cm{
+#2 \ar[r]^-{#1}& #3
+        }}$
+        \\
+        {#4}
+    \end{tabular}   
+ }
 
-            \fotitem{
-                \ranked{\unfold : \tmonad  \reduce k (\Sigma \otimes \cdots \otimes \Sigma) \to \reduce k ( \tmonad \rSigma \otimes \cdots \otimes \tmonad \rSigma)}
-                }
-                {
-                    Unfold a term of folds, for every $k \in \set{2,3,\ldots}$.
-                }
-            % \fotitem{
-            %     \ranked{\unfold : \tmonad (\Sigma^{[k]}) \to (\tmonad \Sigma)^{[k]}}
-            % }
-            %     {
-            %             Matrix power distributes across terms.
-            %     }
+ \newcommand{\reversiblefunfig}[4]{
+    \begin{tabular}{cc}
+        $\ranked{
+        \xymatrix@C=1.5cm{
+#2 \ar@<.5ex>[r]^-{#1}& #3
+\ar@<.5ex>[l]
+        }}$
+        \\
+        {#4}
+    \end{tabular}   
+ }
+
+
+
+ \newcommand{\laterfunfig}[3]{
+    \begin{tabular}{cc}
+        $\ranked{
+        \xymatrix@C=1.5cm{
+#1 & #2
+        }}$
+        \\
+#3
+    \end{tabular}   
+ }
+ 
+
+
+
+\begin{figure}
+    \begin{tabular}{cc}
+        \simplefunfig
+        {\iota_i}
+        {\Sigma_i}
+        {\Sigma_1 + \Sigma_2}
+        {$a \mapsto (a,i)$}
+        &
+        \simplefunfig
+        {\mathrm{forget}}
+        {\Sigma+\Sigma}
+        {\Sigma}
+        {$(a,i) \mapsto a$}
+        \\ \\ 
+        % \\ \\
+        % \reversiblefunfig
+        % {\mathrm{swap}}
+        % {\Sigma \otimes \Gamma}
+        % {\Gamma \otimes \Sigma}
+        % {$\tensorpair{a,b} \mapsto \tensorpair{b,a}$}
+        % &
+        \simplefunfig
+        {\distrtensor}
+        {\reduce k (\Sigma_1 + \Sigma_2)}
+        {\reduce k \Sigma_1 + \reduce k \Sigma_2}
+        {$(a,i)/f \mapsto ((a/f),i)$}
+         & 
+        \reversiblefunfig
+        {\distrtensor}
+        {(\Sigma_1 + \Sigma_2)\otimes \Gamma}
+        {(\Sigma_1 \otimes \Gamma) + (\Sigma_2 \otimes \Gamma)}
+        {$\tensorpair{(a,i),b} \mapsto (\tensorpair{a,b},i)$}
+        \\ \\
+        \reversiblefunfig
+        {\distrtensor}
+        {\shallowterm {(\Sigma_1 + \Sigma_2)} \Gamma}
+        {(\shallowterm {\Sigma_1} \Gamma) + (\shallowterm {\Sigma_2} \Gamma)}
+        {$(a,i)\tensorpair{b_1,\ldots,b_n} \mapsto (a\tensorpair{b_1,\ldots,b_n})$ }
+        &
+        \reversiblefunfig
+        {\distrtensor}
+        {\shallowterm {(\Sigma_1 \otimes \Sigma_2)} \Gamma}
+        {(\shallowterm {\Sigma_1} \Gamma) \otimes (\shallowterm {\Sigma_2} \Gamma)}
+        {
+        \begin{tabular}{c}
+            $\tensorpair{a_1,a_2}\tensorpair{b_1,\ldots,b_n} \mapsto$ \\
+            $\tensorpair{a_1 \tensorpair{b_1,\ldots,b_{n_1}}, a_2\tensorpair{b_{n_1+1},\ldots,b_n} }$  \\
+            where $n_1$ is the arity of $a_1$
+        \end{tabular}    
+        }
+        \\ \\
+        \reversiblefunfig
+        {}
+        {\rSigma}
+        {\shallowterm 1 {\tmonad \Sigma}}
+        {$a \mapsto 1.\tensorpair a$}
+        &
+        \reversiblefunfig
+        {\composeterm}
+        {1 + \shallowterm \Sigma {\tmonad \Sigma} }
+        { \tmonad \Sigma}
+        {
+        \begin{tabular}{c}
+            Every term is either just a port,\\ or has a root and child subterms.    
+        \end{tabular}    
+        } 
+        \\ \\
+        \simplefunfig
+        {}
+        {\Sigma}
+        {\reduce k \Sigma}
+        {$a \mapsto a/(i \mapsto (1,i))$ } &
+        \simplefunfig
+        {}
+        {\reduce {k_1} \reduce {k_2} \Sigma}
+        {\reduce {k_1 \cdot k_2} \Sigma}
+        {$(a/f)/g \mapsto a/(g \circ f)$}
+        \\ \\
+        \simplefunfig
+        {\unit_\Sigma}
+        {\Sigma}
+        {\tmonad \Sigma}
+        {\tablepic{69}}
+        & 
+        \\ \\
+        \simplefunfig
+        {\flatt_\Sigma}
+        {\tmonad \tmonad \Sigma}
+        {\tmonad \Sigma} 
+        {\tablepic{73}}
+        &
+        \simplefunfig
+        {\distrtf}
+        { \tmonad \reduce 1 \Sigma}
+        {\reduce 1 \tmonad \Sigma}
+        {\tablepic{74}}
+        \\ \\
+        \laterfunfig
+        {\tmonad(\Sigma_1+\Sigma_2) \ar@<.5ex>[r]^{ \ancfact}
+        \ar@<-.5ex>[r]_{\decfact}}
+        {\tmonad(\tmonad \Sigma_1 + \tmonad \Sigma_2)} 
+        {see Section~\ref{sec:atomic-and-combinators}} 
+        &
+        \laterfunfig
+        {\tmonad \Sigma \ar[r]^-{\preorder}}
+        {\reduce 1 \tmonad(\rSigma + 0 + 2)}
+        {see Section~\ref{sec:atomic-and-combinators}} 
+        \\ \\ 
+        \laterfunfig
+        {\shallowterm{(\reduce k \Sigma)}{\Gamma^k} \ar[r]^-{\unfold}}
+        {(\shallowterm \Sigma \Gamma)^k}
+        {see Section~\ref{sec:atomic-and-combinators}} 
     \end{tabular} 
-    
-    \caption{Atomic functions and combinators}
-    \label{fig:fo-term}
+    \caption{    \label{fig:fo-term}The atomic functions. The functions are parametrised by types  $\rSigma, \ranked{\Sigma_1}, \ranked{\Sigma_2}, \rGamma$. In the above, the type $\ranked i$ for $i \in \set{0,1,2}$ represents a  ranked set   with one element of arity $i$. Some of the functions are bijections, as indicated by double arrows, in these cases both the function and its inverse are atomic functions. }
 \end{figure}
+
 

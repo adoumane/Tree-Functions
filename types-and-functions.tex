@@ -1,138 +1,119 @@
 \section{Derivable functions}
-The goal of this paper is to characterise the first-order tree-to-tree functions in terms of a set of  atomic functions together with combinators which produce new functions from previously defined ones. A typical combinator is composition of functions.
+In this section, we state the main result of this paper, which describes  the  first-order tree-to-tree functions in terms of  certain atomic functions by using certain combinators.  A typical combinator is composition of functions.
 
-\subsection{Terms}
-We begin by introducing terms, which are a generalisation of trees, where some parts of the tree are unknown. We will need to use terms instead of trees, because we will be splitting  trees into smaller pieces, and such smaller pieces are going to be terms. This is a difference of trees as opposed to strings: while a piece  of a string is also a string, a piece of a tree is a term.
+\paragraph*{The category of ranked sets.}
+The crucial property of the atomic functions and  the combinators is that they use ranked sets. This is because the type constructor of this paper, namely terms, uses ranked sets.  Roughly speaking, a term is a tree with missing parts. The missing parts arise when we  isolate smaller parts of a bigger tree, as illustrated in the following picture:
+\mypic{15}
+This is a difference of trees as opposed to strings~\cite{bojanczykRegularFirstOrderList2018}, where ranked sets are not needed, because a part of a string is also a string.
 
-Fix a set of variables
-\begin{align*}
-    \termvars = \set{x_1,x_2,\ldots}
-\end{align*}
-which will be assumed to be disjoint with all other sets.  We view the variables as a ranked set, where each variable has arity zero, i.e.~it can only be used in leaves. 
 
 \begin{definition}[Terms]\label{def:terms}
-    An $n$-ary term over a ranked set $\rSigma$ is defined to be a tree over the ranked alphabet $\rSigma + \termvars$ where each of the  variables $x_1,\ldots,x_n$ appears exactly once,  and the other variables do not appear at all.  We call \emph{ports} the nodes labeled by $\termvars$.  We write $\tmonad \rSigma$ for the ranked set of terms over $\rSigma$.  
+    An  term\footnote{
+        Our definition of terms differs from the definition used in universal algebra. An $n$-ary term in the sense of this paper is, in the language of universal algebra, a term over variables $\set{x_1,\ldots,x_n}$ where each variable appears exactly once, and the variables are used from left to right.  The requirement that variables appear  once is related to the linear output size of first-order tree-to-tree transductions. Without this requirement, even homomorphisms would have exponential output size. 
+    } over a ranked set $\rSigma$ is a tree over alphabet $\rSigma \redplus \redzero$, where $\redzero$ is a set with one element of arity zero.  The nodes with labels from $\redzero$  -- which are leaves --  are called \emph{ports}. The arity of a term is the number of ports.  We write $\tmonad \rSigma$ for the ranked set of terms over $\rSigma$.  
 \end{definition}
 
-In universal algebra, the restriction that each variable of a term appears exactly once is sometimes called \emph{linearity}; since we do not consider non-linear terms, we use the word term without additionally specifying that it is linear.  The linearity restriction is connected to the fact that first-order transductions have linear size increase.
-
-We adopt the following convention for drawing terms. The term is drawn inside a box, and the dangling edges which leave the box at the bottom are its variables, ordered left-to-right, as in the following picture: \mypic{7}
-% If we disallow crossing edges in the pictures, then the above drawing convention can only represent terms where the variables are ordered $x_1,\ldots,x_n$ from left to right. 
- Because the set of terms is itself a ranked set,  we can create terms of terms, which will be useful.
-
-To see the need for terms, suppose that we want to group the nodes of a tree into connected parts, called \emph{factors} (a factor in a tree is defined to be a set of nodes that is connected by the parent-child relation). The factors are not trees, because they have dangling edges, but they can be viewed as terms, as explained in the following picture:
-\mypic{15}
-        
-A consequence of using terms is that we will work in the category of ranked sets; i.e.~the types we use will be ranked sets and the functions we consider are arity-preserving functions between ranked sets. We adopt the notation that arity-preserving functions are written in red, like this: $\ranked{f : \Sigma \to \Gamma}$. 
 
 
-\subsection{Types}
-The  main goal of this paper is to  show how every first-order tree-to-tree function can be obtained by starting with certain atomic functions, and composing them using certain combinators. The atomic functions and combinators will be based on arity preserving functions on ranked sets. In this section, we describe the types of ranked sets that will be allowed as domains and co-domains of our functions. The general idea is that we start with finite ranked sets, and close these under the following type constructors: coproducts, two kinds of product (Cartesian and tensor), taking terms, and a type constructor that allows to merge ports.
+Because the set of terms is itself a ranked set,  we can create terms of terms.         A consequence of using terms is that we will work in the category of ranked sets; i.e.~the types we use will be ranked sets and the functions we consider are arity-preserving functions between ranked sets. As in Section~\ref{sec:trees-transductions}, we write ranked sets in red. We also use red for operations that output ranked sets. 
+
+\paragraph*{Types.} The following definition describes the  ranked sets that will be allowed as domains and co-domains of our functions.  We call such ranked sets \emph{types}.
+%  The general idea is that we start with finite ranked sets, and close these under the following type constructors: coproducts, two kinds of product (Cartesian and tensor), taking terms, and a type constructor that allows to merge ports.
 %  and the matrix power. 
 % The  matrix power -- which is possibly the least natural type constructor -- will be motivated and discussed in more detail later on.
 
 
-\begin{definition}[Types] \label{def:types} The following ranked sets are called \emph{types}:
-    \begin{enumerate}
-        \item  \emph{Finite ranked sets.} Every finite  ranked set is a type. (A finite ranked set is one that  has finitely many elements altogether, in particular only finitely many arities are represented.)
-        \item \emph{Coproduct.} If $\ranked{\Sigma_1}$ and $\ranked{\Sigma_2}$ are types, then  their \emph{coproduct} $\ranked{\Sigma_1 + \Sigma_2}$
-        is also a type. An $n$-ary element of the coproduct is a pair $(i,a)$ where $i \in \set{1,2}$ and $a$ is an $n$-ary element of  $\ranked{\Sigma_i}$. 
-        \item \emph{Cartesian product.} If $\ranked{\Sigma_1}$ and $\ranked{\Sigma_2}$ are types, then  their \emph{Cartesian product}
-        $ \ranked{\Sigma_1 \times \Sigma_2}$
-        is also a type. An $n$-ary element of the Cartesian product is a pair $(a_1,a_2)$ such that $a_i \in \ranked{\Sigma_i}$ and 
-        \begin{align*}
-            n = \arity{a_1} = \arity{a_2}.
-        \end{align*}
-        We draw Cartesian pairs like this:
-        \mypic{51}
-        \item \emph{Tensor product.} If $\ranked{\Sigma_1}$ and $\ranked{\Sigma_2}$ are types, then  their \emph{tensor product}
-        $ \ranked{\Sigma_1 \otimes \Sigma_2}$
-        is also a type. An $n$-ary element of the Cartesian product is a pair $\tensorpair{a_1,a_2}$ such that $a_i \in \ranked{\Sigma_i}$ and 
-        \begin{align*}
-            n = \arity{a_1} + \arity{a_2}.
-        \end{align*}
-        Note how we use  angular brackets to distinguish tensor $\tensorpair{a_1,a_2}$ pairs from Cartesian pairs $(a_1,a_2)$.         We draw tensor pairs like this:
-        \mypic{52}
 
-        \item \emph{Folding.} If $\rSigma$ is a type and $k \in \set{2,3,\ldots}$ then $\reduce k \rSigma$ is a type. Elements of this set are called $k$-folds of $\rSigma$. A $k$-fold of arity $n$ consists of an element   $a \in \rSigma$ of arity $nk$ and  a function
+\begin{definition}[Types] \label{def:types} Every  ranked set with finitely many elements is a type. Furthermore, types are closed under applying the following type constructors:
+    \begin{enumerate}
+       \item \emph{Coproduct.} An element of the \emph{coproduct} $\ranked{\Sigma_1 + \Sigma_2}$ is a co-pair of the form  $(i,a)$ where $i \in \set{1,2}$ and $a \in \ranked{\Sigma_i}$. The arity is inherited from $a$. We draw co-pairs like this:
+       \mypic{61}
+              \item       \emph{Product.} An element of the   \emph{product}\footnote{
+                  A more precise name would be \emph{tensor product}. The alternative product, call it \emph{Cartesian product}, would have as $n$-ary elements  pairs $(a_1,a_2)$ such that both $a_1$ and $a_2$ have arity $n$. Since we do not use Cartesian product, we write product without specifying that we mean the tensor product.
+              } $\ranked{\Sigma_1 + \Sigma_2}$  is a  pair $\tensorpair{a_1,a_2}$ where $a_i \in \ranked{\Sigma_i}$. The arity  of this pair is the sum of arities of its components $a_1$ and $a_2$. We draw pairs like this:
+        \mypic{52}
+        \item \emph{Folding.} For every $k \in \set{1,2,3,\ldots}$, we have a unary type constructor $\reduce k \rSigma$  which is used to reduce arities, by grouping ports into groups of size at most $k$.  An $n$-ary element of $\reduce k \rSigma$, which is called a \emph{$k$-fold}, consists of an element      $a \in \rSigma$  together with an  injective  function
+            \begin{align*}
+                f : \set{1,\ldots,\arity a} \to \set{1,\ldots,k} \times  \set{1,\ldots,n}.
+            \end{align*}
+            We denote such an element as $a/f$ and draw it like this: \mypic{53}
+        \item \emph{Terms.} The term type constructor $\tmonad \rSigma$ has already been discussed at the beginning of this section.  We draw terms like this:
+        \mypic{51}
+        \item \emph{Shallow terms.} The  ranked set $\shallowterm \rGamma \rSigma$ of  \emph{shallow terms} is defined as
         \begin{align*}
-            f : \set{1,\ldots,nk} \to \set{1,\ldots,n} \qquad \text{every inverse image $f^{-1}(i)$ has size exactly $k$}
+            \ranked {\shallowterm \rSigma \rGamma \eqdef \coprod_{a \in \rSigma} \rGamma^{\text{arity of $a$}}}.
         \end{align*}
-        We write $a/f$ for the $k$-fold given by $a$ and $f$.  We draw $k$-folds like this:
-        \mypic{53}
-        \item \emph{Terms.} If $\ranked \Sigma$ is a type, then  the ranked sets of terms  $\tmonad \rSigma$ is also a type.
+        The coproduct in the above definition is infinite when $\rSigma$ is infinite. 
+        An equivalent definition is that a shallow term  is the special case of  a term over $\rSigma \redplus \rGamma$ where  the root has label from $\rSigma$,  children have labels  from $\rGamma$, and grand-children are ports. We draw shallow terms like terms:
+        \mypic{76}
     \end{enumerate}
 \end{definition}
 
-\subsection{Atomic functions and combinators}
+
+\newcommand{\funcitem}[3]{\ranked{#1  } &:& \ranked{#2} \rto  \ranked{#3}}
+All of the type constructors  above are functors, in the sense  that  arity preserving functions
+\begin{align*}
+\ranked{f_1 : \Sigma_1 \to \Gamma_1 \qquad f_2 : \Sigma_2 \to \Gamma_2}
+\end{align*}       
+can be lifted along the type constructors to new arity preserving  functions
+\begin{eqnarray}
+\label{eq:liftplus}\funcitem{f_1 + f_2}{\Sigma_1 + \Sigma_2}{\Gamma_1 + \Gamma_2} \\
+\funcitem{(f_1,f_2)}{\Sigma_1 \otimes \Sigma_2}{\Gamma_1 \otimes \Gamma_2}\\
+\funcitem{\reduce k f_1}{\reduce k \Sigma_1}{\reduce k \Gamma_1}\\
+\funcitem{\tmonad f_1}{\tmonad \Sigma_1}{\tmonad \Gamma_1}\\
+\label{eq:liftshallow}\funcitem{\shallowterm{f_1}{f_2}}{\shallowterm{\Sigma_1}{\Sigma_2}}{\shallowterm {\Gamma_1}{\Gamma_2}} 
+\end{eqnarray}
+
 We now introduce the main new definition of this paper.
 
 \begin{definition}[Derivable function]
-    A function is called \emph{derivable} if it can be constructed using the atomic functions and combinators listed in Figure~\ref{fig:fo-term}. 
+    The class of \emph{derivable} functions is the least class which:
+    \begin{itemize}
+        \item contains the atomic functions in Figure~\ref{fig:fo-term} and all arity-preserving functions with finite domain;
+        \item is closed under  function composition and the liftings~\eqref{eq:liftplus}-\eqref{eq:liftshallow}.
+    \end{itemize}
 \end{definition}
 
+\include{figure-fot}
+
+Roughly speaking, the atomic functions describe the monad structure of terms, the (graded) monad structure of folds, some obvious distributivity operations, and several less obvious operations whose definitions are  deferred to Section~\ref{sec:atomic-and-combinators}. Before giving these definitions, we state the main result of the paper. 
+
+% \begin{example}
+%     To get a feeling for the atomic functions and combinators, we derive the function
+%     \begin{align*}
+%     \tensorpair{a,b} \in \ranked{\rSigma^2} \qquad \mapsto \qquad  \tensorpair{b,a} \in \ranked{\rSigma^2}
+%     \end{align*}
+%     which witnesses commutativity of the product for pairs of the same type. The idea is to embed pairs into terms, and use simple manipulations on terms. 
+%     We  draw the unique elements of the sets $\redzero$, $\redone$ and $\redtwo$ as follows:
+%     \mypic{79}
+%     We begin by deriving a function which maps a tensor pair into a shallow term whose root is the unique element of $\redtwo$.  This is achieved by composing the derivable functions of types 
+%     \begin{align*}
+%     \ranked{
+%         \xymatrix{
+%             \rSigma \otimes \rSigma \ar[r] &
+%             (\shallowterm \redone \rSigma) \otimes (\shallowterm \redone \rSigma) \ar[r] &
+%             \shallowterm{(\redone \otimes \redone)}  {(\rSigma+\rSigma)} \ar[r] & \shallowterm \redtwo \rSigma
+%         }
+%     }
+%     \end{align*}
+%     which is described in the following picture:
+%     \mypic{78}
+%     The last function applies the bijection $\ranked{\redone \otimes \redone \to \redtwo}$, which is derivable by virtue of having a finite domain. 
+
+%     Next, we can swap the children of 
+% \end{example}
+
+% We first observe that terms and unary folding are monads. 
+% The monad structure for terms is induced by:
+% \begin{align*}
+%         \underbrace{\ranked {\tmonad f : \tmonad \Sigma \to \tmonad \Gamma}}_{\text{$\tmonad$ is a functor}} \qquad  \underbrace{\unit_\rSigma : \rSigma \rto \tmonad \rSigma}_{\text{the unit in the monad}} \qquad  \underbrace{\flatt_\rSigma : \tmonad \tmonad \rSigma \rto \tmonad \rSigma}_{\text{the product operation in the monad}},
+% \end{align*}
+% and a similar situation holds for unary folds $\reduce 1$.  More generally, the family of folds $\set{\reduce k}_{k}$ is a graded monad. Finally, the operation $\tmonad \reduce 1 \rSigma \rto \reduce 1 \tmonad \rSigma$ is a distributive law of these two monads.
+
+% For a derivable function, its domain and co-domain are types as in Definition~\ref{def:types}, in particular the domain and co-domain are ranked sets. The atomic functions are arity-preserving and the combinators preserve this property, and therefore all derivable functions are arity-preserving. 
 
 
-The first two items in the figure, namely function composition and functions with finite domains should be self-explanatory. There are also no surprises for the remaining items which do not involve the term constructor $\tmonad$:
-\begin{center}
-    \newcommand{\fotitemsmall}[2]{$ #1$ & $#2$ \\ }
-\begin{tabular}{ll}
-        \fotitemsmall{
-            \ranked{\iota_i : \Sigma_i \to \Sigma_1 + \Sigma_2}
-            }
-            {
-                a \mapsto (i,a)
-            }
-    \fotitemsmall{
-        {\ranked{f_1 \text{or} f_2 :  (\Sigma_1 + \Sigma_2) \to  \Gamma}}
-        }
-        {
-            (i,a) \mapsto {\ranked{f_i}(a)}
-        }
-        \fotitemsmall{
-            \ranked{\pi_i : \Sigma_1 \times \Sigma_2 \to \Sigma_i}
-            }
-            {
-                (a_1,a_2) \mapsto a_i
-            }
-    \fotitemsmall{
-        {\ranked{(f_1,f_2) :  \Sigma \to  \Gamma_1 \times \Gamma_2}}
-        }
-        {
-            a \mapsto (\ranked{f_1}(a_1), \ranked{f_2}(a_2))
-        }
-        \fotitemsmall{
-            \ranked{\distrcart : (\Sigma_1 + \Sigma_2)\times \Gamma \to (\Sigma_1 \times \Gamma) + (\Sigma_2 \times \Gamma)}
-            }
-            {
-                ((i,a),b) \mapsto (i,(a,b))
-            }
-        \fotitemsmall{
-        {\ranked{ \tensorpair{f_1,f_2}  :  \Sigma_1 \otimes \Sigma_2 \to  \Gamma_1 \otimes \Gamma_2}}
-        }
-        {
-            \tensorpair{a_1,a_2} \mapsto \tensorpair {\ranked{f_1}(a_1), \ranked{f_2}(a_2)}
-        }
-        \fotitemsmall{
-            \ranked{\distrtensor : (\Sigma_1 + \Sigma_2)\otimes \Gamma \to (\Sigma_1 \otimes \Gamma) + (\Sigma_2 \otimes \Gamma)}
-            }
-            {
-                \tensorpair{(i,a),b} \mapsto (i,\tensorpair{a,b})
-            }
-        \fotitemsmall{
-            \ranked{\reduce k f : \reduce k \Sigma \to \reduce k \Gamma }
-            }
-            {
-                a/g \mapsto \ranked f(a)/g
-            }
-\end{tabular}
-\end{center}
-The functions and combinators involving terms    will be described in more detail in  Section~\ref{sec:atomic-and-combinators}.   
-
-For a derivable function, its domain and co-domain are types as in Definition~\ref{def:types}, in particular the domain and co-domain are ranked sets. The atomic functions are arity-preserving and the combinators preserve this property, and therefore all derivable functions are arity-preserving. 
-
-
-We are now ready to state the main theorem of this paper. 
+% We are now ready to state the main theorem of this paper. 
 
 \begin{theorem}\label{thm:main}
     Let $\rSigma,\rGamma$ be finite ranked sets. A function 
@@ -147,54 +128,15 @@ We are now ready to state the main theorem of this paper.
 \end{theorem}
 
 
-\include{figure-fot}
 
 
-
-
-
-\subsection{The atomic functions and combinators for terms}
+\subsection{The atomic functions not explained in Figure~\ref{fig:fo-term}}
 \label{sec:atomic-and-combinators}
-In this section, we define the atomic functions and combinators from Figure~\ref{fig:fo-term} which involve the term type constructor $\tmonad$. 
+In this section, we define the atomic functions whose definitions were not given in Figure~\ref{fig:fo-term}. 
 
 
 
-\subsubsection{Terms as an algebraic data type} Let $\ranked \Sigma$ be a ranked set. If $a \in \Sigma$ is a letter of arity $n$, and $t_1,\ldots,t_n$ are terms in $\tmonad \rSigma$, then also 
-\begin{align*}
-    a \tensorpair{t_1,\ldots,t_n}
-\end{align*}
-is a term, which has $a$ in the root and child subterms $t_1,\ldots,t_n$. We use the tensor brackets $\tensorpair{t_1,\ldots,t_n}$ because the arity of the term is the sum of the arities of $t_1,\ldots,t_n$, as in the tensor product. Another way of constructing a term is to simply have a port $\portletter$ in the root. The above observations explain the function 
-\begin{align*}     
-    \set * + \coprod_{a \in \Sigma} \overbrace{\tmonad \rSigma \otimes \cdots \otimes \tmonad \rSigma}^{\text{arity of $a$ times}}   \qquad \ranked{\xymatrix{
-        \ar[r]^{\composeterm}& 
-        %  \ar@<.5ex>[l]^{\composeterm} 
-    }} \qquad \tmonad \rSigma
-\end{align*}
-from Figure~\ref{fig:fo-term}. Note that the coproduct above can only be viewed as a legitimate type when $\rSigma$ is finite; and therefore the function $\composeterm$ is only allowed when $\rSigma$ is finite. The function $\composeterm$ is injective but not surjective, because its image will contain only the terms that satisfy condition (*) explained in the following picture: 
-\mypic{28}
-If we assumed, in definition~\ref{def:terms}, that the variables in a term are ordered left-to-right, then $\composeterm$ would be a bijection. The operation 
-\begin{align*}     
-    \set {\bot,*} + \coprod_{a \in \Sigma} \overbrace{\tmonad \rSigma \otimes \cdots \otimes \tmonad \rSigma}^{\text{arity of $a$ times}}   \qquad \ranked{\xymatrix{
-&          \ar[l]^{\decomposeterm} 
-    }} \qquad \tmonad \rSigma
-\end{align*}
-is a one-sided inverse of $\composeterm$, i.e.~it is output is the inverse of $\composeterm$ for terms that satisfy (*) and otherwise it is $\bot$. 
 
-
-\subsubsection{Terms as a monad.} Three of the operations associated to the type constructor $\tmonad$, namely  
-\begin{align*}
-        \underbrace{\ranked {\tmonad f : \tmonad \Sigma \to \tmonad \Gamma}}_{\text{$\tmonad$ is a functor}} \qquad  \underbrace{\unit_\rSigma : \rSigma \rto \tmonad \rSigma}_{\text{the unit in the monad}} \qquad  \underbrace{\flatt_\rSigma : \tmonad \tmonad \rSigma \rto \tmonad \rSigma}_{\text{the product operation in the monad}}
-\end{align*}
-induce a monad structure on terms (in the category of ranked sets). The lifting $\tmonad f$ should be self-explanatory: one simply changes the labels in the term according to $f$. The  unit operation interprets each letter as a term with one non-variable node, with the variables ordered left-to-right,  as illustrated below:
-        \mypic{10}
-Finally, the  \emph{flattening} operation $\flatt_\rSigma$ 
-        maps a term of terms into a term, by using substitution as illustrated in the following picture:  \mypic{9}
-% A more formal definition is the flattening of $\portletter$ is $\portletter$, while the flattening of a term of the form 
-% \begin{align*}
-%     t \tensorpair{t_1,\ldots,t_n} \qquad t \in \tmonad \rSigma, t_1,\ldots,t_n \in \tmonad \tmonad \rSigma    
-% \end{align*}
-%  is the term obtained by taking $t$, and replacing each port $x_i$ by the flattening of $t_i$.
-    
 \subsubsection{Factorisations}
     Let $t \in \tmonad \rSigma$ be a term. 
     There are two equivalent definitions of factorisations of $t$. One definition is that a factorisation is an equivalence relation on non-port nodes where every equivalence class is a factor; the other definition is that it is any term $s  \in \tmonad \tmonad \rSigma$ which flattens to $t$. 
@@ -213,107 +155,32 @@ Finally, the  \emph{flattening} operation $\flatt_\rSigma$
         \mypic{11}
         Both ancestor and descendant equivalences are factorisations; and in each case equivalence classes contain only nodes of same type.  The function $\ancfact$ maps a term to (the term of terms corresponding to) its ancestor equivalence relation, likewise we define $\decfact$ for  descendant factorisations.
     
-        \subsubsection{Pre-order traversal.} Let  $\rSigma$ be a ranked set. Let \grayball and \grayballbin be two letters, of arities zero and two. Define 
+        \subsubsection{Pre-order traversal.} The preorder traversal function  
         \begin{align*}
-            \ranked{\preorder : \tmonad \Sigma \to \tmonad (\rSigma + \set{\grayball, \grayballbin})}
+            \ranked{\preorder : \tmonad \Sigma \to \reduce 1 \tmonad (\rSigma + 0 + 2)}
         \end{align*}
-        to be the extension to  terms of the pre-order function discussed in Example~\ref{ex:pre-order}, as explained below:
+        is the natural extension -- from trees to terms -- of the  pre-order function discussed in Example~\ref{ex:pre-order}, as explained below (the unary grey nodes represent the labels from $\ranked 0$, and the binary grey nodes represent the labels from $\ranked 2$):
         \mypic{13}
-
-\todo{Il me semble qu'il manque des operations sur le type Fold. Je propose de faire une section specifique a fold (comme celle pour les terms), avant une section specifique pour l'unfolding, ou on ajouterai, en plus de certaines operations de distributitivite, les operations de "quasi-monad'' sur fold. Il est necessaire d'ajouter la fonctorialite de fold, mais peut etre aussi ce qui ferait office de unit et de flat.}        
-
+        
 \subsubsection{Unfolding}
-The general idea behind the  operation 
-\begin{align*}
-    \ranked{\unfold : \tmonad  \reduce k (\Sigma \otimes \cdots \otimes \Sigma) \to \reduce k ( \tmonad \rSigma \otimes \cdots \otimes \tmonad \rSigma)} 
-\end{align*}
-is to unfold the edges that are joined using the fold constructor, by matching them with different coordinates of the tensor power in the alphabet. This operation is described in the following picture:
-\mypic{39}
-To explain unfolding more precisely, we reduce it to simpler parts, by using a special case of terms, called shallow terms. Define a \emph{shallow term} over a ranked set $\rSigma$ and $\rGamma$ to be the special case of  a term over $\rSigma + \rGamma$ where:  the root has label from $\rGamma$, all children of the root are non-port nodes from $\rGamma$, and all grand-children are ports. Here is a picture of a shallow term:
-\mypic{54}
-It will be easier to define the unfold operation for shallow terms, and then unfolding can be lifted to general terms using structural induction. 
-Before explaining the unfolding operation, we describe  the operations associated to shallow terms. First, we can lift functions on the underlying types to shallow terms in the natural way:
-\begin{align*}
-    \frac
-    { \ranked{f : \Sigma \to \Sigma'} \quad \ranked{g : \Gamma \to \Gamma'}}
-    {\ranked{\shallowterm f g : \shallowterm \Sigma \Gamma \to \shallowterm {\Sigma'} {\Gamma'}}}
-\end{align*}
-Every term over $\rSigma$ is either a port, or it is a shallow term over $\rSigma$ and $\tmonad \rSigma$, leading to the following operations:
-\begin{align*}
-    \ranked{\decomposeterm : \tmonad \Sigma \to 1 +  
-\shallowterm \Sigma {\tmonad \Sigma}} \qquad  \ranked{\composeterm : 1 +  
-\shallowterm \Sigma {\tmonad \Sigma} \to \tmonad \Sigma }
-\end{align*}
-We can distribute fold across shallow terms using the  operation
-\begin{align*}
-    \ranked{\distrfold : \shallowterm \Sigma {\reduce k \Gamma} \to \reduce k (\shallowterm \Sigma  \Gamma)}
-\end{align*}
-as explained in the following picture:
-\mypic{55}
-Finally, we have the shallow unfolding operation, which eliminates folding   by matching it with $k$-th tensor power in a shallow term:
+The general idea behind the  unfolding operation 
 \begin{align*}
 \ranked{
-    \unfoldsmall : \shallowterm {\reduce k   \Sigma} {(\overbrace{\Gamma \otimes \cdots \otimes \Gamma}^{\text{$k$ times}})} \to \shallowterm \Sigma \Gamma
+    \unfoldsmall : \shallowterm {(\reduce k   \Sigma)} {\Gamma^k} \to \reduce 1 (\shallowterm \Sigma \Gamma)
 }
-\end{align*}
+\end{align*} 
+is to eliminate a $k$-fold by matching it with a $k$-th power. 
 The unfolding operation is explained in the following picture for $k=3$:
 \mypic{56}
-
-\newcommand{\expmatrix}[1]{\reduce k \kpower{#1}}
-\newcommand{\kpower}[1]{ \overbrace{(#1 \otimes \cdots \otimes #1)}^{\text{$k$ times}}}
- 
-
-Using the shallow unfold operation described above, we now give a formal definition of the unfold operation. Suppose that we want to compute the unfold of a term of type 
-\begin{align*}
-\ranked{\tmonad \expmatrix \Sigma}.
-\end{align*}
-If the input is the identity term ,  then its unfolding is 
-\begin{align*}
-    \tensorpair{\portletter,\ldots,\portletter}/(i \mapsto 1),
-\end{align*}
-i.e.~it consists of $k$ identity terms with their ports folded into a single one.  Otherwise, the term can can be decomposed as a shallow term of the form: 
-\begin{align*}
- \ranked{
-    \shallowterm{ \expmatrix \Sigma} { \tmonad \expmatrix \Sigma}
-}
-\end{align*}
-Unfold inductively  the children in the shallow term above, yielding a result in
-\begin{align*}
-   \ranked{
-        \shallowterm{ \expmatrix \Sigma} {  \expmatrix {\tmonad \Sigma}}
-    }
-    \end{align*}
-To the result, apply the composition of the following operations, yielding the final result
-\begin{align*}
-\ranked{
-    \xymatrix@C=2cm{
-        \shallowterm{\expmatrix \Sigma}{\expmatrix  \Sigma} \ar[r]^{\distrfold} &
-        \reduce k (\shallowterm {\expmatrix \Sigma } {\kpower \Sigma}) \ar[d]^-{\reduce k \unfoldsmall}\\
-        \reduce k \kpower{\shallowterm \Sigma \Sigma} &
-        \reduce k (\shallowterm {\kpower \Sigma} \Sigma) \ar[l]_{\reduce k \distrtensor}
-    }
-}
-\end{align*}
-
-% Distribute out the fold in the children of the shallow term, yielding  a result in
+% One of the main results in this paper will be  that an iterated version of the unfold operation, of type
 % \begin{align*}
-%       \ranked{ \reduce k(
-%         \shallowterm{ \expmatrix \Sigma} { \kpower{\tmonad \Sigma})}
-%     }
-%     \end{align*}
-% Apply the shallow unfold (inside the fold), yielding  a result of type
-% \begin{align*}
-%   \ranked{ \reduce k(
-%     \shallowterm{ \kpower \Sigma} {\tmonad \Sigma})}
+% \ranked{    \tmonad (\reduce k \Sigma^k) \to \reduce k (\tmonad \Sigma)^k,}
 % \end{align*}
-% Distribute the tensor across the shallow term, yielding a result of type
+% can be derived from the other operations. 
+
+% The formal definition is 
 % \begin{align*}
-%     \ranked{ \reduce k
-%       \kpower {(\shallowterm \Sigma {\tmonad \Sigma})}}
-%   \end{align*}
-% Compose the shallow terms into (not shallow) terms, yielding the final result  in
-% \begin{align*}
-%     \ranked{ \reduce k
-%       \kpower {(\tmonad \Sigma)}}
-%   \end{align*}
-This completes the definition of the unfold operation. 
+% (a/f) \tensorpair{\tensorpair{b_{1,1},\ldots,b_{1,k}},\ldots,\tensorpair{b_{n,1},\ldots,b_{n,k}}} \qquad \mapsto \qquad 
+% (a\tensorpair{b_{f(1)},\ldots,b_{f(\arity a)}})/g
+% \end{align*}
+% where $g$ is defined so that it matches ...

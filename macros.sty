@@ -6,6 +6,12 @@
 \newcommand{\untilmod}{\mathsf U}
 \newcommand{\sincemod}{\mathsf S}
 
+\newcommand{\redplus}{\ranked +}
+\newcommand{\redtimes}{\ranked \otimes}
+\newcommand{\redset}[1]{\ranked{\{}#1 \ranked{\}}}
+\newcommand{\redzero}{{\ranked { 0}}}
+\newcommand{\redone}{{\ranked { 1}}}
+\newcommand{\redtwo}{{\ranked { 2}}}
 
 \newcommand{\regnames}{{\ranked R}}
 \newcommand{\regvals}[2]{\mathrm{regval}(\ranked{#2},\ranked{#1}}
@@ -61,12 +67,15 @@
 \newcommand{\decomposeterm}{\ranked{\mathrm{decompose}}}
 \newcommand{\preorder}{\ranked{\mathrm{preorder}}}
 \newcommand{\distrcart}{\ranked{\mathrm{distr}}}
+\newcommand{\distrtf}{\ranked{\mathrm{distr}}}
 \newcommand{\distrtensor}{\ranked{\mathrm{distr}}}
 \newcommand{\distrfold}{\ranked{\mathrm{distr}}}
-\newcommand{\unfoldsmall}{\ranked{\mathrm{unfold}_0}}
+\newcommand{\unfoldsmall}{\ranked{\mathrm{unfold}}}
 \newcommand{\shallowterm}[2]{\ranked{#1 . #2}}
 \newcommand{\child}[1]{\mathrm{child}_{#1}}
 \newcommand{\matpower}[1]{#1^{[k]}}
+
+
 
 \newcommand{\anceord}{<}
 \newcommand{\portord}{\sqsubset}
@@ -96,7 +105,7 @@
 % \newtheorem{proposition}[theorem]{Proposition}
 % \newtheorem{corollary}[theorem]{Corollary}
 % \newtheorem{fact}[theorem]{Fact}
-% \newtheorem{claim}[theorem]{Claim}
+ 
 % \newtheorem{exampl}[theorem]{Example}
 % \newtheorem{observation}[theorem]{Observation}
 % \newtheorem{sublemma}{Lemma}[theorem]
@@ -241,6 +250,10 @@ $\Box$ \smallskip
 	\begin{center}
 		\includegraphics[page=#1,scale=0.4]{pics}
 	\end{center}
+}
+
+\newcommand{\tablepic}[1]{
+   \includegraphics[page=#1,scale=0.4]{pics}
 }
 
 
