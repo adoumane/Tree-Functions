@@ -337,16 +337,20 @@ to the terms of $\tmonad(X^\lambda+X^\lambda+\set{\grayball, \grayballbin})$ usi
 \subsubsection{Factorizing $\lambda$-terms into blocks of thin $\lambda$-terms}
 
 \begin{definition}[Full redex]
-Let $t$ be a linear $\lambda$-term, $x$ be a typed variable and $\sigma$ be a simple type. A \emph{full $x$-redex of type $\sigma$} is a set of nodes  containing an $x$-redex of type $\sigma$, the node of the variable $x$ bound by this redex, together with the set of nodes between them.
+Let $t$ be a term of $\linterm S X$ $x$ be a variable in $X$ and $\sigma$ be a type in $S$. 
+
+ A \emph{full $x$-redex of type $\sigma$} is a set of nodes  containing an $x$-redex of type $\sigma$, the node of the variable $x$ bound by this redex, together with the set of nodes between them.
 \end{definition}
+\begin{center}
 Picture 9
+\end{center}
 
 
-\begin{proposition}\label{prop:FactoIntoThin}
-For every typed variable $x$, and every simple type $\sigma$, there is a factorisation $f:\tmonad \ranked{X^\lambda} \to \tmonad(\tmonad \ranked{X^\lambda})$ such that for every $t\in\linterm S X$
+\begin{proposition}\label{prop:FactoIntoThin} For every finite set of typed variables $X$, for evry finite set of types $S$ and for every $x\in X$ and $\sigma\in S$, there is a factorisation $$f:\tmonad \ranked{X^\lambda} \to \tmonad\tmonad \ranked{X^\lambda}$$ 
+such that for every $t\in\linterm S X$
 \begin{itemize}
 \item every full $x$-redex of type $\sigma$ in $t$ is entirely contained in one of the factors of $f(t)$;
-\item the factors of $f(t)$ are thin $\lambda$-terms.
+\item the factors of $f(t)$ are in $\thinterm S X$.
 \end{itemize}
 \end{proposition}
 
