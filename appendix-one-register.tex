@@ -244,9 +244,10 @@ We are then left with the following two situations. The first case, illustrated 
 $\qquad\qquad\quad$\includegraphics[scale=.15]{MyPic12.jpg}\includegraphics[scale=.15]{MyPic13.jpg}
 %\end{center}    
 
-Using these ingredients, let us construct a derivable function which computes the normal form of thin $\lambda$-terms. We illustrate this construction on a $\tmonad(X^\lambda)$ term $t$ below which will be our running example in this proof. 
-
-%   
+Using these ingredients, let us construct a derivable function which computes the normal form of thin $\lambda$-terms. We illustrate this construction on the $\tmonad(X^\lambda)$ term $t$ below which will be our running example in this proof. 
+\begin{center}
+\includegraphics[scale=.15]{MyPic14.jpg}
+\end{center}
 \begin{enumerate}
 \item
 We start by distinguishing the redexes of $t$ and their bound variables from the other nodes. For that, we apply the characteristic function of the following first-order query $\varphi$:
@@ -275,7 +276,7 @@ The query $\varphi$ being first-order, its characteristic function is derivable 
 
 When we apply this step to our example term $t$,  we get the $\ranked{\tmonad(X^\lambda+X^\lambda)}$ term below. We coloured in red the nodes belonging to the first copy of $\ranked{X^\lambda}$, that is the nodes satisfying the query $\varphi$. These nodes are the ones that will desappear in the normal form of $t$. 
 \begin{center}
-Picture
+\includegraphics[scale=.15]{MyPic15.jpg}
 \end{center}
 \item After that, we apply the pre-order traversal function 
 \begin{align*}
@@ -283,7 +284,7 @@ Picture
 \end{align*}
 After this step, our initial term becomes
 \begin{center}
-Picture
+\includegraphics[scale=.15]{MyPic16.jpg}
 \end{center}  
 In this term, the nodes of the normal form appear in the right order thanks to the first claim. We only need to get rid of the redexes and the variable nodes that participated in the computation of the normal form (that is the ones coloured in red) together with the nodes $\grayball$ and $\grayballbin$ introduced by the pre-order traversal. 
 \item For this purpose, we apply the function $\ranked{\mathsf{Tagg\text{-}Parent}_{\set{\grayballbin}}}$ from Example~\ref{ex:Tagg}
@@ -298,7 +299,7 @@ In this term, the nodes of the normal form appear in the right order thanks to t
  
  After this step, our example term becoms    
 \begin{center}
-Picture
+\includegraphics[scale=.15]{MyPic17.jpg}
 \end{center}
 \item Now consider the constant function
  \begin{align*}
@@ -310,11 +311,11 @@ Picture
  \end{align*}
  which is the identity function, except for the following finite set of terms for which it is defined as  
 \begin{center}
-Picture
+\includegraphics[scale=.15]{MyPic18.jpg}
 \end{center}
 \item We apply $f$ to the $\tmonad\set{\#}$ factors and $g$ to the other factors, then we flat the resulting term. We obtain the following $\tmonad(X^\lambda+X^\lambda+\set{\grayball, \grayballbin})$ term, which is  the normal form of $t$. 
 \begin{center}
-
+\includegraphics[scale=.15]{MyPic19.jpg}
 \end{center}
 Note that we obtained the desired term, but not with the desired type. To obtain a term in $\ranked{\tmonad{X^\lambda}}$, we lift the co-pairing of the identity function (twice)
 \begin{align*}
