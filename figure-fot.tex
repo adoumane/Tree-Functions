@@ -51,13 +51,20 @@
         {\Sigma+\Sigma}
         {\Sigma}
         {$(a,i) \mapsto a$}
-        \\ \\
-        \reversiblefunfig
-        {\mathrm{swap}}
-        {\Sigma \otimes \Gamma}
-        {\Gamma \otimes \Sigma}
-        {$\tensorpair{a,b} \mapsto \tensorpair{b,a}$}
-        &
+        \\ \\ 
+        % \\ \\
+        % \reversiblefunfig
+        % {\mathrm{swap}}
+        % {\Sigma \otimes \Gamma}
+        % {\Gamma \otimes \Sigma}
+        % {$\tensorpair{a,b} \mapsto \tensorpair{b,a}$}
+        % &
+        \simplefunfig
+        {\distrtensor}
+        {\reduce k (\Sigma_1 + \Sigma_2)}
+        {\reduce k \Sigma_1 + \reduce k \Sigma_2}
+        {$(a,i)/f \mapsto ((a/f),i)$}
+         & 
         \reversiblefunfig
         {\distrtensor}
         {(\Sigma_1 + \Sigma_2)\otimes \Gamma}
@@ -114,7 +121,8 @@
         {\Sigma}
         {\tmonad \Sigma}
         {\tablepic{69}}
-        & \\ \\
+        & 
+        \\ \\
         \simplefunfig
         {\flatt_\Sigma}
         {\tmonad \tmonad \Sigma}

@@ -1,0 +1,80 @@
+\section{Proof of Theorem~\ref{thm:stt}}
+In this part of the appendix, we prove Theorem~\ref{thm:stt}, which says that every first-order tree-to-tree transduction is recognised by a register transducer. 
+
+Our definition of first-order transductions allows composing any number of functions which are either copying or non-copying first-order transductions, which can be stated as follows:
+\begin{align*}
+\text{first-order transductions} \quad \eqdef \quad (\text{copying} \cup \text{(non-copying first-order transductions)})^*
+\end{align*}
+where the star denotes closure under composition. It is not hard to see that copying commutes with non-copying first-order transductions in the following sense:
+\begin{align*}
+    \text{copying} \circ  \text{(non-copying first-order transductions)}  \subseteq   \\ \text{(non-copying first-order transductions)} \circ \text{copying}
+    \end{align*}
+Furthermore, since the class of copying functions is closed under composition, and the same is true for non-copying first-order transductions, we get the following normal form of first-order transductions:
+\begin{align*}
+    \text{first-order transductions} =  \text{(non-copying first-order transductions)} \circ \text{copying}
+    \end{align*}
+Therefore, in order to prove Theorem~\ref{thm:stt}, it suffices to show that a register transducer can compute any function which first copies the nodes of the input tree a fixed number of times, and then applies a non-copying first-order transduction. To make notation lighter, we ignore the copying, and only show that register transducers can simulate non copying first-order transductions. The proof with copying follows the same lines. 
+
+For the rest of this section, fix a tree-to-tree function
+\begin{align*}
+f : \trees \rSigma \to \trees \rGamma
+\end{align*}
+which is defined by a non-copying first-order transduction. We will show that $f$ is computed by some register transducer.  
+
+\newcommand{\origin}[1]{\mathrm{origin}_{#1}}
+\newcommand{\orcol}[2]{\mathrm{orcol}_{#1}^{#2}}
+The general idea is to trace the origin of each node of the output tree. For an input tree $t \in \trees \rSigma$, define the origin map
+\begin{align*}
+\origin t : \text{nodes in $f(t)$} \to \text{nodes in $t$}
+\end{align*}
+which maps a node $x$ of the output tree to the node of the input tree that was used to define it in the interpretation. For a node $x$ in an input tree $t$, define the origin colouring of $x$ to be the function 
+\begin{align*}
+\orcol t x : \text{nodes in $f(t)$} \to \set{\text{below, at, other}} \qquad y \mapsto \begin{cases}
+    \text{below} & \text{ if }\origin t(y) > x\\
+    \text{at} & \text{if }\origin t(y) = x \\
+    \text{other} & \text{otherwise}
+\end{cases}
+\end{align*}
+Like for any colouring of nodes in a tree, among the factorisations of the output tree $f(t)$ (i.e.~partitions of the nodes into connected equivalence classes) there is a unique coarsest factorisation which refines the origin colouring of $x$. We use the name \emph{origin factorisation of $x$ in $t$} for this factorisation. 
+
+
+\begin{lemma}\label{lem:composition-method}
+    For every input tree $t$ and node $x$ in $t$, the origin factorisation of $x$ in $t$ has at most a constant (i.e.~depending only on the fixed transduction) number of  factors. 
+\end{lemma}
+\begin{proof}
+    For an input tree $t$ and a node $x$ in it, we say that an edge in the output tree $f(t)$ is \emph{$x$-sensitive} if the two endpoints of the edge have different colours with respect to the origin colouring of $x$ in $t$. It is not hard to see that the number of factors in the origin factorisation is one plus the  number of sensitive edges, and therefore to prove the lemma, it is enough to show that:
+    \begin{itemize}
+        \item[(*)] for every input tree $t$ and node $x$ in $t$,  there is at most a constant  number of $x$-sensitive edges.
+    \end{itemize}
+    
+    Let us write  $\to$ for the image -- along the origin mapping -- of the  child relation in the output tree. In other words,  nodes $y,z$ in the input tree satisfy $y \to z$ if some node in the output tree with origin $z$ is a child of some node in the output tree with origin $y$.   
+     It is not hard to  see that $\to$ can be defined in first-order logic, using the formulas from the transduction. Let $r$ be the quantifier rank of the first-order formula used to define $\to$. Using Ehrenfeucht-Fraisse argument, one can show that  if $x,y,z$ are nodes in the input tree such that $y$ and $z$ are on different sides of $x$ (i.e.~any path connecting $y$ and $z$ must necessarily pass through $x$),
+    then the truth value of any rank $r$ first-order formula $\varphi(y,z)$   depends only on the following information:
+    \begin{itemize}
+        \item the $r$-type of  $(y,x)$ in the input tree, i.e.~the rank $r$ first-order formulas satisfied by $(y,x)$; and
+         \item the $r$-type of  $(z,x)$ in the input tree, i.e.~the rank $r$ first-order formulas satisfied by $(y,x)$.
+        \end{itemize}
+    Since the relation $\to$ has constant outdegree and indegree, and it can be defined using quantifier rank $r$,  follows that if $y\to z$ are on different sides of $x$ then there can only be a constant number of nodes $y'$ such that $(y,x)$ and $(y',x)$ have the same $r$-type in the input tree. Since the number of $r$-types is constant, it follows that number of pairs $y \to z$ which are on different sides of $x$ is constant; these pairs are the sensitive edges. 
+\end{proof}
+
+\newcommand{\sttregval}[2]{\ranked[#1,#2\ranked]}
+Apply the above lemma, yielding an upper bound  $k \in \set{1,2,\ldots}$ on the number of factors in the origin factorisations. 
+For an input tree $t$ and a node $x$ in it, define 
+\begin{align*}
+\sttregval t x : \regnames \rto  \tmonad \rGamma
+\end{align*}
+
+\begin{lemma}
+    Let $x$ be a node in an input tree, and let $x_1,\ldots,x_n$ be its children from left to right. There is an $n$-ary register update $u$ such that 
+\begin{align*}
+    \sttregval t x = u(\sttregval t {x_1},\ldots, \sttregval t {x_n})
+\end{align*}
+Furthermore, the register update $u$ can be defined in terms of first-order properties of the node $x$, i.e.~there exist
+\begin{align*}
+\overbrace{\varphi_1(x),\ldots,\varphi_m(x)}^{\text{unary queries}} \qquad \overbrace{u_1,\ldots,u_m}^{\text{register updates}},
+\end{align*}
+which depend only on the transduction, such that the update associated to a node $x$ is $u_i$ if and only if the node satisfies $\varphi_i(x)$. 
+\end{lemma}
+\begin{proof}
+    The crucial observation is that each of the ``below'' factors in the origin factorisation for $x$ is obtained by composing  the ``below'' and ``at'' factors in the origin factorisations for the children $x_1,\ldots,x_n$. 
+\end{proof}
