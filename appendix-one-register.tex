@@ -244,47 +244,90 @@ We are then left with the following two situations. The first case, illustrated 
 $\qquad\qquad\quad$\includegraphics[scale=.15]{MyPic12.jpg}\includegraphics[scale=.15]{MyPic13.jpg}
 %\end{center}    
 
-Using these ingredients, let us construct a derivable function which computes the normal form of thin $\lambda$-terms.
+Using these ingredients, let us construct a derivable function which computes the normal form of thin $\lambda$-terms. We illustrate this construction on a $\tmonad(X^\lambda)$ term $t$ below which will be our running example in this proof. 
 
-
-    \begin{tabular}{ll}
-    \pictureline
-    {We start by distinguishing the redexes of $t$ and their bound variables from the other nodes. For that, we apply the characteristic function of the following first-order query:
+%   
+\begin{enumerate}
+\item
+We start by distinguishing the redexes of $t$ and their bound variables from the other nodes. For that, we apply the characteristic function of the following first-order query $\varphi$:
     \begin{center}
-    ''The node $u$ is a redex or a variable bound by a redex``
+    ``The node $u$ is a redex or a variable bound by a redex''
     \end{center}
-    This query is first-order expressible: being a redex is expressed by the fact that the label is 
-  The characteristic function of this query is then derivable by Proposition~\ref{}. }
-    { \text{picture a}}
- \pictureline
-    {We apply the pre-order traversal function. We get a term in $\tmonad \ranked{\Gamma}$ where $\ranked{\Gamma}:=\ranked{\mathcal{A}}+\ranked{\mathcal{A}^r}+\bullet+\bullet+\bullet$.}
-    { \text{picture b}}
- \pictureline
-    {Now we need to eliminate the tagged nodes. For that we start by adding the unary symbol $\#$ as a right child of each $\bullet$ node, getting a term in $\tmonad(\ranked{\Gamma+\#})$. This function is clearly derivable. }
-    { \text{picture c}}
- \pictureline
-    {We apply $\sf{block}^\uparrow$ to separate the symbol $\#$ from the others. We obtain a term in $\ranked{\tmonad(\tmonad \Gamma+\tmonad\#)}$}
-    { \text{picture d}}
-\pictureline
-    {To each kind of blocks,  ($\ranked{\tmonad \Gamma}$ or $\ranked{\tmonad \#}$) we apply the functions $f: \ranked{\tmonad{\Gamma}} \to \ranked{\tmonad(\tmonad \Gamma+\tmonad\#)}$ and $g: \ranked{\tmonad{\#}} \to \ranked{\tmonad(\tmonad \Gamma+\tmonad\#)}$ which are both the identity function, except for the following elements:
-    $$
-    f(\bullet[@[\bullet,\bullet],p_1])=f(\bullet[\lambda x^\sigma\bullet],p_1])=f(\bullet[x^\sigma,p_1])=\bullet[p_1]$$
-    
-    For every n-ary element of $\ranked{\mathcal{A}}$, we have that:
- $$\begin{array}{c}
-  f(\bullet[a[p_{i_1},\dots,p_{i_k}, \bullet, p_{i_{k+1}},\dots, p_{i_{n-1}}],p_{i_n}])\\
-  =a[p_{i_1},\dots,p_{i_k}, p_{i_n}, p_{i_{k+1}},\dots, p_{i_{n-1}}]\\
-f(\bullet[a[p_1,\dots,p_n]])=a[p_1,\dots,p_n]\\
-g(\#[p_1])=p_1
+    This query is first-order expressible. Indeed being a redex is the disjunction of the following two queries
+$$\begin{array}{rl}
+@\mathsf{Redex}(u) = & @(u) \wedge \exists v \ \mathrm{Child}_1(u,v) \wedge \bigvee_{x\in X}\lambda x(v)\\
+\lambda\mathsf{Redex}(u)=& \lambda x(u) \wedge \exists v \ \mathrm{Child}_1(v,u) \wedge @(v) 
 \end{array}$$
-After that, we apply a flattening, to get a term in $\ranked{\tmonad(\Gamma+\#)}$.
-}
-{ \text{picture e}}
-\pictureline
-{We have got the desired term, but not with the desired type. To obtain a term in $\ranked{\tmonad{\mathcal{A}}}$, we transform each tagged element of $\ranked{\mathcal{A}^r}$ into its untagged version, transform $\bullet_2$ into $@$, and $\bullet_0$ into $x^\sigma$. Finally, we erase the symbols $\#$ and $\bullet_1$.}{}
-    \end{tabular}
+where $@\mathsf{Redex}(u)$ says that $u$ is the application node of a redex, and $\lambda\mathsf{Redex}(u)$ says that it is the abstraction node of a redex. Being a variable bound by a redex can be expressed by the formula $X\mathsf{Redex}(u)$ defined as follows
+%$$
+%\begin{array}{ll}
+\begin{align*}
+X\mathsf{Redex}(u)&=\bigvee_{x\in X} x(u) \wedge \exists v\ \lambda\mathsf{Redex}(v) \wedge v\ \mathsf{binds}\ u\\
+\end{align*}
+%\end{array}
+%$$    
+Where the formula $u\ \mathsf{binds}\ v$, defined below,  is a binary first-order query expressing that the node $u$ is an abstraction node that binds $v$.
+ \begin{align*}
+ \bigvee_{x\in X} \lambda x(u) \wedge x(v) \wedge u<v\wedge \forall u<w<v\ \neg \lambda x(w)
+ \end{align*}
 
+The query $\varphi$ being first-order, its characteristic function is derivable thanks to Proposition~\ref{prop:forat}. 
+
+When we apply this step to our example term $t$,  we get the $\ranked{\tmonad(X^\lambda+X^\lambda)}$ term below. We coloured in red the nodes belonging to the first copy of $\ranked{X^\lambda}$, that is the nodes satisfying the query $\varphi$. These nodes are the ones that will desappear in the normal form of $t$. 
+\begin{center}
+Picture
+\end{center}
+\item After that, we apply the pre-order traversal function 
+\begin{align*}
+            \ranked{\preorder : \tmonad (X^\lambda+X^\lambda) \to \tmonad (X^\lambda+X^\lambda + \set{\grayball, \grayballbin})}
+\end{align*}
+After this step, our initial term becomes
+\begin{center}
+Picture
+\end{center}  
+In this term, the nodes of the normal form appear in the right order thanks to the first claim. We only need to get rid of the redexes and the variable nodes that participated in the computation of the normal form (that is the ones coloured in red) together with the nodes $\grayball$ and $\grayballbin$ introduced by the pre-order traversal. 
+\item For this purpose, we apply the function $\ranked{\mathsf{Tagg\text{-}Parent}_{\set{\grayballbin}}}$ from Example~\ref{ex:Tagg}
+\begin{align*}
+\ranked{\mathsf{Tagg\text{-}Parent}_{\set{\grayballbin}}: \tmonad (X^\lambda+X^\lambda + \set{\grayball, \grayballbin}) \to \tmonad (X^\lambda+X^\lambda + \set{\grayball, \grayballbin}+\#) }
+\end{align*}
+ which adds the unary symbol $\#$ as the parent of every node $\grayballbin$. Then we apply the factorisation $\ancfact$
+ to separate the symbol $\#$ from the others:
+ \begin{align*}
+ \ranked{\ancfact : \tmonad (X^\lambda+X^\lambda + \set{\grayball, \grayballbin}+\#) \to \tmonad (\tmonad(X^\lambda+X^\lambda + \set{\grayball, \grayballbin})+\tmonad\set{\#}))}
+ \end{align*}
  
+ After this step, our example term becoms    
+\begin{center}
+Picture
+\end{center}
+\item Now consider the constant function
+ \begin{align*}
+ \ranked{f: \tmonad\set{\#} \to \tmonad(X^\lambda+X^\lambda+\set{\grayball, \grayballbin})}
+ \end{align*}
+ which assigns the empty term (that is the term $x_1$) to every term. And consider the function 
+ \begin{align*}
+ \ranked{g: \tmonad(X^\lambda+X^\lambda+\set{\grayball, \grayballbin}) \to \tmonad(X^\lambda+X^\lambda+\set{\grayball, \grayballbin}+\set{\#})}
+ \end{align*}
+ which is the identity function, except for the following finite set of terms for which it is defined as  
+\begin{center}
+Picture
+\end{center}
+\item We apply $f$ to the $\tmonad\set{\#}$ factors and $g$ to the other factors, then we flat the resulting term. We obtain the following $\tmonad(X^\lambda+X^\lambda+\set{\grayball, \grayballbin})$ term, which is  the normal form of $t$. 
+\begin{center}
+
+\end{center}
+Note that we obtained the desired term, but not with the desired type. To obtain a term in $\ranked{\tmonad{X^\lambda}}$, we lift the co-pairing of the identity function (twice)
+\begin{align*}
+\mathsf{identity}: X^\lambda \to X^\lambda
+\end{align*}
+with the function $h_x$, where $x$ is a variable in $X$
+\begin{align*}
+\ranked{h_x: }\set{\grayball, \grayballbin} &\to X^\lambda \\
+\grayball&\mapsto  x \\
+\grayballbin & \mapsto  @
+\end{align*}
+to the terms of $\tmonad(X^\lambda+X^\lambda+\set{\grayball, \grayballbin})$ using the combinator $\tmonad$. Doing so, we get terms of type $\ranked{\tmonad{X^\lambda}}$.
+\end{enumerate}
 \end{proof}
 
   
