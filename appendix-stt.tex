@@ -1,48 +1,53 @@
 \section{Proof of Theorem~\ref{thm:stt}}
 In this part of the appendix, we prove Theorem~\ref{thm:stt}, which says that every first-order tree-to-tree transduction is recognised by a register transducer. 
 
-Our definition of first-order transductions allows composing any number of functions which are either copying or non-copying first-order transductions, which can be stated as follows:
+According to Definition~\ref{def:fo-transduction}, a first-order transductions is a composition of any number of functions each of which is either  copying (item 1) or a non-copying first-order transduction (item 2). In other words:
 \begin{align*}
 \text{first-order transductions} \quad \eqdef \quad (\text{copying} \cup \text{(non-copying first-order transductions)})^*
 \end{align*}
-where the star denotes closure under composition. It is not hard to see that copying commutes with non-copying first-order transductions in the following sense:
+where the star denotes closure under composition. Although register transducers are closed under composition, this is not very   easy to show directly, and therefore we begin by simplifying the function composition in the definition of first-order transductions.  It is not hard to see that copying commutes with non-copying first-order transductions in the following sense:
 \begin{align*}
-    \text{copying} \circ  \text{(non-copying first-order transductions)}  \subseteq   \\ \text{(non-copying first-order transductions)} \circ \text{copying}
+    \text{copying} \circ  \text{(non-copying first-order transductions)}  \subseteq   \\ \text{(non-copying first-order transductions)} \circ \text{copying}.
     \end{align*}
 Furthermore, since the class of copying functions is closed under composition, and the same is true for non-copying first-order transductions, we get the following normal form of first-order transductions:
 \begin{align*}
-    \text{first-order transductions} =  \text{(non-copying first-order transductions)} \circ \text{copying}
+    \text{first-order transductions} =  \text{(non-copying first-order transductions)} \circ \text{copying}.
     \end{align*}
-Therefore, in order to prove Theorem~\ref{thm:stt}, it suffices to show that a register transducer can compute any function which first copies the nodes of the input tree a fixed number of times, and then applies a non-copying first-order transduction. To make notation lighter, we ignore the copying, and only show that register transducers can simulate non copying first-order transductions. The proof with copying follows the same lines. 
+Therefore, in order to prove Theorem~\ref{thm:stt}, it suffices to show that a register transducer can compute any function which first copies the nodes of the input tree a fixed number of times, and then applies a non-copying first-order transduction. 
+% To make notation lighter, we ignore the copying, and only show that register transducers can simulate non copying first-order transductions. The proof with copying follows the same lines. 
 
-For the rest of this section, fix a tree-to-tree function
+For the rest of this section, fix  a tree-to-tree function
 \begin{align*}
 f : \trees \rSigma \to \trees \rGamma
 \end{align*}
-which is defined by a non-copying first-order transduction. We will show that $f$ is computed by some register transducer.  
+which is a composition of first copying (some fixed number of times), followed by a non-copying first-order transduction. We will show that $f$ is computed by some register transducer.  
 
 \newcommand{\origin}[1]{\mathrm{origin}_{#1}}
 \newcommand{\orcol}[2]{\mathrm{orcol}_{#1}^{#2}}
-The general idea is to trace the origin of each node of the output tree. For an input tree $t \in \trees \rSigma$, define the origin map
+In the proof, we use the origin information associated to $f$, i.e.~how nodes of the output tree can be traced back to nodes in the input tree. For an input tree $t \in \trees \rSigma$, define its origin map
+to be the function of type
 \begin{align*}
-\origin t : \text{nodes in $f(t)$} \to \text{nodes in $t$}
-\end{align*}
-which maps a node $x$ of the output tree to the node of the input tree that was used to define it in the interpretation. For a node $x$ in an input tree $t$, define the origin colouring of $x$ to be the function 
+    \text{nodes in $f(t)$} \to \text{nodes in $t$}
+   \end{align*}
+which maps a node $x$ of the output tree to the node of the input tree that was used to define it. (The origin in a copying function is the node that is being copied, while the node in a non-copying transduction is the node of the input structure that represents the node of the output structure.) For a node $x$ in an input tree $t$, define the origin colouring of $x$ to be the function 
 \begin{align*}
-\orcol t x : \text{nodes in $f(t)$} \to \set{\text{below, at, other}} \qquad y \mapsto \begin{cases}
-    \text{below} & \text{ if }\origin t(y) > x\\
-    \text{at} & \text{if }\origin t(y) = x \\
-    \text{other} & \text{otherwise}
+ y \in \text{nodes in $f(t)$} \quad \mapsto \quad  \begin{cases}
+    \text{below} & \text{ if the origin of $y$ is $x$ or a descendant of $x$}\\
+    \text{not below} & \text{otherwise.}
 \end{cases}
 \end{align*}
-Like for any colouring of nodes in a tree, among the factorisations of the output tree $f(t)$ (i.e.~partitions of the nodes into connected equivalence classes) there is a unique coarsest factorisation which refines the origin colouring of $x$. We use the name \emph{origin factorisation of $x$ in $t$} for this factorisation. 
+Define  the name \emph{origin factorisation of $x$ in $t$}, which is an element of $\trees \tmonad \rGamma$, to be the factorisation of  the output tree where the factors are connected parts of same type (``below '' or ``not below''). The origin factorisation is obtained by applying the ancestor factorisation $\ancfact$ to the output tree extended with its  origin colouring. 
+
+The general idea behind the register transducer is that, after processing the subtree of a node $x$ in the input tree, its registers will store the ``below'' factors in the origin factorisation of $x$. We only store the ``below'' factors, and not the ``not below'' factors, because only the ``below'' factors can be computed using register updates based on the subtree of the node $x$ in the input tree. The key observation is the following lemma, which shows that the a constant number of registers will be enough. 
+
+
 
 
 \begin{lemma}\label{lem:composition-method}
     For every input tree $t$ and node $x$ in $t$, the origin factorisation of $x$ in $t$ has at most a constant (i.e.~depending only on the fixed transduction) number of  factors. 
 \end{lemma}
 \begin{proof}
-    For an input tree $t$ and a node $x$ in it, we say that an edge in the output tree $f(t)$ is \emph{$x$-sensitive} if the two endpoints of the edge have different colours with respect to the origin colouring of $x$ in $t$. It is not hard to see that the number of factors in the origin factorisation is one plus the  number of sensitive edges, and therefore to prove the lemma, it is enough to show that:
+    For an input tree $t$ and a node $x$ in it, we say that an edge in the output tree $f(t)$ is \emph{$x$-sensitive} if its  the two endpoints are in  different factors of  the origin colouring of $x$ in $t$.  The number of factors in the origin factorisation is one plus the  number of sensitive edges, and therefore to prove the lemma, it is enough to show that:
     \begin{itemize}
         \item[(*)] for every input tree $t$ and node $x$ in $t$,  there is at most a constant  number of $x$-sensitive edges.
     \end{itemize}
@@ -57,24 +62,68 @@ Like for any colouring of nodes in a tree, among the factorisations of the outpu
     Since the relation $\to$ has constant outdegree and indegree, and it can be defined using quantifier rank $r$,  follows that if $y\to z$ are on different sides of $x$ then there can only be a constant number of nodes $y'$ such that $(y,x)$ and $(y',x)$ have the same $r$-type in the input tree. Since the number of $r$-types is constant, it follows that number of pairs $y \to z$ which are on different sides of $x$ is constant; these pairs are the sensitive edges. 
 \end{proof}
 
-\newcommand{\sttregval}[2]{\ranked[#1,#2\ranked]}
-Apply the above lemma, yielding an upper bound  $k \in \set{1,2,\ldots}$ on the number of factors in the origin factorisations. 
-For an input tree $t$ and a node $x$ in it, define 
+Apply the above lemma, yielding an upper bound  $k \in \set{1,2,\ldots}$ on the number of factors in the origin factorisations.
+Note that each of the factors in the origin factorisation has arity  $<k$, since the ports of the factors must lead to the other factors. It follows that, in order to store the ``below'' factors in registers, it is enough to have  $k$ groups of registers, with each group having one registers for every arity in $\set{0,\ldots,k-1}$:
+\newcommand{\sttregval}[2]{\text{{(register valuation of $#1$ in $#2$)}}}
+\newcommand{\rootnode}[1]{\mathrm{root}(#1)}
 \begin{align*}
-\sttregval t x : \regnames \rto  \tmonad \rGamma
+\regnames \quad \eqdef \quad \set{r_i^j \text{ of arity $j$} : i \in \set{1,\ldots,k}, j \in \set{0,\ldots,k-1}} 
 \end{align*}
 
-\begin{lemma}
-    Let $x$ be a node in an input tree, and let $x_1,\ldots,x_n$ be its children from left to right. There is an $n$-ary register update $u$ such that 
-\begin{align*}
-    \sttregval t x = u(\sttregval t {x_1},\ldots, \sttregval t {x_n})
-\end{align*}
-Furthermore, the register update $u$ can be defined in terms of first-order properties of the node $x$, i.e.~there exist
-\begin{align*}
-\overbrace{\varphi_1(x),\ldots,\varphi_m(x)}^{\text{unary queries}} \qquad \overbrace{u_1,\ldots,u_m}^{\text{register updates}},
-\end{align*}
-which depend only on the transduction, such that the update associated to a node $x$ is $u_i$ if and only if the node satisfies $\varphi_i(x)$. 
+We now define the invariant that will be satisfied by the register transducer. (We use a slightly extended model of register transducers, where some register contents can be undefined; this model is easily seen to reduce to the original one, by filling the undefined registers with  some fixed nonces. 
+\begin{itemize}
+    \item {\bf Invariant.} Let $t$ be an input tree,  let $x$ be a node in $t$, and let $s_1,\ldots,s_n$ be the ``below'' factors of $x$, viewed as subsets of nodes in the output tree, ordered so that 
+    \begin{align*}
+       \rootnode{s_1} \preceq  \cdots \preceq \rootnode{s_n} 
+    \end{align*}
+    where $\preceq$ is the pre-order on nodes in the output tree and $\rootnode{s_i}$ denotes the  unique node in $s_i$ which is an ancestor of all other nodes in $s_i$. After processing the subtree of $x$ in the input tree, the register valuation of the register transducer is 
+    \begin{align*}
+        r_i^j  \mapsto \begin{cases}
+            \text{$s_i$ viewed as a term over the output alphabet} & \text{if $s_i$ has arity $j$}\\
+            \text{undefined} & \text{otherwise}.
+        \end{cases}
+    \end{align*}
+\end{itemize}
+
+
+The output register of the transducer is $r_1^0$. When $x$ is the root of the input tree, then there is only one ``below'' factor, namely the entire output tree (which has arity $0$) and therefore -- thanks to the invariant -- the output tree will be found in the output register. 
+
+The following lemma gives the  register updates of the transducer. 
+
+% Let $x$ be a node in an input tree $t$, and let $s$ be a ````below'''' factor in the origin factorisation of $x$. It is not hard to see that if $x'$ is some ancestor of $x$, then there is a unique factor $s'$ of the origin factorisation of $x'$ which contains $x$. Also the mapping $s \to s'$ is respects pre-order in the following sense: if a $s_1,s_2$ are factors in the origin factorisation of a node $x$ in the input tree, while  $s'_1,s'_2$ are factors in the origin factorisation of an ancestor $x'$ of $x$, then
+% \begin{align}\label{eq:root-monotone}
+% \rootnode{s_1} \preceq \rootnode{s_2} \quad \text{implies} \quad \rootnode{s'_1} \preceq \rootnode{s'2}
+% \end{align}
+% where $\rootnode{s}$ denotes the root of a factor (the unique node of the factor which is an ancestor of all other nodes), while $\preceq$ denotes the pre-order on nodes in the output tree.
+% Let $x$ be a node in the input tree. 
+% \begin{align*}
+% t_1,\ldots,t_l \in \tmonad \rGamma
+% \end{align*}
+% be the ``below'' factors in its origin factorisation, listed according to the pre-order with respect to their origins. 
+
+% For an input tree $t$ and a node $x$ in it, define 
+% \begin{align*}
+% \sttregval t x : \regnames \rto  \tmonad \rGamma
+% \end{align*}
+
+\begin{lemma}\label{lem:register-updates-in-stt}
+    There is a finite set $\rDelta$ of register updates with the following property. For every  input tree $t$ and every node $x$ in $t$,   there is some $u \in \rDelta$ such that the register valuation of $x$ (as defined in the invariant) is obtained by applying $u$ to the register valuations of the children $x_1,\ldots,x_n$ of $x$, in listed in left-to-right order. 
+Furthermore, there is a family
+$\set{\varphi_u(x)}_{u \in \rDelta}$  of unary queries over the input alphabet such that the update associated to a node $x$ is $u$ if and only if the node satisfies $\varphi_u(x)$ in the input tree. 
 \end{lemma}
 \begin{proof}
-    The crucial observation is that each of the ``below'' factors in the origin factorisation for $x$ is obtained by composing  the ``below'' and ``at'' factors in the origin factorisations for the children $x_1,\ldots,x_n$. 
+    The crucial observation is that each of the ``below'' factors in the origin factorisation for $x$  -- seen as subsets of nodes in the output tree -- is a (disjoint) set union of the   the ``below'' factors in the origin factorisations for the children of $x$, plus the nodes in the output tree which have origin in $x$. Since there is at most a constant number of children and nodes with origin $x$, there is a finite number -- depending only on the transduction -- of ways in which these factors can be combined; this finite set of possible combinations is the set $\rDelta$. The ``furthermore'' part of the lemma, about computing the update using first-order queries, follows from a simple inspection of the first-order formulas used in defining the  transduction. 
 \end{proof}
+
+The above lemma completes the definition of the register transducer. Its register updates are $\rDelta$ as in the lemma, and its transition function assigns label $u \in \rDelta$ to each node that satisfies $\varphi_u(x)$. The final part of the proof is showing that the register updates are monotone. We use the  following order on the registers:
+\begin{align*}
+\underbrace{r_1^0 < r_1^1 < \cdots < r_1^{k-1} < r_2^0 < r_2^1 < \cdots < r_k^{k-2} < r_k^{k-1}}_{\text{lexicographic, with the lower index having priority}}.
+\end{align*}
+
+Let $x$ be a node in an input tree $t$, and let $s_1,s_2$ be a ``below'' factor in the origin factorisation of $x$, which are register contents in register valuation of $x$. The registers storing $s_1$ and $s_2$ will be ordered -- according to the invariant -- with respect to the pre-order on the root nodes of $s_1$ and $s_2$. Let $x'$ be the parent of $x$. By the reasoning in the proof of Lemma~\ref{lem:register-updates-in-stt}, there are ``below'' factors in the origin factorisation of $x'$ which contain the factors $s_1$ and $s_2$; call these factors  $s'_1$ and $s'_2$ (possibly $s'_1=s'_2$). Since $s'_1$ contains $s_1$ (as a set of nodes in the output tree), and the same is true for $s'_2$ and $s_2$, we have 
+\begin{align*}
+\rootnode{s_1} \preceq \rootnode{s_2} \quad \text{implies} \quad \rootnode{s'_1} \preceq \rootnode{s'2}
+\end{align*}
+which establishes monotonicity of the register updates. 
+
+This completes the proof of Theorem~\ref{thm:stt}.
