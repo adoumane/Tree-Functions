@@ -1,24 +1,41 @@
 \section{Factorisation forests}
 
 \newcommand{\branches}{\mathsf{B}}
-Define a \emph{branch} to be a term together with a distinguished port. Branches over a  ranked alphabet $\rSigma$ form a semigroup, which we denote by $\branches \rSigma$. Branches have no arities; they form a set and not a ranked set, hence the black font for $\branches$. The branches of a term are defined to be those branches which can be obtained by distinguishing some port in that term. A term of arity zero has no branches. 
 
-For a factorisation in $\tmonad \tmonad \rSigma$, define a subbranch to be any branch of any term from $\tmonad \rSigma$ that appears as a label in the factorisation. We distinguish two kinds of subbranches: internal subbranches are connected to internal nodes, and external subbranches are connected to ports. The same branch from $\branches \rSigma$  might appear as a subbranch of a facorisation in $\tmonad \tmonad \rSigma$ several times, sometimes as an internal subbranch and sometimes as an external subbranch.
-Here is a picture:
-\begin{center}
-    picture
-\end{center}
+\paragraph{Branches.}
+For a ranked set $\rSigma$, define its \emph{branches} to be the unranked set (hence the black font):
+\begin{align*}
+\branches \rSigma \quad \eqdef \quad \set{(a,i) : a \in \rSigma, i \in \set{1,\ldots,\arity a}}.
+\end{align*}
+For $a \in  \rSigma$, a branch in $a$ is defined to be any branch obtained by choosing some port of $a$. 
+We are mainly interested in the case of branches in terms, which can be visualised as follows:
+\mypic{81}
+ 
+For a term, we classify its edges as internal (linking a non-port node with a non-port child) and external (linking a non-port node with a child port). Each edge in a term $t \in \tmonad \rSigma$ corresponds to a branch over $\rSigma$, namely the branch which leads to the edge. Any branch obtained this way is called a \emph{subbranch} of $t$. Here is a picture of subbranches in the case of a term of terms:
+\mypic{80} 
 
-\begin{definition}[Homogeneous factorisations]
-    Let $h : \branches \rSigma \to S$ be a semigroup homomorphism.
+\paragraph{Factorisation forests} The idea behind factorisation forests is to split a term into a nested factorisation, which is a term of terms of terms, and so on up to a certain depth.  
+Define a \emph{nested factorisation} of depth $k \in \set{1,2,\ldots}$ over alphabet $\rSigma$ to be an element of $\tmonadn k \rSigma$ which is defined by
+\begin{align*}
+\tmonadn 0 \rSigma = \rSigma  \quad \text{and} \quad \tmonadn {k+1}\rSigma = \tmonad \tmonadn k \rSigma.
+\end{align*}
+Nested factorisations can be flattened to terms by using an  operation $\flatn k : \tmonadn k \rSigma \rto \tmonad \rSigma $ defined by 
+\begin{align*}
+     \flatn 1 = \text{\ranked{identity}} \quad \text{and} \quad  \flatn {k+1} \eqdef \flatt  \circ \tmonad \redpar { \flatn k}.
+\end{align*}
+An equivalent definition of $\flatn {k+1}$ would be $\flatn k \circ \tmonadn {k-1} \flatt$, the equivalence of these definitions corresponds to the fact that $\tmonad$ is a monad.
+
+
+
+Branches in  terms $\branches \tmonad \rSigma$  form a semigroup, which we denote by $\branches \rSigma$. 
+The idea behind factorisation forests, as expressed in Definition~\ref{def:hom-for} below, is to factorise a term into a term of terms of terms (etc.) so that the depth of nesting is bounded, and at each level all branches behave regularly with respect to some semigroup homomorphism. 
+
+\begin{definition}[Homogeneous factorisations]\label{def:hom-for}
+    Let $h : \branches \tmonad \rSigma \to S$ be a semigroup homomorphism.
     \begin{itemize}
-\item     We say that $t \in \tmonad \tmonad \rSigma$ is \emph{$h$-homogeneous} if either:
-\begin{enumerate}
-    \item  it has depth at most two, i.e.~all branches have at most two non-port nodes; or
-    \item  all internal subbranches of $t$ have the same value under $h$.
-\end{enumerate}        
-\item For $k = 1$, we say that $t \in \tmonadn k \Sigma$ is \emph{hereditarily $h$-homogeneous} if it is the unit of some letter;
-\item For $k \ge  2$, we say that $t \in \tmonadn k  \rSigma$ is \emph{hereditarily $h$-homogeneous} if both:
+\item     We say that $t \in \tmonad \tmonad \rSigma$ is \emph{$h$-homogeneous} if it is either a shallow term (which means that all internal edges originate from the root) or all internal subbranches of $t$ have the same value under $h$.
+\item We say that  $t \in \tmonad \rSigma$ is \emph{hereditarily $h$-homogeneous} if it is the unit of some letter;
+\item We say that  $t \in \tmonadn k  \rSigma$ is \emph{hereditarily $h$-homogeneous}, for $k \ge 2$, if both:
 \begin{enumerate}
     \item  after applying $\tmonad \flatn {k-1}$,   the resulting term in $\tmonad \tmonad \rSigma$ is $h$-homogeneous; and 
     \item every node has a label in $\tmonadn {k-1} \rSigma$ that is hereditarily $h$-homogeneous. 
@@ -26,12 +43,71 @@ Here is a picture:
     \end{itemize}
 \end{definition}
 
-
-\begin{lemma}
+The main result of this section is the following version of the factorisation forest theorem. It differs from the original Factorisation Forest Theorem of Imre Simon in the following ways: (a) we consider trees instead of strings; (b) we use aperiodic finite semigroups instead of arbitrary finite semigroups; and (c) the factorisation in the conclusion of the theorem can be computed by a derivable function.  A tree generalisation of the Factorisation Forest Theorem was already proved by Colcombet~\cite[Theorem 1 and Section 3.3]{colcombetCombinatorialTheoremTrees2007}, but Colcombet's result is proved for monadic second-order logic, and therefore it does not satisfy condition (c). 
+\begin{theorem}[Factorisation Forest Theorem]\label{thm:factfor}
     Let $\rSigma$ be a finite ranked set and let $h : \branches \rSigma \to M$ be a monoid homomorphism into a finite aperiodic monoid $M$. There is some $k \in \set{1,2,\ldots}$ and a derivable function
     \begin{align*}
         \ranked {f : \tmonad \rSigma \to \tmonad^k \rSigma}  
     \end{align*}
 such that $\flatn k \circ \ranked f$ is the identity on $\tmonad \rSigma$, and  all outputs of  $\ranked f$ are hereditarily $h$-homogeneous.
-\end{lemma}
+\end{theorem}
 
+
+
+\newcommand{\hint}{\bar h}
+\newcommand{\hintplus}{\bar h^+}
+\newcommand{\branchesplus}{\mathsf B^+}
+For $t \in \tmonad  \tmonad \rSigma$ define 
+\begin{align*}
+    \hint(t) = \set{h(\pi) : \text{$\pi$ is an internal branch of $t$}}
+\end{align*}
+The theorem is proved by induction on two parameters: the size of $\hint(t)$, and the size of the semigroup generated by $\hint(t)$, ordered lexicographically with the second parameter being more important. This induction is stated in the following lemma, where the theorem is the special case when $A=B=S$. 
+\begin{lemma} Let $h : \branchesplus \tmonad \rSigma \to S$ be a semigroup homomorphism into a finite aperiodic semigroup, and let  $A,B \subseteq S$. There is some $k$ and  a derivable function
+    \begin{align*}
+        \ranked {f_{A,B}: \tmonad \rSigma \to \tmonad^k \rSigma}  
+    \end{align*}
+    such that $\flatn k \circ \ranked f$ is the identity on $\tmonad \rSigma$, and   outputs of  $\ranked {f_{A,B}}$ are hereditarily $h$-homogeneous for inputs such that:
+    \begin{align*}
+    B = \hint(t) \qquad A = \text{semigroup generated by $\hint(t)$.}
+    \end{align*}
+        
+\end{lemma}
+The theorem is the special case of the a
+\begin{enumerate}
+    \item the size of the set 
+    \begin{align*}
+    \set{h(t)}
+    \end{align*}
+\end{enumerate}
+
+\begin{itemize}
+    \item There is some $x_0 \in $ such that 
+    \begin{align}\label{eq:smaller-semigroup}
+         \set{ a a_0 :  a \in \hintplus(t)} \subsetneq  \hintplus(t)
+    \end{align}
+    Choose some $x$ with the above property, and define $T$ to be the above set. It is not hard to see that $T$ is a proper subsemigroup of $S_t$.  Define a \emph{sensitive edge} in $t$ to be any internal edge where the corresponding subbranch has value $x_0$ under  $h$. Let $t' \in \tmonadn 3 \rSigma$ be the nested factorisation that results from $t$ by factorising along sensitive edges. Here is a picture:
+    \begin{center}
+        picture
+    \end{center}
+    Define the \emph{outer factorisation} $s \in \tmonad \tmonad \rSigma$ to be the result of applying $\tmonad \flatt$ to $t'$. By definition, every inner subbranch in the outer factorisation ends with $x_0$, and therefore the semigroup generated $\hint(s)$ is contained in 
+     by  For a node  $x$ in $t'$ define the \emph{inner factorisation} $s_x \in \tmonad \tmonad \rSigma$ to be the label of node $x$ in $t''$. 
+    By definition, the inner factorisations do not have internal subbranches labelled by $a_0$, and therefore 
+    \begin{align*}
+    \hint(s_x) \subsetneq \hint(t) \qquad \text{for every inner factorisation $s_x$}.
+    \end{align*}
+    We can therefore use the induction assumption to get nested factorisations for the inner factorisations. 
+    For every inner factorisation, its inner subbranches have 
+    \begin{itemize}
+        \item For every node $x$ in $t'$ its label $t'(x) \in \tmonad \tmonad \rSigma$ satisfies 
+        \begin{align*}
+        \beta(t'(x)) \subseteq \beta(t) - \set{a_0}.
+        \end{align*}
+        \item The term $\tmonad \flat (t') \in $ satisfies
+        \begin{align*}
+            \alpha((\tmonad \flatt)(t')) \subseteq 
+        \end{align*}
+    \end{itemize}
+    
+\end{itemize}
+
+For $t \in \tmonad \tmonad \rSigma$ consider $G_t$ the semigroup
