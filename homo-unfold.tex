@@ -1,0 +1,17 @@
+\subsection{Term unfolding for homogeneous inputs}
+\label{sec:homo-unfold}
+For a monotone function 
+\begin{align*}
+\alpha: \set{1,\ldots,k} \to \set{1,\ldots,k}
+\end{align*}
+we say that a term $ t \in \tmonad \mati k \rSigma$ is $\alpha$-homogeneous if all internal branches have twist $\alpha$. This section is devoted to proving the following lemma. 
+
+\begin{lemma}\label{lem:homo-twist}
+    Let $k \in \set{1,2,\ldots}$ and let $\alpha : \set{1,\ldots,k} \to \set{1,\ldots,k}$ be a monotone function. There is a derivable operation 
+    \begin{align*}
+        \ranked{f : \tmonad \mati k \rSigma \to \mati k {(\tmonad \Sigma)} }
+        \end{align*}      
+which coincides with term unfolding for all inputs which are $\alpha$-homogeneous with respect to the matrix branch homomorphism.
+\end{lemma}
+
+The lemma is proved by induction on the size of the image of $\alpha$. 
