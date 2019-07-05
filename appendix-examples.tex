@@ -17,14 +17,20 @@ which erases the elements of $\rGamma$ from the inupt tree. This function is wel
 Let us explain why this is a derivable function. 
 Consider the basic functions $\ranked{\unit_\rSigma:\rSigma\to\tmonad\rSigma}$ and the constant function $\ranked{\mathsf{empty}:\rGamma\to\tmonad\rSigma}$ which associates to every element of $\rGamma$ the tree reduced to the variable $x_1$. Using the cases combinator, we get a tree in $\tmonad\tmonad\rSigma$, which we transform into a tree in $\tmonad \rSigma$ using the flattening function $\flatt_\rSigma$.
 \end{example}
-
-
 \medskip
+
 \noindent \begin{example}[Pattern matching]\label{ex:patternMatching} 
 \end{example}
-
-
 \medskip
+
+\noindent \begin{example}[Tree homomorphisms]\label{ex:morphism} 
+Given two types $\rSigma, \rGamma$ and an arity preserving  function $\ranked{f:\Sigma\to\tmonad\Gamma}$, we can lift $\ranked{f}$ to the tree homomophism  $\ranked{\mathsf{Hom}_f:\tmonad\Sigma\to \tmonad\Gamma}$ which replaces every node by the term corresponding to its label. If $\ranked{f}$ is derivable, then so is  $\mathsf{Hom}_f$. To see this, we use the composition of the two basic functions
+\begin{align*}
+\ranked{\tmonad\Sigma\xrightarrow{\tmonad f}\tmonad\tmonad\Gamma \xrightarrow{\flatt_\Gamma} \tmonad \Gamma}
+\end{align*} 
+\end{example}
+\medskip
+
 \noindent \begin{example}[Parent and sibling informations]\label{ex:sibling}  Let $\rGamma$ be a finite type. We define $\ranked{\rGamma_0}$  to be the ranked set obtained from $\rGamma$ by setting the arity of every element to $0$.  
 \medskip
 Consider the function:
@@ -32,95 +38,63 @@ $$\ranked{ \mathsf{Parent}: \tmonad \rGamma \to \tmonad (\rGamma\otimes (\rGamma
 which adds to every node of a term in $\tmonad \rSigma$ the label  of its parent if it has one and $\bot$ if it is the root.
 
 % from  $(\rGamma\cup\bot)^{\leq n}$, whose lenght is the arity of the node, and such that the $i^{th}$ element of the  list is the symbol of its $i^{th}$ sibling if it has one, otherwise it is $\bot$.
-Let us explain why $\ranked{\mathsf{Parent}}$ is derivable. 
-%\begin{enumerate}
-%\item
-
-\begin{tabular}{l|l}
-    \pictureline 
-     {For every symbol $a\in \rGamma$, consider the unary symbols $a_\#$ and $a_\$$.
-We set $\ranked{\rGamma_\#}=\{a_\#\mid a\in\rGamma\}$ and $\ranked{\rGamma_\$}=\{a_\$\mid a\in\rGamma\}$.
-Let $g$ be the following function:
-$$\begin{array}{ll}
-\ranked{  g: \rGamma} &\ranked{\to \tmonad(\rGamma+\rGamma_\#+\rGamma_\$)}\\
-  a &\mapsto a_\#\tensorpair{a\tensorpair{a_\$\tensorpair{x_1},\dots,a_\$\tensorpair{x_{\mathsf{arity(a)}}}}}.
-\end{array}
-$$
-The action of $\ranked{g}$ on a $\rGamma$ symbol looks like this:
-	}
-	{
-		\begin{center}
-		\includegraphics[scale=.15]{MyPic1.jpg}
+Let us explain how $\ranked{\mathsf{Parent}}$ can be derived. To illustrate this construction, we use the ranked alphabet and the term below as running examples of the alphabet $\rGamma$ and a term in $\tmonad\rGamma$.
+\begin{center}
+		Example of the alphabet $\rGamma$
+		
+		\includegraphics[scale=.15]{MyPic0.jpg}
+		
+		Example of a term in $\tmonad \rGamma$
+		
+		 \includegraphics[scale=.15]{MyPic1.jpg}
 		\end{center}
-	}
-    \pictureline 
-	{We lift $\ranked{g}$ to the terms of $\tmonad \rGamma$ using the combinator $\tmonad$, then we apply a flattenig. After this operation, a term in $\tmonad\rGamma$ is transformed to a term in $\ranked{\tmonad(\rGamma+\rGamma_\#+\rGamma_\$)}$ this way:
-	}
-	{
-		\begin{center}
+We denote by $\ranked{\Gamma_1}$ the ranked set obtained from $\rGamma$ by setting the arity of every element to $1$. If $a$ is a element of $\rGamma$, we denote by $a_1$ the corresponding element of $\ranked{\Gamma_1}$. In our example, the alphabet $\ranked{\Gamma_1}$ is
+\begin{center}
 		\includegraphics[scale=.15]{MyPic2.jpg}
 		\end{center}
-	}
-	\pictureline
-%\item 
-	{We apply $\ancfact$, to separate the symbols of $\rGamma$ form the symbols of $\ranked{\rGamma_\#}$ and $\ranked{\rGamma_\$}$, we get then a term in $\ranked{\tmonad(\tmonad\rGamma+\tmonad(\rGamma_\#+\rGamma_\$))}$. Those terms look like this:
-	}
-	{
-	\begin{center}
-	\includegraphics[scale=.15]{MyPic3.jpg}
-	\end{center}
-	}
-%\item
-    \pictureline
-	{
-	Consider the function $\ranked{h:\tmonad(\rGamma_\#+\rGamma_\$)\to \tmonad(\rGamma_\#+\rGamma_\$)}$ which maps
-$$\begin{array}{rll}
-a_\$\tensorpair{b_\#\tensorpair{x_1}} &\mapsto b_\$\tensorpair{a_\$\tensorpair{x_1}}&  a, b\in \rGamma\\
-a_\$\tensorpair{x_1} & \mapsto  x_1&  a\in\rGamma
-\end{array}$$
-and leaves the other terms unchanged. 
-The function $\ranked{h}$ is derivable thanks to the pattern-matching construction of Example~\ref{ex:patternMatching}.
-	}{}
-		\end{tabular}
-	
-	\begin{tabular}{l|l}
-    \pictureline
-	{
-%\item 
-	To the factors of type $\tmonad \rGamma$ we apply the identity function, and to the factors $\ranked{\tmonad(\rGamma_\#+\rGamma_\$)}$ we apply $\ranked{h}$. After that, we inject the factors into $\ranked{\tmonad(\rGamma+\rGamma_\#+\rGamma_\$)}$, then we apply a flattening to get terms in $\ranked{\tmonad(\rGamma+\rGamma_\#+\rGamma_\$)}$ having the form:
-	}
-	{
-		\begin{center}
+\begin{enumerate}
+\item  First, we apply the homomorphism 
+\begin{align*}
+\ranked{\mathsf{Hom}_g:\tmonad\Gamma\to \tmonad(\Gamma+\Gamma_1+\set{\#})}
+\end{align*}
+where $\#$ is a unary symbol, and $\ranked{g}$ is defined on the elements of $\Gamma$ as follows
+\begin{align*}
+\ranked{g: \Gamma} & \ranked{\to  \tmonad(\Gamma+\Gamma_1+\set{\#} )}\\
+      a & \mapsto a\tensorpair{\#\tensorpair{a_1\tensorpair{x_1}},\dots, \#\tensorpair{a_1\tensorpair{x_n}}}\qquad n=\arity a
+\end{align*}
+In our example, the action of $\ranked{g}$ on the elements of $\rGamma$ looks like this
+\begin{center}
+		\includegraphics[scale=.1]{MyPic3a.jpg}\includegraphics[scale=.1]{MyPic3b.jpg}\includegraphics[scale=.1]{MyPic3c.jpg}
+		\end{center}
+Hence, after the application of the homomorphism $\ranked{\mathsf{Hom}_g}$, our initial term becoms
+\begin{center}
 		\includegraphics[scale=.15]{MyPic4.jpg}
-		\end{center} 
-	}
-    \pictureline
-	{
-%\item
-	We apply $\ancfact$ to separate the symbols of $\ranked{\rGamma_\$}$ form the others. Doing so, every $\rGamma$ node ends up in the same factor as its parent (marked with $\$ $):
-	}
-	{
-		\begin{center}
+		\end{center}
+\item We apply the factorsation 
+\begin{align*}
+\ranked{\ancfact: \tmonad(\Gamma+\Gamma_1+\set{\#}) \to \tmonad(\tmonad(\Gamma+\Gamma_1)+\tmonad\set{\#})}
+\end{align*}
+ to separate the symbol $\#$ form the other symbols. After this operation, each node lies in the same factor as (the element of $\ranked{\Gamma_1}$ representing) its parent. In our example, the obtained term is the following
+\begin{center}
 		\includegraphics[scale=.15]{MyPic5.jpg}
 		\end{center}
-	}
-    \pictureline
-	{
-%\item 
-	Consider the function $\ranked{k:\tmonad(\rGamma+\rGamma_\#)\to \rGamma\otimes(\rGamma+\bot)_0+\tmonad(\rGamma+\rGamma_\#)}$ which maps
+\item Consider the function 
 \begin{align*}
-a\tensorpair{x_1,\dots,x_n} \mapsto \tensorpair{a,\bot} \\
-b_\$\tensorpair{a\tensorpair{x_1,\dots,x_n}} \mapsto \tensorpair{a,b} 
+\ranked{h: \tmonad\set{\#} \to \tmonad(\Gamma+\Gamma_1+(\Gamma+\bot)_0)}
 \end{align*}
-and leaves the terms other unchanged. We apply the function $\ranked{k}$ to the $\ranked{\tmonad(\rGamma+\rGamma_\#)}$
-factors and the identity to the others. After several applications of injections and flattening, we get a term in $\ranked{\tmonad(\rGamma\otimes(\rGamma+\bot)_0+\rGamma_\#+\rGamma_\$+\rGamma)}$. We erase the symbols of $\ranked{\rGamma_\$}$ and $\ranked{\rGamma_\#}$  using the filter function from Example~\ref{ex:filter}, and obtain a term in $\ranked{\tmonad(\rGamma\otimes(\rGamma+\bot)_0+\rGamma)}$. 
-We get rid of the symbols of $\rGamma$ in the output type, we apply any derivable function of type $\ranked{\rGamma\to \rGamma\otimes(\rGamma+\bot)_0}$, for example the one defined by:
+which is the constant function equal to the empty term (that is the term $x_1$).
+And let $k$ be the function
 \begin{align*}
-a \mapsto \tensorpair{a,\bot}
+\ranked{k: \tmonad(\Gamma+\Gamma_1) \to \tmonad(\Gamma+\Gamma_1+(\Gamma+\bot)_0)}
 \end{align*}
- Doing so we get the desired function.}{}
-%\end{enumerate}
-\end{tabular}
+which is the identity function, execpt for the follonwing terms in which it is defined as follows
+$$\begin{array}{rll}
+a\tensorpair{x_1,\dots, x_n}& \mapsto & \tensorpair{a,\bot}\tensorpair{x_1,\dots,x_n}\qquad n=\arity(a)\\
+b_1\tensorpair{a\tensorpair{x_1,\dots,x_n}}&\mapsto& \tensorpair{a,b}\tensorpair{x_1,\dots,x_n}\\
+b_1\tensorpair{x_1} &\mapsto& x_1
+\end{array}$$
+\end{enumerate}
+	
 
 \medskip
 If $\rGamma$ is a finite ranked set, we define $\ranked{\Gamma^*}$ as
