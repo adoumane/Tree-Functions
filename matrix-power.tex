@@ -53,35 +53,103 @@ Another example of an algebra was implicit in the definition of register transdu
 
 \subsection{Matrix power} 
 \label{sec:matrix-power-subsec}
-Let $\alg$ be an algebra and let $k \in \set{1,2,\ldots}$. How should the $k$-th power of the algebra be defined? For the domain, we use  $k$-tuples from the domain of $\alg$.  What about the operations? A natural   approach is to define the $n$-ary operations to be  $k$-tuples of $n$-ary operations from $\alg$, acting coordinate-wise. Because of the coordinate-wise action,  the coordinates in the product are independent of each other. This will be insufficient for our intended application, where the algebra $\alg$ is meant to represent individual register automaton, since the contents of register $r$ in the output of a register update depend on the contents of other registers in the input valuation . To  model this interdependence, we use a more sophisticated notion of power, 
-defined below.
-\begin{definition}
-    For an algebra $\alg$ and $k \in \set{1,2,\ldots}$, the $k$-th matrix power\footnote{
-        The definition of matrix power that we use is a special case of the original definition of matrix power from universal algebra (for the latter, see~\cite{Taylor1975} or~\cite{szendrei1990simple}). Roughly speaking, the restrictions that we place on the original definition correspond to the single-use and monotone conditions from Definition~\ref{def:stt}. 
-    } of $\alg$ is defined as follows. The domain and signature are defined by
+
+For a ranked set $\rSigma$ and $k \in \set{1,2,\ldots}$ define its $k$-th matrix power\footnote{
+           The name  matrix power is based the matrix power in  universal algebra (for the latter, see~\cite{Taylor1975} or~\cite{szendrei1990simple}). Roughly speaking, the restrictions that we place on the original definition correspond to the single-use and monotone conditions from Definition~\ref{def:stt}. 
+        } 
+to be 
+\begin{align*}
+    \mati k \rSigma \quad \eqdef \quad \ranked{\reduce k \rSigma^k}.
+\end{align*}
+Here is a picture of a binary element in the matrix power, where $k=3$:
+\mypic{85}
+The intuition behind the matrix power is that there are $k$ registers, and each letter from $\rSigma$ represents an operation on the register contents. In the above picture, there are three registers, and the blue letters represent the operations on  register contents. An $n$-ary letter in $a \in \mati k \rSigma$ represents a register update, and the $k$-folding says how the register values from the children ($n$ children, each one with $k$ registers) are distributed across the operations from $\rSigma$. 
+
+The above intuitions are captured by unfolding operations for the matrix power, of which there are two versions, one for  shallow terms and one for general terms. We begin with the version for    \emph{shallow terms}, which is defined to be  the composition of the following operations
+\begin{align*}
+\ranked{
+    \xymatrix{
+        \shallowterm{\mati k \rSigma} {\mati k \rGamma} = {\shallowterm{\reduce k {\Sigma^k}}{\reduce k {\Gamma^k}}} \ar[r] &
+        \reduce k(\shallowterm{\reduce k {\Sigma^k}}{ {\Gamma^k}}) \ar[r] &
+        \reduce k(\shallowterm{\Sigma^k}{ {\Gamma}}) \ar[r] &
+        \reduce k(\shallowterm{\Sigma}{ {\Gamma}})^k = \mati k {(\shallowterm \Sigma \Gamma)}
+    }
+}
+\end{align*}
+Here is a picture of shallow unfolding:
+\mypic{86}
+Unfolding for terms is defined by inductively applying shallow unfolding. More formally, it is the  operation 
+\begin{align*}
+    \ranked{\unfold : \tmonad \mati k \rSigma \to \mati k {(\tmonad \Sigma)} }
+    \end{align*}
+defined as follows. If the input is an empty term, then the output is this term:
+\mypic{83}
+Otherwise, if the input is a nonempty term $a(t_1,\ldots,t_n)$ then the output is obtained by first applying term unfolding to to the smaller terms $t_1,\ldots,t_n$, and then applying the shallow unfold. Here is a picture of term unfolding: 
+\mypic{39}
+
+As a composition of derivable functions, shallow unfolding is derivable by definition.  Term unfolding is a different story, due to its iterative definition. 
+In general, the term unfolding operation is not derivable, but it will become derivable after imposing a monotonicity requirement.   To see the need for monotonicity, consider the following example.
+\begin{example}
+    Consider the following elements in a second matrix power:
+    \mypic{84}
+Let $t_n \in \trees \mati 2 \rSigma$ be the tree which consists of a path with $n$ nodes using the unary label $a$, followed by a leaf with label $b$. If we apply term unfolding to this tree, and then project to the first coordinate, then we get a tree with a white leaf if and only if  $n$ is even.  It term   unfolding were derivable, then thanks to the results from Section~\ref{sec:to-transductions}  we would get a first-order tree-to-tree transduction 
+\begin{align*}
+\trees \redset{a,b} \to \trees \rSigma
+\end{align*}
+where the output would contain a white leaf if and only if the input has odd depth. This is in turn would imply that having even depth for trees over $\redset{a,b}$ is first-order definable, which it is not, because first-order logic cannot do modulo counting.
+\end{example}
+
+The problem in the above example is that the letter $a$ does a swap on its ports, which leads to counting modulo two. To forbid such swaps, we impose a monotonicity requirement that matches the monotonicity requirement for register updates in register transducers. 
+Define a \emph{branch} in a ranked set to be an element  of the ranked set together with a distinguished port. We draw branches like  this:
+\mypic{82}
+For a branch in the matrix power   $\mati k \rSigma$, define its \emph{twist} to be the partial function 
+\begin{align*}
+ \set{1,\ldots,k} \to \set{1,\ldots,k}
+\end{align*}
+whose definition is explained in the following picture:
+\begin{center}
+    todo
+\end{center}
+ We say that an element of the $k$-matrix power is \emph{monotone} if all of its branches have monotone twist.
+ We are now ready to state the principal result of this section.
+
+\begin{lemma}\label{lem:monotone-unfold}
+    For every finite ranked set $\rSigma$ and every $k \in \set{1,2,\ldots}$ there is a derivable function 
     \begin{align*}
-    \overbrace{(\algdom \alg)^k}^{\text{domain}} \qquad \overbrace{
-        \ranked{\reduce k ((\algops \alg)^k)}}^{\text{signature}}
-        \end{align*}
-        while the  shallow product operation is defined by
-        \begin{align*}
-            \ranked{
-        \xymatrix{
-            \shallowterm {\reduce k (\algops \alg)^{k}} {{(\algdom \alg)}^k} \ar[d] \\
-            \shallowterm {(\algops \alg)^{k}} {{(\algdom \alg)}} \ar[d] \\
-            (\shallowterm {(\algops \alg)} {{(\algdom \alg)}})^k
-         \ar[d]\\
-            (\algdom \alg)^k
-        }
-        }
-        \end{align*}
-\end{definition}
+    \ranked{ f : \tmonad \mati k \Sigma \to \mati k {(\tmonad \Sigma)}}
+    \end{align*}
+    which coincides with term unfolding for monotone inputs.
+\end{lemma}
+The proof of the  above lemma is one of the main technical contributions of this paper, and it is given in the appendix. One of the ingredients of the proof is a first-order (in fact, derivable) version of the Factorisation Forest Theorem for trees, which is based in Colcombet's splits from~\cite{colcombetCombinatorialTheoremTrees2007}.  
 
-By definition, if an algebra has a derivable shallow product, then the same is true for its  matrix powers, i.e.~for every $k$ the shallow product in the $k$-th matrix power is derivable. The following proposition -- which is much harder to show -- states a similar implication for  (not necessarily shallow) products.  
-\begin{proposition}\label{prop:matrix-power} If an algebra has a derivable product, then the same is true for its matrix powers.
-\end{proposition}
-The proof of the  proposition is one of the main technical contributions of this paper, and it is given in the appendix. One of the ingredients of the proof is a first-order (in fact, derivable) version of the Factorisation Forest Theorem for trees, which is based in Colcombet's splits from~\cite{colcombetCombinatorialTheoremTrees2007}.  
+% Let $\alg$ be an algebra and let $k \in \set{1,2,\ldots}$. How should the $k$-th power of the algebra be defined? For the domain, we use  $k$-tuples from the domain of $\alg$.  What about the operations? A natural   approach is to define the $n$-ary operations to be  $k$-tuples of $n$-ary operations from $\alg$, acting coordinate-wise. Because of the coordinate-wise action,  the coordinates in the product are independent of each other. This will be insufficient for our intended application, where the algebra $\alg$ is meant to represent individual register automaton, since the contents of register $r$ in the output of a register update depend on the contents of other registers in the input valuation . To  model this interdependence, we use a more sophisticated notion of power, 
+% defined below.
+% \begin{definition}
+%     For an algebra $\alg$ and $k \in \set{1,2,\ldots}$, the $k$-th matrix power\footnote{
+%         The definition of matrix power that we use is a special case of the original definition of matrix power from universal algebra (for the latter, see~\cite{Taylor1975} or~\cite{szendrei1990simple}). Roughly speaking, the restrictions that we place on the original definition correspond to the single-use and monotone conditions from Definition~\ref{def:stt}. 
+%     } of $\alg$ is defined as follows. The domain and signature are defined by
+%     \begin{align*}
+%     \overbrace{(\algdom \alg)^k}^{\text{domain}} \qquad \overbrace{
+%         \ranked{\reduce k ((\algops \alg)^k)}}^{\text{signature}}
+%         \end{align*}
+%         while the  shallow product operation is defined by
+%         \begin{align*}
+%             \ranked{
+%         \xymatrix{
+%             \shallowterm {\reduce k (\algops \alg)^{k}} {{(\algdom \alg)}^k} \ar[d] \\
+%             \shallowterm {(\algops \alg)^{k}} {{(\algdom \alg)}} \ar[d] \\
+%             (\shallowterm {(\algops \alg)} {{(\algdom \alg)}})^k
+%          \ar[d]\\
+%             (\algdom \alg)^k
+%         }
+%         }
+%         \end{align*}
+% \end{definition}
 
+% By definition, if an algebra has a derivable shallow product, then the same is true for its  matrix powers, i.e.~for every $k$ the shallow product in the $k$-th matrix power is derivable. The following proposition -- which is much harder to show -- states a similar implication for  (not necessarily shallow) products.  
+% \begin{proposition}\label{prop:matrix-power} If an algebra has a derivable product, then the same is true for its matrix powers.
+% \end{proposition}
+%
 
 \newcommand{\nmax}{n_{\mathrm{max}}}
 \subsection{Proof of Proposition~\ref{prop:many-register}}
@@ -121,12 +189,12 @@ The next  observation is that the algebra of register valuations homomorphically
 \begin{lemma}\label{lem:hom-matrix}
     There is an arity preserving 
     \begin{align*}
-    \ranked h : \regups \to \algops {\alg^{[k]}}
+    \ranked h : \regups \to \mati k {(\algops \alg)}
     \end{align*}
     which makes the following diagram commute
     \begin{align*}
     \xymatrix@C=2cm{
-        \treepar {\regups} \ar[r]^-{\trees \ranked h}\ar[d]_{\text{product}} & \trees (\algops {\alg^{[k]}})\ar[d]^{\text{product}} \\
+        \treepar {\regups} \ar[r]^-{\trees \ranked h}\ar[d]_{\text{product}} & \treepar {\mati k {(\algops \alg)}}\ar[d]^{\text{product}}  & (\treepar {\algops \alg})^k\\
         \regvalss \ar[r]_{(t_1,\ldots,t_k) \mapsto (t^\lambda_1,\ldots,t^\lambda_k)}& \algdom {\alg^{[k]}}
     }
     \end{align*} 

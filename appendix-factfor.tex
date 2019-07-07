@@ -1,80 +1,34 @@
 \section{The matrix power}
 
-\newcommand{\mati}[2]{#2^{\ranked{[#1]}}}
-\newcommand{\branches}{\mathsf{B}}
+\newcommand{\treeunfold}{\mathrm{unfold}}
 
-For a ranked set $\rSigma$ and $k \in \set{1,2,\ldots}$ define its $k$-th matrix power 
-to be the set
-\begin{align*}
-    \mati k \rSigma \quad \eqdef \quad \ranked{\reduce k \rSigma^k}.
-\end{align*}
-The key definition of this section is term unfolding, is an operation 
-\begin{align*}
-    \ranked{\unfold : \tmonad \mati k \rSigma \to \mati k {(\tmonad \Sigma)} }
-    \end{align*}
-that is illustrated in the  following picture for  $k=2$  and explained in Definition~\ref{def:term-unfolding}:
-\mypic{39}
-\begin{definition}[Shallow unfolding and term unfolding]\label{def:term-unfolding}
-    Define shallow unfolding 
-        \begin{align*}
-        \ranked{\unfold : \shallowterm{\mati k \Sigma}{\mati k \Gamma} \to \mati k {(\shallowterm \Sigma \Gamma)}}
-        \end{align*}        
-to be the composition of the following operations:
-\begin{center}
-    todo
-\end{center}
-% \begin{align*}
-% \ranked{
-%     \xymatrix{
-%         \shallowterm{\reduce k {\Sigma^k}}{\Gamma} \ar[r] & (\shallowterm \Sigma \Gamma)^k 
-%     }
-% }
-% \end{align*}
-Define term unfolding to be the operation
-\begin{align*}
-    \ranked{\unfold : \tmonad \mati k \rSigma \to \mati k {(\tmonad \Sigma)} }
-    \end{align*}
-which recursively applies shallow unfolding in the following sense.
-\begin{center}
-    todo
-\end{center}
-\end{definition}
 
-In general, the term unfolding operation is not derivable, but it will become derivable after imposing a monotonicity requirement.   To see the need for monotonicity, consider the following example.
-\begin{example}
-    todo
-\end{example}
-
-\paragraph{Monotone matrix power.}
-The monotonicity requirement is essentially the same as monotonicity in register updates of register transducers, see Definition~\ref{def:stt}. 
-For a ranked set $\rSigma$, define its \emph{branches} to be the unranked set (hence the black font):
-\begin{align*}
-\branches \rSigma \quad \eqdef \quad \set{(a,i) : a \in \rSigma, i \in \set{1,\ldots,\arity a}}.
-\end{align*}
-For $a \in  \rSigma$, a branch in $a$ is defined to be any branch obtained by choosing some port of $a$. 
-We draw branches like this:
-\mypic{82}
-Define the \emph{twist function} on branches of the matrix power 
-\begin{align*}
-\mathrm{twist} : \branches \reduce k \ranked{\Sigma^k}  \to (\set{1,\ldots,k} \to \set{1,\ldots,k})
-\end{align*}
-to be the function illustrated in the following picture:
-\begin{center}
-    todo
-\end{center}
 
 \begin{definition}
-    [Monotone matrix power] \label{def:monotone-matrix-power} We say that an element of the $k$-matrix power is \emph{monotone} if all of its branches have monotone twist.
+    For $k \in \set{1,2,\ldots}$ and a ranked set $\rSigma$, we define the following algebra. The domain is 
+    \begin{align*}
+    \overbrace{(\trees \rSigma)^k}^{\text{domain}} \qquad \overbrace{(\mati k \rSigma)}^{\text{signarure}}
+    \end{align*}
+    while the shallow product operation is shallow unfolding.
 \end{definition}
- We are now ready to state the principal result of this section.
 
 \begin{lemma}\label{lem:monotone-unfold}
+    Let $\rDelta \subseteq \mati k \rSigma$ be a finite and monotone subset of the matrix power.  There is a derivable tree-to-tree function
+\begin{align*}
+\xymatrix{
+    \treeunfold_1,\ldots,\treeunfold_k : \treepar {\mati k \rSigma} \to \trees \rSigma
+}
+\end{align*}
     For every finite ranked set $\rSigma$ and every $k \in \set{1,2,\ldots}$ there is a derivable function 
     \begin{align*}
     \ranked{ f : \tmonad \mati k \Sigma \to \mati k {(\tmonad \Sigma)}}
     \end{align*}
     which coincides with term unfolding for monotone inputs.
 \end{lemma}
+
+
+
+\paragraph{Monotone matrix power.}
 
 Our proof strategy is to show that term unfolding can be derived for certain homogeneous (see below) monotone inputs, and then to show that every input can be decomposed into simpler inputs in a homogeneous way. The notion of homogeneous inputs, and the result about  decomposing of arbitrary inputs into homogeneous inputs, are presented in Section~\ref{sec:factfor}. Next, in Section~\ref{sec:homo-unfold}, we show how term unfolding can be done for homogeneous inputs. Finally, in Section~\ref{sec:monotone-unfold-proof} we prove Lemma~\ref{lem:monotone-unfold} by combining  the results of Sections~\ref{sec:factfor} and~\ref{sec:homo-unfold}.
 
@@ -83,4 +37,55 @@ Our proof strategy is to show that term unfolding can be derived for certain hom
 
 \subsection{Proof of Lemma~\ref{lem:monotone-unfold}}
 \label{sec:monotone-unfold-proof}
-In this section, we complete the proof of Lemma~\ref{lem:monotone-unfold}. 
+In this section, we complete the proof of Lemma~\ref{lem:monotone-unfold}.  We say that a nested factorisation in $\tmonadn n \mati k \rSigma$ is monotone if all of the labels from $\mati k \rSigma$ that appear in it are monotone. 
+ Apply the Factorisation Forest Theorem with respect to the twist mapping, yielding a derivable function
+\begin{align*}
+\ranked{ f : \tmonad \mati k \rSigma \to \tmonadn n \mati k \rSigma}
+\end{align*}
+which produces only nested factorisations that are  hereditarily homogeneous. (Also, because monotone functions are closed under composition, it follows that if  an input to $\ranked f$ is monotone, then the same is true for the output.) Therefore,  Lemma~\ref{lem:monotone-unfold} follows by composing the function $\ranked f$ with the function $\ranked {g_n}$ from the following lemma. 
+
+\begin{lemma}\label{lem:ind-homo-twist}
+    For every finite ranked set $\rSigma$ and  $n \in \set{1,2,\ldots}$ there is a derivable function
+    \begin{align*}
+    \ranked{ g_n : \tmonadn n \mati k \rSigma \to \mati k \tmonad \rSigma}
+    \end{align*}
+    which makes the following diagram commute for inputs that are  monotone and  hereditarily homogeneous: 
+    \begin{align*}
+        \ranked{
+            \xymatrix{
+                \tmonadn n \mati k\rSigma \ar[d]_{\flatn n} \ar[rd]^g\\
+                \tmonad  \mati k \rSigma \ar[r]_{\unfold}& \mati k \tmonad \rSigma 
+            }
+        }
+    \end{align*}
+\end{lemma}
+\begin{proof}
+    Induction on $n$. To make the induction pass through, we also show that each function $\ranked{g_n}$ is consistent wit the  twist homomorphism in the following sense: for every input $t \in \tmonadn n \mati k \rSigma$, and every port $i \in \set{1,\ldots,\arity t}$, the same value is obtained by: (a) recursive flattening $t$ and then composing all of the twists that are found on the path from the root to port $i$; (b) applying $\ranked{g_n}$ and then computing the twist corresponding to port $i$. 
+    
+    For the induction base $n=1$, hereditarily homogeneous inputs are units, and there are finitely many of them and the function can be derived on a case by case basis. 
+    
+    Consider the induction step, where the lemma has already been proved for $n$ and we want to prove it for $n+1$. The function is the composition
+    \begin{align*}
+        \ranked{
+            \xymatrix@C=2cm{
+                \tmonadn {n+1} \mati k \Sigma \ar[r]^{\tmonad g_n} & \tmonad \mati k{(\tmonad \Sigma)} \ar[r]^{\text{Lemma~\ref{lem:homo-twist}}}&  \mati k  {(\tmonad \tmonad \rSigma)} \ar[r]^{\mati k \flatt} & \mati k \rSigma
+            }
+        }
+    \end{align*}
+    Consider a  hereditarily homogeneous input $t   \in \ranked{\tmonadn{n+1} \mati k \Sigma}$. 
+    \begin{enumerate}
+            \item Apply the function from the induciton assumption to every label of $t$, i.e.~apply 
+        \begin{align*}
+        \ranked{
+            \xymatrix{
+                \tmonadn {n+1} \mati k \Sigma \ar[r]^{\tmonad g_n} & \tmonad \mati k{(\tmonad \Sigma)}
+            }
+        }
+        \end{align*}
+        \item Let $t_1$ be the output from the previous step. Because $\ranked {g_n}$ is consistent with twists, and $t$ is hereditarily homogeneous, it follows that $t_1$  is either a shallow term, or it is homogeneous with respect to the twist homomorphism.  If $t_1$ is a shallow term, then we apply the shallow unfolding operation from .. . Otherwise, we $t_1$ is homogeneous
+        , because $t$ is hereditarily homogeneous and $\ranked{g_n}$ is consistent with twists. Therefore, we can apply the function
+        from Lemma~\ref{lem:homo-twist}, with the alphabet being $\tmonad \rSigma$. 
+        \item The result of the previous step is a term $t_2 \in \mati k {(\tmonad \tmonad \rSigma)}$. To this term, we apply $\mati k \flatt$, yielding the final result.
+    \end{enumerate}
+    A routine check shows that the function $\ranked{g_{n+1}}$ defined above satisfies the property in the statement of the lemma, and that it is furthermore consistent with the twist homomorphism.     
+\end{proof}
