@@ -12,7 +12,56 @@ we say that a term $ t \in \tmonad \mati k \rSigma$ is $\alpha$-homogeneous if a
     \begin{align*}
         \ranked{f : \tmonad \mati k \rSigma \to \mati k {(\tmonad \Sigma)} }
         \end{align*}      
-which coincides with term unfolding for all inputs which are $\alpha$-homogeneous with respect to the matrix branch homomorphism.
+which coincides with term unfolding for all inputs which are $\alpha$-homogeneous.
+\todo{I am not sure that this is true. More precisely, I do not see how to get this precise codomain. Maybe should it be $\mati {k'} {(\tmonad \Sigma)}$?}
 \end{lemma}
+\begin{proof}
+We will show this lemma by induction on $k$. For that, we need to strengthen the invariant of the induction: we will show that the unfolding of $\alpha$-homogenous terms in $\ranked{\tmonad \reduce l\rSigma^k}$ is derivable. Note that Lemma~\ref{lem:homo-twist} is the particular case of this statement where $k=l$. To state this strenghtening more precisely, we need to generalize the definition of unfolding and $\alpha$-homogenuity to $\ranked{\tmonad \reduce l\rSigma^k}$ terms.
 
-The lemma is proved by induction on the size of the image of $\alpha$. 
+For a port $i$ in an element $a/f$ of $\ranked{\reduce l \rSigma^k}$ define its \emph{twist} to be the partial function from $\set{1,\ldots,l}$ to $\set{1,\ldots,k}$
+which is the composition of 
+\begin{align*}
+\xymatrix{
+    \set{1,\ldots,l} \ar[r]^-{j \mapsto {(j,i)}} & \set{1,\ldots,l} \times \set{1,\ldots,n} \ar[r]^-{f^{-1}} & \set{1,\ldots,\arity a} \ar[r] & \set{1,\ldots,k}
+},
+\end{align*}
+where the last function maps each port of the tuple $a$ to the coordinate of the tuple that created that port. 
+
+We say that a term $t\in \ranked{\tmonad \reduce l \Sigma^k}$ is \emph{coherent} if the twist of every internal branche has $\set{1,\ldots,k}$ as domain. The unfold of $\ranked{\tmonad \reduce l \Sigma^k}$ coherent terms is the operation 
+\begin{align*}
+\ranked{\tmonad \reduce l \Sigma^k \to \reduce l (\tmonad \Sigma)^k}
+\end{align*}
+defined as follows
+\begin{center}
+TODO: {Define precisely unfold?}
+\end{center}
+
+For a monotone function 
+\begin{align*}
+\alpha: \set{1,\ldots,k} \to \set{1,\ldots,k}
+\end{align*}
+we say that a term $ t \in\ranked{\tmonad\reduce l \Sigma^k}$ is $\alpha$-homogeneous if  it is coherent and if all internal branches have as twist the function $\beta$ such that
+\begin{align*}
+\beta|_{\set{1,\dots,k}}=\alpha.
+\end{align*}
+Now we are ready to state the generalisation of our lemma.
+\begin{lemma}
+ Let $k, l \in \set{1,2,\ldots}$ and let $\alpha : \set{1,\ldots,k} \to \set{1,\ldots,k}$ be a monotone function. There is a computable $l'\geq l$ and a derivable operation 
+    \begin{align*}
+        \ranked{f : \tmonad \reduce l \rSigma^k \to \reduce {l'} {(\tmonad \Sigma)}^k }
+        \end{align*}      
+which coincides with term unfolding for all inputs which are $\alpha$-homogeneous.
+\end{lemma}
+As said earlier, we proceed by induction on $k$. 
+When $k=1$, the unfolding can be derived as the composition of tghe following functions
+\begin{align*}
+\ranked{\tmonad \reduce l \Sigma \longrightarrow \shallowterm {\reduce l\tmonad \Sigma}{\tmonad \reduce l\Sigma} \longrightarrow \reduce 1\reduce l \tmonad \Sigma \longrightarrow \reduce l\tmonad \Sigma }
+\end{align*}
+To treat the inductive case, we indroduce a tool that will be useful to analyse the function $\alpha$. For a function $$\alpha: \set{1,\ldots,k} \to \set{1,\ldots,k}$$ define  \emph{its graph} as the directed graph whose set of vertices is $\set{1,\ldots,k}$, and which contains an edge $i\rightarrow j$ if $\alpha(i)=j$. Note that the out-degree of the nodes is $1.$
+
+In the proof of the inductive case, we distinghuish two cases. The first is when the graph of $\alpha$ is not weakly connected.
+
+The graph of alpha is weakly connected. 
+
+
+\end{proof}
