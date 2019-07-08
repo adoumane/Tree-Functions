@@ -30,18 +30,19 @@ Because the set of terms is itself a ranked set,  we can create terms of terms. 
        \mypic{61}
               \item       \emph{Product.} An element of the   \emph{product}\footnote{
                   A more precise name would be \emph{tensor product}. The alternative product, call it \emph{Cartesian product}, would have as $n$-ary elements  pairs $(a_1,a_2)$ such that both $a_1$ and $a_2$ have arity $n$. Since we do not use Cartesian product, we write product without specifying that we mean the tensor product.
-              } $\ranked{\Sigma_1 + \Sigma_2}$  is a  pair $\tensorpair{a_1,a_2}$ where $a_i \in \ranked{\Sigma_i}$. The arity  of this pair is the sum of arities of its components $a_1$ and $a_2$. We draw pairs like this:
+              } $\ranked{\Sigma_1 \otimes \Sigma_2}$  is a  pair $\tensorpair{a_1,a_2}$ where $a_i \in \ranked{\Sigma_i}$. The arity  of this pair is the sum of arities of its components $a_1$ and $a_2$. We draw pairs like this:
         \mypic{52}
         \item \emph{Folding.} For every $k \in \set{1,2,3,\ldots}$, we have a unary type constructor $\reduce k \rSigma$  which is used to reduce arities, by grouping ports into groups of size at most $k$.  An $n$-ary element of $\reduce k \rSigma$, which is called a \emph{$k$-fold}, consists of an element      $a \in \rSigma$  together with an  injective  function
             \begin{align*}
                 f : \set{1,\ldots,\arity a} \to \set{1,\ldots,k} \times  \set{1,\ldots,n}.
             \end{align*}
             We denote such an element as $a/f$ and draw it like this: \mypic{53}
+            If $i\in  \set{1,\ldots,\arity a}$, then the second component of $f(i)$ specifies to which group the $i$-th port of $a$ will participate, while the first component specifies its place in this group. In the picture above, the arity of $a$ is $6$, the arity of $a/f$ is $4$, and $k$, the size of the groups,  is $2$. For instance we have that $f(1)=(1,2)$, because the first port of $a$ participated to the group forming the first port of $a/f$, and because it is the second element in this group.
         \item \emph{Terms.} The term type constructor $\tmonad \rSigma$ has already been discussed at the beginning of this section.  We draw terms like this:
         \mypic{51}
         \item \emph{Shallow terms.} The  ranked set $\shallowterm \rGamma \rSigma$ of  \emph{shallow terms} is defined as
         \begin{align*}
-            \ranked {\shallowterm \rSigma \rGamma \eqdef \coprod_{a \in \rSigma} \rGamma^{\text{arity of $a$}}}.
+            \ranked {\shallowterm \rSigma \rGamma \eqdef \coprod_{a \in \rSigma} \underbrace{\rGamma\otimes\ldots\otimes\rGamma}_{\text{arity of $a$}}}.
         \end{align*}
         The coproduct in the above definition is infinite when $\rSigma$ is infinite. 
         An equivalent definition is that a shallow term  is the special case of  a term over $\rSigma \redplus \rGamma$ where  the root has label from $\rSigma$,  children have labels  from $\rGamma$, and grand-children are ports. We draw shallow terms like terms:
@@ -159,7 +160,7 @@ In this section, we define the atomic functions whose definitions were not given
         \begin{align*}
             \ranked{\preorder : \tmonad \Sigma \to \reduce 1 \tmonad (\rSigma + 0 + 2)}
         \end{align*}
-        is the natural extension -- from trees to terms -- of the  pre-order function discussed in Example~\ref{ex:pre-order}, as explained below (the unary grey nodes represent the labels from $\ranked 0$, and the binary grey nodes represent the labels from $\ranked 2$):
+        is the natural extension -- from trees to terms -- of the  pre-order function discussed in Example~\ref{ex:pre-order}, as explained below (the nullary grey nodes represent the labels from $\ranked 0$, and the binary grey nodes represent the labels from $\ranked 2$):
         \mypic{13}
         
 \subsubsection{Unfolding}
@@ -170,7 +171,7 @@ The general idea behind the  unfolding operation
 }
 \end{align*} 
 is to eliminate a $k$-fold by matching it with a $k$-th power. 
-The unfolding operation is explained in the following picture for $k=3$:
+The unfolding operation is explained in the following picture for $k=3$: \todo{Not the right picture. Still think that triple edges will make the idea more clear.}
 \mypic{56}
 % One of the main results in this paper will be  that an iterated version of the unfold operation, of type
 % \begin{align*}
