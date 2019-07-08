@@ -1,71 +1,33 @@
-\section{Reduction to one register}
 
-\newcommand{\regalg}{{\alg_{\rGamma,\regnames}}}
-\newcommand{\alg}{{\color{black}\mathbf A}}
-\newcommand{\balg}{{\color{black}\mathbf B}}
-\newcommand{\algops}[1]{\ranked{\text{signature of }}#1}
-\newcommand{\algdom}[1]{{\color{black}\text{domain of }}#1}
-\newcommand{\redpar}[1]{\ranked(#1\ranked)}
-\newcommand{\treepar}[1]{\trees \redpar{#1}}
-\newcommand{\regups}{\ranked{\text{register updates}}}
-\newcommand{\regvalss}{{\text{register valuations}}}
+\section{Matrix power} 
 \label{sec:matrix-power}
-In this section, we prove that first-order  tree transducers can only recognise derivable functions. 
-\begin{proposition}
-    \label{prop:many-register} 
-For every first-order  tree transducer, the computed function is derivable. 
-\end{proposition}
-This completes the proof of the left-to-right implication in Theorem~\ref{thm:main}, as explained below:
-\begin{align*}
-\text{first-order tree-to-tree transductions}  \stackrel {\text{Theorem~\ref{thm:stt}}}\subseteq  \text{first-order tree transducers} \stackrel {\text{Proposition~\ref{prop:many-register}}} \subseteq \text{derivable}
-\end{align*}
-The rest of this section is devoted to proving Proposition~\ref{prop:many-register}. There will be three main ingredients. Two of these ingredients have been introduced in Sections~\ref{sec:fo-translation} and~\ref{sec:one-register}:    Proposition~\ref{prop:forat} about  first-order tree relabellings will be used for the transition function of the transducer, while  Theorem~\ref{thm:normalise} about affine $\lambda$-terms will be used to handle the mechanics of iterated substitution used in a register transducer. The final ingredient, which is called the {matrix power} and described in Section~\ref{sec:matrix-power-subsec} below, will be used to handle the interplay between different registers.  To put these ingredients together, we use  terminology inspired by universal algebra, as given in the following definition. 
+In this section, we de define the matrix power, which can be seen as a way of representing several trees in one. Roughly speaking, the several trees are the contents of registers in a register automaton, and the single tree that represents them is the computation tree of the register automaton.  We then show that several trees stored in a computation  can be unfolded in a derivable way. 
 
 \begin{definition}
-    An \emph{algebra} $\alg$ consists of two sets 
-    \begin{align*}
-    \overbrace{\algdom \alg}^{\text{unranked}} \qquad \overbrace{\algops \alg}^{\text{ranked}},
-    \end{align*}
-equipped with a  \emph{shallow product}\footnote{
-    A more standard approach would be to use a family of operations indexed by the signature
-    \begin{align*}
-    \set{f^\alg : (\algdom \alg)^{\arity f} \to \algdom \alg}_{f \in \algops \alg}.
-    \end{align*}
-   Our approach is equivalent, i.e.~defining a shallow product is the same as defining a family of operations.
-}, which is function of type
-\begin{align*}
- \shallowterm {(\algops \alg)}{\underbrace{(\algdom \alg)}_{\substack{\text{viewed as a ranked}\\ \text{set, with all elements}\\ \text{having arity zero}}}} \rto \redpar {\algdom \alg}.
-\end{align*}
-    For an algebra $\alg$, define its \emph{product} to be the function of type
-    \begin{align*}
-        \treepar {\algops \alg} \to \algdom \alg
-    \end{align*}
-    defined in the natural way.
-    %  An algebra is called \emph{derivable} if its product  is derivable. 
-\end{definition}
-
-
-One example of an algebra is when the signature is some ranked set $\rSigma$, the domain is  $\trees \rSigma$, and the interpretation is defined in the natural way. In this case, the product operation is the identity. A variant of this algebra is when the signature is replaced by $\tmonad \rSigma$; in this case the product operation becomes flattening. 
-
-Another example of an algebra was implicit in the definition of register transducers: the domain is the register valuations and the signature is the  register updates. An important step in the proof of Proposition~\ref{prop:many-register} will be to decompose this algebra using an operation called the matrix power.
-
-
-
-\subsection{Matrix power} 
-\label{sec:matrix-power-subsec}
-
-For a ranked set $\rSigma$ and $k \in \set{1,2,\ldots}$ define its $k$-th matrix power\footnote{
-           The name  matrix power is based the matrix power in  universal algebra (for the latter, see~\cite{Taylor1975} or~\cite{szendrei1990simple}). Roughly speaking, the restrictions that we place on the original definition correspond to the single-use and monotone conditions from Definition~\ref{def:stt}. 
-        } 
+    [Matrix power] For $k \in \set{1,2,\ldots}$ define the $k$-th matrix power\footnote{
+        The name  matrix power is based the matrix power in  universal algebra (for the latter, see~\cite{Taylor1975} or~\cite{szendrei1990simple}). Roughly speaking, the restrictions that we place on the original definition correspond to the single-use and monotone conditions from Definition~\ref{def:stt}. 
+     } of a ranked set $\rSigma$ 
 to be 
 \begin{align*}
-    \mati k \rSigma \quad \eqdef \quad \ranked{\reduce k \rSigma^k}.
+ \mati k \rSigma \quad \eqdef \quad \ranked{\reduce k \rSigma^k}.
 \end{align*}
+\end{definition}
+
 Here is a picture of a binary element in the matrix power, where $k=3$:
 \mypic{85}
-The intuition behind the matrix power is that there are $k$ registers, and each letter from $\rSigma$ represents an operation on the register contents. In the above picture, there are three registers, and the blue letters represent the operations on  register contents. An $n$-ary letter in $a \in \mati k \rSigma$ represents a register update, and the $k$-folding says how the register values from the children ($n$ children, each one with $k$ registers) are distributed across the operations from $\rSigma$. 
+The intuition behind the matrix power is that there are $k$ registers, and each letter from $\rSigma$ represents an operation on the register contents.  In the above picture, there are three registers, and the blue letters represent the operations on  register contents. Each of the two ports in the above picture is split -- using folding -- into smaller ports; the idea is that these smaller ports will be substituted by the register values in the two children.  
 
-The above intuitions are captured by unfolding operations for the matrix power, of which there are two versions, one for  shallow terms and one for general terms. We begin with the version for    \emph{shallow terms}, which is defined to be  the composition of the following operations
+The above intuitions are captured by the following unfolding operations for the matrix power. The first and simpler unfolding operation is defined for shallow terms, and has type
+\begin{align*}
+    \ranked{
+        \xymatrix{
+            \shallowterm{\mati k \rSigma} {\mati k \rGamma}  \ar[r] & \mati k {(\shallowterm \Sigma \Gamma)}.
+        }
+    }
+\end{align*}
+Here is a picture of unfolding for shallow terms:
+\mypic{86}
+More formally, unfolding for shallow terms is defined to be   the composition of the following
 \begin{align*}
 \ranked{
     \xymatrix{
@@ -76,20 +38,17 @@ The above intuitions are captured by unfolding operations for the matrix power, 
     }
 }
 \end{align*}
-Here is a picture of shallow unfolding:
-\mypic{86}
-Unfolding for terms is defined by inductively applying shallow unfolding. More formally, it is the  operation 
+As a composition of derivable functions, shallow unfolding is derivable by definition.  It will be much harder to show derivability for the second unfolding operation, 
 \begin{align*}
     \ranked{\unfold : \tmonad \mati k \rSigma \to \mati k {(\tmonad \Sigma)} }
     \end{align*}
-defined as follows. If the input is an empty term, then the output is this term:
+    which extends unfolding to  not necessarily shallow terms, and which is
+defined as follows by induction on the size of the input term. If the input is an empty term, then the output is this term:
 \mypic{83}
 Otherwise, if the input is a nonempty term $a(t_1,\ldots,t_n)$ then the output is obtained by first applying term unfolding to to the smaller terms $t_1,\ldots,t_n$, and then applying the shallow unfold. Here is a picture of term unfolding: 
 \mypic{39}
-
-As a composition of derivable functions, shallow unfolding is derivable by definition.  Term unfolding is a different story, due to its iterative definition. 
-In general, the term unfolding operation is not derivable, but it will become derivable after imposing a monotonicity requirement.   To see the need for monotonicity, consider the following example.
-\begin{example}
+Since our atomic functions and combinators do not have any general mechanisms for induction, it is not clear how to derive the unfolding operation for not necessarily shallow terms. In fact, it is not derivable in general, but it will become derivable after imposing a monotonicity requirement.   To see the need for monotonicity, consider the following example.
+\begin{example}\label{eq:twist}
     Consider the following elements in a second matrix power:
     \mypic{84}
 Let $t_n \in \trees \mati 2 \rSigma$ be the tree which consists of a path with $n$ nodes using the unary label $a$, followed by a leaf with label $b$. If we apply term unfolding to this tree, and then project to the first coordinate, then we get a tree with a white leaf if and only if  $n$ is even.  It term   unfolding were derivable, then thanks to the results from Section~\ref{sec:to-transductions}  we would get a first-order tree-to-tree transduction 
@@ -99,29 +58,34 @@ Let $t_n \in \trees \mati 2 \rSigma$ be the tree which consists of a path with $
 where the output would contain a white leaf if and only if the input has odd depth. This is in turn would imply that having even depth for trees over $\redset{a,b}$ is first-order definable, which it is not, because first-order logic cannot do modulo counting.
 \end{example}
 
-The problem in the above example is that the letter $a$ does a swap on its ports, which leads to counting modulo two. To forbid such swaps, we impose a monotonicity requirement that matches the monotonicity requirement for register updates in register transducers. 
-Define a \emph{branch} in a ranked set to be an element  of the ranked set together with a distinguished port. We draw branches like  this:
-\mypic{82}
-For a branch in the matrix power   $\mati k \rSigma$, define its \emph{twist} to be the partial function 
+The problem in the above example is that the letter $a$ does a swap on its ports, which leads to counting modulo two. To forbid such swaps, we impose a monotonicity requirement that matches the monotonicity requirement for register updates in register transducers.
+For a port $i$ in an element of the matrix power $a/f \in \mati k \rSigma$ define its \emph{twist} to be the partial function from $\set{1,\ldots,k}$ to itself 
+which is the composition of 
 \begin{align*}
- \set{1,\ldots,k} \to \set{1,\ldots,k}
+\xymatrix{
+    \set{1,\ldots,k} \ar[r]^-{j \mapsto {(i,j)}} & \set{1,\ldots,k} \times \set{1,\ldots,n} \ar[r]^-{f^{-1}} & \set{1,\ldots,\arity a} \ar[r] & \set{1,\ldots,k}
+},
 \end{align*}
-whose definition is explained in the following picture:
-\begin{center}
-    todo
-\end{center}
- We say that an element of the $k$-matrix power is \emph{monotone} if all of its branches have monotone twist.
+where the last function maps each port of the tuple $a$ to the coordinate of the tuple that created that port. Here is a picture:
+\mypic{87}
+ We say that an element of the $k$-matrix power is \emph{monotone} if all of its ports have monotone twist.
  We are now ready to state the principal result of this section.
 
-\begin{lemma}\label{lem:monotone-unfold}
+\begin{proposition}\label{prop:monotone-unfold}
     For every finite ranked set $\rSigma$ and every $k \in \set{1,2,\ldots}$ there is a derivable function 
     \begin{align*}
     \ranked{ f : \tmonad \mati k \Sigma \to \mati k {(\tmonad \Sigma)}}
     \end{align*}
     which coincides with term unfolding for monotone inputs.
-\end{lemma}
+\end{proposition}
 The proof of the  above lemma is one of the main technical contributions of this paper, and it is given in the appendix. One of the ingredients of the proof is a first-order (in fact, derivable) version of the Factorisation Forest Theorem for trees, which is based in Colcombet's splits from~\cite{colcombetCombinatorialTheoremTrees2007}.  
 
+\begin{corollary}\label{cor:matrix-power}
+    Let $\rSigma$ be a finite set and let $\rDelta \subseteq \mati k \rSigma$ be a finite set which contains only monotone elements. Then one can derive the tree-to-tree function
+    \begin{align*}
+    f : \trees \rDelta \to \trees \rSigma  \qquad t \mapsto \text{first tree in the unfolding of $t$.}
+    \end{align*}
+\end{corollary}
 % Let $\alg$ be an algebra and let $k \in \set{1,2,\ldots}$. How should the $k$-th power of the algebra be defined? For the domain, we use  $k$-tuples from the domain of $\alg$.  What about the operations? A natural   approach is to define the $n$-ary operations to be  $k$-tuples of $n$-ary operations from $\alg$, acting coordinate-wise. Because of the coordinate-wise action,  the coordinates in the product are independent of each other. This will be insufficient for our intended application, where the algebra $\alg$ is meant to represent individual register automaton, since the contents of register $r$ in the output of a register update depend on the contents of other registers in the input valuation . To  model this interdependence, we use a more sophisticated notion of power, 
 % defined below.
 % \begin{definition}
@@ -151,67 +115,4 @@ The proof of the  above lemma is one of the main technical contributions of this
 % \end{proposition}
 %
 
-\newcommand{\nmax}{n_{\mathrm{max}}}
-\subsection{Proof of Proposition~\ref{prop:many-register}}
-\label{sec:proof-of-prop}
-We now complete the proof of Proposition~\ref{prop:many-register}. 
-Fix a register transducer with $k$ registers. For the rest of this section, when talking about register valuations and register updates, we mean the registers of the fixed register transducer. To derive the function computed by the register transducer, we will embed the algebra of its register operations into the $k$-th matrix power of an algebra of $\lambda$-terms.  
 
- The idea behind this algebra is to use  $\lambda$-terms to represent register contents, according to the following picture:
-    \mypic{59}  
-    Let  $\nmax$  be the maximal arity of registers in the fixed register transducer, and let  $\rGamma$ be its  output alphabet. For a term $t \in \tmonad \rGamma$ of arity at most $\nmax$, its representation as a  $\lambda$-term, which we denote by $t^\lambda$,  uses variables from the following finite set (we use the notation $\otype^i \to \otype$ defined in Example~\ref{ex:affine-not-enough}):
-\begin{align*}
-X  \quad \eqdef \quad \set{\typevar {x_a} {\otype^i \to \otype} : a \in \rGamma \text{ of arity $i$}} \cup \set{\typevar {x_i} \otype : i \in \set{1,2,\ldots,\nmax }}.
-\end{align*}
-Furthermore, $t^\lambda$ is affine and it can be typed using simple types  from  the following set finite set :
-\begin{align*}
-    \Tt \quad \eqdef \quad \set{\otype^i \to \otype : i \in \set{0,\ldots,\nmax}}
-\end{align*}
-This means that if $t$ has arity at most $\nmax$ -- which is true for any term that can appear in a register of our fixed register transducer -- then its $\lambda$-term representation $t^\lambda$ satisfies constraints as in Theorem~\ref{thm:normalise}.  On its own, $t^\lambda$ is already in normal form, so there is no need to normalise it, but we intend to compose  such $\lambda$-terms, leading to terms that are not in normal form (but which still use variables from $X$ and types from $\Tt$). 
-This motivates the  following definition of an algebra, call it $\alg$. Its domain and signature are given by 
-\begin{align*}
-\overbrace{\set \bot + \trees \lamrank X}^{\algdom \alg}  \qquad \overbrace{ \tmonad \lamrank X}^{\algops \alg} \qquad \text{where }\lamrank X = {\overbrace{\set{x : x \in X}}^{\text{arity 0}} \cup \overbrace{\set{\lambda x : x \in X}}^{\text{arity 1}} \cup  \overbrace{\set @}^{\text{arity 2}}}
-\end{align*}
-In other words, the domain is $\lambda$-terms plus an error element, and the signature is $\lambda$-terms  with ports. The   product operation is 
-\begin{align*}
-t^\alg(t_1,\ldots,t_n) = \begin{cases}
-    \text{normal form of $t(t_1,\ldots,t_n)$} & \text{if $t(t_1,\ldots,t_n)$ is affine and can be typed using $\Tt$}\\
-    \bot & \text{otherwise}
-\end{cases}
-\end{align*}
-In particular, if one of the inputs $t_1,\ldots,t_n$ is $\bot$, then the output is also $\bot$.  The algebra $\alg$ is designed so that we can apply Theorem~\ref{thm:normalise} about normalising $\lambda$-terms, hence the following result.
-
-\begin{corollary}[of Theorem~\ref{thm:normalise}]\label{lem:balg}
-    The product operation in the  algebra $\alg$ is derivable.
-\end{corollary}
-
-The next  observation is that the algebra of register valuations homomorphically embeds into a matrix power of the algebra $\alg$, as stated in the following lemma. 
-\begin{lemma}\label{lem:hom-matrix}
-    There is an arity preserving 
-    \begin{align*}
-    \ranked h : \regups \to \mati k {(\algops \alg)}
-    \end{align*}
-    which makes the following diagram commute
-    \begin{align*}
-    \xymatrix@C=2cm{
-        \treepar {\regups} \ar[r]^-{\trees \ranked h}\ar[d]_{\text{product}} & \treepar {\mati k {(\algops \alg)}}\ar[d]^{\text{product}}  & (\treepar {\algops \alg})^k\\
-        \regvalss \ar[r]_{(t_1,\ldots,t_k) \mapsto (t^\lambda_1,\ldots,t^\lambda_k)}& \algdom {\alg^{[k]}}
-    }
-    \end{align*} 
-\end{lemma}
-The lemma is proved by simply unfolding the definition of register updates, and seeing how they can be represented using the matrix power.
-
-
-
-
- We now use the above results to complete the proof of Proposition~\ref{prop:many-register}. We need to show that the function computed by our fixed register transducer is derivable. This function decomposes into the following steps, all of which are derivable:    
-%  By definition, the  register transducer  first applies to the input tree a first-order translation  -- which is derivable thanks to  -- and then to the resulting tree $t \in \trees \Delta$ of register updates it applies the function:
-%     \begin{align*}\label{eq:regup-fun}
-%         t \in \trees \Delta \qquad \mapsto \qquad \text{content of register 1 in the product of $t$}
-%         \end{align*}
-%     Therefore, to finish the proof, it is enough to derive the above function. By  Lemma~\ref{lem:hom-matrix}, this function is the composition of the following derivable functions:
-     \begin{enumerate}
-        \item Apply a first-order tree relabelling to the input tree, yielding a tree labelled by register updates. This step is derivable thanks to Proposition~\ref{prop:forat}.
-        \item  Thanks to Lemma~\ref{lem:hom-matrix}, instead of applying the product in the algebra of register updates, we can  apply  $\trees \ranked h$, followed by the product operation in the algebra $\alg^{[k]}$. The function $\ranked h$ restricted to the finite set of register updates used by the transducer is derivable, and therefore the same is true for its tree lifting $\trees \ranked h$. The product operation in $\alg^{[k]}$ is derivable, because the  underlying algebra has a derivable product  by Corollary~\ref{lem:balg}, and derivable products  are preserved under matrix power by  Proposition~\ref{prop:matrix-power}.
-        \item After the first two steps, we are left with a tuple $(t^\lambda_1,\ldots,t^\lambda_k)$ which contains the  $\lambda$-term representations of all register contents. We project this tuple to the first coordinate, and finally we undo the $\lambda$-term representation, yielding the underlying tree $t_1$. 
-    \end{enumerate} 

@@ -1,48 +1,28 @@
 \section{The matrix power}
-
+\label{ap:matrix-power}
 \newcommand{\treeunfold}{\mathrm{unfold}}
 
-
-
-\begin{definition}
-    For $k \in \set{1,2,\ldots}$ and a ranked set $\rSigma$, we define the following algebra. The domain is 
-    \begin{align*}
-    \overbrace{(\trees \rSigma)^k}^{\text{domain}} \qquad \overbrace{(\mati k \rSigma)}^{\text{signarure}}
-    \end{align*}
-    while the shallow product operation is shallow unfolding.
-\end{definition}
-
-\begin{lemma}\label{lem:monotone-unfold}
-    Let $\rDelta \subseteq \mati k \rSigma$ be a finite and monotone subset of the matrix power.  There is a derivable tree-to-tree function
-\begin{align*}
-\xymatrix{
-    \treeunfold_1,\ldots,\treeunfold_k : \treepar {\mati k \rSigma} \to \trees \rSigma
-}
-\end{align*}
-    For every finite ranked set $\rSigma$ and every $k \in \set{1,2,\ldots}$ there is a derivable function 
+This part of the appendix is devoted to proving Proposition~\ref{prop:monotone-unfold}, which says that  for  every finite ranked set $\rSigma$ and every $k \in \set{1,2,\ldots}$ there is a derivable function 
     \begin{align*}
     \ranked{ f : \tmonad \mati k \Sigma \to \mati k {(\tmonad \Sigma)}}
     \end{align*}
     which coincides with term unfolding for monotone inputs.
-\end{lemma}
 
 
-
-\paragraph{Monotone matrix power.}
-
-Our proof strategy is to show that term unfolding can be derived for certain homogeneous (see below) monotone inputs, and then to show that every input can be decomposed into simpler inputs in a homogeneous way. The notion of homogeneous inputs, and the result about  decomposing of arbitrary inputs into homogeneous inputs, are presented in Section~\ref{sec:factfor}. Next, in Section~\ref{sec:homo-unfold}, we show how term unfolding can be done for homogeneous inputs. Finally, in Section~\ref{sec:monotone-unfold-proof} we prove Lemma~\ref{lem:monotone-unfold} by combining  the results of Sections~\ref{sec:factfor} and~\ref{sec:homo-unfold}.
+Our proof strategy is to show that term unfolding can be derived for certain homogeneous (see below) monotone inputs, and then to show that every input can be decomposed into simpler inputs in a homogeneous way. The notion of homogeneous inputs, and the result about  decomposing of arbitrary inputs into homogeneous inputs, are presented in Section~\ref{sec:factfor}. Next, in Section~\ref{sec:homo-unfold}, we show how term unfolding can be done for homogeneous inputs. Finally, in Section~\ref{sec:monotone-unfold-proof} we prove Proposition~\ref{prop:monotone-unfold} by combining  the results of Sections~\ref{sec:factfor} and~\ref{sec:homo-unfold}.
 
 \input{factfor}
 \input{homo-unfold}
 
-\subsection{Proof of Lemma~\ref{lem:monotone-unfold}}
+\subsection{Proof of Proposition~\ref{prop:monotone-unfold}}
 \label{sec:monotone-unfold-proof}
-In this section, we complete the proof of Lemma~\ref{lem:monotone-unfold}.  We say that a nested factorisation in $\tmonadn n \mati k \rSigma$ is monotone if all of the labels from $\mati k \rSigma$ that appear in it are monotone. 
- Apply the Factorisation Forest Theorem with respect to the twist mapping, yielding a derivable function
+In this section, we complete the proof of Proposition~\ref{prop:monotone-unfold}.  We say that a nested factorisation in $\tmonadn n \mati k \rSigma$ is monotone if all of the labels from $\mati k \rSigma$ that appear in it are monotone. 
+Consider the homomorphism which maps a branch to its corresponding twist, and which gives the completely undefined function in case the twist is not monotone.  The homomorphism uses an aperiodic monoid, as discussed in Example~\ref{ex:partial-monoton-functions}. 
+ Apply the Factorisation Forest Theorem with respect to this homomorphism, yielding a derivable function
 \begin{align*}
 \ranked{ f : \tmonad \mati k \rSigma \to \tmonadn n \mati k \rSigma}
 \end{align*}
-which produces only nested factorisations that are  hereditarily homogeneous. (Also, because monotone functions are closed under composition, it follows that if  an input to $\ranked f$ is monotone, then the same is true for the output.) Therefore,  Lemma~\ref{lem:monotone-unfold} follows by composing the function $\ranked f$ with the function $\ranked {g_n}$ from the following lemma. 
+which produces only nested factorisations that are  hereditarily homogeneous. (Also, because monotone functions are closed under composition, it follows that if  an input to $\ranked f$ is monotone, then the same is true for the output.) Therefore,  Proposition~\ref{prop:monotone-unfold} follows by composing the function $\ranked f$ with the function $\ranked {g_n}$ from the following lemma. 
 
 \begin{lemma}\label{lem:ind-homo-twist}
     For every finite ranked set $\rSigma$ and  $n \in \set{1,2,\ldots}$ there is a derivable function
@@ -74,7 +54,7 @@ which produces only nested factorisations that are  hereditarily homogeneous. (A
     \end{align*}
     Consider a  hereditarily homogeneous input $t   \in \ranked{\tmonadn{n+1} \mati k \Sigma}$. 
     \begin{enumerate}
-            \item Apply the function from the induciton assumption to every label of $t$, i.e.~apply 
+            \item Apply the function from the induction assumption to every label of $t$, i.e.~apply 
         \begin{align*}
         \ranked{
             \xymatrix{
