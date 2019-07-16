@@ -13,28 +13,23 @@ we say that a term $ t \in \tmonad \mati k \rSigma$ is $\alpha$-homogeneous if a
         \ranked{f : \tmonad \mati k \rSigma \to \mati k {(\tmonad \Sigma)} }
         \end{align*}      
 which coincides with term unfolding for all inputs which are $\alpha$-homogeneous.
-\todo{I am not sure that this is true. More precisely, I do not see how to get this precise codomain. Maybe should it be $\mati {k'} {(\tmonad \Sigma)}$?}
 \end{lemma}
 \begin{proof}
 We will show this lemma by induction on $k$. For that, we need to strengthen the invariant of the induction: we will show that the unfolding of $\alpha$-homogenous terms in $\ranked{\tmonad \reduce l\rSigma^k}$ is derivable. Note that Lemma~\ref{lem:homo-twist} is the particular case of this statement where $k=l$. To state this strenghtening more precisely, we need to generalize the definition of unfolding and $\alpha$-homogenuity to $\ranked{\tmonad \reduce l\rSigma^k}$ terms.
 
-For a port $i$ in an element $a/f$ of $\ranked{\reduce l \rSigma^k}$ define its \emph{twist} to be the partial function from $\set{1,\ldots,l}$ to $\set{1,\ldots,k}$
-which is the composition of 
-\begin{align*}
-\xymatrix{
-    \set{1,\ldots,l} \ar[r]^-{j \mapsto {(j,i)}} & \set{1,\ldots,l} \times \set{1,\ldots,n} \ar[r]^-{f^{-1}} & \set{1,\ldots,\arity a} \ar[r] & \set{1,\ldots,k}
-},
-\end{align*}
-where the last function maps each port of the tuple $a$ to the coordinate of the tuple that created that port. 
 
-We say that a term $t\in \ranked{\tmonad \reduce l \Sigma^k}$ is \emph{coherent} if the twist of every internal branche has $\set{1,\ldots,k}$ as domain. The unfold of $\ranked{\tmonad \reduce l \Sigma^k}$ coherent terms is the operation 
-\begin{align*}
-\ranked{\tmonad \reduce l \Sigma^k \to \reduce l (\tmonad \Sigma)^k}
-\end{align*}
-defined as follows
+
+If $k, l\in \set{2,3,\dots}$ such that $k\leq l$, we can embed the elements of $\ranked{\reduce l \rSigma^k}$ in 
+$\ranked{\mati l {(\rSigma+\set{0})}}$ by adding $l-k$ copies of the nullary element $0$ to the tensor product, as illustrated below:
 \begin{center}
-TODO: {Define precisely unfold?}
-\end{center}
+
+\end{center}  
+Hence, we can talk about the twist of an element of $\ranked{\reduce l \Sigma^k}$, and we can embed every element of $\ranked{\tmonad \reduce l \Sigma^k}$  into $\ranked{\tmonad \mati l \Sigma}$.
+
+We define the unfolding of a term $t$ in $\ranked{\tmonad \reduce l \Sigma^k}$ as its unfolding when seen as an element of $\ranked{\tmonad \mati l \Sigma}$. Note that the unfolding of a element of $\ranked{\tmonad \reduce l \Sigma^k}$ is an element of $\ranked{\reduce l(\tmonad (\Sigma+\set{0}))^k}$.
+
+We will be interested in a particular case of terms: the \emph{coherent} ones. We say that a term $t\in \ranked{\tmonad \reduce l \Sigma^k}$ is \emph{coherent} if the twist of every internal branche of $t$ seen as an element of $\ranked{\tmonad \mati l \Sigma}$ has $\set{1,\ldots,k}$ as domain. Note that the unfolding of a coherent element of $\ranked{\tmonad \reduce l \Sigma^k}$ is an element of $\ranked{\reduce l(\tmonad \Sigma)^k}$.
+
 
 For a monotone function 
 \begin{align*}
@@ -46,22 +41,82 @@ we say that a term $ t \in\ranked{\tmonad\reduce l \Sigma^k}$ is $\alpha$-homoge
 \end{align*}
 Now we are ready to state the generalisation of our lemma.
 \begin{lemma}
- Let $k, l \in \set{1,2,\ldots}$ and let $\alpha : \set{1,\ldots,k} \to \set{1,\ldots,k}$ be a monotone function. There is a computable $l'\geq l$ and a derivable operation 
+ Let $k, l \in \set{1,2,\ldots}$ and let $\alpha : \set{1,\ldots,k} \to \set{1,\ldots,k}$ be a monotone function. There is a  derivable operation 
     \begin{align*}
-        \ranked{f : \tmonad \reduce l \rSigma^k \to \reduce {l'} {(\tmonad \Sigma)}^k }
+        \ranked{f : \tmonad \reduce l \rSigma^k \to \reduce {l} {(\tmonad \Sigma)}^k }
         \end{align*}      
 which coincides with term unfolding for all inputs which are $\alpha$-homogeneous.
 \end{lemma}
-As said earlier, we proceed by induction on $k$. 
-When $k=1$, the unfolding can be derived as the composition of tghe following functions
+As said earlier, we proceed by induction on $k$. When $k=1$, unfolding coincides with the basic function
 \begin{align*}
-\ranked{\tmonad \reduce l \Sigma \longrightarrow \shallowterm {\reduce l\tmonad \Sigma}{\tmonad \reduce l\Sigma} \longrightarrow \reduce 1\reduce l \tmonad \Sigma \longrightarrow \reduce l\tmonad \Sigma }
+\ranked{\mathsf{unfold} : \tmonad \reduce l \rSigma \to \shallowterm{\reduce {l} {\tmonad \Sigma}} {\tmonad \reduce l \rSigma}  }
 \end{align*}
-To treat the inductive case, we indroduce a tool that will be useful to analyse the function $\alpha$. For a function $$\alpha: \set{1,\ldots,k} \to \set{1,\ldots,k}$$ define  \emph{its graph} as the directed graph whose set of vertices is $\set{1,\ldots,k}$, and which contains an edge $i\rightarrow j$ if $\alpha(i)=j$. Note that the out-degree of the nodes is $1.$
+We only need to adjust the output type, that is to get rid of the $\ranked{\tmonad \reduce l \rSigma}$ after the ``$\cdot$'' of the shallow term. Fisrt, we lift the basic function 
+\begin{align*}
+\ranked{\composeterm: \tmonad \reduce l \rSigma \to 
+        1 + \shallowterm {\reduce l \rSigma} {\tmonad \reduce l \rSigma}}          
+\end{align*} 
+and the identity function 
+\begin{align*}
+\ranked{ \reduce {l} {\tmonad \Sigma}\to \reduce {l} {\tmonad \Sigma}}          
+\end{align*} 
+to the the shallow combinator. \todo{Je ne sais pas comment finir.}
 
-In the proof of the inductive case, we distinghuish two cases. The first is when the graph of $\alpha$ is not weakly connected.
+Let us treat the inductive case. For that, we indroduce a tool that will be useful to analyse the function $\alpha$. For a function $$\alpha: \set{1,\ldots,k} \to \set{1,\ldots,k}$$ define  \emph{its graph} as the directed graph whose set of vertices is $\set{1,\ldots,k}$, and which contains an edge $i\rightarrow j$ if $\alpha(i)=j$. Note that the out-degree of the nodes is $1.$
 
-The graph of alpha is weakly connected. 
+In the proof of the inductive case, we distinghuish two cases. The first is when the graph of $\alpha$ is not weakly connected. In this case, by monotonicity of $\alpha$, we can find $m\in [1,k[$ such that $\alpha(\set{1,m})\subseteq\set{1,m}$ and $\alpha(\set{m+1,k})\subseteq\set{m+1,k}$. The idea is then to create two copies of the original tree: in the first one we keep only the first $m$ elements of the tensor product of each node, and in the second one we keep the last $k-m$ copies. Then we unfold these terms by applying the induction hypothesis, $m$ and $k-m$ being strictly smaller than $k$, and  finally we gather them to obtain the  unfolding of the original term. \todo{Adapt the name of the combinators.}
+The following derivation allows us to derive the function  
+\begin{align*}
+\ranked{f_1:\tmonad \reduce l \Sigma^k \to \reduce l (\tmonad \Sigma)^m}
+\end{align*}
+which creates a copy of the original term, keeping only the first $m$ elements of the tensor product, then applies the induction hypothesis to the obtained term.
+\begin{align*}
+\begin{prooftree}
+\Infer{0}{\ranked{\Sigma^k\to \Sigma^m\otimes \Sigma^{k-m}}}
+\Hypo{\text{\small Projection}}
+\Infer{1}[]{\ranked{\Sigma^m\otimes \Sigma^{k-m} \to \reduce 1 \Sigma^m}}
+\Infer{2}[$(\circ)$]{\ranked{\Sigma^k \to \reduce 1 \Sigma^m}}
+\Infer{1}[$(\reduce l)$]{\ranked{\reduce l \Sigma^k \to \reduce l \reduce 1 \Sigma^m}}
+\Infer{0}[]{\ranked{\reduce l \reduce 1 \Sigma^m \to \reduce l \Sigma^m}}
+\Infer{2}[$(\circ)$]{\ranked{\reduce l \Sigma^k \to \reduce l \Sigma^m}}
+\Infer{1}[$(\tmonad)$]{\ranked{\tmonad \reduce l \Sigma^k \to \tmonad \reduce l \Sigma^m}}
+\Hypo{\text{\small Induction Hypothesis}}
+\Infer{1}[]{\ranked{\tmonad \reduce l \Sigma^m \to \reduce l (\tmonad \Sigma)^m}}
+\Infer{2}[$(\circ)$]{\ranked{\tmonad \reduce l \Sigma^k \to \reduce l (\tmonad \Sigma)^m}}
+\end{prooftree}
+\end{align*}
+Similarly, we can derive the function
+\begin{align*}
+\ranked{f_2:\tmonad \reduce l \Sigma^k \to \reduce l (\tmonad \Sigma)^{k-m}}
+\end{align*}
+which creates a copy of the original term, keeping only the last $k-m$ elements of the tensor product, then applies the induction hypothesis to the obtained term.
+Finally, we combine $f_1$ and $f_2$ as follows. First we duplicate the original tree using the following combinator:
+\begin{align*}
+\ranked{\tmonad \reduce l \Sigma^k\to \reduce 2 (\tmonad \reduce l \Sigma^k\otimes \tmonad \reduce l \Sigma^k)}
+\end{align*}
+Then we compose it with the following function, which applies $f_1$ to the first copy and $f_2$ to the second one
+\begin{align*}
+\begin{prooftree}
+\Infer{0}[]{\ranked{f_1:\tmonad \reduce l \Sigma^k\to\reduce l (\tmonad \Sigma)^m}}
+\Infer{0}[]{\ranked{ \tmonad \reduce l \Sigma^k\to \reduce l(\tmonad \Sigma)^{k-m}}}
+\Infer{2}[$(\ranked{\otimes})$]{\ranked{\tmonad \reduce l \Sigma^k\otimes \tmonad \reduce l \Sigma^k\to\reduce l(\tmonad  \Sigma)^m\otimes \reduce l(\tmonad  \Sigma)^{k-m}}}
+\Infer{1}[$(\reduce 2)$]{\ranked{\reduce 2 (\tmonad \reduce l \Sigma^k\otimes \tmonad \reduce l \Sigma^k)\to \reduce 2 ( \reduce l (\tmonad  \Sigma)^m\otimes \reduce l (\tmonad \reduce\Sigma)^{k-m})}}
+\end{prooftree}
+\end{align*}
+Finally, we compose the result with the following fucntion 
+\begin{align*}
+\begin{prooftree}
+\Infer{0}[]{\ranked{f_1:\tmonad \reduce l \Sigma^k\to\reduce l (\tmonad \Sigma)^m}}
+\Infer{0}[]{\ranked{ \tmonad \reduce l \Sigma^k\to \reduce l(\tmonad \Sigma)^{k-m}}}
+\Infer{2}[$(\ranked{\otimes})$]{\ranked{\tmonad \reduce l \Sigma^k\otimes \tmonad \reduce l \Sigma^k\to\reduce l(\tmonad  \Sigma)^m\otimes \reduce l(\tmonad  \Sigma)^{k-m}}}
+\Infer{1}[$(\reduce 2)$]{\ranked{ \reduce 2 ( \reduce l (\tmonad  \Sigma)^m\otimes \reduce l (\tmonad \reduce\Sigma)^{k-m})\to \reduce l (\tmonad \Sigma)^k}}
+\end{prooftree}
+\end{align*}
+Now consider the case where the graph of $\alpha$ is weakly connected. 
 
 
 \end{proof}
+%We proceed by induction on $k$. When $k=1$, the unfolding coincides with the basic function 
+%\begin{align*}
+%\ranked{\distrtf : \tmonad \reduce 1 \Sigma \to {\reduce 1 \tmonad \Sigma}}
+%\end{align*}
