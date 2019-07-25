@@ -3,33 +3,125 @@
 \label{sec:homo-unfold}
 
 
----------------------------------------------------------------------------------------------------------------------------------------------------------
-List of functions I need for this proof:
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+I frequently define factroisations by means of fo rational functions. For instance "consider the factorisation where the factors satisfy property P". State a result on that.
+
+
+I list below the functions needed for the proof of the homogenous case. We need to find appropriate names for the functions. Many functions are called unfold, which can be misleading.
+
+We add $\ranked{\bot}$, a ranked set containing a unique element of each arity, to the list of types. 
+$$
+\begin{array}{llll}
+\ranked{\Gamma_1\otimes\Gamma_2} &\ranked{\to \reduce 1 \Gamma_i}&
+\ranked{\Sigma}&\ranked{\to \reduce k\Sigma^k}\\
+\ranked{\reduce k \Sigma \otimes \reduce k \Gamma }&\ranked{\to \reduce k (\Sigma\otimes \Gamma)}&
+\ranked{\reduce k \Sigma }&\ranked{\to \reduce {k+l} \Sigma }\\
+\ranked{\reduce k\Sigma }&\ranked{\to \reduce {k-l} {(\Sigma\cdot(0+1))}}&
+\ranked{\reduce k (\Gamma\otimes \Sigma) }&\ranked{\to \reduce k (\reduce k \Gamma \otimes \Sigma)}\\
+\ranked{\Gamma }&\ranked{\to \Gamma\cdot 1}& \ranked{\Gamma\cdot 1 }&\ranked{\to \Gamma}\\
+\ranked{\Sigma}&\ranked{\to\bot}&
+\ranked{\bot }&\ranked{\to \tmonad(0+2)}\\
+\ranked{\tmonad(\Gamma+\bot)}&\ranked{\to \tmonad\Gamma+\bot} & \text{Error raising}
+\end{array}$$
 \begin{align*}
-\ranked{\Gamma_1\otimes\Gamma_2 \to \reduce 1 \Gamma_i}\\
-\ranked{\Sigma\to \reduce 2 (\Sigma\otimes \Sigma)}\\
-\ranked{\reduce k \Sigma \otimes \reduce k \Gamma \to \reduce k (\Sigma\otimes \Gamma)}\\
-\ranked{\reduce k \Sigma \to \reduce {k+l} \Sigma }\\
-\ranked{\reduce k\Sigma \to \reduce {k-l} {(\Sigma\cdot(0+1))}}\\
-\ranked{\reduce k (\Gamma\otimes \Sigma) \to \reduce k (\reduce k \Gamma \otimes \Sigma)}\\
-\ranked{\Gamma \leftrightarrow \Gamma\cdot 1}\\
 \ranked{\reduce k \Gamma\cdot(\Sigma_1+\Sigma_2)\to \reduce k(\reduce k \Gamma\cdot(\Sigma_1+\Sigma_2))}
 \end{align*}
-I need operations transforming tensors and shallow terms into terms and vice et versa.
-I need associativity of $\cdot$ and $\otimes$.
-I need also to derive this:
+\begin{center}
+\includegraphics[scale=.05]{MyPicBasicFun1.jpg}
+\end{center}
+I need operations transforming tensors and into (shallow) terms.
 \begin{align*}
-\ranked{\reduce k \tmonad\Sigma\cdot\Gamma\to \reduce k \tmonad\Sigma}
+\ranked{\Gamma\otimes \Delta \to 2\cdot(\Gamma+\Delta)}
 \end{align*}
-To derive t, I will need the following derivable function
+I need associativity of $\cdot$ and $\otimes$.
+\begin{align*}
+\ranked{\Gamma\cdot(\Delta\cdot\Sigma) \leftrightarrow (\Gamma\cdot\Delta)\cdot\Sigma}\\
+\ranked{\Gamma\otimes(\Delta\otimes\Sigma) \leftrightarrow (\Gamma\otimes\Delta)\otimes\Sigma}
+\end{align*}
+
+Now, some useful derivable functions.
+\begin{example}\label{ex:PermuteScopeShallowFold}
+The function
 \begin{align*}
 \ranked{\reduce k \Sigma\cdot \Gamma\to \reduce k (\Sigma\cdot \Gamma)}
 \end{align*}
-We need also a "partial shallow unfold"
+which puts shallow composition inside the scope of the fold is derivable. Indeed, it is the composition of the following functions:
 \begin{align*}
-\ranked{\reduce k (\Sigma\cdot (1+\Gamma^k))\to \reduce k (\Sigma\cdot(1+\Gamma))}
-\end{align*}
+\ranked{\reduce k \Sigma\cdot \Gamma\to \reduce k \Sigma\cdot \reduce k\Gamma^k\to \reduce k(\reduce k \Sigma\cdot \Gamma^k)\to \reduce k (\Sigma\cdot \Gamma)}
+\end{align*} 
+\end{example}
 
+One annoying thing about the unfold function and the function that reduces the degree of the fold
+\begin{align*}
+\ranked{\tmonad \reduce k \Sigma \to \reduce k \tmonad \Sigma\cdot  \tmonad \reduce k \Sigma \qquad \reduce k\Sigma \to \reduce {k-l} {(\Sigma\cdot(0+1))}}
+ \end{align*}
+ is that they append a type after a $\cdot$. In our futur developments, we will need to derive functions of the form
+ \begin{align*}
+ \ranked{\Gamma\cdot\Delta\to \Gamma}
+ \end{align*}
+ to get rid of these appended types. Obviously, this function is not derivable for any $\rGamma$ and $\rDelta$. We show in the following some situations where it becoms derivable.
+ 
+ \begin{example}
+ Supposethat $\rSigma$ is a ranked set containg a binary and a nullary element. We can derive a function
+ \begin{align*}
+\ranked{\tmonad\Sigma\cdot\Gamma\to \tmonad\Sigma}
+ \end{align*}
+ as the composition of the following functions:
+ \begin{align*}
+\ranked{\tmonad\Sigma\cdot\Gamma\to \tmonad\Sigma\cdot\bot\to\tmonad\Sigma\cdot\tmonad(0+2)\to \tmonad(\Sigma+0+2) \to \tmonad\Sigma} 
+ \end{align*}
+
+Suppose that $\rGamma, \rDelta$ are two types shuch that we can derive a function of type 
+ \begin{align*}
+ \ranked{\Gamma\cdot\Delta\to \Gamma}
+ \end{align*}
+Then we can also derive a function of type 
+\begin{align*}
+\ranked{\reduce k \Gamma\cdot\Delta\to \reduce k \Gamma}
+\end{align*}
+using the following derivation. 
+\begin{align*}
+\ranked{\reduce k \Gamma\cdot\Delta\xrightarrow{Ex.~\ref{ex:PermuteScopeShallowFold}} \reduce k (\Gamma\cdot\Delta) \to \reduce k \Gamma}
+\end{align*}
+Similarly, we can derive a function of type
+\begin{align*}
+\ranked{ \Gamma^k\cdot\Delta\to \Gamma^k}
+\end{align*}
+using the following derivation. 
+\begin{align*}
+\ranked{\Gamma^k\cdot\Delta\to (\Gamma\cdot\Delta)^k \to \Gamma^k}
+\end{align*}
+Using these functions, when we will want to reduce the degree of a fold of a type, $\ranked{\tmonad\Sigma}$, $\ranked{(\tmonad\Sigma)^k}$, etc, we use the following function:
+\begin{align*}
+\ranked{\reduce l\tmonad \Sigma\to \reduce {l-m}(\tmonad \Sigma)\cdot(0+1)\to \reduce {l-m}\tmonad \Sigma }\\
+\ranked{\reduce l(\tmonad \Sigma)^k\to \reduce {l-m}(\tmonad \Sigma)^m\cdot(0+1)\to \reduce {l-m}(\tmonad \Sigma)^k }
+\end{align*} 
+\end{example}
+
+
+\begin{example}[Partial shallow unfold]~\label{ex:PartialShallowUnfold}
+We need a "partial shallow unfold"
+\begin{align*}
+\ranked{\reduce k \Sigma\cdot (1+\Gamma^k)\to \reduce k (\Sigma\cdot(1+\Gamma))}
+\end{align*}
+\begin{center}
+\includegraphics[scale=.09]{MyPicPartialShallowUnfold.jpg}
+\end{center}
+This function can be derived as follows. First we lift the functions
+\begin{align*}
+\ranked{1\to \reduce k 1^k}\qquad \text{ and } \qquad\ranked{\Gamma^k\to \reduce 1\Gamma^k}
+\end{align*}
+obtaining the function
+\begin{align*}
+\ranked{\reduce k \Sigma\cdot (1+\Gamma^k)\to \reduce k \Sigma\cdot (\reduce k 1^k+\reduce k\Gamma^k) }
+\end{align*}
+We compose the result with the following  (series of) injections
+\begin{align*}
+\ranked{\reduce k \Sigma\cdot (\reduce k 1^k+\reduce k\Gamma^k)\to \reduce k \Sigma\cdot \reduce k (1+\Gamma)^k}
+\end{align*}
+Finally we permute the fold with the shallow product, then we apply the shallow unfold to obtain the result.
+\end{example}
 ---------------------------------------------------------------------------------------------------------------------------------------------------------
 \bigskip
 
@@ -63,19 +155,52 @@ There is a derivable function
 \begin{align*}
 \ranked{f:\tmonad \mati k \Sigma \to \reduce k \tmonad \mati k \Sigma}
 \end{align*}
-satisfying the follwoing conditions:
+satisfying the following conditions:
 \begin{itemize}
-\item The function $f$ preserves the unfolding. More precisely:
+\item It preserves the unfolding. More precisely the composition of the following functions
 \begin{align*}
-\ranked{\reduce k(\mathsf{Unfold})\circ f}=\ranked{\mathsf{Unfold}}
+\ranked{\tmonad \mati k \Sigma \xrightarrow{f} \reduce k \tmonad \mati k \Sigma \xrightarrow{\reduce k (Unfold)} \reduce k \mati k {(\tmonad\Sigma)} \to \reduce {k^2}  {(\tmonad\Sigma)}^k\to  \mati k {(\tmonad\Sigma)}}
 \end{align*} 
-\item It preserves $\alpha$-homogenuity. That is, if $t\in\ranked{\tmonad\mati k \rSigma}$ is $\alpha$-homogeneous, then so is $\overline{f(t)}$.
-\item  For every term $t\in \ranked{\tmonad\mati k \rSigma}$, the domain of the external twists of $\overline{f(t)}$ is 1.
+computes the unfolding.
+\item It preserves $\alpha$-homogenuity. That is, if $t\in\ranked{\tmonad\mati k \rSigma}$ is $\alpha$-homogeneous, so is $\overline{\ranked{f}(t)}$.
+\item  For every term $t\in \ranked{\tmonad\mati k \rSigma}$, the domain of the external twists of $\overline{\ranked{f}(t)}$ is 1.
 \end{itemize}
-We call $f$ an external unfold function.
+We call $\ranked{f}$ an external unfold function.
 \end{lemma}
 \begin{proof}
-Some combinator is missing to do this.
+We start by lifting to terms the following basic function 
+\begin{align*}
+\ranked{\mati k \Sigma  \to \mati k \Sigma \cdot1}
+\end{align*}
+After embedding the shalow terms into terms and performing a flatening, we get a term in $\ranked{\tmonad(\Sigma+1)}$. After that, we apply the function
+\begin{align*}
+\ranked{\tmonad(\mati k \Sigma+1)\to \tmonad(\mati k\Sigma+1+1)}
+\end{align*}
+which sends every node labeled by $1$ to the first copy of $1$ in the output if it is directly connected to the output, and to the second copy if not. This function is derivable as it can be implemented by an fo rational function. We illustrate this by the following figure where the red nodes denote the first copy of $1$ and the blue nodes denote the second one
+\begin{center}
+\includegraphics[scale=.1]{MyPicLabel1.jpg}
+\end{center}  
+After that, we will regroup each $\ranked{\mati k \Sigma}$ node with its children of type $\ranked{1+1}$. Such factorisation is of type
+\begin{align*}
+\ranked{\tmonad(\mati k \Sigma+1+1)\to \tmonad(\tmonad(\mati k \Sigma+1+1))}
+\end{align*} 
+and can be easily implemented using an fo rational function.
+But actually we want to see in the type that the formed factors are of type $\ranked{\Gamma\cdot(1+1)}$, so that we can apply the basic functions of the shallow terms. For that, we decompose $\ranked{\tmonad(\mati k \Sigma+1+1)}$ into $\ranked{\mati k \Sigma\cdot(1+1)+\bot}$ by using the decomposition basic function, and the function 
+that sends every type to $\bot$ to collect the ``garbage'' types.
+Our term is now of type $\ranked{\tmonad(\mati k \Sigma\cdot(1+1)+\bot)}$.
+Now, we lift the basic function
+\begin{align*}
+\ranked{\mati k \Sigma\cdot(1+1)\to \reduce k(\mati k \Sigma\cdot(1+1))}
+\end{align*}
+obtaining the following term of type $\ranked{\tmonad(\reduce k(\mati k \Sigma\cdot(1+1))+\bot)}$
+\begin{center}
+\includegraphics[scale=.1]{MyPic26.jpg}
+\end{center}  
+When we lift the functions $\ranked{1+1\to 1}$ and $\ranked{\mati k \Sigma\cdot 1\to \mati k \Sigma}$, we get a term in $\ranked{\tmonad(\reduce k \mati k \Sigma+\bot)}$ to which we apply the raise error function, followed by an unfolding, then by the function of Example~\ref{ex:ReduceDegreeRecoverType} which gets rid of the type after the $\cdot$.
+\begin{align*}
+\ranked{\tmonad(\reduce k \mati k \Sigma+\bot)\to \tmonad\reduce k \mati k \Sigma+\bot\to (\reduce k \tmonad\mati k \Sigma)\cdot\tmonad\reduce k \mati k \Sigma +\bot\to \reduce k \tmonad\mati k \Sigma+\bot }
+\end{align*}
+To obtain the desired type  we embed $\bot$ into $\ranked{\reduce k \tmonad\mati k \Sigma}$ using the fact that $\rSigma$ contains a nullary and a binary element. 
 \end{proof}
 \begin{proof}[Proof of Lemma~\ref{lem:homo-twist}]
 We proceed by induction on $k$. When $k=1$, the unfolding coincides with the basic function 
@@ -177,7 +302,7 @@ The function of step 1 is the function $\ranked{f}$ where $\ranked{\Gamma}$ is t
 
 
 
-Now consider that the function
+Now consider the function
 \begin{align*}
 \ranked{g:\tmonad (\reduce k \Gamma \otimes \Sigma) \to \tmonad \reduce {k-1} (\Gamma\cdot(1+\Sigma))\otimes \Sigma}
 \end{align*}
@@ -272,3 +397,17 @@ After that, we apply some flattening to get the desired term. However, we still 
 %\ranked{ \reduce {l} {\tmonad \Sigma}\to \reduce {l} {\tmonad \Sigma}}          
 %\end{align*} 
 %to the the shallow combinator. \todo{Je ne sais pas comment finir.}
+%\begin{example}\label{ex:ReduceDegreeRecoverType}
+%When we reduce the degree of a fold, we append a $\cdot(0+1)$, to the input type which is annoying since we lose the type. However, for certain types, we can overcome this problem. For instance, we can derive this, if $\rSigma$ contains a nullary symbol:
+%\begin{align*}
+%\ranked{\reduce k \tmonad \Sigma\to \reduce {k-l} \tmonad\Sigma }
+%\end{align*}
+%Using distributivity of $\cdot$ over $\otimes$, we can also derive this
+%\begin{align*}
+%\ranked{\reduce k (\tmonad \Sigma)^m\to \reduce {k-l} (\tmonad\Sigma)^m}
+%\end{align*}
+%\end{example}
+%
+%\begin{example}
+%Similarly, the unfold operation appends
+%\end{example}
