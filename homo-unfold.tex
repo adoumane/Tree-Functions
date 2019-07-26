@@ -3,9 +3,7 @@
 \label{sec:homo-unfold}
 
 
--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-I frequently define factroisations by means of fo rational functions. For instance "consider the factorisation where the factors satisfy property P". State a result on that.
+I frequently define factorisations by means of fo rational functions. For instance "consider the factorisation where the factors satisfy property P". State a result on that.
 
 
 I list below the functions needed for the proof of the homogenous case. We need to find appropriate names for the functions. Many functions are called unfold, which can be misleading.
@@ -122,8 +120,10 @@ We compose the result with the following  (series of) injections
 \end{align*}
 Finally we permute the fold with the shallow product, then we apply the shallow unfold to obtain the result.
 \end{example}
----------------------------------------------------------------------------------------------------------------------------------------------------------
-\bigskip
+
+
+\subsubsection{Term unfolding for $\alpha$-homogeneous inputs}
+\label{subsec:alpha-homo-unfold}
 
 For a monotone function 
 \begin{align*}
@@ -384,63 +384,72 @@ which result into a term of type $\ranked{\tmonad(\reduce k\Gamma\cdot(1+\Sigma)
 After that, we apply some flattening to get the desired term. However, we still dont have the right type. I need either a bottom, or something else to handel the garbage.
 \end{proof}
 
-%We will show this lemma by induction on $k$. For that, we need to strengthen the invariant of the induction: we will show that the unfolding of $\alpha$-homogenous terms in $\ranked{\tmonad \reduce l\rSigma^k}$ is derivable. Note that Lemma~\ref{lem:homo-twist} is the particular case of this statement where $k=l$. To state this strengthening more precisely, we need to generalize the definition of unfolding and $\alpha$-homogenuity to $\ranked{\tmonad \reduce l\rSigma^k}$ terms.
-%
-%
-%
-%If $k, l\in \set{2,3,\dots}$ such that $k\leq l$, we can embed the elements of $\ranked{\reduce l \rSigma^k}$ in 
-%$\ranked{\mati l {(\rSigma+\set{0})}}$ by adding $l-k$ copies of the nullary element $0$ to the tensor product, as illustrated below:
-%\begin{center}
-%
-%\end{center}  
-%Hence, we can talk about the twist of an element of $\ranked{\reduce l \Sigma^k}$, and we can embed every element of $\ranked{\tmonad \reduce l \Sigma^k}$  into $\ranked{\tmonad \mati l \Sigma}$.
-%
-%We define the unfolding of a term $t$ in $\ranked{\tmonad \reduce l \Sigma^k}$ as its unfolding when seen as an element of $\ranked{\tmonad \mati l \Sigma}$. Note that the unfolding of a element of $\ranked{\tmonad \reduce l \Sigma^k}$ is an element of $\ranked{\reduce l(\tmonad (\Sigma+\set{0}))^k}$.
-%
-%We will be interested in a particular case of terms: the \emph{coherent} ones. We say that a term $t\in \ranked{\tmonad \reduce l \Sigma^k}$ is \emph{coherent} if the twist of every internal branche of $t$ seen as an element of $\ranked{\tmonad \mati l \Sigma}$ has $\set{1,\ldots,k}$ as domain. Note that the unfolding of a coherent element of $\ranked{\tmonad \reduce l \Sigma^k}$ is an element of $\ranked{\reduce l(\tmonad \Sigma)^k}$.
-%
-%
-%For a monotone function 
-%\begin{align*}
-%\alpha: \set{1,\ldots,k} \to \set{1,\ldots,k}
-%\end{align*}
-%we say that a term $ t \in\ranked{\tmonad\reduce l \Sigma^k}$ is $\alpha$-homogeneous if  it is coherent and if all internal branches have as twist the function $\beta$ such that
-%\begin{align*}
-%\beta|_{\set{1,\dots,k}}=\alpha.
-%\end{align*}
-%Now we are ready to state the generalisation of our lemma.
-%\begin{lemma}
-% Let $k, l \in \set{1,2,\ldots}$ and let $\alpha : \set{1,\ldots,k} \to \set{1,\ldots,k}$ be a monotone function. There is a  derivable operation 
-%    \begin{align*}
-%        \ranked{f : \tmonad \reduce l \rSigma^k \to \reduce {l} {(\tmonad \Sigma)}^k }
-%        \end{align*}      
-%which coincides with term unfolding for all inputs which are $\alpha$-homogeneous.
-%\end{lemma}
-%As said earlier, we proceed by induction on $k$. When $k=1$, unfolding coincides with the basic function
-%\begin{align*}
-%\ranked{\mathsf{unfold} : \tmonad \reduce l \rSigma \to \shallowterm{\reduce {l} {\tmonad \Sigma}} {\tmonad \reduce l \rSigma}  }
-%\end{align*}
-%We only need to adjust the output type, that is to get rid of the $\ranked{\tmonad \reduce l \rSigma}$ after the ``$\cdot$'' of the shallow term. Fisrt, we lift the basic function 
-%\begin{align*}
-%\ranked{\composeterm: \tmonad \reduce l \rSigma \to 
-%        1 + \shallowterm {\reduce l \rSigma} {\tmonad \reduce l \rSigma}}          
-%\end{align*} 
-%and the identity function 
-%\begin{align*}
-%\ranked{ \reduce {l} {\tmonad \Sigma}\to \reduce {l} {\tmonad \Sigma}}          
-%\end{align*} 
-%to the the shallow combinator. \todo{Je ne sais pas comment finir.}
-%\begin{example}\label{ex:ReduceDegreeRecoverType}
-%When we reduce the degree of a fold, we append a $\cdot(0+1)$, to the input type which is annoying since we lose the type. However, for certain types, we can overcome this problem. For instance, we can derive this, if $\rSigma$ contains a nullary symbol:
-%\begin{align*}
-%\ranked{\reduce k \tmonad \Sigma\to \reduce {k-l} \tmonad\Sigma }
-%\end{align*}
-%Using distributivity of $\cdot$ over $\otimes$, we can also derive this
-%\begin{align*}
-%\ranked{\reduce k (\tmonad \Sigma)^m\to \reduce {k-l} (\tmonad\Sigma)^m}
-%\end{align*}
-%\end{example}
-%
-%\begin{example}
-%Similarly, the unfold operation appends
-%\end{example}
+
+\subsubsection{Term unfolding for homogeneous inputs}
+\label{subsec:something-homo-unfold}
+we say that a term $ t \in \tmonad \mati k \rSigma$ is homogeneous if for every two internal branches $b_1, b_2$ having twists $\alpha_1, \alpha_2$ respectively and such that $b_2$ is a child of $b_1$, we have that
+\begin{align*}
+\alpha_1\alpha_2=\alpha_1
+\end{align*}
+
+Therest of this section is devoted to proving the following lemma. 
+
+\begin{lemma}\label{lem:homo-2-twist}
+    Let $k \in \set{1,2,\ldots}$. There is a derivable operation 
+    \begin{align*}
+        \ranked{f : \tmonad \mati k \rSigma \to \mati k {(\tmonad \Sigma)} }
+        \end{align*}      
+which coincides with term unfolding for all inputs which are homogeneous.
+\end{lemma}
+To perform the unfolding of homogenous inputs, we need the following function
+\begin{align*}
+\ranked{\reduce k \Sigma^l \to \reduce 1 (\reduce k \Sigma\cdot(0+1))^l }
+\end{align*}
+which pluggs $0$ to the folds shared by two distinct elements of the tensor product
+\begin{center}
+\includegraphics[scale=.07]{MyPic34.jpg}
+\end{center}
+
+\begin{lemma}
+Let
+\begin{align*}
+\alpha:\set{1,\dots,k}\to\set{1,\dots,k}\qquad
+\beta:\set{1,\dots,k}\to\set{1,\dots,k}
+\end{align*} 
+be two monotone functions such that
+\begin{align*}
+\alpha\beta=\alpha
+\end{align*}
+\begin{itemize}
+\item If the graph of $\alpha$ is not weakly connected, then so is the graph of $\beta$. 
+\item Moreover, if $m\in \set{1,\dots, k}$ is such that 
+\begin{align*}
+\alpha\set{1,\dots,m}\subseteq \set{1,\dots,m} \qquad \text{and}\qquad 
+\alpha\set{m+1,\dots,k}\subseteq \set{m+1,\dots,k}
+\end{align*}
+then we have also 
+\begin{align*}
+\beta\set{1,\dots,m}\subseteq \set{1,\dots,m} \qquad \text{and}\qquad 
+\beta\set{m+1,\dots,k}\subseteq \set{m+1,\dots,k}
+\end{align*}
+\item If the graphs of $\alpha$ and $\beta$ are both weakly connected, then the image of $\alpha$ and the image of $\beta$ are both singletons.
+\end{itemize}
+\end{lemma}
+
+\begin{proof}[Proof of Lemma~\ref{lem:homo-2-twist}]
+\begin{center}
+\includegraphics[scale=.07]{MyPic35.jpg}
+\end{center} 
+\begin{center}
+\includegraphics[scale=.07]{MyPic36.jpg}
+\end{center} 
+\begin{center}
+\includegraphics[scale=.07]{MyPic37.jpg}
+\end{center} 
+\begin{center}
+\includegraphics[scale=.07]{MyPic38.jpg}
+\end{center} 
+\begin{center}
+\includegraphics[scale=.07]{MyPic39.jpg}
+\end{center} 
+\end{proof}
