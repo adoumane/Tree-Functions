@@ -30,7 +30,7 @@ $$
 \begin{center}
 \includegraphics[scale=.05]{MyPicBasicFun1.jpg}
 \end{center}
-I need operations transforming tensors and into (shallow) terms.
+I need operations transforming tensors into (shallow) terms.
 \begin{align*}
 \ranked{\Gamma\otimes \Delta \to 2\cdot(\Gamma+\Delta)}
 \end{align*}
@@ -63,7 +63,7 @@ One annoying thing about the unfold function and the function that reduces the d
  to get rid of these appended types. Obviously, this function is not derivable for any $\rGamma$ and $\rDelta$. We show in the following some situations where it becoms derivable.
  
  \begin{example}
- Supposethat $\rSigma$ is a ranked set containg a binary and a nullary element. We can derive a function
+ Suppose that $\rSigma$ is a ranked set containg a binary and a nullary element. We can derive a function
  \begin{align*}
 \ranked{\tmonad\Sigma\cdot\Gamma\to \tmonad\Sigma}
  \end{align*}
@@ -92,10 +92,10 @@ using the following derivation.
 \begin{align*}
 \ranked{\Gamma^k\cdot\Delta\to (\Gamma\cdot\Delta)^k \to \Gamma^k}
 \end{align*}
-Using these functions, when we will want to reduce the degree of a fold of a type, $\ranked{\tmonad\Sigma}$, $\ranked{(\tmonad\Sigma)^k}$, etc, we use the following function:
+Using these functions, when we will want to reduce the degree of a fold of a type $\ranked{\tmonad\Sigma}$, $\ranked{(\tmonad\Sigma)^k}$, etc, we will use the following functions instead of the basic ones:
 \begin{align*}
-\ranked{\reduce l\tmonad \Sigma\to \reduce {l-m}(\tmonad \Sigma)\cdot(0+1)\to \reduce {l-m}\tmonad \Sigma }\\
-\ranked{\reduce l(\tmonad \Sigma)^k\to \reduce {l-m}(\tmonad \Sigma)^m\cdot(0+1)\to \reduce {l-m}(\tmonad \Sigma)^k }
+\ranked{\reduce l\tmonad \Sigma\to \reduce {l-m}(\tmonad \Sigma\cdot(0+1))\to \reduce {l-m}\tmonad \Sigma }\\
+\ranked{\reduce l(\tmonad \Sigma)^k\to \reduce {l-m}((\tmonad \Sigma)^k\cdot(0+1))\to \reduce {l-m}(\tmonad \Sigma)^k }
 \end{align*} 
 \end{example}
 
@@ -110,7 +110,7 @@ We need a "partial shallow unfold"
 \end{center}
 This function can be derived as follows. First we lift the functions
 \begin{align*}
-\ranked{1\to \reduce k 1^k}\qquad \text{ and } \qquad\ranked{\Gamma^k\to \reduce 1\Gamma^k}
+\ranked{1\to \reduce k 1^k}\qquad \text{ and } \qquad\ranked{\Gamma^k\to \reduce k\Gamma^k}
 \end{align*}
 obtaining the function
 \begin{align*}
@@ -157,22 +157,24 @@ There is a derivable function
 \end{align*}
 satisfying the following conditions:
 \begin{itemize}
-\item It preserves the unfolding. More precisely the composition of the following functions
+\item It preserves the unfolding. More precisely the following diagram commutes
 \begin{align*}
-\ranked{\tmonad \mati k \Sigma \xrightarrow{f} \reduce k \tmonad \mati k \Sigma \xrightarrow{\reduce k (Unfold)} \reduce k \mati k {(\tmonad\Sigma)} \to \reduce {k^2}  {(\tmonad\Sigma)}^k\to  \mati k {(\tmonad\Sigma)}}
-\end{align*} 
-computes the unfolding.
+\xymatrix{
+\ar[r]^{\ranked{f}}     \ranked{\tmonad \mati k \Sigma}\ar[d]_{\ranked{Unfold}}& \ranked{\reduce k \tmonad \mati k \Sigma}\ar[d]^{\ranked{\reduce k(Unfold)}}\\
+     \ranked{\mati k {(\tmonad\Sigma)}}& \ar[l]^{\ranked{reduce\circ merge}}\ranked{\reduce k \mati k {(\tmonad\Sigma)}}
+}
+\end{align*}
 \item It preserves $\alpha$-homogenuity. That is, if $t\in\ranked{\tmonad\mati k \rSigma}$ is $\alpha$-homogeneous, so is $\overline{\ranked{f}(t)}$.
 \item  For every term $t\in \ranked{\tmonad\mati k \rSigma}$, the domain of the external twists of $\overline{\ranked{f}(t)}$ is 1.
 \end{itemize}
 We call $\ranked{f}$ an external unfold function.
 \end{lemma}
 \begin{proof}
-We start by lifting to terms the following basic function 
+Let us derive a function $f$ satisfying the conditions of the lemma. We start by lifting to terms the following basic function 
 \begin{align*}
 \ranked{\mati k \Sigma  \to \mati k \Sigma \cdot1}
 \end{align*}
-After embedding the shalow terms into terms and performing a flatening, we get a term in $\ranked{\tmonad(\Sigma+1)}$. After that, we apply the function
+After embedding the shalow terms into terms and performing a flatening, we get a term in $\ranked{\tmonad(\mati k\Sigma+1)}$. After that, we apply the function
 \begin{align*}
 \ranked{\tmonad(\mati k \Sigma+1)\to \tmonad(\mati k\Sigma+1+1)}
 \end{align*}
@@ -185,8 +187,8 @@ After that, we will regroup each $\ranked{\mati k \Sigma}$ node with its childre
 \ranked{\tmonad(\mati k \Sigma+1+1)\to \tmonad(\tmonad(\mati k \Sigma+1+1))}
 \end{align*} 
 and can be easily implemented using an fo rational function.
-But actually we want to see in the type that the formed factors are of type $\ranked{\Gamma\cdot(1+1)}$, so that we can apply the basic functions of the shallow terms. For that, we decompose $\ranked{\tmonad(\mati k \Sigma+1+1)}$ into $\ranked{\mati k \Sigma\cdot(1+1)+\bot}$ by using the decomposition basic function, and the function 
-that sends every type to $\bot$ to collect the ``garbage'' types.
+But actually we want to see in the type that the formed factors are of type $\ranked{\mati k\Sigma\cdot(1+1)}$, so that we can apply the basic functions of the shallow terms. For that, we decompose $\ranked{\tmonad(\mati k \Sigma+1+1)}$ into $\ranked{\mati k \Sigma\cdot(1+1)+\bot}$ using the decomposition basic function, and the function 
+that sends every type to $\ranked{\bot}$ to collect the ``garbage'' types.
 Our term is now of type $\ranked{\tmonad(\mati k \Sigma\cdot(1+1)+\bot)}$.
 Now, we lift the basic function
 \begin{align*}
@@ -200,7 +202,9 @@ When we lift the functions $\ranked{1+1\to 1}$ and $\ranked{\mati k \Sigma\cdot 
 \begin{align*}
 \ranked{\tmonad(\reduce k \mati k \Sigma+\bot)\to \tmonad\reduce k \mati k \Sigma+\bot\to (\reduce k \tmonad\mati k \Sigma)\cdot\tmonad\reduce k \mati k \Sigma +\bot\to \reduce k \tmonad\mati k \Sigma+\bot }
 \end{align*}
-To obtain the desired type  we embed $\bot$ into $\ranked{\reduce k \tmonad\mati k \Sigma}$ using the fact that $\rSigma$ contains a nullary and a binary element. 
+To obtain the desired type  we embed $\ranked{\bot}$ into $\ranked{\reduce k \tmonad\mati k \Sigma}$ using the fact that $\rSigma$ contains a nullary and a binary element. 
+
+It is not difficult to see that the obtained function satisfies the conditions of the lemma.
 \end{proof}
 \begin{proof}[Proof of Lemma~\ref{lem:homo-twist}]
 We proceed by induction on $k$. When $k=1$, the unfolding coincides with the basic function 
@@ -213,7 +217,19 @@ Let us treat the inductive case. For that, we indroduce a tool that will be usef
 In the proof of the inductive case, we distinghuish two cases. The first is when the graph of $\alpha$ is not weakly connected. In this case, by monotonicity of $\alpha$, we can find $m\in \set{1,k-1}$ such that $\alpha(\set{1,m})\subseteq\set{1,m}$ and $\alpha(\set{m+1,k})\subseteq\set{m+1,k}$. The idea is then to create two copies of the original tree: in the first one we keep only the first $m$ elements of the tensor product of each node, and in the second one we keep the last $k-m$ copies. Then we unfold these terms by applying the induction hypothesis, and  finally we gather them to obtain the  unfolding of the original term. 
 
 \smallskip
-To implement these ideas, we start by unfolding the external twists, using the function from Lemma~\ref{lem:unfold-external-twist}. This way, the domain of every external twist has size at most one,  hence it cannot be shared by the two disconnected components of the domain of $\alpha$.
+To illustrate this case, we consider the following function $\alpha$, whose graph is shown below
+\begin{center}
+\includegraphics[scale=.07]{MyPic27.jpg}
+\end{center}
+The graph of $\alpha$ is not weakly connected: it contains two weakly connected componenets, $\set{1,2}$ and $\set{3}$.
+Consider the following $\alpha$-homogeneous terms $t$ of $\tmonad \mati k \rSigma$ which will be our running example in the not weakly connected case of the proof. We coloured in blue the elements of the first weakly connected part of the graph of $\alpha$ and in green the second part.
+\begin{center}
+\includegraphics[scale=.07]{MyPic28.jpg}
+\end{center}
+Let us now implement the ideas we discussed above. We start by unfolding the external twists, using the function from Lemma~\ref{lem:unfold-external-twist}. This way, the domain of every external twist has size at most one,  hence it cannot be shared by the two disconnected components of the domain of $\alpha$. Our running example becomes like this:
+\begin{center}
+\includegraphics[scale=.07]{MyPic29.jpg}
+\end{center}
 Then, we duplicate the input term using the basic function 
 \begin{align*}
 \ranked{\tmonad \mati k \Sigma\to \reduce 2 (\tmonad \mati k \Sigma\otimes \tmonad \mati k \Sigma)}
@@ -222,7 +238,18 @@ To the first copy, we apply the function
 \begin{align*}
 \ranked{f_1:\tmonad \mati k \Sigma \to \mati m {(\tmonad \Sigma)}}
 \end{align*}
-which keeps only the first $m$ elements of the tensor product, then applies the induction hypothesis to the obtained term. The function $f_1$ can be derived as follows. First, we consider the function which keeps only the first $m$ components of the tensor, obtained as the composition of the following tree functions:
+which keeps only the first $m$ elements of the tensor product, then applies the induction hypothesis to the obtained term.
+To the second copy, we apply the function 
+\begin{align*}
+\ranked{f_2:\tmonad \mati k \Sigma \to \mati {k-m} {(\tmonad \Sigma)}}
+\end{align*}
+which keeps only the last $k-m$ elements of the tensor product, then applies the induction hypothesis to the obtained term.
+
+Here is the effect of the functions $f_1$ and $f_2$ on our example
+\begin{center}
+\includegraphics[scale=.15]{MyPic30.jpg}
+\end{center}
+ The function $f_1$ can be derived as follows. First, we consider the function which keeps only the first $m$ components of the tensor, obtained as the composition of the following tree functions:
 \begin{align*}
 \begin{prooftree}
 \Hypo{\overbrace{\ranked{\mati k \Sigma \to \reduce k \reduce 1 \Sigma^m}}^{\substack{\text{Lift the projection on the first}\\\text{$m$ elements of the tensor to $\reduce k$}}}}
@@ -237,11 +264,6 @@ We lif this function to terms, then we compose it with the following unfolding f
 \end{align*}
 Since $\rSigma$ contains a nullary element, we can embed the terms of  $\ranked{\tmonad (\Sigma\cdot (1+0))}$ into those of $\ranked{\tmonad \Sigma}$, obtaining finally the function $f_1$.
 
-Similarly, we can derive the function
-\begin{align*}
-\ranked{f_2:\tmonad \mati k \Sigma \to \mati {k-m} {(\tmonad \Sigma)}}
-\end{align*}
-which keeps only the last $k-m$ elements of the tensor product, then applies the induction hypothesis to the obtained term.
 
 When we apply $f_1$ and $f_2$ to the two copies of the original term, we get a term of type 
 \begin{align*}
@@ -251,19 +273,30 @@ Now, we need to get the fold outsid the tensor product. For that, we lift both $
 \begin{align*}
 \ranked{\reduce k (\tmonad \Sigma)^m\otimes\reduce k (\tmonad \Sigma)^{k-m}\to \reduce k (\tmonad \Sigma)^k}
 \end{align*}
-Then we merge the two  folds $\reduce 2$ and $\reduce k$ into $\reduce {2k}$. After these operations, we get the desired term, but not with the desired type (the type we get is $\ranked{\reduce {2k} (\tmonad\Sigma)^k}$. To get the right type which is $\ranked{\mati k {(\tmonad\Sigma)}}$, we apply the following function wich reducs the degree of the fold
+Then we merge the two  folds $\reduce 2$ and $\reduce k$ into $\reduce {2k}$. After these operations, we get the desired term, but not with the desired type (the type we get is $\ranked{\reduce {2k} (\tmonad\Sigma)^k}$). To get the right type, which is $\ranked{\mati k {(\tmonad\Sigma)}}$, we apply the  function wich reducs the degree of the fold
 \begin{align*}
-\ranked{\reduce {2k} (\tmonad \Sigma)^k \to \reduce {k} (\tmonad \Sigma\cdot(0+1))^k}
+\ranked{\reduce {2k} (\tmonad \Sigma)^k \to \reduce {k} (\tmonad \Sigma)^k}
  \end{align*}
-then we embed the terms of $\ranked{\tmonad \Sigma\cdot(0+1)}$ into $\ranked{\tmonad \Sigma}$ using, as we did earlier, the fact that $\rSigma$ contains a nullary element, then getting the type $\ranked{\mati k {(\tmonad\Sigma)}}$.
+ The term we get for our example is the following, which is the unfloding of the original term
+ \begin{center}
+ \includegraphics[scale=.08]{MyPic31.jpg}
+ \end{center}
 
 \medskip
 Now consider the case where the graph of $\alpha$ is weakly connected. By monotonicity, we can show that either
 \begin{align*}
 \alpha^{-1}(1)=\emptyset\qquad\text{ or }\qquad\alpha^{-1}(k)=\emptyset
 \end{align*}
-By symetry, we suppose wlog that $\alpha^{-1}(k)=\emptyset$. We suppose also that $\alpha(k)=k-1$, the general case can be treated in a similar way.
-First of all, we apply the function given by lemma~\ref{lem:unfold-external-twist} to unfold the external twists.  Then we proceed in three steps. 
+By symmetry, we suppose wlog that $\alpha^{-1}(k)=\emptyset$. We suppose also that $\alpha(k)=k-1$, the general case can be treated in a similar way.
+We consider as example the following function $\alpha$, whose graph, drawn below, is weakly connected
+\begin{center}
+\includegraphics[scale=.1]{MyPic32.jpg}
+\end{center}
+we consider also the following $\alpha$-homogenous term, where $\alpha$ is the function above, as running example for the weakly connected case. 
+\begin{center}
+\includegraphics[scale=.1]{MyPic33.jpg}
+\end{center} 
+Notice that the external twists of our example term have 1 as domain. We can suppose that for all terms under consideration since we can start by applying the function given by lemma~\ref{lem:unfold-external-twist} to unfold the external twists.  Then we proceed in three steps. 
 \begin{enumerate}
 \item First, we apply the function
 \begin{align*}
@@ -330,15 +363,15 @@ This factorisation is of type
 Where the type of the first kind of factors is $\ranked{\reduce k \Gamma\cdot(1+2)\cdot(1+\Sigma)}$, the elment $1$ is used when a child of the root is not $2$ or a grand child is not an element of $\rSigma$. 
 This factrorisation can clearly be implemented by a first-order rational function. After these operations, our example term $t$ becomes like this, where the binary gray node is the element $2$, we ommited the element $1$ in the figure, and the factorisation is indicated by the red lines
 \begin{center}
-\includegraphics[scale=.1]{MyPic23.jpg}
+\includegraphics[scale=.09]{MyPic23.jpg}
 \end{center}
   After that, we apply to each block of the first kind the homomorphism that transforms every element $2$ into the following element of type $\ranked{\mati k 1}$
   \begin{center}
-  \includegraphics[scale=.05]{MyPic24.jpg}
+  \includegraphics[scale=.03]{MyPic24.jpg}
   \end{center}
   and keeps the other nodes unchanged. The term $t$ becomes now
   \begin{center}
-  \includegraphics[scale=.1]{MyPic25.jpg}
+  \includegraphics[scale=.09]{MyPic25.jpg}
   \end{center}
   We can now lift the partial shallow unfold (Example~\ref{}), followed by an injection and the elimination of $1$ to recover the type $\ranked{\reduce k \Gamma}$
   \begin{align*}
