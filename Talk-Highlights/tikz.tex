@@ -1,0 +1,123 @@
+\tikzstyle{blop}=[circle,fill=black,inner sep=1]
+\tikzstyle{token}=[circle,draw]
+\tikzstyle{vert}=[thick,draw,circle,fill=blue!10,minimum height=15,inner sep=1]
+\tikzstyle{bigvert}=[thick,draw,rounded corners=11pt,fill=blue!10,
+minimum height=22,minimum width=22,inner sep=1]
+\tikzstyle{state}=[thick,draw,circle,fill=blue!10,inner sep=1]
+\tikzstyle{trans}=[thick,draw,minimum height=15,fill=yellow!30,inner sep=2]
+\tikzstyle{transf}=[thick,draw,minimum height=15,fill=red!30,inner sep=2]
+\tikzstyle{active}=[thick,draw,minimum height=15,fill=green!40]
+\tikzstyle{blocked}=[thick,draw,minimum height=15,fill=red!40]
+\tikzstyle{arc}=[thick,->,>=stealth]
+\tikzstyle{every node}=[font=\footnotesize]
+\tikzstyle{portnode}=[inner sep=0.2,outer sep=0.2]
+\tikzstyle{portarc}=[->,>=latex]
+
+\tikzstyle{every loop above}=[min distance=10mm,looseness=10]
+\tikzstyle{uploop}=[out=55,in=125,loop, above]
+\tikzstyle{dnloop}=[out=-125,in=-55,loop, below]
+\tikzstyle{lfloop}=[out=145,in=-145,loop, left]
+\tikzstyle{rgloop}=[out=-35,in=35,loop, right]
+\tikzstyle{lbl}=[midway,fill=white,inner sep=1]
+
+\DeclareDocumentCommand\initst{r()O{.8}}
+{\draw[arc] ($ (#1) + (-#2,0) $) to (#1)}
+\DeclareDocumentCommand\position{O{}O{above}r()r()}
+{\node[state] (#3) at (#4) [label=#2:$#1$] {}}
+\DeclareDocumentCommand\state{O{}r()r()}
+{\node[state] (#2) at (#3) {$#1$}}
+\DeclareDocumentCommand\transb{O{}r()r()}{
+  \node[trans] (#2) at (#3) {};
+  \node (l#2) at ($ (#3) + (0,0.6) $) {$#1$}}
+\DeclareDocumentCommand\trans{O{}r()r()}
+{\node[trans] (#2) at (#3) {$#1$}}
+\DeclareDocumentCommand\transf{O{}r()r()}
+{\node[transf] (#2) at (#3) {$#1$}}
+\DeclareDocumentCommand\fnst{r()O{.8}}
+{\draw[arc] (#1) to ($ (#1) + (#2,0) $)}
+\DeclareDocumentCommand\edge{O{above}O{midway}r()r()O{}}
+{\draw[arc] (#3) to[#1] node[#2]{$#5$} (#4)}
+\DeclareDocumentCommand\cedge{O{red} O{above}O{midway}r()r()O{}}
+{\draw[arc,#1] (#4) to[#2] node[#3]{$#6$} (#5)}
+% \DeclareDocumentCommand\token[2]{\filldraw[fill=#2] (#1) circle [radius=0.05]}
+\DeclareDocumentCommand\etat{O{}r()r()}
+{\node[state,minimum height=4ex]
+  (#2) at (#3) {$#1$}}
+\DeclareDocumentCommand\final{O{1,0}r()}{
+  % \draw[thick,dotted,fill=red!10] ($ (#1) + (-0.4,-0.4) $) rectangle ($ (#1) + (0.4,0.4) $)
+  \transf (fntr) ($(#2)+(#1)$);
+  \edge(#2)(fntr);
+}
+
+\DeclareDocumentCommand\auto{O{0,0}r()r()}{
+  \draw[>=latex,out=40,in=140,fill=gray!10] (#3)
+  to ($ (#3) + (1.5,0) + (#1) + (#1)$) to [in=-40,out=-140]  (#3);
+  \etat[\iota_#2] (i#2) (#3);
+  \etat[f_#2] (f#2) ($ (i#2) + (1.5,0) + (#1) + (#1)$);
+  \node (lbl#2) at ($ (i#2) + (0.75,0) + (#1)$) {$e_{#2}$}% ;
+  % \draw[thick,>=latex,out=30,in=150] (i#2) to (f#2);
+  % \draw[thick,>=latex,out=-30,in=-150] (i#2) to (f#2)
+}
+
+\DeclareDocumentCommand\clbox{ O{.25} r() O{.25} r() }{
+  \draw  ($(#2)-(.25,#1)$) rectangle ($(#4)+(.25,#3)$)
+}
+
+\DeclareDocumentCommand\rect{ O{.5} r() r() O{.5} r() r()}{
+  \draw  ($(#2-|#3)-(.25,#1)$) rectangle ($(#5-|#6)+(.25,#4)$)
+}
+
+\newcommand\port[4]{   
+  \node[portnode] (#3) at ($(#4)+(#1)$){$#2$};
+  \draw[portarc]  (#3) to (#4)
+}
+\DeclareDocumentCommand\iport{ O{0} r() o r() o }
+{
+  \IfNoValueTF{#5}{
+    \IfNoValueTF{#3}
+    {\port{-.6,#1}{#2}{p#2i}{#4}}
+    {\port{-.6,#1}{#2}{#3}{#4}}
+  }{
+    \IfNoValueTF{#3}
+    {\node[portnode] (p#2i) at ($(#5|-#4)+(-.6,#1)$){$#2$};
+      \draw[portarc]  (p#2i) to (#4)
+    }
+    {\node[portnode] (#3) at ($(#5|-#4)+(-.6,#1)$){$#2$};
+      \draw[portarc]  (#3) to (#4)
+    }
+    
+  }
+}
+\DeclareDocumentCommand\oport{ O{0} r() o r() o }
+{
+  \IfNoValueTF{#5}{
+    \IfNoValueTF{#3}
+    {\port{.6,#1}{#2}{p#2o}{#4}}
+    {\port{.6,#1}{#2}{#3}{#4}}}{
+    \IfNoValueTF{#3}
+    {\node[portnode] (p#2o) at ($(#5|-#4)+(.6,#1)$){$#2$};
+      \draw[portarc]  (p#2o) to (#4)
+    }
+    {\node[portnode] (#3) at ($(#5|-#4)+(.6,#1)$){$#2$};
+      \draw[portarc]  (#3) to (#4)
+    }
+    
+  }
+}
+% \DeclareDocumentCommand\hdist{ r() r() }{
+%   ($(#1|-#2)!.5!(#2)-(#1|-#2)$)
+% }
+% \DeclareDocumentCommand\vdist{ r() r() }{
+%   ($(#1|-#2)!.5!(#2)-(#2)$)
+% }
+\newcommand\hdist[2]{
+  ($(#2)-(#1|-#2)$)
+}
+\newcommand\vdist[2]{
+  ($(#1)-(#1|-#2)$)
+}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "../main"
+%%% End:

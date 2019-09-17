@@ -1,0 +1,397 @@
+\ProvidesPackage{pn}
+
+\RequirePackage{tikz}
+\RequirePackage{stmaryrd} % linear logic symbols
+\RequirePackage{xargs,ifthen,xstring} % for parsing and automating commands
+
+\usetikzlibrary{arrows,calc,matrix,shapes,fit,positioning}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%% optionnal arguments marked "*" are factors: default value is 1
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%% environment and command to begin writing proofnets
+
+\newenvironment{proofnet}{\begin{center}\begin{tikzpicture}[baseline]\coordinate ();}{\end{tikzpicture}\end{center}}
+\newcommand{\pnet}[1]{\begin{tikzpicture}[baseline]\coordinate ();#1\end{tikzpicture}}
+
+
+%%%% pgf function for getting angle between two points %%%
+
+\newcommand{\pgfextractangle}[3]{%
+	\pgfmathanglebetweenpoints
+		{\pgfpointanchor{#2}{center}}
+		{\pgfpointanchor{#3}{center}}
+	\global\let#1\pgfmathresult  
+}
+
+
+%%%% layer for boxes and links
+
+\pgfdeclarelayer{box layer}
+\pgfsetlayers{box layer,main}
+
+
+%%%% empty node text %%%
+
+\def\PNemptynodetext{\large$\bullet$}
+
+
+%%%% styles %%%%%
+
+\tikzstyle{linkfrom}=[
+	draw, opacity=1, -, line width=1pt
+]
+
+\tikzstyle{switchfrom}=[
+draw, lightgray, -, densely dotted, line width=1pt
+]
+
+\tikzstyle{linkto}=[
+draw, opacity=1, -, line width=1pt
+]
+\tikzstyle{linkto'}=[
+	draw opacity=0, -latex, line width=0.2pt,
+	postaction={draw, opacity=1, -, line width=1pt, shorten >=3pt}
+]
+
+\tikzstyle{switchto}=[
+draw, lightgray, -, densely dotted, line width=1pt
+]
+
+\tikzstyle{box}=[inner sep=7pt, rounded corners=6pt, fill opacity=.07, fill=black, draw= black, line width=0.7pt]
+
+\tikzstyle{linkstyle}=[trapezium, trapezium angle=110, rounded corners=2pt, inner sep=1.2pt, fill=lightgray,draw=black]
+
+
+%%%% initial formulae positionning %%%%
+
+% \pnformulae[label]{formulae matrix}[width*][height*][extra tikz options]
+
+\newcommandx{\pnformulae}[5][5=,1=formulae,3=1,4=1,usedefault]{
+	\matrix(#1)[row sep=#4*15,column sep=#3*18,ampersand replacement=~,#5]{#2\\};
+}
+
+% \pnf[label]{text}[position][extra tikz options]
+% \pnformula[label]{text}[position][extra tikz options]
+
+\def\PNtrianglecolor{black}
+
+\newcommandx{\pnf}[4][1=formula,3=,4=]{
+\coordinate (#1) #3;
+\StrDel{#1}{*}[\PNtheformula]
+\ifthenelse{\equal{#1}{\PNtheformula}}{\def\PNtrianglecolor{black}}{\def\PNtrianglecolor{lightgray}}
+\node [shape border rotate=-90,inner sep=0.9pt,shape=isosceles triangle,fill=\PNtrianglecolor] () #3 {};
+\ifthenelse{\equal{}{#2}}
+	{}
+	{\node [text width=0,inner sep=0,#4,anchor=south west] () at ($(#1)+(0.08,-0.15)$) {#2};
+	}
+}
+
+\newcommandx{\pnformula}[4][1=formula,3=,4=]{
+\ifthenelse{\equal{}{#2}}{\def\PNtheconclusion{\PNemptynodetext}}{\def\PNtheconclusion{#2}}
+\node [text width=0,inner sep=4.5pt,#4] (#1) #3 
+	{\makebox[0pt]{\raisebox{-3pt}[0pt][0pt]{\PNtheconclusion}}};
+}
+
+%%%% arrows %%%
+
+% \pnarrow[style]{source:+angle}{target:+angle}[looseness*]
+
+\newcommandx{\pnarrow}[4][1=linkto',4=1]{
+	\StrBefore{#2}{:}[\PNtheoutnode]
+	\StrBehind{#2}{:}[\PNtheoutangle]
+	\StrBefore{#3}{:}[\PNtheinnode]
+	\StrBehind{#3}{:}[\PNtheinangle]
+	\coordinate (ARROWtemp1) at (\PNtheoutnode);
+	\coordinate (ARROWtemp2) at (\PNtheinnode);
+	\pgfextractangle{\PNangle}{ARROWtemp1}{ARROWtemp2}
+	\draw [#1]
+	let \p1 = ($(\PNtheoutnode)-(\PNtheinnode)$), \n1 = {veclen(\x1,\y1)} in
+		(\PNtheoutnode) 
+		to [controls=+(\PNangle+\PNtheoutangle:\n1*#4*0.3) and +(180+\PNangle+\PNtheinangle:\n1*#4*0.3)]
+		(\PNtheinnode);
+}
+
+
+% \PN*arrow*[style]{source}{target} %%%%%% intended for internal use only
+
+% (terminal arrows)
+
+\newcommandx{\PNterminalarrow}[3][1=linkfrom]{
+	\path let \p2 = (#2), \p3 =(#3) in coordinate (control) at (\x2,\y3);
+	\draw [#1] (#2) .. controls ($(control)!0.1!(#2)$) and ($(control)!0.5!(#3)$) .. (#3);
+}
+
+\newcommandx{\PNcutarrow}[3][1=linkfrom]{
+	\path let \p2 = (#2), \p3 =(#3) in coordinate (control) at (\x2,\y3);
+	\draw [#1] (#2) .. controls (control) .. (#3);
+}
+
+\newcommandx{\PNdownarrow}[3][1=linkfrom]{
+	\path let \p2 = (#2), \p3 =(#3) in coordinate (control) at (\x2,\y3);
+	\draw [#1] (#2) .. controls ($(#2)+(0,-0.25)$) .. (#3);
+}
+
+% (initial arrows)
+
+\newcommandx{\PNinitialarrow}[3][1=linkto]{
+	\path let \p2 = (#2), \p3 =(#3) in coordinate (control) at (\x3,\y2);
+	\draw [#1] (#2) .. controls ($(control)!0.2!(#2)$) and ($(control)!0.2!(#3)$) .. (#3);
+}
+
+\newcommandx{\PNanglearrow}[3][1=linkto]{
+	\path let \p2 = (#2), \p3 =(#3) in coordinate (control) at (\x3,\y2);
+	\draw [#1] (#2) .. controls (control) .. (#3);
+}
+
+\newcommandx{\PNarrowdown}[3][1=linkto]{
+	\path let \p2 = (#2), \p3 =(#3) in coordinate (control) at (\x3,\y2);
+	\draw [#1] (#2) .. controls ($(#3)+(0,0.2)$) .. (#3);
+}
+
+% (box ports arrow)
+
+\newcommandx{\PNdownarrowdown}[3][1=linkto]{
+	\draw [#1] 
+		(#2) to [controls=+(-90:0.4) and +(90:0.4)] (#3);
+}
+
+
+%%%% generic hyperlink function %%%
+
+% \pnlink[label]{symbol}[position][extra TikZ options]
+
+\newcommandx{\pnlink}[4][1=link, 3=, 4=]{
+	\node [anchor=north,linkstyle,#4] (#1) #3 {#2};
+}
+
+% \pnhyperlink[label]{symbol}[prem style/concl style: a,r]{prem list}[placement: c, b, t]{concl list}
+%		[height*][x-offset]
+
+\newcommandx{\pnhyperlink}[8][1=hyperlink,3=/, 5=, 7=1, 8=0]{
+% determines the style of arrow: rounded or straight
+	\StrBefore{#3}{/}[\PNthestyleup]
+	\StrBehind{#3}{/}[\PNthestyledown]
+	\ifthenelse{\equal{\PNthestyleup}{r}}
+		{\def\PNtheuparrow{\PNterminalarrow}}
+		{\ifthenelse{\equal{\PNthestyleup}{a}}
+			{\def\PNtheuparrow{\PNcutarrow}}
+			{\def\PNtheuparrow{\PNdownarrow}}
+		}
+	\ifthenelse{\equal{\PNthestyledown}{r}}
+		{\def\PNthedownarrow{\PNinitialarrow}}
+		{\ifthenelse{\equal{\PNthestyledown}{a}}
+			{\def\PNthedownarrow{\PNanglearrow}}
+			{\def\PNthedownarrow{\PNarrowdown}}
+		}
+% determines the fitting boxes for positionning the link, cases for empty lists
+	\StrDel{#4}{*}[\PNtheplist]
+	\StrDel{#6}{*}[\PNtheclist]
+	\StrSubstitute{\PNtheplist}{,}{)(}[\PNthefitup]
+	\StrSubstitute{\PNtheclist}{,}{)(}[\PNthefitdown]
+	\ifthenelse{\equal{\PNthefitup}{}}
+		{\ifthenelse{\equal{\PNthefitdown}{}}
+			{}
+			{\node [fit=(\PNthefitdown),inner sep=0] (fitd) {}; \node (fitu) at ($(fitd.north)+(0,1.8)$) {};}
+		}
+		{\ifthenelse{\equal{\PNthefitdown}{}}
+			{\node [fit=(\PNthefitup),inner sep=0] (fitu) {}; \node (fitd) at ($(fitu.south)+(0,-1.5)$) {};}
+			{\node [fit=(\PNthefitup),inner sep=0] (fitu) {};
+			\node [fit=(\PNthefitdown),inner sep=0] (fitd) {};}
+		}
+% positions the link according to the option: b(ottom) c(entered) t(op)
+	\ifthenelse{\equal{#5}{t}}
+		{\pnlink[#1]{}[at ($(fitu.south)+(#8,-0.3*#7)$)][opacity=0]}
+		{\ifthenelse{\equal{#5}{b}}
+			{\pnlink[#1]{}[at ($(fitd.north)+(#8,0.6*#7)$)][opacity=0]}
+			{\pnlink[#1]{}[at ($0.5*(fitd.north)+0.5*(fitu.south)+(#8,0.2-#7*0.2)$)][opacity=0]}
+		}
+%draws the arrows
+	\foreach \linkprem in {#4}{
+		\StrDel{\linkprem}{*}[\PNtheprem]
+		\ifthenelse{\equal{\linkprem}{\PNtheprem}}
+			{\def\PNthearrowstyle{linkfrom}}
+			{\def\PNthearrowstyle{switchfrom}}
+		\PNtheuparrow[\PNthearrowstyle]
+			{\PNtheprem.south}{$(#1.north)+(0,-0.05)$}
+	}
+	\foreach \linkconcl in {#6}{
+		\StrDel{\linkconcl}{*}[\PNtheconcl]
+		\ifthenelse{\equal{\linkconcl}{\PNtheconcl}}
+			{\def\PNthearrowstyle{linkto}}
+			{\def\PNthearrowstyle{switchto}}
+		\PNthedownarrow[\PNthearrowstyle]
+			{$(#1.south)+(0,-0.05)$}{\PNtheconcl.north}
+	}
+%redraws the link above the arrows
+	\pnlink[#1]{\footnotesize#2}[at (#1.north)]
+}
+
+
+%%%%% initial, terminal, and n-ary links %%%%%%%%%%%%%%%%%%
+
+% \pninitial[label]{symbol}[arrow style]{concl list}[height*][x-offset]
+
+\newcommandx{\pninitial}[6][1=initial, 3=r, 5=1, 6=0]{
+	\pnhyperlink[#1]{#2}[/#3]{}[b]{#4}[0.9*#5][#6]
+}
+
+% \pnterminal[label]{symbol}[style]{prem list}[height*][x-offset]
+
+\newcommandx{\pnterminal}[6][1=terminal,3=r, 5=1,6=0]{
+	\pnhyperlink[#1]{#2}[#3/]{#4}[t]{}[1.3*#5][#6]
+}
+
+% \pnnnary[label]{symbol}[style]{prem list}[label concl]{text concl}[height*][x-offset]
+
+\newcommandx{\pnnary}[8][1=nary link, 3=r, 5=nary, 7=1, 8=0]{
+	\StrDel{#4}{*}[\PNtheplist]
+	\StrSubstitute{\PNtheplist}{,}{)(}[\PNthefit]
+	\node [fit=(\PNthefit),inner sep=0] (fits) {};
+%	\pnf[NARYtemp]{ }[at ($(fits.south)+(#8,-#7)$)]
+
+	\pnf[#5]{#6}[at ($(fits.south)+(#8,-#7)$)]
+	\pnhyperlink[#1]{#2}[#3/]{#4}[b]{#5}[1]
+}
+
+%%%%% boxes %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%\pnbox[label]{(node) list}[extra tikz options]
+
+\newcommandx{\pnbox}[3][1=box,3=]{
+	\StrSubstitute{#2}{,}{)(}[\PNthefit]
+	\begin{pgfonlayer}{box layer}
+		\node[box, fit=(\PNthefit),#3](#1) {};
+	\end{pgfonlayer}
+}
+
+%\pnport[link label]{symbol}[box.position]{prem list}[label concl]{text concl}[height*]
+
+\newcommandx{\pnport}[7][1=port link, 3=box.down, 5=port, 7=1]{
+	\StrBehind{#3}{.}[\PNisdown]
+	\StrBefore{#3}{.}[\PNthebox]
+	\StrDel{#4}{*}[\PNportp]
+	\StrSubstitute{\PNportp}{,}{)(}[\PNthefit]
+	\node [fit=(\PNthefit),inner sep=0] (fit) {};
+	\ifthenelse{\equal{\PNisdown}{down}}
+		{\path let \p1=(\PNthebox.south), \p2=(fit) in coordinate (port position) at ($(\x2,\y1)+(0,0.07)$);}
+		{\coordinate (port position) at ($(#3)+(0,0.07)$);}
+	\pnlink[PORTtemp]{#2}[at (port position)]
+	\foreach \portprem in {#4}{
+		\StrDel{\portprem}{*}[\PNtheprem]
+		\ifthenelse{\equal{\portprem}{\PNtheprem}}
+			{\def\PNthearrowstyle{linkfrom}}
+			{\def\PNthearrowstyle{switchfrom}}
+		\PNdownarrowdown[\PNthearrowstyle]{\PNtheprem.south}{PORTtemp.center}
+	}
+	\pnformula[#5]{#6}[at ($(PORTtemp)+(0,-0.65*#7)$)]
+	\PNarrowdown{PORTtemp.center}{#5.north}
+	\pnlink[#1]{#2}[at (port position)]
+}
+
+
+%%%%% generic nets and in/outgoing edges %%%%%%%%%%%%%%%%%
+
+% \pnsomenet[label]{text}{width}{height}[position][extra tikz options]
+
+\newcommandx{\pnsomenet}[6][1=somenet,5=,6=]{
+	\node [rectangle,rounded corners=6pt,draw,fill=lightgray,minimum width=#3,minimum height=#4,#6]
+	(#1) #5 {\scalebox{1.5}{#2}};
+}
+
+% \pnoutfrom{somenet.angle}[label]{text}[height*]
+
+\newcommandx{\pnoutfrom}[4][2=outfrom,4=1]{
+	\pnf[#2]{#3}[at ($(#1)+(0,0.45*-#4)$)]
+	\PNarrowdown{#1}{#2.north}
+}
+
+% \pninto{somenet.angle}[label]{text}[height*]
+
+\newcommandx{\pninto}[4][2=into,4=1]{
+	\pnformula[#2]{#3}[at ($(#1)+(0,0.4*#4)$)]
+	\PNdownarrow[linkfrom]{#2.south}{#1}
+}
+
+
+%%%%% links for inlining in text %%%%%%%%%%%%%%%%%%%%%%%%%
+
+% \pntextlink{symbol}
+
+\newcommand{\pntextlink}[1]{
+	\raisebox{9pt}{\pnet{\pnlink{#1}}}
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%% logical macros %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%% initial links %%%%%%%
+
+% \pnaxiom[label]{prem1,prem2}[height*][x-offset]
+
+\newcommandx{\pnaxiom}[4][1=axiom, 3=1, 4=0]{
+	\pninitial[#1]{\tt ax}{#2}[#3][#4]
+}
+
+%\pndaimon[label]{concl list}[height*][x-offset]
+
+\newcommandx{\pndaimon}[4][1=daimon, 3=1, 4=0]{
+	\pninitial[#1]{$\maltese$}{#2}[#3][#4]
+}
+
+% \pnone[label]{concl}[height*][x-offset]
+
+\newcommandx{\pnone}[4][1=one,3=1, 4=0]{
+	\pninitial[#1]{\scriptsize\bf1}{#2}[#3][#4]
+}
+
+\newcommandx{\pnconcl}[4][1=concl,3=1, 4=0]{
+	\pnterminal[#1]{\scriptsize\tt c}{#2}[0.6*#3][#4]
+}
+
+%%%% cut %%%%%%%%
+
+% \pncut[label]{prem1,prem2}[height*][x-offset]
+
+\newcommandx{\pncut}[4][1=cut, 3=1, 4=0]{
+	\pnterminal[#1]{\tt \makebox[12pt]{cut}}[a]{#2}[0.6*#3][#4]
+}
+
+
+%%%%% connectives %%%%%%
+
+% \pntensor[label]{prem1,prem2}[label concl]{text concl}[height*][x-offset]
+
+\newcommandx{\pntensor}[6][1=tensor link, 3=tensor, 5=1, 6=0]{
+	\pnnary[#1]{\normalsize$\tensor$}{#2}[#3]{#4}[#5][#6]
+}
+
+% \pnpar[label]{prem1,prem2}[label concl]{text concl}[height*][x-offset]
+
+\newcommandx{\pnpar}[6][1=par link, 3=par, 5=1, 6=0]{
+	\pnnary[#1]{$\!\bindnasrepma\!$}{#2}[#3]{#4}[#5][#6]
+}
+
+
+%%%%% exponentials %%%%%
+
+% \pnprom[box.position]{prem}[label concl]{text concl}[height*]
+
+\newcommandx{\pnprom}[5][3=prom, 1=box.down, 5=1]{
+\pnport[prom link]{\footnotesize$!$}[#1]{#2}[#3]{#4}[#5]
+}
+
+% \pnauxprom[box.position]{prem}[label concl]{text concl}[height*]
+
+\newcommandx{\pnauxprom}[5][3=auxprom, 1=box.down, 5=1]{
+\pnport[auxprom link]{\footnotesize$?$}[#1]{#2}[#3]{#4}[#5]
+}
+
+% \pnexp[label]{subscript}{prem list}[label concl]{text concl}[height*][x-offset]
+
+\newcommandx{\pnexp}[7][1=exp link, 4=exp, 6=1, 7=0]{
+\pnnary[#1]{$?_{#2}$}{#3}[#4]{#5}[#6][#7]
+}
