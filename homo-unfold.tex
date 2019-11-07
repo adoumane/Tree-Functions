@@ -250,14 +250,14 @@ Here is the effect of the functions $f_1$ and $f_2$ on our example
 \includegraphics[scale=.15]{MyPic30.jpg}
 \end{center}
  The function $f_1$ can be derived as follows. First, we consider the function which keeps only the first $m$ components of the tensor, obtained as the composition of the following tree functions:
-\begin{align*}
-\begin{prooftree}
-\Hypo{\overbrace{\ranked{\mati k \Sigma \to \reduce k \reduce 1 \Sigma^m}}^{\substack{\text{Lift the projection on the first}\\\text{$m$ elements of the tensor to $\reduce k$}}}}
-\Hypo{\overbrace{\ranked{\reduce k \reduce 1 \Sigma^m \to \reduce k \Sigma^m}}^{\substack{\text{Merge the folds $\reduce k$ and $\reduce 1$}}}}
-\Hypo{\overbrace{\ranked{\reduce k \Sigma^m \to \mati m {(\Sigma\cdot (1+0))}}}^{\substack{\text{Adjust the degree of the fold}\\\text{to get a matrix power}}}}
-\Infer{3}[]{\ranked{\mati k \Sigma \to \mati m {(\Sigma\cdot (1+0))}}}
-\end{prooftree}
-\end{align*}
+%\begin{align*}
+%\begin{prooftree}
+%\Hypo{\overbrace{\ranked{\mati k \Sigma \to \reduce k \reduce 1 \Sigma^m}}^{\substack{\text{Lift the projection on the first}\\\text{$m$ elements of the tensor to $\reduce k$}}}}
+%\Hypo{\overbrace{\ranked{\reduce k \reduce 1 \Sigma^m \to \reduce k \Sigma^m}}^{\substack{\text{Merge the folds $\reduce k$ and $\reduce 1$}}}}
+%\Hypo{\overbrace{\ranked{\reduce k \Sigma^m \to \mati m {(\Sigma\cdot (1+0))}}}^{\substack{\text{Adjust the degree of the fold}\\\text{to get a matrix power}}}}
+%\Infer{3}[]{\ranked{\mati k \Sigma \to \mati m {(\Sigma\cdot (1+0))}}}
+%\end{prooftree}
+%\end{align*}
 We lif this function to terms, then we compose it with the following unfolding function, given by the induction hypothesis
 \begin{align*}
 \ranked{\tmonad \mati m {(\Sigma\cdot (1+0))} \to \mati m {(\tmonad (\Sigma\cdot (1+0)))}}
