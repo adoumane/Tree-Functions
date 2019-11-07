@@ -182,13 +182,13 @@ Let us go back to the proof of Thm.~\ref{prop:one-register}. We proceed by induc
 To show this proposition, we will factorize (via a derivable function) our \lambdaterms into factors satisfying the following properties:
 \begin{itemize}
 \item All the $x$-redexes of type $\sigma$ fall entirely into one of the factors. In other words, for every such redex, its application node, its abstraction node, and the variable it binds are in the same factor.
-\item Each factor containing a redex have a a very specific shape called \emph{thin}. Those factors, which are \lambdaterms with ports, are roughly speaking those terms whose normal form have the shape of a word (by opposition to trees, which is the general case).
+\item Each factor have a a very specific shape called \emph{thin}. Those factors, which are \lambdaterms with ports, are roughly speaking those terms whose normal form have the shape of a word (by opposition to trees, which is the general case).
 \end{itemize}
 Since each redex is fully contained in a thin factor, it is enough to show that normalization of thin \lambdaterms (with ports) is derivable. To do so, we prove that the word obtained by normalizing a thin \lambdaterm results from a depth-first traversal of the later. Using the fact that depth-first traversal is a basic function, we show that normalization of thin $\lambda$-terms is derivable.
  
- The last ingredient to conclude the proof is to notice that $\beta$-reducing the factors of (a factorization of) a $\lambda$-term, then applying a flattening, is the same thing as $\beta$-reducing the original $\lambda$-term. This concludes the proof. 
+ The last ingredient to conclude the proof is to notice that $\beta$-reducing the factors of (a factorization of) a $\lambda$-term, then applying a flattening, is the same thing as $\beta$-reducing the original $\lambda$-term, which is a direct consequence from the fact that $\beta$-reduction is a congruence on terms. This concludes the proof. 
  
- In the rest of this section, we develop on each of these steps of the proof.  In Sec.~\ref{subsub:thin} we present thin \lambdaterms with ports and show how to normalize them. Then we show in Sec.~\ref{subsub:facto} how to factorize a \lambdaterm into thin factors. Finally we show in Sec.~\ref{subsub:commutes} that $\beta$-reduction commutes with factorization and flattening. 
+ In the rest of this section, we develop on each of the two main steps of the proof.  In Sec.~\ref{subsub:thin} we present thin \lambdaterms with ports and show how to normalize them. Then we show in Sec.~\ref{subsub:facto} how to factorize a \lambdaterm into thin factors. 
  
 
 \subsubsection{Evaluation of thin $\lambda$-terms}\label{subsub:thin}
@@ -295,8 +295,8 @@ We start by distinguishing the redexes of $t$ and their variables from the other
     \end{center}
     This query is first-order expressible. Indeed it is the disjunction of the following queries
 $$\begin{array}{rl}
-@\mathsf{Redex}(u) = & @(u) \wedge \exists v \ \mathrm{Child}_1(u,v) \wedge \bigvee_{x\in X}\lambda x(v)\\
-\lambda\mathsf{Redex}(u)=& \lambda x(u) \wedge \exists v \ \mathrm{Child}_1(v,u) \wedge @(v) \\
+@\mathsf{Redex}(u) = & @(u) \wedge \exists v \ \mathrm{Child}_1(u,v) \wedge \bigvee_{x\in X}\lambda x(v)\\[8pt]
+\lambda\mathsf{Redex}(u)=& \lambda x(u) \wedge \exists v \ \mathrm{Child}_1(v,u) \wedge @(v) \\[8pt]
 X\mathsf{Redex}(u) = &\bigvee_{x\in X} x(u) \wedge \exists v\ \lambda\mathsf{Redex}(v) \wedge v\ \mathsf{binds}\ u
 \end{array}$$
 where $@\mathsf{Redex}(u)$ says that $u$ is the application node of a redex, $\lambda\mathsf{Redex}(u)$ says that it is the abstraction node of a redex and $X\mathsf{Redex}(u)$ says that it is the variable of a redex. 
@@ -368,73 +368,70 @@ $\ranked{\reduce 1\tmonad{X^\lambda}}$, we get rid of the labels $0+2$ by transf
 
 \subsubsection{Factorizing $\lambda$-terms into blocks of thin $\lambda$-terms}\label{subsub:facto}
 
-\begin{definition}[Full redex]
-Let $t$ be a term of $\linterm S X$ $x$ be a variable in $X$ and $\sigma$ be a type in $S$. 
-
- A \emph{full $x$-redex of type $\sigma$} is a set of nodes  containing an $x$-redex of type $\sigma$, the node of the variable $x$ bound by this redex, together with the set of nodes between them.
-\end{definition}
+In a linear $\lambda$-term, we call \emph{full redex} a set of nodes  containing a redex, the node of its variable, together with the set of nodes between them, as illustrated below
 \begin{center}
-Picture 9
+\includegraphics[scale=1]{full-redex.pdf}
 \end{center}
 
 
-\begin{proposition}\label{prop:FactoIntoThin} For every finite set of typed variables $X$, for every finite set of types $S$ and for every $x\in X$ and $\sigma\in S$, there is a factorization $$f:\tmonad \ranked{X^\lambda} \to \tmonad\tmonad \ranked{X^\lambda}$$ 
-such that for every $t\in\linterm S X$
+\begin{proposition}\label{prop:FactoIntoThin} For every finite set of typed variables $X$, for every finite set of types $S$ and for every $x\in X$ and $\sigma\in S$, there is a factorization $$\ranked{f:\tmonad \ranked{X^\lambda} \to \tmonad\tmonad \ranked{X^\lambda}}$$ 
+such that for every linear \lambdaterm $t$
 \begin{itemize}
 \item every full $x$-redex of type $\sigma$ in $t$ is entirely contained in one of the factors of $f(t)$;
-\item the factors of $f(t)$ are in $\thinterm S X$.
+\item the factors of $f(t)$ are thin.
 \end{itemize}
 \end{proposition}
 
 \begin{proof}
 We define the function $f$ as the composition of the following three functions
 \begin{align*}
-\tmonad \ranked{X^\lambda} \xrightarrow{\quad g\quad} \tmonad (\ranked{X^\lambda}+\bullet) \xrightarrow{\quad \mathsf{block}^\uparrow\quad} \tmonad (\tmonad\ranked{X^\lambda}+\tmonad\bullet)
-\xrightarrow{\quad \mathsf{erase}\quad} \tmonad \tmonad\ranked{X^\lambda}
+\ranked{\tmonad \ranked{X^\lambda} \xrightarrow{\quad g\quad} \tmonad (\ranked{X^\lambda}+1) \xrightarrow{\quad \mathsf{block}^\uparrow\quad} \tmonad (\tmonad\ranked{X^\lambda}+\tmonad 1)
+\xrightarrow{\quad \mathsf{erase}\quad} \tmonad \tmonad\ranked{X^\lambda}}
 \end{align*}
-The function $g$ is a first-order rational tree function, which indicates, using the unary symbol $\bullet$, the places wheres two distinct blocks of $f$ will be separated. We will describe it more precisely a bit later. The function $\mathsf{block}^\uparrow$ will create these blocks and finally, we erase the all the occurrences of the symbol $\bullet$.
-Each of these functions is derivable: $g$ thanks to Proposition~\ref{prop:forat}, $\mathsf{block}^\uparrow$ being a basic function, and $\mathsf{erase}$ has been show derivable in Example~\ref{}. Their composition is then derivable as well.
- 
-Now we define a first-order rational function $g:$ and show that the $\bullet$-nodes it introduces creates blocks satisfying the conditions 1 and 2 of Proposition~\ref{}, when the input term is in $\linterm S X$.  
-We define $g$ as the composition of the characteristic function of three first-order unary queries: $\mathsf{@redex}, \mathsf{Right}$ and $\mathsf{Left}$, followed by an homomorphims $h$. We define them in the following:
+The function $g$ is a first-order rational tree function, which indicates, using the unary symbol $1$, the places wheres two distinct blocks of $f$ will be separated. We will describe it more precisely a bit later. The function $\mathsf{block}^\uparrow$ will create these blocks and finally, we erase all the factors $\ranked{\tmonad 1}$.
+
+The functions $\mathsf{block}^\uparrow$ is a basic function and  $\mathsf{erase}$ can be easily derivable. 
+Let us show how to derive the function $g$, so that the $1$-nodes it introduces creates blocks satisfying the conditions 1 and 2 of Proposition~\ref{prop:FactoIntoThin} (when the input is a linear $\lambda$-term).  
+
+We define $g$ as the composition of the characteristic function of three first-order unary queries: $\mathsf{@redex}, \mathsf{Right}$ and $\mathsf{Left}$, followed by a homomorphims $h$. We define them in the following:
 \begin{itemize}
 \item The property $\mathsf{@Redex}$ checks whether a node is the application node of an $x$-redex of type $\sigma$. It can be expressed by the following first-order formula, where  $\varphi_\sigma$ is a first-order formula which decides if the type of a node is $\sigma$ (for instance the one given by Lemma~\ref{lem:IsTypeTauFo}):
-\begin{align*} \mathsf{@Redex}( u ):=& \mathsf{@}(u)\ \wedge\ \lambda x(\mathrm{Child}_1(u))\ \wedge\ \varphi_\sigma(\mathrm{Child}_1(u))
+\begin{align*} \mathsf{App}( u ):=& \mathsf{@}(u)\ \wedge\ \exists v\  \mathrm{Succ}_1(u, v) \wedge \lambda x(v)\ \wedge\ \varphi_\sigma(v)
 \end{align*} 
-\item The query $\mathsf{Right}$ (resp. $\mathsf{Left}$) checks if the node is an application node, which lies, together with his right (resp. left) child, strictly between an $x$-redex of type $\sigma$ and the node it binds. Those properties can be expressed by the following first-order formula:
-\begin{align*}
-\mathsf{Right}( u ):=&\ @(u)\ \wedge\ \exists v\exists w . \ (w< \mathrm{Child}_2(u))\ \wedge\ (u< v)\ \wedge \ \mathsf{@ redex}(v) \ \wedge\ (\mathrm{Child}_1(v)\ \mathsf{binds}\ w)\\
-\mathsf{Left}( u ):=&\ @(u)\ \wedge\  \exists v\exists w . \ (w< \mathrm{Child}_1(u))\ \wedge\ (u< v)\ \wedge \ \mathsf{@ redex}(v) \ \wedge\ (\mathrm{Child}_1(v)\ \mathsf{binds}\ w)
-\end{align*} 
-Where $u\ \mathsf{binds} \ v$ is a binary query indicating that $u$ is an abstraction node which binds the node $v$. This is a first-order relation, and can be described by the following formula for example:
-\begin{align*}
- u\ \mathsf{binds}\ v :=&\bigvee_{y\in X} \lambda y(u) \wedge y(v) \wedge (\forall w. \ \ v< w< u\Rightarrow \neg \lambda y(w))
- \end{align*}
+\item The query $\mathsf{Right}$ (resp. $\mathsf{Left}$) checks if the node is an application node, which lies, together with his right (resp. left) child, between the application node of an $x$-redex of type $\sigma$ and the node it binds. Those properties can be easily expressed by a first-order formula.
 \end{itemize}
 
-When we apply the characteristic functions of these queries to a term in $\tmonad X^\lambda$, each node will be decorated by three informations: whether is satisfies or not $\mathsf{@Redex}$,  whether is satisfies or not $\mathsf{Right}$ and whether is satisfies or not $\mathsf{Left}$. Note that for linear $\lambda$-terms, some combinations of these properties cannot hold in the same node. For instance, a node cannot satisfy $\mathsf{Right}$ and $\mathsf{Left}$ simultaneously, as this would contradict linearity. 
+When we apply the characteristic functions of these queries to a term in $\ranked{\tmonad X^\lambda}$, each node will be decorated by three informations: whether is satisfies or not $\mathsf{App}$,  whether is satisfies or not $\mathsf{Right}$ and whether is satisfies or not $\mathsf{Left}$. Note that for linear $\lambda$-terms, some combinations of these properties cannot hold in the same node. For instance, a node cannot satisfy $\mathsf{Right}$ and $\mathsf{Left}$ simultaneously, as this would contradict linearity. 
 
-Now we define the homomorphism $h$, which maps the $\lambda$-terms with these three informations to terms of $\tmonad (\ranked{X^\lambda}+\bullet)$. We define $h$ by his action to each node, depending on its label and the three informations it contains:
-$$\begin{array}{|l|l|l|l|l|l|}
-\hline
-\neg\mathsf{@Redex} \wedge \mathsf{Right} & \neg\mathsf{@Redex} \wedge \mathsf{Left} & \neg\mathsf{@Redex} \wedge \neg\mathsf{Right} \wedge \neg\mathsf{Left} & \mathsf{@Redex} &  \lambda y & y\\
-\hline
-\end{array}$$
-
-Let $t$ be a term in $\linterm S X$. We show that the factors of $g(t)$ satisfy the two conditions of Proposition~\ref{prop:FactoIntoThin}. First of all, by analyzing the action of $h$ on each node, note that every $@$ node of $g(t)$ has $\bullet$ as one of its children, except when it is satisfies $\mathsf{@Redex}$. Thus the only branching nodes in a factor are redexes, hence the factors are thin. Now suppose by contradiction that there is some full $x$-redex of type $\sigma$ of $t$ which is not entirely contained in a factor of $g(t)$. This means that in $g(t)$ there is a $\bullet$ between the application node of the redex (call it $u$) and the variable it binds (call it $v$). Equivalently, there is a node $n$ in $t$ between $u$ and $v$ which satisfies one of the first three conditions of table~\ref{}.  Suppose that the right child of $n$ is also in the path between $u$ and $v$, the symmetric case can be treated similarly. In particular, $n$ satisfies $\mathsf{Right}$. But in this case $\bullet$ would be the left child of $n$ in $g(t)$ and this gives 
+Now we define the homomorphism $h$, which maps the $\lambda$-terms with these three informations to terms of $\ranked{\tmonad (\ranked{X^\lambda}+1)}$. We define the action of $h$ on each node, depending on its label and the three informations it contains:
+\begin{itemize}
+\item If the label of the node is $y$ or $\lambda y$ for some variable $y\in X$, or if the label is $@$ and satisfies $\mathsf{App}$, then $h$ returns the same node (seen as a term), forgetting the extra three informations.
+\item If the node is an application node satisfying 
+\begin{align*}
+\neg \mathsf{App} \wedge \neg \mathsf{Right} \wedge\neg \mathsf{Left} 
+\end{align*} 
+then $h$ adds $1$ to the two children of the node.
+\item If the node is an application node satisfying 
+\begin{align*}
+\neg \mathsf{App} \wedge \neg \mathsf{Right} \qquad\text{(resp. } \neg \mathsf{App} \wedge \neg \mathsf{Left} \text{)}
+\end{align*} 
+then $h$ adds $1$ to the left (resp. right) child of the node. 
+\end{itemize}
+Let $t$ be a linear $\lambda$-term. We show that the factors induced by $g$ satisfy the two conditions of Proposition~\ref{prop:FactoIntoThin}. First of all, by analyzing the action of $h$ on each node, note that every application node will receive $1$ as one of its children, except when it is satisfies $\mathsf{App}$. Thus the only branching nodes in a factor are redexes, hence the factors are thin. Now suppose by contradiction that there is some full $x$-redex of type $\sigma$ of $t$ which is not entirely contained in a factor. This means that in $g(t)$ there is a $1$ between the application node of some $x$-redex of type $\sigma$ and its variable.
+By construction of $h$, $1$ is the child of an application node (call it $n$). Suppose w.l.o.g. that it is the right child of $n$. The node $n$ cannot satisfy $\mathsf{App}$ because it got $1$ as a child by $h$. Is satisfies $\mathsf{Right}$ by the contradiction hypothesis. Thus its satisfies $\neg \mathsf{App} \wedge \neg \mathsf{Right}$, therefore it receives also $1$ as its left child by $h$. This means that $n$ received $1$ for its both children, and the only way to get that is to satisfy $\neg \mathsf{App} \wedge \neg \mathsf{Right} \wedge\neg \mathsf{Left}$, which gives a contradiction. 
 \end{proof}
-\subsubsection{$\beta$-reduction commutes with factorization} \label{subsub:commutes}
-The last ingredient to show Thm.~\ref{thm:evalOneType} is to notice  that factorizing a term, applying some $\beta$-reduction steps to the factors, then flattening, can be simulated by applying  $\beta$-reduction steps directly to the original $\lambda$-term.
-
-Let us state this property more formally. For that, we can generalize the lifting of functions to the lifting of relations as follows. 
-Let $\Sigma$ be a ranked set. If $R\subseteq \ranked{\Sigma}\times\ranked{\Sigma}$ is an arity preserving relation (that is $\arity{u}=\arity{v}$ whenever $(u,v)\in R$), then $R$ can be lifted to $\tmonad R\subseteq \ranked{\tmonad \Sigma} \times \ranked{\tmonad \Sigma}$ in a natural way. 
-
-Since $\beta$-reduction is an arity preserving relation  over linear $\lambda$-terms, its reflexive transitive closure $\beta^*$ is arity preserving as well.  We can lift then the later to $\tmonad \beta^*\subseteq \linterm S X\times\linterm S X$.
-The following proposition is a direct consequence from the fact that $\beta$ is a congruence on terms.
-
-\begin{proposition}\label{prop:betaCommutesWithFacto}
-For every factorization $f:\linterm S X \to \linterm S X$ and every linear $\lambda$-term $M$
-$$\text{if }\qquad f(M) \xrightarrow{\tmonad \beta^*} N \qquad\text{ then }\qquad M\xrightarrow{\beta^*} \flatt(N).$$
-\end{proposition}
-
-
+%\subsubsection{$\beta$-reduction commutes with factorization} \label{subsub:commutes}
+%The last ingredient to show Thm.~\ref{thm:evalOneType} is to notice  that factorizing a term, applying some $\beta$-reduction steps to the factors, then flattening, can be simulated by applying  $\beta$-reduction steps directly to the original $\lambda$-term.
+%
+%Let us state this property more formally. For that, we can generalize the lifting of functions to the lifting of relations as follows. 
+%Let $\Sigma$ be a ranked set. If $R\subseteq \ranked{\Sigma}\times\ranked{\Sigma}$ is an arity preserving relation (that is $\arity{u}=\arity{v}$ whenever $(u,v)\in R$), then $R$ can be lifted to $\tmonad R\subseteq \ranked{\tmonad \Sigma} \times \ranked{\tmonad \Sigma}$ in a natural way. 
+%
+%Since $\beta$-reduction is an arity preserving relation  over linear $\lambda$-terms, its reflexive transitive closure $\beta^*$ is arity preserving as well.  We can lift then the later to $\tmonad \beta^*\subseteq \linterm S X\times\linterm S X$.
+%The following proposition is a direct consequence from the fact that $\beta$ is a congruence on terms.
+%
+%\begin{proposition}\label{prop:betaCommutesWithFacto}
+%For every factorization $f:\linterm S X \to \linterm S X$ and every linear $\lambda$-term $M$
+%$$\text{if }\qquad f(M) \xrightarrow{\tmonad \beta^*} N \qquad\text{ then }\qquad M\xrightarrow{\beta^*} \flatt(N).$$
+%\end{proposition}
+%
+%
