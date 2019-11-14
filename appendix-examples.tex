@@ -156,7 +156,7 @@ Using similar arguments as before, we can conclude that:
 The ancestor function is obtained by applying $\ranked{\mathsf{root}_{f,g}}$ followed by a flattening.
 \end{example}
 
-\begin{example} If $\rGamma$ and $\rDelta$ are types, we define $\ranked{\Gamma*\Delta}$ to be $\ranked{\Gamma.(1+\Delta)}$. We call its inhabitants the \emph{partial shallow} terms. A partial shallow term looks like this, where we omitted to draw the element 1:
+\noindent\begin{example}[Partial unfold] If $\rGamma$ and $\rDelta$ are types, we define $\ranked{\Gamma*\Delta}$ to be $\ranked{\Gamma.(1+\Delta)}$. We call its inhabitants the \emph{partial shallow} terms. A partial shallow term looks like this, where we omitted to draw the element 1:
 \begin{center}
 \includegraphics[scale=.4]{partial-shallow-term.pdf}
 \end{center}
@@ -167,4 +167,20 @@ We define the partial shallow unfolding functions to be the function of type
  \begin{center}
 \includegraphics[scale=.4]{partial-shallow-unfold.pdf}
  \end{center}
+\end{example}
+
+\noindent\begin{example} Consider the function $\ranked{f}$ which makes the following diagram commute.
+ \begin{center}
+ \begin{tikzpicture}
+  \matrix (m) [matrix of math nodes,row sep=3em,column sep=6em,minimum width=2em]
+  {
+     \ranked{\tmonad (\reduce k \Sigma)^k} & \ranked{(\tmonad \Sigma)^{[k]}} \\
+     \ranked{(\tmonad \Sigma)^{[k]})} &  \\};
+  \path[-stealth]
+    (m-1-1) edge node [right] {} (m-2-1)
+    (m-2-1) edge node [right] {$\ranked{\mathsf{unfold}}$}  (m-1-2)
+     (m-1-1) edge node [above] {$\ranked{f}$}  (m-1-2);
+\end{tikzpicture}
+ \end{center}
+ In words, the function $f$ is the unfolding operation, when we restrict to a very specific class of inputs: the twists have singletons as image. 
 \end{example}
