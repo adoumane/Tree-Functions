@@ -156,4 +156,15 @@ Using similar arguments as before, we can conclude that:
 The ancestor function is obtained by applying $\ranked{\mathsf{root}_{f,g}}$ followed by a flattening.
 \end{example}
 
-
+\begin{example} If $\rGamma$ and $\rDelta$ are types, we define $\ranked{\Gamma*\Delta}$ to be $\ranked{\Gamma.(1+\Delta)}$. We call its inhabitants the \emph{partial shallow} terms. A partial shallow term looks like this, where we omitted to draw the element 1:
+\begin{center}
+\includegraphics[scale=.4]{partial-shallow-term.pdf}
+\end{center}
+We define the partial shallow unfolding functions to be the function of type
+\begin{align*}
+\ranked{{\reduce k \Sigma}*{\Gamma^k} \to \reduce k ({\Sigma}*{\Gamma})} 
+\end{align*}
+ \begin{center}
+\includegraphics[scale=.4]{partial-shallow-unfold.pdf}
+ \end{center}
+\end{example}

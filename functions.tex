@@ -63,16 +63,13 @@ $$\begin{array}{ll}
   \simplefun
         {}
         {\Sigma}
-        {\reduce k \Sigma^k}
-        {\includegraphics[scale=.3]{graded-unit.pdf}} &
+        {\reduce 1 \Sigma^1}
+        {} &
         \simplefun
         {}
         {\reduce {k_1} \reduce {k_2} \Sigma}
         {\reduce {k_1 \cdot k_2} \Sigma}
-        {\begin{tabular}{c}
-        $(a/f)/g \mapsto a/(g \circ f)$\\
-        \includegraphics[scale=.4]{graded-flat.pdf}
-        \end{tabular}}
+        {$(a/f)/g \mapsto a/(g \circ f)$}
         \end{array}$$
 \item \textbf{Associativity functions.}
 $$\begin{array}{lll}
@@ -112,7 +109,7 @@ $$\begin{array}{ll}
 	\simplefun
         {}
         {\reduce k (\Sigma_1 \otimes \Sigma_2)}
-        {\reduce k (\Sigma_1 \otimes (\reduce k {\Sigma_2}))}{picture}        
+        {\reduce k ((\reduce k {\Sigma_1})\otimes (\reduce k \Sigma_2))}{picture}        
 	&
 	 \simplefun
         {}
@@ -133,7 +130,13 @@ $$\begin{array}{ll}
 \end{array}
 $$
 \item \textbf{Shallow terms.} 
-   $$\begin{array}{ll}
+   $$\begin{array}{lll}
+   \reversiblefun
+        {}
+        {\rSigma}
+        {\shallowterm 1 {\Sigma} }
+        {picture}
+        &
       \reversiblefun
         {}
         {\rSigma}
@@ -150,30 +153,30 @@ $$
         \end{tabular}    
         } 
 \end{array} $$     
-\item \textbf{The error type $\bot$.}
-$$
-\ranked{\Sigma \to \bot}
-$$     
+\item \textbf{The error type $\bot$.} Some error raising mechanisms.
+$$\begin{array}{llll}
+\ranked{\Sigma \to \bot} \quad&\quad \ranked{\tmonad(\Sigma+\bot)\to \tmonad\Sigma+\bot} \quad&\quad \ranked{\reduce k (\Sigma+\bot)\to \reduce k\Sigma+\bot}\quad&\quad  \ranked{(\Sigma+\bot)\otimes \Gamma\to \Sigma\otimes \Gamma+\bot}
+\end{array}$$     
 \item \textbf{Injections.}
-$$\begin{array}{lll}
-\ranked{\Sigma \to \Sigma+\Sigma} \quad &\quad \ranked{\Sigma\otimes \Sigma \to \shallowterm 2 \Sigma}  \quad & \quad \ranked{\reduce k \Sigma \to \reduce {k+l}\Sigma} 
+$$\begin{array}{llll}
+\ranked{\Sigma \to \Sigma+\Sigma} \quad &\quad \ranked{\Sigma \to \reduce k \Sigma^k}  \quad & \quad \ranked{\reduce k \Sigma \to \reduce {k+l}\Sigma} \quad & \quad 
+\ranked{\Sigma^n\to  \shallowterm n \Sigma}
 \end{array}$$
 \item \textbf{Projections.}
-$$\begin{array}{lll}
-\ranked{\Sigma+\Sigma\to \Sigma} \quad &\quad \ranked{\Sigma\otimes \Sigma \to \reduce 1 \Sigma} \quad & \quad \ranked{\reduce {k+1} \Sigma \to \reduce {k}\Sigma+\bot}  
+$$\begin{array}{llll}
+\ranked{\Sigma+\Sigma\to \Sigma} \quad &\quad \ranked{\Sigma\otimes \Sigma \to \reduce 1 \Sigma} \quad & \quad \ranked{\reduce {k+1} \Sigma \to \reduce {k}\Sigma+\bot} \quad & \quad 
+\ranked{\shallowterm n \Sigma \to \Sigma^n} 
 \end{array}$$
 \item \textbf{Factorisations.} Same as before.
 \item \textbf{Pre-order.} Same as before.
-\item \textbf{Unfolding.} I suggest to define shallow terms in a ``partial way'', a shallow term will look like this:
-\begin{center}
-\includegraphics[scale=.4]{partial-shallow-term.pdf}
-\end{center}
-Then consider the following partial shallow unfolding as a basic function
+\item \textbf{Unfolding.} In addition to the shallow unfold, 
+ we consider also \emph{the unfolding of external twists}. This function, which is of type 
 \begin{align*}
-\ranked{\shallowterm{\reduce k \Sigma}{\Gamma^k} \to \reduce k (\shallowterm{\Sigma}{\Gamma})} 
+\ranked{\tmonad \mati k \Sigma \to \reduce k \tmonad \mati k \Sigma}
 \end{align*}
- \begin{center}
-\includegraphics[scale=.4]{partial-shallow-unfold.pdf}
- \end{center}
+"untwists" the external twists  as illustrated by the following figure where the external twists have been colored in red. 
+\begin{center}
+\includegraphics[scale=.4]{external-unfold.pdf}
+\end{center}
 \end{enumerate}
 

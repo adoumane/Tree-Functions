@@ -81,3 +81,63 @@ We compose the result with the following  (series of) injections
 \end{align*}
 Finally we permute the fold with the shallow product, then we apply the shallow unfold to obtain the result.
 \end{example}
+
+In order to prove lemma~\ref{lem:homo-twist}, we need to show that a very particular form of unfolding, which we call \emph{the unfolding of external twists}, is derivable. This function, which is of type 
+\begin{align*}
+\ranked{\tmonad \mati k \Sigma \to \reduce k \tmonad \mati k \Sigma}
+\end{align*}
+"untwists" the external twists  as illustrated by the following figure where the external twists have been colored in red. 
+\begin{center}
+\includegraphics[scale=.4]{external-unfold.pdf}
+\end{center}
+The main feature of this function, which will be very useful later, is that the external twists of the output term have $1$ as domain.  
+
+
+\begin{lemma}\label{lem:unfold-external-twist} If $u$ is an element of $\ranked{\reduce k \Sigma}$, let us denote by $\overline{u}$ the term of $\ranked{\Sigma}$ underlying it. There is a derivable function
+\begin{align*}
+\ranked{f:\tmonad \mati k \Sigma \to \reduce k \tmonad \mati k \Sigma}
+\end{align*}
+satisfying the following conditions:
+\begin{itemize}
+\item It preserves the unfolding. 
+\item It preserves $\alpha$-homogeneity. That is, if $t\in\ranked{\tmonad\mati k \rSigma}$ is $\alpha$-homogeneous, so is $\overline{\ranked{f}(t)}$.
+\item  For every term $t\in \ranked{\tmonad\mati k \rSigma}$, the domain of the external twists of $\overline{\ranked{f}(t)}$ is 1.
+\end{itemize}
+We call $\ranked{f}$ an external unfold function.
+\end{lemma}
+\begin{proof}
+Let us derive a function $\ranked{f}$ satisfying the conditions of the lemma. We start by lifting to terms the following basic function 
+$
+\ranked{\mati k \Sigma  \to \mati k \Sigma \cdot1}
+$.
+After embedding the shallow terms into terms and performing a flattening, we get a term in $\ranked{\tmonad(\mati k\Sigma+1)}$. After that, we apply the function
+\begin{align*}
+\ranked{\tmonad(\mati k \Sigma+1)\to \tmonad(\mati k\Sigma+1+1)}
+\end{align*}
+which sends every node labeled by $1$ to the first copy if it is directly connected to the output, and to the second copy if not. This function is derivable as it can be implemented by an FO rational function. %We illustrate this by the following figure where the red nodes denote the first copy of $1$ and the blue nodes denote the second one
+%\begin{center}
+%\includegraphics[scale=.1]{MyPicLabel1.jpg}
+%\end{center}  
+After that, we factorize the obtained term in such a way that each factor contains exactly a node $\ranked{\mati k \Sigma}$ with its children of type $\ranked{1+1}$. Such factorisation is of type
+\begin{align*}
+\ranked{\tmonad(\mati k \Sigma+1+1)\to \tmonad(\tmonad(\mati k \Sigma+1+1))}
+\end{align*} 
+and can be easily implemented using an fo rational function. The formed factors are of the form $\ranked{\mati k\Sigma\cdot(1+1)}$. We want to reflect that on the type, so that we can apply the basic functions of shallow terms. For that, we decompose $\ranked{\tmonad(\mati k \Sigma+1+1)}$ into $\ranked{\mati k \Sigma\cdot(1+1)+\bot}$ using the decomposition  function and the function 
+that sends every type to $\ranked{\bot}$ to collect the ``garbage'' types.
+Our term is now of type $\ranked{\tmonad(\mati k \Sigma\cdot(1+1)+\bot)}$. We apply the raising error function to get a term in $\ranked{\tmonad(\mati k \Sigma\cdot(1+1))+\bot}$.
+Now, we lift the basic function
+\begin{align*}
+\ranked{\mati k \Sigma\cdot(1+1)\to \reduce k(\mati k \Sigma\cdot(1+1))}
+\end{align*}
+obtaining the following term of type $\ranked{\tmonad(\reduce k(\mati k \Sigma\cdot(1+1))+\bot)}$
+\begin{center}
+\includegraphics[scale=.1]{MyPic26.jpg}
+\end{center}  
+When we lift the functions $\ranked{1+1\to 1}$ and $\ranked{\mati k \Sigma\cdot 1\to \mati k \Sigma}$, we get a term in $\ranked{\tmonad(\reduce k \mati k \Sigma+\bot)}$ to which we apply the raise error function, followed by an unfolding, then by the function of Example~\ref{ex:ReduceDegreeRecoverType} which gets rid of the type after the $\cdot$.
+\begin{align*}
+\ranked{\tmonad(\reduce k \mati k \Sigma+\bot)\to \tmonad\reduce k \mati k \Sigma+\bot\to (\reduce k \tmonad\mati k \Sigma)\cdot\tmonad\reduce k \mati k \Sigma +\bot\to \reduce k \tmonad\mati k \Sigma+\bot }
+\end{align*}
+To obtain the desired type  we embed $\ranked{\bot}$ into $\ranked{\reduce k \tmonad\mati k \Sigma}$ using the fact that $\rSigma$ contains a nullary and a binary element. 
+
+It is not difficult to see that the obtained function satisfies the conditions of the lemma.
+\end{proof}
