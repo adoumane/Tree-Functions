@@ -169,18 +169,31 @@ We define the partial shallow unfolding functions to be the function of type
  \end{center}
 \end{example}
 
-\noindent\begin{example} Consider the function $\ranked{f}$ which makes the following diagram commute.
- \begin{center}
- \begin{tikzpicture}
-  \matrix (m) [matrix of math nodes,row sep=3em,column sep=6em,minimum width=2em]
-  {
-     \ranked{\tmonad (\reduce k \Sigma)^k} & \ranked{(\tmonad \Sigma)^{[k]}} \\
-     \ranked{(\tmonad \Sigma)^{[k]})} &  \\};
-  \path[-stealth]
-    (m-1-1) edge node [right] {} (m-2-1)
-    (m-2-1) edge node [right] {$\ranked{\mathsf{unfold}}$}  (m-1-2)
-     (m-1-1) edge node [above] {$\ranked{f}$}  (m-1-2);
-\end{tikzpicture}
+\noindent\begin{example} Consider the function $\ranked{f}$ 
+ \begin{align*}
+\ranked{f : \tmonad \Sigma^{[k]} \rightarrow  (\tmonad \Sigma)^{[k]}}
+\end{align*}
+which coincides with the unfolding function when restricted to a very specific class of inputs: the image of every twist is a singleton. Below is an example illustrating the function $\ranked{f}$ 
+  \begin{center}
+\includegraphics[scale=.3]{one-unfold.pdf}
  \end{center}
- In words, the function $f$ is the unfolding operation, when we restrict to a very specific class of inputs: the twists have singletons as image. 
+The function $f$ can be implemented by a derivable function, which we construct using following steps. We use the example above as a running example to illustrate our construction.
+\begin{itemize}
+ \item We start by unfolding the external twits using the corresponding basic function. We get a term in $\ranked{\reduce k \tmonad \Sigma^{[k]}}$. Our example becomes like this
+   \begin{center}
+\includegraphics[scale=.3]{one-unfold1.pdf}
+ \end{center}
+ \item Next, we will transform each matrix power node into a tensor product. 
+   \begin{center}
+\includegraphics[scale=.3]{one-unfold2.pdf}
+ \end{center}
+ \item
+   \begin{center}
+\includegraphics[scale=.3]{one-unfold3.pdf}
+ \end{center}
+ \item
+   \begin{center}
+\includegraphics[scale=.3]{one-unfold4.pdf}
+ \end{center}
+ \end{itemize}
 \end{example}
