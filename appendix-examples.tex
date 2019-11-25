@@ -156,7 +156,7 @@ Using similar arguments as before, we can conclude that:
 The ancestor function is obtained by applying $\ranked{\mathsf{root}_{f,g}}$ followed by a flattening.
 \end{example}
 
-\noindent\begin{example}[Partial unfold] If $\rGamma$ and $\rDelta$ are types, we define $\ranked{\Gamma*\Delta}$ to be $\ranked{\Gamma.(1+\Delta)}$. We call its inhabitants the \emph{partial shallow} terms. A partial shallow term looks like this, where we omitted to draw the element 1:
+\noindent\begin{example}[Partial unfold]\label{ex:partial-shallow-unfold} If $\rGamma$ and $\rDelta$ are types, we define $\ranked{\Gamma*\Delta}$ to be $\ranked{\Gamma.(1+\Delta)}$. We call its inhabitants the \emph{partial shallow} terms. A partial shallow term looks like this, where we omitted to draw the element 1:
 \begin{center}
 \includegraphics[scale=.4]{partial-shallow-term.pdf}
 \end{center}
@@ -204,7 +204,7 @@ The function $f$ can be implemented by a derivable function, which we construct 
  \ranked{\tmonad \tmonad(k + \reduce k \Sigma) \to k. \tmonad ((\reduce k \Sigma)*k)}
  \end{align*}
  This function can be implemented easily using the decomposition function, the functions which maps every type to $\ranked{\bot}$ and mechanisms of raising errors. 
- \item Now the idea is to transform each factor $\ranked{(\reduce k \Sigma)*k}$ 
+ \item Now the idea is to transform each node $\ranked{(\reduce k \Sigma)*k}$ into a $\rSigma$ one. We do so by transforming $\ranked{k}$ into $\ranked{1^k}$ (this function is basic since its domain is finite), then by applying the partial shallow unfold function of Example~\ref{ex:partial-shallow-unfold}, as illustrated by the following picture
    \begin{center}
 \includegraphics[scale=.3]{one-unfold4.pdf}
  \end{center}
