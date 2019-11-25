@@ -105,95 +105,7 @@ We consider as example the following function $\alpha$, whose graph, drawn below
 \includegraphics[scale=.1]{MyPic32.jpg}
 \end{center}
 we consider also the following $\alpha$-homogeneous term, where $\alpha$ is the function above, as running example for the weakly connected case. 
-\begin{center}
-\includegraphics[scale=.1]{MyPic33.jpg}
-\end{center} 
-Notice that the external twists of our example term have 1 as domain. We can suppose that for all terms under consideration since we can start by applying the function given by lemma~\ref{lem:unfold-external-twist} to unfold the external twists.  Then we proceed in three steps. 
-\begin{enumerate}
-\item First, we apply the function
-\begin{align*}
-\ranked{\tmonad \mati k \Sigma \to \reduce k \tmonad(\reduce k\Sigma^{k-1}\otimes \Sigma)}
-\end{align*} 
-which isolates the last component of the tensor product. We illustrate the effect of the function $f$ by the following example, where $k=3$
-\begin{center}
-\includegraphics[scale=.1]{MyPic20.jpg}
-\end{center}
-\item After that, we lift to $\reduce k$ the function function
-\begin{align*}
-\ranked{\tmonad(\reduce k\Sigma^{k-1}\otimes \Sigma) \to \tmonad\mati {k-1} {(\Sigma\cdot(1+\Sigma))}\otimes \Sigma}
-\end{align*}
-which pulls-up the last component of the tensor product to the parents, as illustrated by the following picture 
-\begin{center}
-\includegraphics[scale=.12]{MyPic21.jpg}
-\end{center}
-\item After that, we apply the induction hypothesis to unfold the term from $\ranked{\tmonad\mati {k-1} {(\Sigma\cdot(1+\Sigma))}}$. Finally, after some operations aiming at adjusting the type of the output term, we get our result.
-\end{enumerate}
-Clearly, the most important steps are 1 and 2. We explain in the following how they can be derived. 
 
-Consider the function 
-\begin{align*}
-\ranked{f:\tmonad \reduce k (\Gamma\otimes \Sigma)\to \reduce k \tmonad(\reduce k \Gamma\otimes \Sigma)}
-\end{align*}
-Obtained as follows. First we lift the basic function
-\begin{align*}
-\ranked { \reduce k (\Gamma\otimes \Sigma) \to  \reduce k (\reduce k \Gamma\otimes \Sigma)}
-\end{align*}
-to terms. Then we compose the result with the following function, obtained by composing the unfold function with the function of Example~\ref{}
-\begin{align*}
- \ranked{\tmonad \reduce k (\reduce k \Gamma\otimes \Sigma) \xrightarrow{\text{Unfold}}
- \reduce k \tmonad (\reduce k \Gamma\otimes \Sigma)\cdot \tmonad \reduce k (\reduce k \Gamma\otimes \Sigma) \xrightarrow{\text{Ex}~\ref{}} \reduce k \tmonad (\reduce k \Gamma\otimes \Sigma)}
-\end{align*}
-The function of step 1 is the function $\ranked{f}$ where $\ranked{\Gamma}$ is taken to be $\ranked{\Sigma^{k-1}}$.
-
-
-
-Now consider the function
-\begin{align*}
-\ranked{g:\tmonad (\reduce k \Gamma \otimes \Sigma) \to \tmonad \reduce {k-1} (\Gamma\cdot(1+\Sigma))\otimes \Sigma}
-\end{align*}
-which, for every node (describe). Here is an example illustrating the effect of the function $\ranked{g}$ on the term $t$ below which will be our running example in this proof.
-\begin{center}
-\includegraphics[scale=.12]{MyPic22.jpg}
-\end{center}
-The function of step 2 is obtained by taking $\ranked{\Gamma}$ to be $\ranked{\Sigma^{k-1}}$ in $\ranked{g}$. Let us see how $\ranked{g}$ can be derived.
-
-First, we embed the tensor product into terms using the derivable function
-\begin{align*}
-\ranked{\reduce k \Gamma \otimes \Sigma \to \tmonad (2+\reduce k \Gamma +\Sigma)}
-\end{align*}
-After lifting this function to terms, and flattening the result, we get a term in $\ranked{\tmonad(2+\reduce k \Gamma +\Sigma)}$. 
-Consider now the factorisation of these terms
- which is described as follows. There is two types of factors
-\begin{itemize}
-\item  A factor of the first kind is of depth at most three. Its root is a $\reduce k \rGamma$ element, it contains the children of the root labeled by $2$ and the grand-children labeled by elements from $\rSigma$.
-\item If a node is labeled by $2$ or by an element of $\rSigma$, and it is not part of a factor of the first kind, then it forms a singleton factor of its own.    
-\end{itemize}
-This factorisation is of type
-\begin{align*}
-\ranked{\tmonad(2+\reduce k \Gamma +\Sigma) \to \tmonad(\reduce k \Gamma\cdot(1+2)\cdot(1+\Sigma)+\tmonad(2+\Sigma+\reduce k \Gamma))}
-\end{align*}
-Where the type of the first kind of factors is $\ranked{\reduce k \Gamma\cdot(1+2)\cdot(1+\Sigma)}$, the element $1$ is used when a child of the root is not $2$ or a grand child is not an element of $\rSigma$. 
-This factrorisation can clearly be implemented by a first-order rational function. After these operations, our example term $t$ becomes like this, where the binary gray node is the element $2$, we omitted the element $1$ in the figure, and the factorisation is indicated by the red lines
-\begin{center}
-\includegraphics[scale=.09]{MyPic23.jpg}
-\end{center}
-  After that, we apply to each block of the first kind the homomorphism that transforms every element $2$ into the following element of type $\ranked{\mati k 1}$
-  \begin{center}
-  \includegraphics[scale=.03]{MyPic24.jpg}
-  \end{center}
-  and keeps the other nodes unchanged. The term $t$ becomes now
-  \begin{center}
-  \includegraphics[scale=.09]{MyPic25.jpg}
-  \end{center}
-  We can now lift the partial shallow unfold (Example~\ref{}), followed by an injection and the elimination of $1$ to recover the type $\ranked{\reduce k \Gamma}$
-  \begin{align*}
-  \ranked{\reduce k \Gamma\cdot(1+\mati k 1)\to \reduce k (\Gamma\cdot(1+1))\to \reduce k (\Gamma\cdot 1) \to  \reduce k \Gamma}
-\end{align*}
-which result into a term of type $\ranked{\tmonad(\reduce k\Gamma\cdot(1+\Sigma)+\tmonad(2+\Sigma+\reduce k \Gamma))}$. We apply then the following basic functions, which aims at putting the $\cdot$ inside the scope of $\reduce k$, then reducing the degree of the fold:
-\begin{align*}
-\ranked{\reduce k\Gamma\cdot(1+\Sigma)\to \reduce k(\Gamma\cdot(1+\Sigma))\to \reduce {k-1}(\Gamma\cdot(1+\Sigma)\cdot (0+1)) }
-\end{align*}
-After that, we apply some flattening to get the desired term. However, we still do not have the right type. I need either a bottom, or something else to handle the garbage.
 \end{proof}
 
 
@@ -213,14 +125,6 @@ The rest of this section is devoted to proving the following lemma.
         \end{align*}      
 which coincides with term unfolding for all inputs which are homogeneous.
 \end{lemma}
-To perform the unfolding of homogeneous inputs, we need the following function
-\begin{align*}
-\ranked{\reduce k \Sigma^l \to \reduce 1 (\reduce k \Sigma\cdot(0+1))^l }
-\end{align*}
-which plugs $0$ to the folds shared by two distinct elements of the tensor product
-\begin{center}
-\includegraphics[scale=.07]{MyPic34.jpg}
-\end{center}
 
 \begin{lemma}
 Let
@@ -249,20 +153,5 @@ then we have also
 \end{lemma}
 
 \begin{proof}[Proof of Lemma~\ref{lem:homo-2-twist}]
-~\\
-\begin{center}
-\includegraphics[scale=.07]{MyPic35.jpg}
-\end{center} 
-\begin{center}
-\includegraphics[scale=.07]{MyPic36.jpg}
-\end{center} 
-\begin{center}
-\includegraphics[scale=.07]{MyPic37.jpg}
-\end{center} 
-\begin{center}
-\includegraphics[scale=.07]{MyPic38.jpg}
-\end{center} 
-\begin{center}
-\includegraphics[scale=.07]{MyPic39.jpg}
-\end{center} 
+
 \end{proof}
