@@ -1,21 +1,30 @@
 \section{Derivable functions}
 In this section, we state the main result of this paper, which describes  the  first-order tree-to-tree functions in terms of  certain atomic functions by using certain combinators.  A typical combinator is composition of functions.
 
-\paragraph*{The category of ranked sets.}
-The crucial property of the atomic functions and  the combinators is that they use ranked sets. This is because the type constructor of this paper, namely terms, uses ranked sets.  Roughly speaking, a term is a tree with missing parts. The missing parts arise when we  isolate smaller parts of a bigger tree, as illustrated in the following picture:
+\paragraph*{The category of ranked sets.} Even if our goal is to generate first-order tree-to-tree transductions, our basic functions will not be necessarily function transforming trees into trees. For example, we will need to manipulate pairs of trees or trees of trees etc. Clearly, these data structures are encodable by trees, however this would make the basic functions rather complex. We make the choice of introducing new types for our basic functions in order to get simple basic functions.
+
+Among the types that we introduce, the most important one is certainly the type of \emph{terms}. This type appears when we want to decompose our trees into smaller parts, as illustrated by the figure below. Each small part of the tree is not really a tree\footnote{This is a difference of trees as opposed to strings~\cite{bojanczykRegularFirstOrderList2018}, where ranked sets are not needed, because a part of a string is also a string.}: it has dangling ports which  allows to connect it with the other parts. We call \emph{terms} such tree with ports. 
 \mypic{15}
-This is a difference of trees as opposed to strings~\cite{bojanczykRegularFirstOrderList2018}, where ranked sets are not needed, because a part of a string is also a string.
+A term can naturally be seen as a ranked element, its arity being the number of its ports. Because the set of terms is itself a ranked set,  we can create terms of terms.  A consequence of using terms is that we will work in the category of ranked sets; i.e.~the types we use will be ranked sets and the functions we consider are arity-preserving functions between ranked sets. As in Section~\ref{sec:trees-transductions}, we write ranked sets in red. We also use red for operations that output ranked sets. 
 
 
-\begin{definition}[Terms]\label{def:terms}
-    An  term\footnote{
-        Our definition of terms differs from the definition used in universal algebra. An $n$-ary term in the sense of this paper is, in the language of universal algebra, a term over variables $\set{x_1,\ldots,x_n}$ where each variable appears exactly once, and the variables are used from left to right.  The requirement that variables appear  once is related to the linear output size of first-order tree-to-tree transductions. Without this requirement, even homomorphisms would have exponential output size. 
-    } over a ranked set $\rSigma$ is a tree over alphabet $\rSigma \redplus \redzero$, where $\redzero$ is a set with one element of arity zero.  The nodes with labels from $\redzero$  -- which are leaves --  are called \emph{ports}. The arity of a term is the number of ports.  We write $\tmonad \rSigma$ for the ranked set of terms over $\rSigma$.  
-\end{definition}
+ 
+%
+%
+%The crucial property of the atomic functions and  the combinators is that they use ranked sets. This is because the type constructor of this paper, namely terms, uses ranked sets.  Roughly speaking, a term is a tree with missing parts. The missing parts arise when we  isolate smaller parts of a bigger tree, as illustrated in the following picture:
 
 
 
-Because the set of terms is itself a ranked set,  we can create terms of terms.         A consequence of using terms is that we will work in the category of ranked sets; i.e.~the types we use will be ranked sets and the functions we consider are arity-preserving functions between ranked sets. As in Section~\ref{sec:trees-transductions}, we write ranked sets in red. We also use red for operations that output ranked sets. 
+
+%\begin{definition}[Terms]\label{def:terms}
+%    An  term\footnote{
+%        Our definition of terms differs from the definition used in universal algebra. An $n$-ary term in the sense of this paper is, in the language of universal algebra, a term over variables $\set{x_1,\ldots,x_n}$ where each variable appears exactly once, and the variables are used from left to right.  The requirement that variables appear  once is related to the linear output size of first-order tree-to-tree transductions. Without this requirement, even homomorphisms would have exponential output size. 
+%    } over a ranked set $\rSigma$ is a tree over alphabet $\rSigma \redplus \redzero$, where $\redzero$ is a set with one element of arity zero.  The nodes with labels from $\redzero$  -- which are leaves --  are called \emph{ports}. The arity of a term is the number of ports.  We write $\tmonad \rSigma$ for the ranked set of terms over $\rSigma$.  
+%\end{definition}
+
+
+
+
 
 \paragraph*{Types.} The following definition describes the  ranked sets that will be allowed as domains and co-domains of our functions.  We call such ranked sets \emph{types}.
 %  The general idea is that we start with finite ranked sets, and close these under the following type constructors: coproducts, two kinds of product (Cartesian and tensor), taking terms, and a type constructor that allows to merge ports.
@@ -24,13 +33,18 @@ Because the set of terms is itself a ranked set,  we can create terms of terms. 
 
 
 
-\begin{definition}[Types] \label{def:types} Every  ranked set with finitely many elements is a type. Furthermore, types are closed under applying the following type constructors:
+\begin{definition}[Types] \label{def:types} Every  ranked set with finitely many elements is a type. The set $\ranked{\bot}$ which contains a single  element for each arity is also a type. We denote by $n$ the $n$-ary element of $\ranked{\bot}$.  Furthermore, types are closed under applying the following type constructors:
     \begin{enumerate}
-       \item \emph{Coproduct.} An element of the \emph{coproduct} $\ranked{\Sigma_1 + \Sigma_2}$ is a co-pair of the form  $(i,a)$ where $i \in \set{1,2}$ and $a \in \ranked{\Sigma_i}$. The arity is inherited from $a$. We draw co-pairs like this:
-       \mypic{61}
-              \item       \emph{Product.} An element of the   \emph{product}\footnote{
-                  A more precise name would be \emph{tensor product}. The alternative product, call it \emph{Cartesian product}, would have as $n$-ary elements  pairs $(a_1,a_2)$ such that both $a_1$ and $a_2$ have arity $n$. Since we do not use Cartesian product, we write product without specifying that we mean the tensor product.
-              } $\ranked{\Sigma_1 \otimes \Sigma_2}$  is a  pair $\tensorpair{a_1,a_2}$ where $a_i \in \ranked{\Sigma_i}$. The arity  of this pair is the sum of arities of its components $a_1$ and $a_2$. We draw pairs like this:
+    \item \emph{Terms.} An element of $\tmonad \rSigma$, the set of terms over $\rSigma$, is a tree over alphabet $\rSigma \redplus \redzero$.  The nodes with labels from $\redzero$  -- which are leaves --  are called \emph{ports}. The arity of a term is the number of ports. We draw terms like this:
+            \mypic{51}
+      \item \emph{Coproduct.} An element of the \emph{coproduct} $\ranked{\Sigma_1 + \Sigma_2}$ is a co-pair of the form  $(i,a)$ where $i \in \set{1,2}$ and $a \in \ranked{\Sigma_i}$. The arity is inherited from $a$. 
+      
+%We draw co-pairs like this:
+%       \mypic{61}
+              \item       \emph{Product.} An element of the   \emph{product}%\footnote{
+%                  A more precise name would be \emph{tensor product}. The alternative product, call it \emph{Cartesian product}, would have as $n$-ary elements  pairs $(a_1,a_2)$ such that both $a_1$ and $a_2$ have arity $n$. Since we do not use Cartesian product, we write product without specifying that we mean the tensor product.
+%              } 
+ $\ranked{\Sigma_1 \otimes \Sigma_2}$  is a  pair $\tensorpair{a_1,a_2}$ where $a_i \in \ranked{\Sigma_i}$. The arity  of this pair is the sum of arities of its components $a_1$ and $a_2$. We draw pairs like this:
         \mypic{52}
         \item \emph{Folding.} For every $k \in \set{1,2,3,\ldots}$, we have a unary type constructor $\reduce k \rSigma$  which is used to reduce arities, by grouping ports into groups of size at most $k$.  An $n$-ary element of $\reduce k \rSigma$, which is called a \emph{$k$-fold}, consists of an element      $a \in \rSigma$  together with an  injective  function
             \begin{align*}
@@ -38,8 +52,6 @@ Because the set of terms is itself a ranked set,  we can create terms of terms. 
             \end{align*}
             We denote such an element as $a/f$ and draw it like this: \mypic{53}
             If $i\in  \set{1,\ldots,\arity a}$, then the second component of $f(i)$ specifies to which group the $i$-th port of $a$ will participate, while the first component specifies its place in this group. In the picture above, the arity of $a$ is $6$, the arity of $a/f$ is $4$, and $k$, the size of the groups,  is $2$. For instance we have that $f(1)=(1,2)$, because the first port of $a$ participated to the group forming the first port of $a/f$, and because it is the second element in this group.
-        \item \emph{Terms.} The term type constructor $\tmonad \rSigma$ has already been discussed at the beginning of this section.  We draw terms like this:
-        \mypic{51}
         \item \emph{Shallow terms.} The  ranked set $\shallowterm \rGamma \rSigma$ of  \emph{shallow terms} is defined as
         \begin{align*}
             \ranked {\shallowterm \rSigma \rGamma \eqdef \coprod_{a \in \rSigma} \underbrace{\rGamma\otimes\ldots\otimes\rGamma}_{\text{arity of $a$}}}.
@@ -70,12 +82,13 @@ We now introduce the main new definition of this paper.
 \begin{definition}[Derivable function]
     The class of \emph{derivable} functions is the least class which:
     \begin{itemize}
-        \item contains the atomic functions in Figure~\ref{fig:fo-term} and all arity-preserving functions with finite domain;
-        \item is closed under  function composition and the liftings~\eqref{eq:liftplus}-\eqref{eq:liftshallow}.
+    \item contains, for every $\rSigma$, the (unique) arity preserving function $\ranked{\Sigma \to \bot}$, and all arity-preserving functions with finite domain;
+        \item contains the atomic functions in Figure~\ref{fig:fo-term};
+        \item is closed under  function composition and type liftings.
     \end{itemize}
 \end{definition}
 
-\include{figure-fot}
+%\include{figure-fot}
 
 Roughly speaking, the atomic functions describe the monad structure of terms, the (graded) monad structure of folds, some obvious distributivity operations, and several less obvious operations whose definitions are  deferred to Section~\ref{sec:atomic-and-combinators}. Before giving these definitions, we state the main result of the paper. 
 
@@ -128,7 +141,7 @@ Roughly speaking, the atomic functions describe the monad structure of terms, th
     
 \end{theorem}
 
-\subsection{Proposition of another presentation of atomic functions}
+%\subsection{Proposition of another presentation of atomic functions}
 \input{functions}
 
 \subsection{The atomic functions not explained in Figure~\ref{fig:fo-term}}
@@ -152,17 +165,21 @@ In this section, we define the atomic functions whose definitions were not given
         \begin{align*}
             t \in \ranked{\tmonad(\Sigma_1+\Sigma_2)}.
         \end{align*}
-        We say that two non-port nodes have \emph{same type} if both have labels in the same  $\ranked{\Sigma_i}$; otherwise we say that non-port nodes have \emph{opposing type}.  Call two non-port nodes \emph{ancestor equivalent}  if they have the same proper ancestors of opposing type. Call two non-port nodes \emph{descendant equivalent}  if they  are ancestor equivalent and they have the same proper descendants of opposing type. Here is a picture, with $\ranked{\Sigma_1}$ being red and $\ranked{\Sigma_2}$ being blue: \todo{les images ne collent pas avec la def.}
-        \mypic{11}
+        We say that two non-port nodes have \emph{same type} if both have labels in the same  $\ranked{\Sigma_i}$; otherwise we say that non-port nodes have \emph{opposing type}.  Call two non-port nodes \emph{ancestor equivalent}  if they have the same proper ancestors of opposing type. Call two non-port nodes \emph{descendant equivalent}  if they  are ancestor equivalent and they have the same proper descendants of opposing type. Here is a picture, with $\ranked{\Sigma_1}$ being red and $\ranked{\Sigma_2}$ being blue: 
+        \begin{center}
+      \includegraphics[scale=.4]{facto-up-down.pdf}
+        \end{center}
         Both ancestor and descendant equivalences are factorisations; and in each case equivalence classes contain only nodes of same type.  The function $\ancfact$ maps a term to (the term of terms corresponding to) its ancestor equivalence relation, likewise we define $\decfact$ for  descendant factorisations.
     
         \subsubsection{Pre-order traversal.} The preorder traversal function  
         \begin{align*}
             \ranked{\preorder : \tmonad \Sigma \to \reduce 1 \tmonad (\rSigma + 0 + 2)}
         \end{align*}
-        is the natural extension -- from trees to terms -- of the  pre-order function discussed in Example~\ref{ex:pre-order}, as explained below (the nullary grey nodes represent the labels from $\ranked 0$, and the binary grey nodes represent the labels from $\ranked 2$):
-        \mypic{13}
-        
+        is the natural extension -- from trees to terms -- of the depth-first traversal, as explained below (the nullary grey nodes represent the labels from $\ranked 0$, and the binary grey nodes represent the labels from $\ranked 2$):
+        \begin{center}
+        \includegraphics[scale=.45]{preorder.pdf}
+        \end{center}
+The $\preorder$ function respects the input port order, this is the reason  why we have a fold $\reduce 1$ in the output type. 
 \subsubsection{Unfolding}
 The general idea behind the  unfolding operation 
 \begin{align*}
@@ -171,8 +188,10 @@ The general idea behind the  unfolding operation
 }
 \end{align*} 
 is to eliminate a $k$-fold by matching it with a $k$-th power. 
-The unfolding operation is explained in the following picture for $k=3$: \todo{Not the right picture. Still think that triple edges will make the idea more clear.}
-\mypic{56}
+The unfolding operation is explained in the following picture for $k=2$: 
+        \begin{center}
+        \includegraphics[scale=.4]{shallow-unfold.pdf}
+        \end{center}
 % One of the main results in this paper will be  that an iterated version of the unfold operation, of type
 % \begin{align*}
 % \ranked{    \tmonad (\reduce k \Sigma^k) \to \reduce k (\tmonad \Sigma)^k,}
@@ -185,3 +204,19 @@ The unfolding operation is explained in the following picture for $k=3$: \todo{N
 % (a\tensorpair{b_{f(1)},\ldots,b_{f(\arity a)}})/g
 % \end{align*}
 % where $g$ is defined so that it matches ...
+
+\noindent\begin{example}[Filter]\label{ex:filter} 
+ To get a feeling for the atomic functions and combinators, we derive the function
+$$ \ranked{f:\tmonad (\rSigma+\rGamma)\to\tmonad \rSigma}$$
+discussed earlier, which erases the elements of $\rGamma$ from the input term, where $\rGamma$ is a finite set of unary symbols. 
+
+Consider the atomic function $\ranked{\unit_\rSigma:\rSigma\to\tmonad\rSigma}$ and the constant function $\ranked{\mathrm{empty}:\rGamma\to\tmonad\rSigma}$ which associates to every element of $\rGamma$ the empty term. The function $\ranked{\mathrm{empty}}$ is atomic because its domain is finite. We start by lifting $\ranked{\unit_\rSigma}$ and $\ranked{\mathrm{empty}}$ to the type constructor $+$, then we compose the result with the atomic projection function as follows
+\begin{align*}
+\xymatrix{
+    \ranked{\rSigma+\rGamma}\quad \ar[r]^-{\ranked{\unit_\Sigma+\mathsf{empty}}} & \quad \ranked{\tmonad\rSigma+\tmonad\rSigma}\ar[r]^-{} &\tmonad\rSigma
+},
+\end{align*}
+We lift the obtained function to terms, and compose the result with the $\flatt_\rSigma$ function to obtain our function $\ranked{f}$.  
+\end{example}
+
+More examples of derived functions are given in Appendix.~\ref{sec:AppendixExamples}.

@@ -6,18 +6,19 @@
 In this section, we introduce an automaton model for tree-to-tree functions, and prove that it defines the same functions as first-order tree-to-tree transductions. 
 The automaton model is roughly based on streaming tree transducers~\cite{alur2017streaming}.
 It processes the input tree bottom-up, and uses registers to store parts of the output tree.
-Before giving a formal definition, we present an example based on  pre-order traversal from Example~\ref{ex:pre-order}.
-\begin{example}\label{ex:preorder-register} In Example~\ref{ex:pre-order}, we considered a tree-to-tree function which computed pre-order traversal, using the following input and output alphabets:
-    \mypic{21}
-We now show a transducer which recognises the same function, and which uses  a single register.  After reading processing an input tree, the register stores a unary term (not a tree), which represents the pre-order traversal of the  input tree, and which has a single port in the rightmost leaf. The updates of this transducer are illustrated as follows. If the input tree is a single leaf, then the register is set to the following term:
-    \mypic{47}
-    For a tree which is not a single leaf, and its root symbol has $n>0$ children, we first compute the register value  for each of the $n$  child subtrees, resulting in unary terms $r_1,\ldots,r_n$,  and then we combine these terms into a single one, which is illustrated below for the case of $n=2$:
-    \mypic{34}
-    Once the whole input tree has been processed, resulting in a register value $r$ in the root node, the output tree is obtained from this register value by plugging its port with a node, as illustrated in the following picture:
-    \mypic{48}
-\end{example}
 
-
+%Before giving a formal definition, we present an example based on  pre-order traversal from Example~\ref{ex:pre-order}.
+%\begin{example}\label{ex:preorder-register} In Example~\ref{ex:pre-order}, we considered a tree-to-tree function which computed pre-order traversal, using the following input and output alphabets:
+%    \mypic{21}
+%We now show a transducer which recognises the same function, and which uses  a single register.  After reading processing an input tree, the register stores a unary term (not a tree), which represents the pre-order traversal of the  input tree, and which has a single port in the rightmost leaf. The updates of this transducer are illustrated as follows. If the input tree is a single leaf, then the register is set to the following term:
+%    \mypic{47}
+%    For a tree which is not a single leaf, and its root symbol has $n>0$ children, we first compute the register value  for each of the $n$  child subtrees, resulting in unary terms $r_1,\ldots,r_n$,  and then we combine these terms into a single one, which is illustrated below for the case of $n=2$:
+%    \mypic{34}
+%    Once the whole input tree has been processed, resulting in a register value $r$ in the root node, the output tree is obtained from this register value by plugging its port with a node, as illustrated in the following picture:
+%    \mypic{48}
+%\end{example}
+%
+%
 
 % We use an algebraic syntax for register tree transducers. 
 % \emph{Linear polynomials.} Suppose that $\Sigma$ is a finite ranked alphabet.  For a ranked set $X$, define a \emph{polynomial with variables $X$ over $\Sigma$} to be any term in $\tmonad (\Sigma + X)$. Given such a polynomial $p$, and an arity preserving valuation $v : X \to \tmonad \Sigma$, we define $p(v)\in \tmonad \Sigma$ to be the term obtained from $p$ by replacing each variable with its value under $v$. The arity of $p(v)$ is the same as the arity of $p$.  A polynomial is called \emph{linear}, or non-duplicating, if each variable from $X$ is used at most once.
@@ -31,7 +32,7 @@ We now show a transducer which recognises the same function, and which uses  a s
 % \end{definition}
 
 
-We now proceed with a more formal definition of register tree transducers.
+%We now proceed with a more formal definition of register tree transducers.
 
 \paragraph*{Register valuations and updates.}   Let $\ranked{\Gamma, R}$ be finite ranked sets.
 A \emph{register valuation} over output alphabet $\rGamma$ and register names $\ranked R$ is defined to be any arity-preserving function from the register names $\regnames$ to terms $\tmonad \rGamma$. Here is an example, which uses registers $r,s$ of arities two and zero:
@@ -60,7 +61,7 @@ define its \emph{evaluation} to be the register valuation defined by induction i
 % \ranked{u}(\ranked {u_1},\ldots,\ranked{u_n})  \qquad \text{of arity $m_1+\cdots + m_n$}
 % \end{align*}
 
-\paragraph*{Register transducers.} Having defined a registers and their updates, we proceed to define register transducers. The general idea is that the transducer assigns to each node of the input tree a register update using a first-order tree relabelling, these register updates are then evaluated, and the output tree is found in a designated output register. 
+\paragraph*{Register transducers.} Having defined registers and their updates, we proceed to define register transducers. The general idea is that the transducer assigns to each node of the input tree a register update using a first-order tree relabeling, these register updates are then evaluated, and the output tree is found in a designated output register. 
 
 
 
@@ -72,8 +73,8 @@ The syntax of a register transducer consists of:
     \item A distinguished \emph{output register} in $\regnames$ of arity zero.
     \item A \emph{transition function}, which is a  first-order tree relabelling of type
     \begin{align*}
-      \trees{\rSigma} \to \trees{\rDelta}  \qquad \text{for some finite set $\rDelta$ of  register updates over $\regnames$ and $\rGamma$}.
-    \end{align*}
+      \trees{\rSigma} \to \trees{\rDelta}
+    \end{align*}for some finite set $\rDelta$ of  register updates over $\regnames$ and $\rGamma$, 
     such that all register updates in  $\rDelta$ are single-use and monotone, as defined below:
     \begin{enumerate}
         \item \emph{Single-use.}  An $n$-ary register update $\ranked{u}$ is  called  \emph{single-use} if   every
@@ -95,10 +96,10 @@ The syntax of a register transducer consists of:
 
 The function computed by a register transducer is the composition the following three operations:
 \begin{align*}
-\xymatrix@C=2.5cm{
-    \trees {\rSigma} \ar[r]^{\text{transition function}} & \trees {\rDelta} \ar[r]^-{
+\xymatrix@C=1.6cm{
+    \trees{\rSigma} {\ar[r]^{\text{transition}}_{\text{function}}} & \trees {\rDelta} \ar[r]^-{
     \text{evaluate}
-    } & \text{register valuations} \ar[r]^-{\text{contents of output register}} & \trees \Gamma
+    } & \rDelta {\ar[r]^{\text{content of }}_{\text{output register}}} & \trees \rGamma
 }
 \end{align*}
 

@@ -1,10 +1,35 @@
-
-
 \section{Appendix on first-order relabelling}~\label{sec:AppendixForat}
 
-\subsection{From first-order queries to temporal logic}
-\textcolor{red}{Either reprove Schlingloff or write this section well.}
+\subsection{Proof of Lemma~\ref{lem:schlingloff}}
 
+In this section, we provide more details about the proof of Lemma~\ref{lem:schlingloff}:
+
+\begin{lemma} The first-order tree relabelings are equal to the smallest class of functions which is closed under composition and which  contains the following functions:
+    \begin{enumerate}
+        \item \label{it:relabeling} \emph{Relabeling}. To every finite $\rGamma,\rSigma$ and $\ranked {f : \rSigma \to \rGamma}$, the tree lifting $\trees \ranked f : \trees \rSigma \to \trees \rGamma$.
+        \item \label{it:child} \emph{Child.} For every $\rSigma$ and  $i \in \set{1,2,\ldots}$, the characteristic function of the  unary query 
+        \begin{align*}
+            \underbrace{\child i (x).}_{\text{$x$ is an $i$-th child}}
+        \end{align*}
+         \item \label{it:until} \emph{Until.} For every finite $\rGamma, \rDelta \subseteq \rSigma$,  the characteristic function of the unary query
+         \begin{align*}
+              \underbrace{\exists y\ y > x \land \rDelta(y) \land  \forall z \ (x < z < y \Rightarrow \rGamma(z)).}_{\substack{\text{$x$ has a descendant $y$ with label in $\rDelta$, such that}\\ \text{all nodes strictly between $x$ and $y$ have label in $\rGamma$}}} 
+         \end{align*} 
+         \item \label{it:since}\emph{Since.} For every $\rGamma, \rDelta \subseteq \rSigma$,    the characteristic function of the unary query
+         \begin{align*}
+              \underbrace{\exists y\ y < x \land \rDelta(y) \land  \forall z \ (y < z < x \Rightarrow \rGamma(z)).}_{\substack{\text{$x$ has a descendant $y$ with label in $\rDelta$, such that}\\ \text{all nodes strictly between $x$ and $y$ have label in $\rGamma$}}}  
+         \end{align*} 
+    \end{enumerate}
+    In items \ref{it:child} -- \ref{it:since}, the alphabet is $\rSigma$, so the characteristic functions have type $\trees \rSigma \to \trees(\rSigma + \rSigma)$. 
+\end{lemma}
+Clearly the functions in the lemma are first-order tree relabelings, and first-order tree relabelings are easily seen to be closed under composition, which gives the right-to-left inclusion in the lemma. The hard part is the left-to-right inclusion, which says that every first-order tree relabeling can be decomposed into functions as in items~\ref{it:relabeling} -- \ref{it:since}. 
+The first  step in the proof of  the right-to-left inclusion is the observation that  every first-order tree relabeling can be decomposed as 
+\begin{align*}
+    g \circ f_1 \circ \cdots \circ f_n
+\end{align*}
+where $g$ is a relabeling as in item~\ref{it:relabeling} of the lemma and each $f_i$ is a  characteristic function of some unary query (not necessarily of the simple form indicated in items~\ref{it:child} -- \ref{it:since} in the lemma). This is a simple observation: the functions $f_1,\ldots,f_n$ annotate the tree with the truth values of the unary queries used in the definition of the  first-order relabeling, and $g$ uses these truth values to select the appropriate output label. The hard part of the lemma is showing that each $f_i$  can be further decomposed into functions as indicated in the lemma. This is where we us the result of Schlingloff~\cite[Theorem 2.6]{schlingloff1992expressive}, which says that all first-order definable tree properties can be defined using a temporal logic that has operators similar to the ones used in items~\ref{it:child} -- \ref{it:since} of the lemma. 
+
+Schlingloff's result is about unorderd trees. In the following, we recall this result and show how to adapt it to our framework.
 In order to show that first-order relabeling functions are derivable, we use a decomposition result, which says that first-order queries on trees over a ranked alphabet $\rGamma$ can be decomposed into the temporal operators of a logic that we call $2$-$\mathsf{CTL}$. 
 This result can be seen as a direct consequence of \cite{}. But since the framework of this theorem is slightly different from ours, we recall it here, and show how our result can be derived from it.
 
@@ -42,7 +67,7 @@ The semantics of $4$-$\mathsf{CTL}$ formulas is as before. The connective $\next
 %Il y a un plongement naturel 
 %$$ \overline{\bullet}: \trees\rGamma \to \trees_b\Gamma$$
  
-\subsection{First-order relabelling are derivable}
+\subsection{First-order relabelling are derivable}\label{sec:relabeling}
 
 \begin{lemma}\label{lem:nextmod}
   For every finite $\rSigma$, $\rGamma\subseteq \rSigma$ and $i \in \set{1,2,\ldots}$, the characteristic function $\ranked{f:\tmonad \rSigma\to\tmonad(\rSigma+\rSigma)}$ of the  unary query 

@@ -13,59 +13,21 @@ Define a \emph{unary   query over $\rSigma$} to be a first-order formula $\varph
     \end{enumerate}
 The semantics of a  first-order tree relabelling is a function from trees over the input alphabet to trees over the output alphabet, which changes the label of every node in the input tree to the unique letter described in  (*). 
       \end{definition}
-% In this section, we discuss first-order rational tree functions. These are compositions of two types of tree transformations: (a) characteristic functions of first-order query, which annotate nodes of the input tree with first-order definable information; (b) and tree homomorphisms, which replace letters in the input tree  by terms. 
 
 
-% \begin{definition}[First-order rational tree functions] \label{def:forat}\ 
-%     \begin{itemize}
-%         \item \emph{Characteristic functions.}  Let $\rSigma$ be a finite ranked set, and let $\varphi(x)$ be a first-order formula with one free variable over the vocabulary associated to tree models over alphabet $\rSigma$. The \emph{characteristic function of $\varphi$} 
-%         \begin{align*}
-%             \mathrm{char}_\varphi : \trees \rSigma \to \trees (\rSigma + \rSigma)
-%         \end{align*}
-%         is defined to be the function which inputs a tree, and returns a tree with the same nodes, but where the labels are changed so that the first copy of $\rSigma$ is used for nodes that satisfy  $\varphi(x)$, and the second copy is used for the other nodes.
-%         \item \emph{Homomorphism.} A \emph{tree homomorphism} is defined to be any function
-%         \begin{align*}
-%             f : \trees \rSigma \to \trees \rGamma
-%         \end{align*} 
-%         which applies some arity preserving function $\ranked f : \rSigma \to \tmonad \rGamma$ to each node in the input tree. 
-%         \item \emph{First-order rational tree function}. A first-order rational tree function is defined to be any composition $f_1 \circ \cdots \circ f_n$, where each $f_i$ is either a characteristic function or a tree homomorphism\footnote{One can show that, without loss of generality, we can assume the composition $f_1 \circ \cdots \circ f_n$ to be such that $f_1$ is a tree homomorphism and the remaining functions are  characteristic functions. We do not need this result, so we do not prove it.
-%         }.
-%     \end{itemize}
-%       \end{definition}
-
-% \begin{lemma}
-%     Every first-order streaming tree transducer is equivalent to one where all registers have arity 1.
-% \end{lemma}
-
-% First-order tree relabellings will be used as a basic pre-processing step in the automaton model that will be defined in Section~\ref{sec:stt}.
-% The main  result of Section~\ref{sec:fo-translation} is the following proposition. 
-% \begin{proposition} \label{prop:forat}    
-%     Every first-order tree relabelling is derivable.
-% \end{proposition}       
-% Since the combinators include function composition, it is enough to show the above proposition for the case when $f$ is either a characteristic function, or a tree homomorphism. 
-
-% For tree homomorphisms, we use the composition of the two functions
-% \begin{align*}
-%     \ranked{
-%     \xymatrix{
-%         \tmonad \rSigma \ar[r]^{\tmonad \ranked f} & \tmonad \tmonad \rGamma \ar[r]^{\flatt_\rGamma} & \tmonad \rGamma,
-%     }}
-% \end{align*}
-% where $\ranked f : \rSigma \rto \tmonad \rGamma$ is an atomic function because it has a finite domain.  
-
-A first-order tree relabelling is a very special case of a first-order tree-to-tree transduction, where only the labelling of the input tree is changed, while the universe as well as the child and descendant relations are not affected. 
+A first-order tree relabeling is a very special case of a first-order tree-to-tree transduction, where only the labeling of the input tree is changed, while the universe as well as the child and descendant relations are not affected. 
 The goal of this section is to prove the following proposition.
 \begin{proposition} \label{prop:forat}    
-    Every first-order tree relabelling is derivable.
+    First-order tree relabelings are derivable.
 \end{proposition}   
-The key step in the proof is  Lemma~\ref{lem:schlingloff} below, which decomposes  first-order tree labellings into  simpler functions. 
+The key step in the proof is  Lemma~\ref{lem:schlingloff} below, which decomposes  first-order tree labelings into  simpler functions. 
 For a unary query  over $\rSigma$,  its \emph{characteristic function} is the function of type
 \begin{align*}
  \trees \rSigma \to \trees (\rSigma + \rSigma)
 \end{align*}
-which replaces the label of each node by its first or second copy, depending on whether the node is selected by the query. The following lemma shows that every first-order tree relabelling can be obtained by composing local label changes, together with characteristic functions of certain simple unary queries. 
+which replaces the label of each node by its first or second copy, depending on whether the node is selected by the query. The following lemma shows that every first-order tree relabeling can be obtained by composing local label changes, together with characteristic functions of certain simple unary queries. 
 
-\begin{lemma}\label{lem:schlingloff} The first-order tree relabellings are equal to the smallest class of functions which is closed under composition and which  contains the following functions:
+\begin{lemma}\label{lem:schlingloff} The first-order tree relabelings are equal to the smallest class of functions which is closed under composition and which  contains the following functions:
     \begin{enumerate}
         \item \label{it:relabeling} \emph{Relabeling}. To every finite $\rGamma,\rSigma$ and $\ranked {f : \rSigma \to \rGamma}$, the tree lifting $\trees \ranked f : \trees \rSigma \to \trees \rGamma$.
         \item \label{it:child} \emph{Child.} For every $\rSigma$ and  $i \in \set{1,2,\ldots}$, the characteristic function of the  unary query 
@@ -84,15 +46,7 @@ which replaces the label of each node by its first or second copy, depending on 
     In items \ref{it:child} -- \ref{it:since}, the alphabet is $\rSigma$, so the characteristic functions have type $\trees \rSigma \to \trees(\rSigma + \rSigma)$. 
 \end{lemma}
 
-Clearly the functions in the lemma are first-order tree relabellings, and first-order tree relabellings are easily seen to be closed under composition, which gives the right-to-left inclusion in the lemma. The hard part is the left-to-right inclusion, which says that every first-order tree relabelling can be decomposed into functions as in items~\ref{it:relabeling} -- \ref{it:since}. 
-The first  step in the proof of  the right-to-left inclusion is the observation that  every first-order tree relabelling can be decomposed as 
-\begin{align*}
-    g \circ f_1 \circ \cdots \circ f_n
-\end{align*}
-where $g$ is a relabelling as in item~\ref{it:relabeling} of the lemma and each $f_i$ is a  characteristic function of some unary query (not necessarily of the simple form indicated in items~\ref{it:child} -- \ref{it:since} in the lemma). This is a simple observation: the functions $f_1,\ldots,f_n$ annotate the tree with the truth values of the unary queries used in the definition of the  first-order relabelling, and $g$ uses these truth values to select the appropriate output label. The hard part of the lemma is showing that each $f_i$  can be further decomposed into functions as indicated in the lemma. Here we use a result of Schlingloff~\cite[Theorem 2.6]{schlingloff1992expressive}, which says that all first-order definable tree properties can be defined using a temporal logic that has operators similar to the ones used in items~\ref{it:child} -- \ref{it:since} of the lemma. The exact reduction to Schlingloff's theorem is given in Appendix~\ref{sec:AppendixForat}.
+This lemma follows easily from a result of Schlingloff~\cite[Theorem 2.6]{schlingloff1992expressive}, which says that all first-order definable tree properties can be defined using a temporal logic that has operators similar to the ones used in items~\ref{it:child} -- \ref{it:since} of the lemma. The exact reduction to Schlingloff's theorem is given in Appendix~\ref{sec:AppendixForat}.
 
-In light of Lemma~\ref{lem:schlingloff},  Proposition~\ref{prop:forat} will follow once we  show that all functions  used in the lemma are derivable. The relabellings from item~\ref{it:relabeling} are immediate: we simply lift to terms (and therefore also trees) the function $\ranked f$, which is derivable by virtue of having a finite domain. For the remaining functions, an important role is played by the factorisation operations. We only do the proof for ??, the other cases can be found in Appendix~\ref{sec:AppendixForat}. 
 
-\begin{center}
-    proof for ??, which is one of the deleted examples
-\end{center}
+In light of Lemma~\ref{lem:schlingloff},  Proposition~\ref{prop:forat} will follow once we  show that all functions  used in the lemma are derivable. The relabelings from item~\ref{it:relabeling} are immediate: we simply lift to terms (and therefore also trees) the function $\ranked f$, which is derivable by virtue of having a finite domain. The remaining functions are also derivable, as shown in Appendix~\ref{sec:relabeling}, lemmas~\ref{lem:nextmod}, \ref {lem:untilmod} and \ref{lem:sincemod}. 
