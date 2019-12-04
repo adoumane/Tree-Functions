@@ -13,17 +13,48 @@
 
 
 \newcommand{\thinterm}[1]{\ranked{\mathsf{Thin}_{#1}}}
+
 In this part of the appendix, we establish a link between FO logic and $\lambda$-terms throught two results: under some conditions, well-typedeness is a FO property (Thm.\ref{prop:WellTypedFo}), and normalization is a FO transduction (Thm.\ref{thm:evalOneType}). 
 
-%As usual, the proof requires a generalization of these results to $\lambda$-terms with ports. 
-%Let us fix some notations for the rest of this appendix. Let $X$ be a finite set of typed variable. We define the set of \emph{\lambdaterms with ports} as 
-%\begin{align*}
-%\rlambda X = \tmonad \lamrank X
-%\end{align*}
-%where $\lamrank X$ is the ranked set
-%\begin{align*}
-%     \lamrank X= \overbrace{\set{x : x \in X}}^{\text{arity 0}} \cup \overbrace{\set{\lambda x : x \in X}}^{\text{arity 1}} \cup  \overbrace{\set @}^{\text{arity 2}}
-%\end{align*}
+\subsection{Explaining the restrictions}
+
+ Because of iterated duplication, the normal form of a well-typed $\lambda$-term can be exponential (or worse, see~\cite[Section 3.6]{sorensen_lectures_2006}), as shown by the following example.
+ 
+\begin{example}\label{ex:exponential}
+    Assume that we have two variables $\typevar x  \otype$ and $\typevar y {\otype \to \otype \to \otype}$ and consider the $\lambda$-terms defined by:
+    \begin{align*}
+        M_0 \eqdef \typevar x \otype \qquad M_{n+1} = (\lambda \typevar x  \otype . \typevar y {\otype \to \otype \to \otype}  \typevar x  \otype \typevar x  \otype)M_n.
+    \end{align*}
+    The $\lambda$-term $M_n$ is well-typed and of type $\otype$. It has size linear in $n$, but its normal form has size at least $2^n$. 
+    % as shown in the following picture, which uses variables $x : \otype$ and  $z : \otype \to \otype \to \otype$.
+    % \mypic{44}
+\end{example}
+
+ For this reason, we  limit attention to affine $\lambda$-terms: a $\lambda$-term is called \emph{affine} if every bound variable is used at most once in its scope, but free variables are allowed to appear multiple times.  For example, 
+\begin{align*}
+\typevar z {\otype \to \otype \to \otype} \big(\lambda \typevar x \otype.  \typevar y {\otype \to \otype} (\typevar y {\otype \to \otype}  \typevar x \otype)\big) \big(\lambda \typevar x \otype.  \typevar y {\otype \to \otype} (\typevar y {\otype \to \otype}  \typevar x \otype)\big)
+\end{align*}
+is affine, even if $\typevar y {\otype \to \otype}$ appears four times. If we prepend $\lambda \typevar y {\otype \to \otype}$, then the $\lambda$-term ceases to be affine.
+
+Being affine alone is not enough to normalise terms with first-order transductions. Another obstacle is terms that use types of unbounded complexity, as illustrated in the following example. 
+
+\begin{example}\label{ex:affine-not-enough}
+Consider the following $\lambda$-terms, which have types of 
+unbounded size: 
+\begin{align*}
+M_n = \overbrace{\lambda \typevar x \otype. \lambda \typevar  x \otype. \cdots \lambda \typevar  x \otype.}^{\text{$n$ times}} \typevar  x \otype
+\end{align*}
+This is a well-typed affine term, whose type is 
+\begin{align*}
+\otype^n \to \otype \qquad \eqdef \qquad  \overbrace{\otype \to \otype \to \cdots \to \otype}^{\text{$n+1$ arrows}}
+\end{align*}
+    To $M_n$, apply  $m$ arguments of type $\otype$:
+    \begin{align}\label{eq:complicated-term}
+    M_n \overbrace{\typevar y \otype \ \typevar y {\otype} \cdots \typevar y{\otype} }^{\text{$m$ times}}.
+    \end{align}
+    We claim that the above $\lambda$-term cannot be normalised using a first-order transduction, or even a monadic second-order transduction. In order to normalise, a transduction would need to be able to compare the numbers $n$ and $m$ as follows:  if $m < n$  the normal form contains $\lambda$, if $m=n$  the normal form does not contain $\lambda$, and if $m > n$ then the normal form is undefined because the $\lambda$-term is not well-typed.  Whether or not a $\lambda$-term (seen as a tree over a finite alphabet) contains $\lambda$ is a first-order definable property, and first-order definable properties are preserved under inverse images of first-order transductions. Therefore, if normalisation would be a first-order transduction,
+then there would be a first-order formula which would be true for terms of the form~\eqref{eq:complicated-term} with $m>n$ and which would be false for terms of the form~\eqref{eq:complicated-term} with $m=n$. Such a formula cannot exist, which can be shown using a pumping argument or Ehrenfeucht-Fra\"iss\'e games. 
+\end{example}
 
 \subsection{Well-typedeness}
 In general, well-typedeness is not a FO property (actually not even a MSO property) as shown by Example~\ref{ex:exponential} in Section~\ref{sec:one-register}.

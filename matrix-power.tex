@@ -1,7 +1,8 @@
 
 \section{Matrix power} 
 \label{sec:matrix-power}
-In this section, we de define the matrix power, which can be seen as a way of representing several trees in one. Roughly speaking, the several trees are the contents of registers in a register automaton, and the single tree that represents them is the computation tree of the register automaton.  We then show that several trees stored in a computation  can be unfolded in a derivable way. 
+In this section, we define the matrix power, which can be seen as a way of representing several trees in one. Roughly speaking, the several trees are the contents of registers in a register automaton.
+%, and the single tree that represents them is the computation tree of the register automaton.  We then show that several trees stored in a computation  can be unfolded in a derivable way. 
 
 \begin{definition}
     [Matrix power] For $k \in \set{1,2,\ldots}$ define the $k$-th matrix power\footnote{
@@ -14,7 +15,9 @@ to be
 \end{definition}
 
 Here is a picture of a binary element in the matrix power, where $k=3$:
-\mypic{85}
+\begin{center}
+\includegraphics[scale=.4, page=85]{pics.pdf}
+\end{center}
 The intuition behind the matrix power is that there are $k$ registers, and each letter from $\rSigma$ represents an operation on the register contents.  In the above picture, there are three registers, and the blue letters represent the operations on  register contents. Each of the two ports in the above picture is split -- using folding -- into smaller ports; the idea is that these smaller ports will be substituted by the register values in the two children.  
 
 The above intuitions are captured by the following unfolding operations for the matrix power. The first and simpler unfolding operation is defined for shallow terms, and has type
@@ -26,31 +29,39 @@ The above intuitions are captured by the following unfolding operations for the 
     }
 \end{align*}
 Here is a picture of unfolding for shallow terms:
-\mypic{86}
+\begin{center}
+\includegraphics[scale=.2, page=86]{pics.pdf}
+\end{center}
 More formally, unfolding for shallow terms is defined to be   the composition of the following
-\begin{align*}
-\ranked{
-    \xymatrix{
-        \shallowterm{\mati k \rSigma} {\mati k \rGamma} = {\shallowterm{\reduce k {\Sigma^k}}{\reduce k {\Gamma^k}}} \ar[r] &
-        \reduce k(\shallowterm{\reduce k {\Sigma^k}}{ {\Gamma^k}}) \ar[r] &
-        \reduce k(\shallowterm{\Sigma^k}{ {\Gamma}}) \ar[r] &
-        \reduce k(\shallowterm{\Sigma}{ {\Gamma}})^k = \mati k {(\shallowterm \Sigma \Gamma)}
-    }
-}
-\end{align*}
+    \begin{align*}
+        \xymatrix@C=3.2cm{
+          {\begin{array}{c}
+          \shallowterm{\mati k \rSigma} {\mati k \rGamma} \\{=\shallowterm{\reduce k {\Sigma^k}}{\reduce k {\Gamma^k}}}
+          \end{array}}  \ar[d]_{{\mathrm{Commutativity}}}\ar[r]^{\mathrm{Shallow\  unfold}} &  {\begin{array}{c}
+         \ranked{\mati k {(\shallowterm \Sigma \Gamma)}} \\=  \ranked{ \reduce k(\shallowterm{\Sigma}{ {\Gamma}})^k}
+          \end{array}} \\
+             \reduce k(\shallowterm{\reduce k {\Sigma^k}}{ {\Gamma^k}})  \ar[r]_{{\mathrm{Matching}}} &  \ranked{ \reduce k(\shallowterm{\Sigma^k}{ {\Gamma}}) } \ar[u]_{\mathrm{Commutativity}} 
+        } 
+    \end{align*}
 As a composition of derivable functions, shallow unfolding is derivable by definition.  It will be much harder to show derivability for the second unfolding operation, 
 \begin{align*}
     \ranked{\unfold : \tmonad \mati k \rSigma \to \mati k {(\tmonad \Sigma)} }
     \end{align*}
     which extends unfolding to  not necessarily shallow terms, and which is
 defined as follows by induction on the size of the input term. If the input is an empty term, then the output is this term:
-\mypic{83}
+\begin{center}
+\includegraphics[scale=.3, page=83]{pics.pdf}
+\end{center}
 Otherwise, if the input is a nonempty term $a(t_1,\ldots,t_n)$ then the output is obtained by first applying term unfolding to to the smaller terms $t_1,\ldots,t_n$, and then applying the shallow unfold. Here is a picture of term unfolding: 
-\mypic{39}
+\begin{center}
+\includegraphics[scale=.28, page=39]{pics.pdf}
+\end{center}
 Since our atomic functions and combinators do not have any general mechanisms for induction, it is not clear how to derive the unfolding operation for not necessarily shallow terms. In fact, it is not derivable in general, but it will become derivable after imposing a monotonicity requirement.   To see the need for monotonicity, consider the following example.
 \begin{example}\label{eq:twist}
     Consider the following elements in a second matrix power:
-    \mypic{84}
+\begin{center}
+\includegraphics[scale=.3, page=84]{pics.pdf}
+\end{center}
 Let $t_n \in \trees \mati 2 \rSigma$ be the tree which consists of a path with $n$ nodes using the unary label $a$, followed by a leaf with label $b$. If we apply term unfolding to this tree, and then project to the first coordinate, then we get a tree with a white leaf if and only if  $n$ is even.  If term unfolding were derivable, then thanks to the results from Section~\ref{sec:to-transductions}  we would get a first-order tree-to-tree transduction 
 \begin{align*}
 \trees \redset{a,b} \to \trees \rSigma

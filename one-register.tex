@@ -25,63 +25,20 @@ We use the standard notion of $\beta$-reduction for $\lambda$-terms, see~\cite[D
 Because of normalisation and confluence for the simply typed $\lambda$-calculus, every well-typed $\lambda$-term has a unique normal form, i.e~a $\lambda$-term to which it $\beta$-reduces (in zero or more steps), and which cannot be further $\beta$-reduced.
 
 
-\begin{example}\label{ex:exponential}
-    Because of iterated duplication, the normal form of a well-typed $\lambda$-term can be exponential (or worse, see~\cite[Section 3.6]{sorensen_lectures_2006}). Assume that we have two variables $\typevar x  \otype$ and $\typevar y {\otype \to \otype \to \otype}$ and consider the $\lambda$-terms defined by:
-    \begin{align*}
-        M_0 \eqdef \typevar x \otype \qquad M_{n+1} = (\lambda \typevar x  \otype . \typevar y {\otype \to \otype \to \otype}  \typevar x  \otype \typevar x  \otype)M_n.
-    \end{align*}
-    The $\lambda$-term $M_n$ is well-typed and of type $\otype$. It has size linear in $n$, but its normal form has size at least $2^n$. 
-    % as shown in the following picture, which uses variables $x : \otype$ and  $z : \otype \to \otype \to \otype$.
-    % \mypic{44}
-\end{example}
-Because derivable and first-order transductions have linear size increase, they cannot compute normal forms in general, as  witnessed by the above example. To  avoid this problem, we  limit attention to affine $\lambda$-terms: a $\lambda$-term is called \emph{affine} if every bound variable is used at most once in its scope, but free variables are allowed to appear multiple times.  For example, 
-\begin{align*}
-\typevar z {\otype \to \otype \to \otype} \big(\lambda \typevar x \otype.  \typevar y {\otype \to \otype} (\typevar y {\otype \to \otype}  \typevar x \otype)\big) \big(\lambda \typevar x \otype.  \typevar y {\otype \to \otype} (\typevar y {\otype \to \otype}  \typevar x \otype)\big)
-\end{align*}
-is affine, even if $\typevar y {\otype \to \otype}$ appears four times. If we prepend $\lambda \typevar y {\otype \to \otype}$, then the $\lambda$-term ceases to be affine.
+Because of iterated duplication, the normal form of a well-typed $\lambda$-term can be exponential, as witnessed by Example~\ref{ex:exponential} in the appendix.
+Because derivable and first-order transductions have linear size increase, they cannot compute normal forms in general. To  avoid this problem, we  limit attention to affine $\lambda$-terms: a $\lambda$-term is called \emph{affine} if every bound variable is used at most once in its scope, but free variables are allowed to appear multiple times.
 
 For affine $\lambda$-terms, each step of $\beta$-reduction reduces the size by two or three, and therefore the normal form cannot be bigger than the original $\lambda$-term. 
 
-Being affine  alone is not enough to normalise terms with first-order transductions. Another obstacle is terms that use types of unbounded complexity, as illustrated in the following example. 
+Being affine alone is not enough to normalise terms with first-order transductions. Another obstacle is terms that use types of unbounded complexity. If the size of types that occur in subterms of our affine $\lambda$-terms is not bounded, and if we suppose that there is a first-order transduction which normalises them, then we could derive a first-order formula which performs an equality test between two integers, as illustrated by Example~\ref{ex:affine-not-enough} in the appendix. Such a formula cannot exist (even if we allow monadic second-order logic).
 
-\begin{example}\label{ex:affine-not-enough}
-Consider the following $\lambda$-terms, which have types of 
-unbounded size: 
-\begin{align*}
-M_n = \overbrace{\lambda \typevar x \otype. \lambda \typevar  x \otype. \cdots \lambda \typevar  x \otype.}^{\text{$n$ times}} \typevar  x \otype
-\end{align*}
-This is a well-typed affine term, whose type is 
-\begin{align*}
-\otype^n \to \otype \qquad \eqdef \qquad  \overbrace{\otype \to \otype \to \cdots \to \otype}^{\text{$n+1$ arrows}}
-\end{align*}
-    To $M_n$, apply  $m$ arguments of type $\otype$:
-    \begin{align}\label{eq:complicated-term}
-    M_n \overbrace{\typevar y \otype \ \typevar y {\otype} \cdots \typevar y{\otype} }^{\text{$m$ times}}.
-    \end{align}
-    We claim that the above $\lambda$-term cannot be normalised using a first-order transduction, or even a monadic second-order transduction. In order to normalise, a transduction would need to be able to compare the numbers $n$ and $m$ as follows:  if $m < n$  the normal form contains $\lambda$, if $m=n$  the normal form does not contain $\lambda$, and if $m > n$ then the normal form is undefined because the $\lambda$-term is not well-typed.  Whether or not a $\lambda$-term (seen as a tree over a finite alphabet) contains $\lambda$ is a first-order definable property, and first-order definable properties are preserved under inverse images of first-order transductions. Therefore, if normalisation would be a first-order transduction,
-then there would be a first-order formula which would be true for terms of the form~\eqref{eq:complicated-term} with $m>n$ and which would be false for terms of the form~\eqref{eq:complicated-term} with $m=n$. Such a formula cannot exist (even if we allow monadic second-order logic), which can be shown using a pumping argument or Ehrenfeucht-Fra\"iss\'e games. 
 
-% \begin{align*}
-%         M_0 \eqdef \typevar u {\otype \to \otype}  \qquad M_{n+1} \eqdef \overbrace{\lambda \typevar x {\otype}. \lambda \typevar y {\otype}.   M_n (\typevar z {\otype \to \otype \to \otype}  \typevar x {\otype} \typevar y {\otype}).}^{\text{type} \overbrace{\otype \to \otype \to \cdots \to \otype}^{\text{$n+1$ arrows}}}
-%     \end{align*}
-%     Apart from having large types (although still of rank 1, as described in~\cite[Exercise 3.6.7]{sorensen_lectures_2006}), these  $\lambda$-terms are simple: they use four variables (although the bound variables are reused), and are linear, because each bound variable is used exactly once in its scope. 
-%     To $M_n$, apply  $m$ arguments of type $\otype$:
-%     \begin{align}\label{eq:complicated-term}
-%     M_n \overbrace{\typevar v \otype \ \typevar v {\otype} \cdots \typevar v{\otype} }^{\text{$m$ times}}.
-%     \end{align}
-%     We claim that the above $\lambda$-term cannot be normalised using a first-order transduction, or even a monadic second-order transduction. In order to normalise, a transduction would need to be able to compare the numbers $n$ and $m$ as follows:  if $m < n$  the normal form contains $\lambda$, if $m=n$  the normal form does not contain $\lambda$, and if $m > n$ then the normal form is undefined because the $\lambda$-term is not well-typed.  Whether or not a $\lambda$-term (seen as a tree over a finite alphabet) contains $\lambda$ is a first-order definable property, and first-order definable properties are preserved under inverse images of first-order transductions. Therefore, if normalisation would be a first-order transduction,
-% then there would be a first-order formula which would be true for terms of the form~\eqref{eq:complicated-term} with $m>n$ and which would be false for terms of the form~\eqref{eq:complicated-term} with $m=n$. Such a formula cannot exist (even if we allow monadic second-order logic), which can be shown using a pumping argument or Ehrenfeucht-Fra\"iss\'e games. 
-\end{example}
-
-The above example explains why we need to bound the size of types that occur in subterms, motivating the following definition. If $\Tt$ is a finite set of simple types, then   we say that a $\lambda$-term can be typed using $\Tt$ if all of its  subterms have types in $\typeset$.  Once we assume that $\lambda$-terms are affine, use a fixed finite set of bound variables, and use only types from a fixed finite set of simple types, then normalisation can be done by a derivable function, and therefore also by a first-order tree-to-tree transduction: 
+These examples motivate the following definition. If $X$ is a finite set of simply typed variables and $\Tt$ is a finite set of simple types, we define $\Lambda_\Tt X $ to be the set of affine $\lambda$-terms using variables from $X$, whose subterms have 	 types in $\typeset$.  When restricted to $\lambda$-terms of $\Lambda_\Tt X $, normalisation can be done by a derivable function, and therefore also by a first-order tree-to-tree transduction: 
 
 \begin{theorem}\label{thm:normalise} Let $X$ be a finite set of simply typed variables, and let $\typeset$ be a finite set of simple types.
-    The following tree-to-tree function is derivable (i.e.~it is the tree restriction of a derivable function on terms):
+    The following tree-to-tree function is derivable (i.e.~it is the restriction of a derivable function on terms):
     \begin{align*}
-        M \in \text{$\lambda$-terms over variables $X$} \quad \mapsto \quad \begin{cases}
-            \text{normal form of $M$} & \text{if $M$ is affine and can be typed using $\Tt$,}\\
-            \bot & \text{otherwise}.
-        \end{cases}
+        M \in \Lambda_\Tt X  \quad \mapsto \quad  \text{normal form of $M$}       
     \end{align*}
 \end{theorem}
 
