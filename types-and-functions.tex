@@ -1,7 +1,7 @@
 \section{Derivable functions}
 In this section, we state the main result of this paper, which describes  the  first-order tree-to-tree functions in terms of  certain atomic functions by using certain combinators.  A typical combinator is composition of functions.
 
-\paragraph*{The category of ranked sets.} Even if our goal is to generate first-order tree-to-tree transductions, our basic functions will not be necessarily function transforming trees into trees. For example, we will need to manipulate pairs of trees or trees of trees etc. Clearly, these data structures are encodable by trees, however this would make the basic functions rather complex. We make the choice of introducing new types for our basic functions in order to get simple basic functions.
+\paragraph*{The category of ranked sets.} Even if our goal is to generate first-order tree-to-tree transductions, our basic functions will not necessarily be function transforming trees into trees. For example, we will need to manipulate pairs of trees or trees of trees etc. Clearly, these data structures are encodable by trees, however this would make the basic functions rather complex. We make the choice of introducing new types for our basic functions in order to get simple basic functions.
 
 Among the types that we introduce, the most important one is certainly the type of \emph{terms}. This type appears when we want to decompose our trees into smaller parts, as illustrated by the figure below. Each small part of the tree is not really a tree\footnote{This is a difference of trees as opposed to strings~\cite{bojanczykRegularFirstOrderList2018}, where ranked sets are not needed, because a part of a string is also a string.}: it has dangling ports which  allows to connect it with the other parts. We call \emph{terms} such tree with ports. 
 \mypic{15}
@@ -90,7 +90,7 @@ We now introduce the main new definition of this paper.
 
 %\include{figure-fot}
 
-Roughly speaking, the atomic functions describe the monad structure of terms, the (graded) monad structure of folds, some obvious distributivity operations, and several less obvious operations whose definitions are  deferred to Section~\ref{sec:atomic-and-combinators}. Before giving these definitions, we state the main result of the paper. 
+The atomic functions describe the monad structure of terms, the (graded) monad structure of folds, some obvious distributivity, commutativity and (co)projection operations. These operations are obvious in the sens that they can be guessed from  types\footnote{The (co)projection functions are canonical in a very precise way: they are the unique functions satisfying some natural digrams. We wonder if our obvious functions are also canonical in such a precise way. We leave this question for future works.}. Our list of functions contains also three less obvious operations whose definitions are  deferred to Section~\ref{sec:atomic-and-combinators}. Before giving these definitions, we state the main result of the paper. 
 
 % \begin{example}
 %     To get a feeling for the atomic functions and combinators, we derive the function
