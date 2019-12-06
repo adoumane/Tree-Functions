@@ -1,0 +1,100 @@
+
+\section{Functions computed by register transducers are derivable}
+\label{sec:stt-derivable}
+We now  have all of the ingredients needed to derive functions computed by register transducers, as stated in the following proposition.
+\begin{proposition}
+    \label{prop:many-register} 
+For every first-order  tree transducer, the computed function is derivable. 
+\end{proposition}
+The above proposition  completes the proof of the left-to-right implication in Theorem~\ref{thm:main}: we have seen, by Proposition~\ref{prop:many-register}, that first-order tree-to-tree transductions can be computed by first-order tree transducers, and Proposition~\ref{prop:many-register} shows that the later are derivable, which concludes the proof.
+
+The rest of this section is devoted to proving Proposition~\ref{prop:many-register}. As said earlier in the paper, the main idea is to see the computation of an STT as the normalization of a $\lambda$-term. For that, we will show in subsection~\ref{subsec:ru-as-lambda} how to encode register updates as (matrix power of) $\lambda$-terms. The proof of Proposition~\ref{prop:many-register} is then given in subsection~\ref{subsec:proof}. In the rest of this section, we suppose without loss of generality, that the registers of our STT are all unary.
+
+\subsection{Register updates as matrix powers of $\lambda$-terms}\label{subsec:ru-as-lambda}
+\paragraph{The case of unary register updates.} We show how to encode unary register updates as terms over $\Lambda_S X$, for a well chosen set of typed variables $X$ and set of types $S$. 
+
+A unary register upadte $\ranked{u}$ is just as a term of $\ranked{\tmonad(\Gamma+\set{r})}$.  We represent it with a term in $\ranked{\tmonad(\Gamma+\lambda^{\set{x}})}$ where $x$ is a variable of type $o$, as described by the following picture.
+ \begin{center}
+\includegraphics[scale=.26]{composition=normalisation.pdf}
+\end{center}
+The picture also justifies this encoding: it shows that that composition is the same thing as normalisation.
+
+\paragraph{The general case.}
+
+\subsection{Proof of proposition~\ref{prop:many-register}}\label{subsec:proof}
+
+There will be four main ingredients, namely derivability for: first-order tree relabelings (Proposition~\ref{prop:forat}), normalisation of affine $\lambda$-terms (Theorem~\ref{thm:normalise}), and unfolding of the matrix power (Proposition~\ref{prop:monotone-unfold}).
+\label{sec:proof-of-prop} 
+To put these ingredients together,  we use  terminology inspired by universal algebra, as given in the following definition. 
+
+\begin{definition}
+    An \emph{algebra} $\alg$ consists of two sets 
+    \begin{align*}
+    \overbrace{\algdom \alg}^{\text{unranked}} \qquad \overbrace{\algops \alg}^{\text{ranked}},
+    \end{align*}
+equipped with a  \emph{shallow product}\footnote{
+    A more standard approach would be to use a family of operations indexed by the signature
+    \begin{align*}
+    \set{f^\alg : (\algdom \alg)^{\arity f} \to \algdom \alg}_{f \in \algops \alg}.
+    \end{align*}
+   Our approach is equivalent, i.e.~defining a shallow product is the same as defining a family of operations.
+}, which is function of type
+\begin{align*}
+ \shallowterm {(\algops \alg)}{\underbrace{(\algdom \alg)}_{\substack{\text{viewed as a ranked}\\ \text{set, with all elements}\\ \text{having arity zero}}}} \rto \redpar {\algdom \alg}.
+\end{align*}
+    For an algebra $\alg$, define its \emph{product} to be the function of type
+    \begin{align*}
+        \treepar {\algops \alg} \to \algdom \alg
+    \end{align*}
+    defined in the natural way.
+    %  An algebra is called \emph{derivable} if its product  is derivable. 
+\end{definition}
+
+
+One example of an algebra is when the signature is some ranked set $\rSigma$, the domain is  $\trees \rSigma$, and the interpretation is defined in the natural way. In this case, the product operation is the identity. A variant of this algebra is when the signature is replaced by $\tmonad \rSigma$; in this case the product operation becomes flattening. 
+
+Let us begin the proof of Proposition~\ref{prop:many-register}.
+Fix a register transducer with $k$ registers. For the rest of this section, when talking about register valuations and register updates, we mean the registers of the fixed register transducer.
+Another example of an algebra was implicit in the definition of register transducers: the domain is the register valuations and the signature is the  register updates. To prove  Proposition~\ref{prop:many-register}, we will show that the algebra of register updates embeds -- via the matrix power -- in an algebra, call it $\alg$, whose product operation is derivable as a special case of normalisation of affine $\lambda$-terms. 
+ The idea behind the algebra  $\alg$ is to use  $\lambda$-terms to represent register contents, according to the following picture:
+ \begin{center}
+ \includegraphics[scale=.3, page=59]{pics.pdf}
+ \end{center}
+%    \mypic{59}  
+    Let  $\nmax$  be the maximal arity of registers in the fixed register transducer, and let  $\rGamma$ be its  output alphabet. For a term $t \in \tmonad \rGamma$ of arity at most $\nmax$, its representation as a  $\lambda$-term, which we denote by $t^\lambda$,  uses variables from the following finite set (we use the notation $\otype^i \to \otype$ defined in Example~\ref{ex:affine-not-enough}):
+\begin{align*}
+X  \quad \eqdef \quad \set{\typevar {x_a} {\otype^i \to \otype} : a \in \rGamma \text{ of arity $i$}} \cup \set{\typevar {x_i} \otype : i \in \set{1,2,\ldots,\nmax }}.
+\end{align*}
+Furthermore, $t^\lambda$ is affine and it can be typed using simple types  from  the following set finite set :
+\begin{align*}
+    \Tt \quad \eqdef \quad \set{\otype^i \to \otype : i \in \set{0,\ldots,\nmax}}
+\end{align*}
+This means that if $t$ has arity at most $\nmax$ -- which is true for any term that can appear in a register of our fixed register transducer -- then its $\lambda$-term representation $t^\lambda$ satisfies constraints as in Theorem~\ref{thm:normalise}.  On its own, $t^\lambda$ is already in normal form, so there is no need to normalise it, but we intend to compose  such $\lambda$-terms, leading to terms that are not in normal form (but which still use variables from $X$ and types from $\Tt$). 
+This motivates the  following definition of an algebra, call it $\alg$. Its domain and signature are given by 
+\begin{align*}
+\overbrace{\set \bot + \trees \lamrank X}^{\algdom \alg}  \qquad \overbrace{ \tmonad \lamrank X}^{\algops \alg} 
+\end{align*}
+\begin{align*}
+\text{where }\lamrank X = {\overbrace{\set{x : x \in X}}^{\text{arity 0}} \cup \overbrace{\set{\lambda x : x \in X}}^{\text{arity 1}} \cup  \overbrace{\set @}^{\text{arity 2}}}
+\end{align*}
+In other words, the domain is $\lambda$-terms plus an error element, and the signature is $\lambda$-terms  with ports. The   product operation is 
+\begin{align*}
+t^\alg(t_1,\ldots,t_n) = \begin{cases}
+    \text{normal form of $t(t_1,\ldots,t_n)$} & \text{if $t(t_1,\ldots,t_n)$ is affine and can be typed using $\Tt$}\\
+    \bot & \text{otherwise}
+\end{cases}
+\end{align*}
+In particular, if one of the inputs $t_1,\ldots,t_n$ is $\bot$, then the output is also $\bot$.  The algebra $\alg$ is designed so that we can apply Theorem~\ref{thm:normalise} about normalising $\lambda$-terms to see that the  product operation in the  algebra $\alg$ is derivable. Next, by observing that the matrix power is a form of syntactic sugar for manipulating registers in a register automaton, we see that there is an arity preserving 
+    \begin{align*}
+    \ranked h : \regups \to \mati k {(\algops \alg)}
+    \end{align*}
+    which has only monotone elements in its image, and which makes the following diagram commute
+    \begin{align*}
+    \xymatrix@C=2cm{
+        \treepar {\regups} \ar[r]^-{\trees \ranked h}\ar[d]_{\text{product}} &
+         \treepar {\mati k {(\algops \alg)}}\ar[r]^{\text{Corollary~\ref{cor:matrix-power}}}  & 
+         \treepar {\algops \alg} \ar[d]^{\text{product}} \\
+        \regvalss \ar[rr]_{(t_1,\ldots,t_k) \mapsto t^\lambda_1}&  & \algdom {\alg^{[k]}}
+    }
+    \end{align*} 
+Putting this all together, we see that there is a derivable function which inputs a tree of register updates, and outputs the value of the first register, represented as a $\lambda$-term. The last remaining observation is that function $t^\lambda \mapsto t$, i.e.~the inverse of the $\lambda$-term representation, is derivable. This inverse can be achieved, for example, by composing a first-order tree relabelling with a tree homomorphism. This completes the proof of Proposition~\ref{prop:many-register}, and therefore also of Theorem~\ref{thm:main}. 
