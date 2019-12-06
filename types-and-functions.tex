@@ -148,9 +148,6 @@ The atomic functions describe the monad structure of terms, the (graded) monad s
 \label{sec:atomic-and-combinators}
 In this section, we define the atomic functions whose definitions were not given in Figure~\ref{fig:fo-term}. 
 
-
-
-
 \subsubsection{Factorisations}
     Let $t \in \tmonad \rSigma$ be a term. 
     There are two equivalent definitions of factorisations of $t$. One definition is that a factorisation is an equivalence relation on non-port nodes where every equivalence class is a factor; the other definition is that it is any term $s  \in \tmonad \tmonad \rSigma$ which flattens to $t$. 
@@ -190,7 +187,7 @@ The general idea behind the  unfolding operation
 is to eliminate a $k$-fold by matching it with a $k$-th power. 
 The unfolding operation is explained in the following picture for $k=2$: 
         \begin{center}
-        \includegraphics[scale=.4]{shallow-unfold.pdf}
+        \includegraphics[scale=.35]{shallow-unfold.pdf}
         \end{center}
 % One of the main results in this paper will be  that an iterated version of the unfold operation, of type
 % \begin{align*}
