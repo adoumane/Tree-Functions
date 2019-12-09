@@ -91,4 +91,11 @@ We define the function $\ranked{f}$ from the algebra of register updates over $\
 \begin{center}
 \includegraphics[scale=.4]{embedding.pdf}
 \end{center}
+\begin{enumerate}
+\item Every $n$-ary symbol $a$ of $\rGamma$ is replaced by a spine of $@$ nodes of lenght $n$ ending by the variable $x_a$.
+\item Ports of register updates become the variable $x$.
+\item A node $\lambda x$ is added as a root of every register update.
+\item Register names become an $@$ node whose left child is a port. 
+\item Ports coming from the same copy of name registers are folded in the same port. The order of the fold respects registers order.
+\end{enumerate}
 

@@ -1,3 +1,37 @@
-There is little need for justifying decomposition results, such as the Jordan-H\"older theorem in group theory, or the Krohn-Rhodes theorem in semigroup theory. For example, the Krohn-Rhodes theorem in semigroup theory says that every finite monoid can be decomposed, using wreath product, into semigroups that are either groups or a single three element monoid called $\mathcal U_2$. A consequence is that if a  property  is true for groups and $\mathcal U_2$ and preserved under wreath products, then the property is true for all finite semigroups. 
 
-The goal of this paper is to establish a decomposition result for tree-to-tree functions.  (Maybe this is the wrong spin.)
+\section{Introduction}
+
+The purpose of this paper is to find a decomposition of tree-to-tree transducers into simple building blocks. An important inspiration  is the Krohn-Rhodes theorem~\cite[p.~454]{Krohn1965}, which says that every string-to-string function recognised by a  one-way deterministic automaton with output can be decomposed into certain prime functions. 
+
+\paragraph*{Regular functions.} We begin by describing the class of regular functions, both for strings and trees. In~\cite[Theorem 13]{engelfrietMSODefinableString2001}, Engelfriet and Hoogeboom proved that deterministic two-way transducers recognise the same string-to-string functions as \mso transductions. Because of this, and thanks to other good properties such as closure under composition~\cite[Theoremn 1]{chytilSerialComposition2Way1977} and decidable equivalence~\cite[Theorem 1]{gurariEquivalenceProblemDeterministic1982}, this class of functions is now called the \emph{regular string-to-string functions}. Other  equivalent descriptions of this class include: string transducers of Alur and {\v C}ern{\'y}~\cite{alurStreamingStringTransducers2011}, regular expressions~\cite{alur2014regular,daveGastinKrishna18}, and a functional programming language~\cite{bojanczykRegularFirstOrderList2018}. 
+
+% One corollary of the description in~\cite{bojanczykRegularFirstOrderList2018} is that the regular  string-to-string functions are the smallest class of string-to-string functions which is closed under composition, contains functions recognised by one-way deterministic automata, and the following two operations:
+% \begin{eqnarray*}
+% w_1 |  \cdots | w_n &\qquad \mapsto \qquad& w_1 w_1 |  \cdots | w_n w_n, \\
+% w_1 |  \cdots | w_n &\qquad \mapsto \qquad& \text{reverse}(w_1) |  \cdots | \text{reverse}(w_n),
+% \end{eqnarray*}
+% where $w_1,\ldots,w_n \in \set{a,b}^*$ and $|$ is a separator symbol. The deterministic one-way automata themselves can be further decomposed using the Krohn-Rhodes theorem; thus leading a decomposition into very simple prime functions.
+
+Regular functions can also be used for trees. One definition  is the \mso tree-to-tree transductions~\cite[Section 3]{bloem_comparison_2000}. As in the string case, the regular tree-to-tree functions admit many equivalent characterisations: single use attributed tree grammars~\cite{bloem_comparison_2000}, macro tree transducers of linear size increase~\cite[Theorem 7.1]{engelfriet_macro_2003}, and streaming tree transducers~\cite[Theorem 4.6]{alur2017streaming}. The class of functions computed by these models, and its first-order fragment, is the topic of this paper. 
+
+\paragraph*{First-order transductions. } Although \mso transductions are the more popular model, we work mainly with the less expressive model of first-order transductions. Why?
+
+One reason is that \mso on trees is too hard if we are interested in Krohn-Rhodes decompositions.  Already for the simplest tree formalisms, such as tree languages or letter-to-letter transformations, there is no known  Krohn-Rhodes theory. One would expect a Krohn-Rhodes theorem  for trees to yield an effective characterisation of first-order logic -- as it does for words -- but finding such a characterisation remains a major open problem~\cite[Section 3]{bojanczyk2015automata}. We do not attempt to solve this problem here. In contrast, first-order logic on trees does have decomposition theorems, which we can use: including the temporal logic {\sc ctl*} \cite[Main Theorem]{haferthomas}, cascade products of tree automata~\cite[Theorem 2.5.7]{bojanczykDecidablePropertiesTree2004}, block products~\cite[Corollary 3.11]{esik2010algebraic} and wreath products~\cite[Theorem 3.1]{bojanczykWreathProductsForest2012}. For our paper, the most useful decomposition is a remarkable theorem of Schlingloff, which shows that first-order logic on trees is equivalent to a certain two-way variant  {\sc ctl}~\cite[Theorem 4.5]{schlingloff1992expressive}.
+
+Another, more positive, reason is that in terms of restructuring trees, first-order logic is not that far from \mso.  By~\cite[Corollary 1]{colcombetCombinatorialTheoremTrees2007},  every \mso tree-to-tree transduction can be decomposed into an \mso transduction that does not change the tree structure, followed by a first-order transduction. Furthermore, as we show in this paper, first-order logic is sufficient for certain fundamental transformations, such as evaluating $\lambda$-terms. 
+
+
+Summing up, we believe that first-order  tree transformations are an expressive model, with a strong theory, and deserve to leave the shadow of their better known \mso cousin.
+
+
+\paragraph*{Structured datatypes.} In this paper, we provide a functional programming language which defines exactly the first-order tree-to-tree functions. 
+
+Our approach is most similar to~\cite{bojanczykRegularFirstOrderList2018},  in that we also define a functional programming language. The motivation behind this programming language is that, in the  Krohn-Rhodes decomposition, the   intermediate functions  operate on strings that are full of endmarkers and separators.   To avoid such low-level, annotation the programming language from~\cite{bojanczykRegularFirstOrderList2018}, uses  datatype constructors such as pairs or disjoint unions.  Thanks to such datatypes, one can use established operations such as map, head or tail that are used in functional programming languages. 
+In this paper, we apply the same method to trees.
+For trees,  the choice of datatypes  becomes harder. The difficulty is in splitting the input into smaller pieces. A piece of a string is also a string, but this is no longer true for trees, where the pieces have dangling edges (or variables). As a result, more complicated  datatypes are needed.
+
+We finish the introduction by stating 
+one of the guiding principles behind our approach:  we want to describe tree-to-tree functions using a formalism devoid of any iteration mechanisms, such as states or {\tt fold} functions. This also validates the choice of first-order logic. If we would use \mso, at the very least we would need to have some mechanism for groups, which are a basic building block for Krohn-Rhodes decompositions, or for evaluating Boolean formulas. 
+
+
+
