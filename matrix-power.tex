@@ -1,7 +1,7 @@
 
 \section{Matrix power} 
 \label{sec:matrix-power}
-In this section, we define the matrix power, which can be seen as a way of representing several trees in one. Roughly speaking, the several trees are the contents of registers in a register automaton.
+In this section, we define the matrix power, which can be seen as a way of representing several trees in one. %Roughly speaking, the several trees are the contents of registers in a register automaton.
 %, and the single tree that represents them is the computation tree of the register automaton.  We then show that several trees stored in a computation  can be unfolded in a derivable way. 
 
 \begin{definition}
@@ -18,9 +18,24 @@ Here is a picture of a binary element in the matrix power, where $k=3$:
 \begin{center}
 \includegraphics[scale=.4, page=85]{pics.pdf}
 \end{center}
-The intuition behind the matrix power is that there are $k$ registers, and each letter from $\rSigma$ represents an operation on the register contents.  In the above picture, there are three registers, and the blue letters represent the operations on  register contents. Each of the two ports in the above picture is split -- using folding -- into smaller ports; the idea is that these smaller ports will be substituted by the register values in the two children.  
 
-The above intuitions are captured by the following unfolding operations for the matrix power. The first and simpler unfolding operation is defined for shallow terms, and has type
+A matrix power of arity $n$ is used as an abstraction of an $n$-ary register update $\ranked{R\to \tmonad(\Gamma+R+\dots+R)}$. The number $k$ represents the number of registers (that is the size of $\ranked {R}$), and each letter from $\rSigma$ represents a register update (that is, an element of $\ranked{\tmonad(\Gamma+R+\dots+R)}$). When two letters share the same port in the matrix power, this means that the corresponding register updates call the same component of $\ranked{R+\dots+R}$ in their definition, the position in the fold indicates which precise register is called. For instance, the register update above is an abstraction of the following binary register update of registers $r, s$ and $t$:
+   \begin{center}
+   \includegraphics[scale=.3]{register-update-matrix-power.pdf}
+   \end{center}
+When we run a STT on an input tree, we decorate it with register updates following the transition function. In order to evaluate this tree, the first thing to do is to determine, for each register update of the root, its "dependency tree" that is to say the register updates they call, inductively. When register updates are abstracted by matrix powers, this operation of determining the dependency tree is what we call \emph{unfolding}. We illustrate it by the following example 
+\begin{center}
+\includegraphics[scale=.28, page=39]{pics.pdf}
+\end{center}
+Formally, \emph{unfolding} is a function of type
+\begin{align*}
+    \ranked{\unfold : \tmonad \mati k \rSigma \to \mati k {(\tmonad \Sigma)} }
+    \end{align*}
+ which is defined as follows by induction on the size of the input term. If the input is an empty term, then the output is this term:
+\begin{center}
+\includegraphics[scale=.3, page=83]{pics.pdf}
+\end{center}
+Otherwise, if the input is a nonempty term $a(t_1,\ldots,t_n)$ then the output is obtained by first applying unfolding to to the smaller terms $t_1,\ldots,t_n$, and then applying the following derivable function, which we call \emph{shallow unfold}. 
 \begin{align*}
     \ranked{
         \xymatrix{
@@ -32,9 +47,9 @@ Here is a picture of unfolding for shallow terms:
 \begin{center}
 \includegraphics[scale=.2, page=86]{pics.pdf}
 \end{center}
-More formally, unfolding for shallow terms is defined to be   the composition of the following
+More formally, unfolding for shallow terms is defined to be   the composition of the following functions
     \begin{align*}
-        \xymatrix@C=3.2cm{
+        \xymatrix@R-1pc@C=3.2cm{
           {\begin{array}{c}
           \shallowterm{\mati k \rSigma} {\mati k \rGamma} \\{=\shallowterm{\reduce k {\Sigma^k}}{\reduce k {\Gamma^k}}}
           \end{array}}  \ar[d]_{{\mathrm{Commutativity}}}\ar[r]^{\mathrm{Shallow\  unfold}} &  {\begin{array}{c}
@@ -43,43 +58,20 @@ More formally, unfolding for shallow terms is defined to be   the composition of
              \reduce k(\shallowterm{\reduce k {\Sigma^k}}{ {\Gamma^k}})  \ar[r]_{{\mathrm{Matching}}} &  \ranked{ \reduce k(\shallowterm{\Sigma^k}{ {\Gamma}}) } \ar[u]_{\mathrm{Commutativity}} 
         } 
     \end{align*}
-As a composition of derivable functions, shallow unfolding is derivable by definition.  It will be much harder to show derivability for the second unfolding operation, 
-\begin{align*}
-    \ranked{\unfold : \tmonad \mati k \rSigma \to \mati k {(\tmonad \Sigma)} }
-    \end{align*}
-    which extends unfolding to  not necessarily shallow terms, and which is
-defined as follows by induction on the size of the input term. If the input is an empty term, then the output is this term:
-\begin{center}
-\includegraphics[scale=.3, page=83]{pics.pdf}
-\end{center}
-Otherwise, if the input is a nonempty term $a(t_1,\ldots,t_n)$ then the output is obtained by first applying term unfolding to to the smaller terms $t_1,\ldots,t_n$, and then applying the shallow unfold. Here is a picture of term unfolding: 
-\begin{center}
-\includegraphics[scale=.28, page=39]{pics.pdf}
-\end{center}
-Since our atomic functions and combinators do not have any general mechanisms for induction, it is not clear how to derive the unfolding operation for not necessarily shallow terms. In fact, it is not derivable in general, but it will become derivable after imposing a monotonicity requirement.   To see the need for monotonicity, consider the following example.
-\begin{example}\label{eq:twist}
-    Consider the following elements in a second matrix power:
-\begin{center}
-\includegraphics[scale=.3, page=84]{pics.pdf}
-\end{center}
-Let $t_n \in \trees \mati 2 \rSigma$ be the tree which consists of a path with $n$ nodes using the unary label $a$, followed by a leaf with label $b$. If we apply term unfolding to this tree, and then project to the first coordinate, then we get a tree with a white leaf if and only if  $n$ is even.  If term unfolding were derivable, then thanks to the results from Section~\ref{sec:to-transductions}  we would get a first-order tree-to-tree transduction 
-\begin{align*}
-\trees \redset{a,b} \to \trees \rSigma
-\end{align*}
-where the output would contain a white leaf if and only if the input has odd depth. This is in turn would imply that having even depth for trees over $\redset{a,b}$ is first-order definable, which it is not, because first-order logic cannot do modulo counting.
-\end{example}
+Since our atomic functions and combinators do not have any general mechanisms for induction, it is not clear how to derive the unfolding operation. In fact, it is not derivable in general, but it will become derivable after imposing a monotonicity requirement. The need for this condition is shown in Example~\ref{eq:twist}.  Let us define it in the following.
 
-The problem in the above example is that the letter $a$ does a swap on its ports, which leads to counting modulo two. To forbid such swaps, we impose a monotonicity requirement that matches the monotonicity requirement for register updates in register transducers.
 For a port $i$ in an element of the matrix power $a/f \in \mati k \rSigma$ define its \emph{twist} to be the partial function from $\set{1,\ldots,k}$ to itself 
 which is the composition of 
 \begin{align*}
 \xymatrix{
-    \set{1,\ldots,k} \ar[r]^-{j \mapsto {(j,i)}} & \set{1,\ldots,k} \times \set{1,\ldots,n} \ar[r]^-{f^{-1}} & \set{1,\ldots,\arity a} \ar[r] & \set{1,\ldots,k}
-},
+    [1,k] \ar[r]^-{j \mapsto {(j,i)}} & [1,k] \times [1,n] \ar[r]^-{f^{-1}} & [1,\arity a] \ar[r] & [1,k]
+}
 \end{align*}
 where the last function maps each port of the tuple $a$ to the coordinate of the tuple that created that port. Here is a picture:
-\mypic{87}
- We say that an element of the $k$-matrix power is \emph{monotone} if all of its ports have monotone twist.
+\begin{center}
+\includegraphics[scale=.3, page=87]{pics.pdf}
+\end{center}
+ We say that an element of the $k$-matrix power is \emph{monotone} if all of its ports have monotone twist. For instance, the right example above is not monotone.
  We are now ready to state the principal result of this section.
 
 \begin{proposition}\label{prop:monotone-unfold}
