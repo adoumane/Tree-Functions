@@ -6,14 +6,98 @@ We now  have all of the ingredients needed to derive functions computed by regis
     \label{prop:many-register} 
 For every first-order  tree transducer, the computed function is derivable. 
 \end{proposition}
-The above proposition  completes the proof of the left-to-right implication in Theorem~\ref{thm:main}: we have seen, by Proposition~\ref{prop:many-register}, that first-order tree-to-tree transductions can be computed by first-order tree transducers, and Proposition~\ref{prop:many-register} shows that the later are derivable, which concludes the proof.
+The above proposition  completes the proof of the left-to-right implication in Theorem~\ref{thm:main}: we have seen, by Proposition~\ref{prop:many-register}, that first-order tree-to-tree transductions can be computed by first-order tree transducers, which are in turn derivable by Proposition~\ref{prop:many-register}.
 
-The rest of this section is devoted to proving Proposition~\ref{prop:many-register}. As said earlier in the paper, the main idea is to see the computation of an STT as the normalization of a $\lambda$-term. For that, we will show in subsection~\ref{subsec:ru-as-lambda} how to encode register updates as (matrix power of) $\lambda$-terms. The proof of Proposition~\ref{prop:many-register} is then given in subsection~\ref{subsec:proof}. In the rest of this section, we suppose without loss of generality, that the registers of our STT are all unary.
+The rest of this section is devoted to proving Proposition~\ref{prop:many-register}. To compute its output, first-order tree transducers start with relabeling the nodes of the input tree by register updates following the transition function. Since the later is a first-order tree relabeling, it is derivable thanks to Proposition~\ref{prop:forat}. To show Proposition~\ref{prop:many-register}, it remains to prove that the function
+\begin{align*}
+\trees(\ranked{\text{Register updates}}) \xrightarrow{\text{Evaluation}} \text{Register valuation} 
+\end{align*}
+which evaluates a tree of register updates to a register valuation is derivable. For that, we use  terminology inspired by universal algebra, as given in the following definition. 
+\begin{definition}
+    An \emph{algebra} $\alg$ consists of two sets: 
+ \begin{itemize}
+ \item a ranked set $\ranked{A}$ called its \emph{domain},
+\item  a function $\ranked{\shallowterm A A_0} \to \ranked{A_0}$, called its \emph{shallow product}.
+ \end{itemize}
+ Where $\ranked{A_0}$ is the set of nullary elements of $\ranked{A}$. 
+    For an algebra $\alg$, define its \emph{product} to be the function of type
+    \begin{align*}
+\trees( \ranked{A} ) \to \ranked{A_0}
+    \end{align*}
+    defined by induction on terms depth using the sallow product of the algebra in the natural way.
+\end{definition}
+Here are some examples of algebras.
+\begin{example}[The algebra of register updates] Let $\rGamma$, $\ranked{R}$ be finite ranked
+sets. The \emph{algebra of register updates} over $\rGamma$, $\ranked{R}$ is the algebra whose 
+\begin{itemize}
+\item domain is the ranked set of register updates over output alphabet $\rGamma$ and register names $R$. The nullary elements of the domain are the register valuations. 
+\item shallow product is the following operation evaluating register updates 
+    \begin{align*}
+ {\ranked{\text{Register updates}}} \cdot {\text{Register valuations}}  \to \text{Register valuations}
+    \end{align*}
+\end{itemize}  
+The product in the algebra is the operation evaluating a tree of register updates into a register valuation. This  is the operation we are aiming to derive in this section.
+\end{example}
 
-\subsection{Register updates as matrix powers of $\lambda$-terms}\label{subsec:ru-as-lambda}
-\paragraph{The case of unary register updates.} We show how to encode unary register updates as terms over $\Lambda_S X$, for a well chosen set of typed variables $X$ and set of types $S$. 
+\begin{example}[The algebra of (matrix power of) $\lambda$-terms] Let $\Tt$ be a finite set of simple types and $X$ be a finite set of typed variables. 
 
-A unary register upadte $\ranked{u}$ is just as a term of $\ranked{\tmonad(\Gamma+\set{r})}$.  We represent it with a term in $\ranked{\tmonad(\Gamma+\lambda^{\set{x}})}$ where $x$ is a variable of type $o$, as described by the following picture.
+We define the algebra of $\lambda$-terms $\mathbf{\Lambda X}$, to be the algebra whose domain is $\ranked{\Lambda X}$, the set of $\lambda$-terms over the variables $X$ together with the error type $\ranked{\bot}$, and whose shallow product is the composition of the functions
+\begin{align*}
+\ranked{\Lambda X}\cdot \Lambda X \xrightarrow{\text{Flattening}} \Lambda X \xrightarrow{\text{Normalisation}} \Lambda X 
+\end{align*}
+where Normalisation is the function computing normal form of affine terms using types in $\Tt$ for their su-terms, and associating $\bot$ to the other terms. 
+
+
+
+Now let $k$ be an integer. We set $\mathbf{(\Lambda X)^{[k]}}$ to be the algebra whose domain is the matrix power $\ranked{\mati k {(\Lambda X)}}$, and whose shallow product is the composition of shallow unfold with the lifting of the shallow product of the algebra $\mathbf{\Lambda X}$
+\begin{align*}
+\ranked{(\Lambda X)^{[k]}}\cdot (\Lambda X)^{[k]} \to (\ranked{\Lambda X}\cdot \Lambda X)^{[k]}  \to (\Lambda X)^{[k]} 
+\end{align*}
+
+Thanks to Theorem~\ref{thm:normalise} and ~\ref{thm:stt}, the product of $\mathbf{(\Lambda X)^{[k]}}$ is derivable, as the composition of the following derivable functions
+\begin{align*}
+\trees(\ranked{\Lambda X})^{[k]} \xrightarrow{\text{Unfold}} (\trees \ranked{\Lambda X})^{[k]} \xrightarrow{\text{flatt}^{[k]}} 
+ (\Lambda X)^{[k]} \underset{\text{form}}{\xrightarrow{\text{Normal}}}  (\Lambda X)^{[k]}
+\end{align*}
+\end{example}
+
+To show that the product of an algebra is derivable, our technique will be to embed it into another algebra whose 
+product is known to be derivable. This justifies the following definition.
+
+Let $\mathbf{A}$, $\mathbf{B}$ be two algebras. An \emph{embeding} of $\mathbf{A}$ into $\mathbf{B}$ is a function $\ranked{f: \ranked{A}\to \ranked{B}}$ which makes the following diagram commutes ($f_0$ is the restriction of $\ranked{f}$ to $A_0$.)
+      \begin{align*}
+    \xymatrix@C=2cm{
+        \ranked{A} \cdot A_0 \ar[r]^{\ranked{f}\cdot f_0} \ar[d]_{\text{Shallow product}} & \ranked{B}\cdot B_0 \ar[d]^{\text{Shallow product}}\\
+A_0 \ar[r]_{f_0} & B_0       
+       }
+    \end{align*} 
+It is easy to check that the following diagram also commutes for embeddings    
+        \begin{align*}
+    \xymatrix@C=2cm{
+        \trees(\ranked{A}) \ar[r]^{\trees(\ranked{f})} \ar[d]_{\text{Product}} & \trees(\ranked{B}) \ar[d]^{\text{Product}}\\
+A_0 \ar[r]_{f_0} & B_0       
+       }
+    \end{align*}  
+ In the light of this property, to show that the product of $\mathbf{A}$ is derivable, it is enough to find an algebra $\mathbf{B}$ and an embedding $\ranked{f}$ of $A$ into B such that. 
+The product of $B$ is derivable, $f$ is derivable and $f$ is invertible and $f^{-1}$ is derivable.  
+In our case, we want to show< that the product of the algebra of register updates is derivable. For that, we will embed it into an algebra $\Lambda X$ (for a well chosen set of variables $X$ and set of types $\Tt$). Since the product of the latter is derivable, we only need to show that the embedding satisfies this ivertibility property.
+
+
+
+\newpage
+As said earlier, the main idea will be to relate the computation of an STT with normalization of a certain $\lambda$-term. For that, we will show in subsection~\ref{subsec:ru-as-lambda} how to encode register updates as (matrix power of) $\lambda$-terms. The proof of Proposition~\ref{prop:many-register} is then given in subsection~\ref{subsec:proof}. In the rest of this section, we suppose without loss of generality\footnote{To show that unary registers are sufficent, we can proceed by induction on the maximal arity of registers. The main observation is  that the content of a register can be split in three parts...}, that the registers of our STT are at most unary. We suppose that the input and output vocabularies of our STT are $\rSigma$ and $\rGamma$ respectively. 
+
+\subsection{Register updates as $\lambda$-terms}\label{subsec:ru-as-lambda}
+\paragraph{Terms as $\lambda$-terms.} On va d'abord commencer par rappeler un encodage assez classique des terms en $\lambda$-termes.
+Les termes en general sont des objets statiques qui m'on t pas de conte nu calculatoire, c'est normal qu'ils soient représentés par des lambda termes 
+\paragraph{One register.} Suppose that our STT have only one register $r$. We define the function
+\begin{center}
+\begin{tabular}{>{\centering\arraybackslash}m{.15\textwidth} >{\centering\arraybackslash}m{.03\textwidth} >{\centering\arraybackslash}m{.3\textwidth}}
+$\ranked{\text{Register updates}}$ & $\xrightarrow{\ranked{\lambda}}$ & $\ranked{\tmonad(\set{x}^\ranked{\lambda}\ranked{+ \Gamma})}$ \\
+\includegraphics[scale=.3]{unary-register-update.pdf} & $\mapsto$ & \includegraphics[scale=.3]{its-encoding.pdf}
+\end{tabular}
+\end{center}
+The function $\lambda$ represents unary register updates (which are just terms over $\ranked{\tmonad(\Gamma+\set{r})}$) as terms over $\tmonad({x}^\ranked{\lambda}\ranked{+ \Gamma})$, where $x$ is a variable of type $o$.
  \begin{center}
 \includegraphics[scale=.26]{composition=normalisation.pdf}
 \end{center}
@@ -89,12 +173,6 @@ In particular, if one of the inputs $t_1,\ldots,t_n$ is $\bot$, then the output 
     \ranked h : \regups \to \mati k {(\algops \alg)}
     \end{align*}
     which has only monotone elements in its image, and which makes the following diagram commute
-    \begin{align*}
-    \xymatrix@C=2cm{
-        \treepar {\regups} \ar[r]^-{\trees \ranked h}\ar[d]_{\text{product}} &
-         \treepar {\mati k {(\algops \alg)}}\ar[r]^{\text{Corollary~\ref{cor:matrix-power}}}  & 
-         \treepar {\algops \alg} \ar[d]^{\text{product}} \\
-        \regvalss \ar[rr]_{(t_1,\ldots,t_k) \mapsto t^\lambda_1}&  & \algdom {\alg^{[k]}}
-    }
-    \end{align*} 
+
+
 Putting this all together, we see that there is a derivable function which inputs a tree of register updates, and outputs the value of the first register, represented as a $\lambda$-term. The last remaining observation is that function $t^\lambda \mapsto t$, i.e.~the inverse of the $\lambda$-term representation, is derivable. This inverse can be achieved, for example, by composing a first-order tree relabelling with a tree homomorphism. This completes the proof of Proposition~\ref{prop:many-register}, and therefore also of Theorem~\ref{thm:main}. 
