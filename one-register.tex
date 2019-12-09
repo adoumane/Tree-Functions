@@ -26,11 +26,10 @@ Because of normalisation and confluence for the simply typed $\lambda$-calculus,
 
 
 Because of iterated duplication, the normal form of a well-typed $\lambda$-term can be exponential, as witnessed by Example~\ref{ex:exponential} in the appendix.
-Because derivable and first-order transductions have linear size increase, they cannot compute normal forms in general. To  avoid this problem, we  limit attention to affine $\lambda$-terms: a $\lambda$-term is called \emph{affine} if every bound variable is used at most once in its scope, but free variables are allowed to appear multiple times.
+Because derivable and first-order transductions have linear size increase, they cannot compute normal forms in general. To  avoid this problem, we  limit attention to affine $\lambda$-terms: a $\lambda$-term is called \emph{affine} if every bound variable is used at most once in its scope, but free variables are allowed to appear multiple times. For affine $\lambda$-terms, each step of $\beta$-reduction reduces the size by two or three, and therefore the normal form cannot be bigger than the original $\lambda$-term. 
 
-For affine $\lambda$-terms, each step of $\beta$-reduction reduces the size by two or three, and therefore the normal form cannot be bigger than the original $\lambda$-term. 
-
-Being affine alone is not enough to normalise terms with first-order transductions. Another obstacle is terms that use types of unbounded complexity. If the size of types that occur in subterms of our affine $\lambda$-terms is not bounded, and if we suppose that there is a first-order transduction which normalises them, then we could derive a first-order formula which performs an equality test between two integers, as illustrated by Example~\ref{ex:affine-not-enough} in the appendix. Such a formula cannot exist (even if we allow monadic second-order logic).
+Being affine alone is not enough to normalise terms with first-order transductions. Another obstacle is terms that use types of unbounded complexity, as illustrated by Example~\ref{ex:affine-not-enough} in the appendix.
+% If the size of types that occur in subterms of our affine $\lambda$-terms is not bounded, and if we suppose that there is a first-order transduction which normalises them, then we could derive a first-order formula which performs an equality test between two integers Such a formula cannot exist (even if we allow monadic second-order logic).
 
 
 These examples motivate the following definition. If $X$ is a finite set of simply typed variables and $\Tt$ is a finite set of simple types, we define $\Lambda_\Tt X $ to be the set of affine $\lambda$-terms using variables from $X$, whose subterms have 	 types in $\typeset$.  When restricted to $\lambda$-terms of $\Lambda_\Tt X $, normalisation can be done by a derivable function, and therefore also by a first-order tree-to-tree transduction: 

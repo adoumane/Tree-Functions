@@ -7,13 +7,11 @@ In this section, we give an overview on the proof of the right-to-left implicati
 is a first-order tree-to-tree transduction. The proof is a simple induction on the derivation of  $\ranked f$. In the induction, we must deal with functions that manipulate types that are more complex than trees, e.g.~tensor pairs of terms of coproducts.  To operate on such types with first-order transductions, we need to show how such types can be modeled as relational structures. For this purpose, we associate to each type $\rSigma$
 \begin{itemize}
 \item a relational vocabulary denoted  \emph{voc$ \rSigma$};
-\item a map 
- \begin{align*}
-        a \in \rSigma \qquad \mapsto \qquad \underline a \in \text{models over voc$ \rSigma$}.
-    \end{align*}
+\item a map $\underline{\bullet}: a \in \rSigma  \mapsto \underline a \in \text{models over voc$ \rSigma$}$;
+
     which interprets every inhabitant of $\rSigma$ as a relational structure over the vocabulary of $\rSigma$,
 \end{itemize}
-both defined in a natural way by induction on types. Their precise definition are given in Appendix~\ref{sec:to-logic}, Definition~\ref{def:type-model}.
+both defined in a natural way by induction on types. Their precise definition are given in  Definition~\ref{def:type-model}.
     \smallskip
 
 The following proposition immediately yields the right-to-left implication in Theorem~\ref{thm:main}. Its proof, which is a straightforward case analysis of all atomic functions and combinators, is in the appendix. 
