@@ -17,35 +17,31 @@ which evaluates a tree of register updates to a register valuation is derivable.
     An \emph{algebra} $\alg$ consists of two sets: 
  \begin{itemize}
  \item a ranked set $\ranked{A}$ called its \emph{domain},
-\item  a function $\ranked{\shallowterm A A_0} \to \ranked{A_0}$, called its \emph{shallow product}.
+\item  a function $\ranked{A}\cdot A \to A$, called its \emph{shallow product}, 
  \end{itemize}
- Where $\ranked{A_0}$ is the set of nullary elements of $\ranked{A}$. 
+ where $A$ is the set of nullary elements of $\ranked{A}$. 
     For an algebra $\alg$, define its \emph{product} to be the function of type
     \begin{align*}
-\trees( \ranked{A} ) \to \ranked{A_0}
+\trees( \ranked{A} ) \to A
     \end{align*}
-    defined by induction on terms depth using the sallow product of the algebra in the natural way.
+    defined by induction on trees, using the sallow product of the algebra in the natural way.
 \end{definition}
 Here are some examples of algebras.
 \begin{example}[The algebra of register updates] Let $\rGamma$, $\ranked{R}$ be finite ranked
-sets. The \emph{algebra of register updates} over $\rGamma$, $\ranked{R}$ is the algebra whose 
-\begin{itemize}
-\item domain is the ranked set of register updates over output alphabet $\rGamma$ and register names $R$. The nullary elements of the domain are the register valuations. 
-\item shallow product is the following operation evaluating register updates 
+sets. The \emph{algebra of register updates} over $\rGamma$, $\ranked{R}$ is the algebra whose  domain is the ranked set of register updates over output alphabet $\rGamma$ and register names $R$. The nullary elements of the domain are the register valuations.  Its shallow product is the following operation evaluating register updates 
     \begin{align*}
  {\ranked{\text{Register updates}}} \cdot {\text{Register valuations}}  \to \text{Register valuations}
     \end{align*}
-\end{itemize}  
-The product in the algebra is the operation evaluating a tree of register updates into a register valuation. This  is the operation we are aiming to derive in this section.
+The product in this algebra is the operation evaluating a tree of register updates into a register valuation. This  is the operation we are aiming to derive in this section.
 \end{example}
 
 \begin{example}[The algebra of (matrix power of) $\lambda$-terms] Let $\Tt$ be a finite set of simple types and $X$ be a finite set of typed variables. 
 
 We define the algebra of $\lambda$-terms $\mathbf{\Lambda X}$, to be the algebra whose domain is $\ranked{\Lambda X}$, the set of $\lambda$-terms over the variables $X$ together with the error type $\ranked{\bot}$, and whose shallow product is the composition of the functions
 \begin{align*}
-\ranked{\Lambda X}\cdot \Lambda X \xrightarrow{\text{Flattening}} \Lambda X \xrightarrow{\text{Normalisation}} \Lambda X 
+\ranked{\Lambda X}\cdot \Lambda X \xrightarrow{\text{Flatt}} \Lambda X \xrightarrow{\text{Normal form}} \Lambda X 
 \end{align*}
-where Normalisation is the function computing normal form of affine terms using types in $\Tt$ for their su-terms, and associating $\bot$ to the other terms. 
+where Normal form is the function computing normal form of affine terms using types in $\Tt$ for their sub-terms, and associating $\bot$ to the other terms. 
 
 
 
@@ -61,26 +57,27 @@ Thanks to Theorem~\ref{thm:normalise} and ~\ref{thm:stt}, the product of $\mathb
 \end{align*}
 \end{example}
 
-To show that the product of an algebra is derivable, our technique will be to embed it into another algebra whose 
+To show that an algebra has a derivable product, we will be to embed it into another algebra whose 
 product is known to be derivable. This justifies the following definition.
 
-Let $\mathbf{A}$, $\mathbf{B}$ be two algebras. An \emph{embeding} of $\mathbf{A}$ into $\mathbf{B}$ is a function $\ranked{f: \ranked{A}\to \ranked{B}}$ which makes the following diagram commutes ($f_0$ is the restriction of $\ranked{f}$ to $A_0$.)
+Let $\mathbf{A}$, $\mathbf{B}$ be two algebras. An \emph{embedding} of $\mathbf{A}$ into $\mathbf{B}$ is a function $\ranked{f: \ranked{A}\to \ranked{B}}$ which makes the following diagram commutes ($f$ is the restriction of $\ranked{f}$ to $A$.)
       \begin{align*}
     \xymatrix@C=2cm{
-        \ranked{A} \cdot A_0 \ar[r]^{\ranked{f}\cdot f_0} \ar[d]_{\text{Shallow product}} & \ranked{B}\cdot B_0 \ar[d]^{\text{Shallow product}}\\
-A_0 \ar[r]_{f_0} & B_0       
+        \ranked{A} \cdot A \ar[r]^{\ranked{f}\cdot f} \ar[d]_{\text{Shallow product}} & \ranked{B}\cdot B \ar[d]^{\text{Shallow product}}\\
+A \ar[r]_{f} & B       
        }
     \end{align*} 
 It is easy to check that the following diagram also commutes for embeddings    
         \begin{align*}
     \xymatrix@C=2cm{
         \trees(\ranked{A}) \ar[r]^{\trees(\ranked{f})} \ar[d]_{\text{Product}} & \trees(\ranked{B}) \ar[d]^{\text{Product}}\\
-A_0 \ar[r]_{f_0} & B_0       
+A \ar[r]_{f} & B       
        }
     \end{align*}  
- In the light of this property, to show that the product of $\mathbf{A}$ is derivable, it is enough to find an algebra $\mathbf{B}$ and an embedding $\ranked{f}$ of $A$ into B such that. 
-The product of $B$ is derivable, $f$ is derivable and $f$ is invertible and $f^{-1}$ is derivable.  
-In our case, we want to show< that the product of the algebra of register updates is derivable. For that, we will embed it into an algebra $\Lambda X$ (for a well chosen set of variables $X$ and set of types $\Tt$). Since the product of the latter is derivable, we only need to show that the embedding satisfies this ivertibility property.
+ In the light of this property, to show that the product of an algebra $\mathbf{A}$ is derivable, it is enough to find an algebra $\mathbf{B}$ and an embedding $\ranked{f}$ of $\mathbf{A}$ into $\mathbf{B}$ such that:  
+the product of $\mathbf{B}$ is derivable, $f$ is derivable, $f$ is invertible and its inverse $f^{-1}$ is derivable.  
+
+In our case, we will embed the algebra of register updates into an algebra $\mathbf{(\Lambda X)^{[k]}}$, for a well chosen set of variables $X$ and set of types $\Tt$. As noticed earlier, the product of the latter is derivable, we only need to show that the additional derivability conditions on the embedding.
 
 
 
