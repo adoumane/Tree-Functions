@@ -4,7 +4,7 @@
         \xymatrix@C=1cm{
 #2 \ar[r]^-{#1}& #3
         }}$
-        \\
+        \\[10pt]
         {#4}
     \end{tabular}   
  }
@@ -16,7 +16,7 @@
 #2 \ar@<.5ex>[r]^-{#1}& #3
 \ar@<.5ex>[l]
         }}$
-        \\
+        \\[10pt]
         {#4}
     \end{tabular}   
  }
@@ -29,91 +29,73 @@
         \xymatrix@C=1.5cm{
 #1 & #2
         }}$
-        \\
+        \\[10pt]
 #3
     \end{tabular}   
  }
  
 
 \begin{figure*}
-$$\begin{array}{cc}
-\textbf{Monad $\tmonad$} & \textbf{Graded monad $\reduce k$}\\[5pt]
-\begin{array}{ll}
+\begin{center}
+$$\qquad\begin{array}{cc}
+\textbf{Monad $\tmonad$} & \textbf{Graded monad $\reduce k$} \\[5pt]
+\begin{array}{cc}
    \simplefun
         {\unit_\Sigma}
         {\Sigma}
         {\tmonad \Sigma}
         {
-      \includegraphics[page=10,scale=0.3]{pics}}
+      \includegraphics[scale=0.33]{unit}}
         & 
         \simplefun
         {\flatt_\Sigma}
         {\tmonad \tmonad \Sigma}
         {\tmonad \Sigma} 
-        {\includegraphics[page=73,scale=0.3]{pics}}
-\end{array} & \begin{array}{ll}
+        {  \includegraphics[scale=0.33]{flat}}
+\end{array} \quad&\quad \begin{array}{cc}
 \simplefun
         {\mathrm{g-unit}_\Sigma}
         {\Sigma}
         {\reduce 1 \Sigma}
         {
-      \includegraphics[page=10,scale=0.3]{pics}}
+        \includegraphics[scale=0.33]{g-unit}}
         & 
         \simplefun
         {\mathrm{g-flat}_\Sigma}
         {\reduce k \reduce l \Sigma}
         {\reduce{k.l} \Sigma} 
-        {\includegraphics[page=73,scale=0.3]{pics}}
+        {  \includegraphics[scale=0.33]{g-flat}}
 \end{array}
 \end{array}$$
-
-\begin{center}
-$$
-\begin{array}{ccc}
-\textbf{Accocativity} \qquad&\qquad  \textbf{Commutativity} \qquad&\qquad   \textbf {Shallow terms}\\[5pt]
-\begin{array}{c}
-\ranked{(\Sigma \otimes \Gamma)\otimes \Delta \to \Sigma \otimes (\Gamma\otimes \Delta)} \\[5pt] \ranked{(\Sigma + \Gamma)+ \Delta \to \Sigma + (\Gamma+ \Delta)}  \\[5pt] \ranked{(\Sigma . \Gamma). \Delta \to \Sigma . (\Gamma . \Delta)}
-\end{array}
-&
-\begin{array}{c}
-\ranked{\Sigma_1 + \Sigma_2 \to \Sigma_2 + \Sigma_1} \\[5pt] \ranked{\Sigma_1 \otimes \Sigma_2 \to \Sigma_2 \otimes \Sigma_1}
-\end{array}
-&
-\qquad\begin{array}{c}
-      \reversiblefun
-        {}
-        {\rSigma}
-        {\shallowterm {\Sigma} 1}
-        {}
-        \\[5pt]
-        \reversiblefun
-        {\composeterm}
-        {1 + \shallowterm \Sigma {\tmonad \Sigma} }
-        { \tmonad \Sigma}
-        {
-        \begin{tabular}{l}
-            Every term is either just a port,\\ or has a root and child subterms.    
-        \end{tabular}    
-        }
-\end{array}\end{array}$$
 \end{center}
 
-$$
+
+$
 \begin{array}{ccc}
+ & \textbf{Accociativity} &\\[5pt]
+ \ranked{(\Sigma \otimes \Gamma)\otimes \Delta \to \Sigma \otimes (\Gamma\otimes \Delta)} & \ranked{(\Sigma + \Gamma)+ \Delta \to \Sigma + (\Gamma+ \Delta)}  & \ranked{(\Sigma \cdot \Gamma)\cdot \Delta \to \Sigma \cdot (\Gamma \cdot \Delta)}\\[15pt]
  & \textbf{Distributivity} &\\[5pt]
 \reversiblefun
         {}
         {\shallowterm {(\Sigma_1 + \Sigma_2)} \Gamma}
-        {(\shallowterm {\Sigma_1} \Gamma) + (\shallowterm {\Sigma_2} \Gamma)}{}
+        {(\shallowterm {\Sigma_1} \Gamma) + (\shallowterm {\Sigma_2} \Gamma)}
+        {}
         &
         \reversiblefun
         {}
         {(\Sigma_1 + \Sigma_2)\otimes \Gamma}
         {(\Sigma_1 \otimes \Gamma) + (\Sigma_2 \otimes \Gamma)}{}
-        & \reversiblefun
+        &       \simplefun
+        {}
+        {\reduce k (\Sigma_1 + \Sigma_2)}
+        {\reduce k \Sigma_1 + \reduce k \Sigma_2}{}
+      %  {$(a,i)/f \mapsto ((a/f),i)$}
+      \\[-15pt]  
+      \reversiblefun
         {}
         {\shallowterm {(\Sigma_1 \otimes \Sigma_2)} \Gamma}
-        {(\shallowterm {\Sigma_1} \Gamma) \otimes (\shallowterm {\Sigma_2} \Gamma)}{}\\[5pt]
+        {(\shallowterm {\Sigma_1} \Gamma) \otimes (\shallowterm {\Sigma_2} \Gamma)}
+        {\includegraphics[scale=.33]{tensor-shallow-distrib}}
 %        {(a,i)\tensorpair{b_1,\ldots,b_n} \mapsto (a\tensorpair{b_1\ldots,b_n}) }
 %       &
 %        {\tensorpair{(a,i),b} \mapsto (\tensorpair{a,b},i)}
@@ -123,40 +105,91 @@ $$
 %            $\tensorpair{a_1,a_2}\tensorpair{b_1,\ldots,b_n} \mapsto$ \\
 %            $\tensorpair{a_1 \tensorpair{b_1,\ldots,b_{n_1}}, a_2\tensorpair{b_{n_1+1},\ldots,b_n} }$  \\
 %            where $n_1$ is the arity of $a_1$
-%            \end{tabular}}\\[15pt]         
-%            
-      \simplefun
-        {}
-        {\reduce k (\Sigma_1 + \Sigma_2)}
-        {\reduce k \Sigma_1 + \reduce k \Sigma_2}{}
-      %  {$(a,i)/f \mapsto ((a/f),i)$}
+%            \end{tabular}}                
          & 
 	\simplefun
         {}
         {\reduce k (\Sigma_1 \otimes \Sigma_2)}
-        {\reduce k ((\reduce k {\Sigma_1})\otimes (\reduce k \Sigma_2))}{}        
+        {\reduce k ((\reduce k {\Sigma_1})\otimes (\reduce k \Sigma_2))}
+        {\includegraphics[scale=.33]{tensor-fold-distrib-1}}        
 	&
 	 \simplefun
         {}
         {(\reduce k \Sigma_1) \otimes (\reduce k {\Sigma_2})}
          {\reduce k (\Sigma_1 \otimes \Sigma_2)}
-        {}  \\[5pt] 
+        {\includegraphics[scale=.33]{tensor-fold-distrib-2}}  \\[5pt] 
 
          \simplefun
         {}
         {\shallowterm \Sigma {\reduce k \Gamma}}
-         {\reduce k (\shallowterm \Sigma {\Gamma})}{} &        
+         {\reduce k (\shallowterm \Sigma {\Gamma})}{\includegraphics[scale=.33]{shallow-fold-distrib}} &        
          \simplefun
         {}
         {\tmonad {\reduce 1\Sigma}}
-         {\reduce 1 \tmonad \Sigma}{}
+         {\reduce 1 \tmonad \Sigma}
+         {\includegraphics[scale=.33]{unfold-1}}
          & 
          \simplefun
         {}
         {\tmonad {\reduce k \Sigma}}
-         {\reduce k \tmonad \reduce k \Sigma}{}
- \\[15pt]
-&         \textbf{Non-trivial functions}  & \\[5pt]
+         {\reduce k \tmonad \reduce k \Sigma}
+         {\includegraphics[scale=.33]{external-unfold-1}}
+         \end{array}
+$
+
+$$
+\begin{array}{cc}
+\textbf{Injections} \qquad&\qquad \textbf{Projections}\\
+\begin{array}{ll}
+\ranked{\Sigma \to \Sigma+\Sigma} & \ranked{\Sigma \to \reduce k \Sigma^k}  \\ \ranked{\reduce k \Sigma \to \reduce {k+l}\Sigma}  &  
+\ranked{\Sigma^n\to  \shallowterm n \Sigma}
+\end{array}\qquad&\qquad
+\begin{array}{ll}
+\ranked{\Sigma+\Sigma\to \Sigma} & \ranked{\Sigma\otimes \Sigma \to \reduce 1 \Sigma} \\\ranked{\reduce {k+1} \Sigma \to \reduce {k}\Sigma+\bot} &
+\ranked{\shallowterm n \Sigma \to \Sigma^n}
+\end{array}
+\end{array}
+$$
+
+$
+\begin{array}{cc}
+\textbf{Commutativity} & \textbf{Shallow terms} \\
+\begin{array}{cc}
+      \reversiblefun
+        {}
+        {\ranked{\Sigma_1 + \Sigma_2}}
+        {\ranked{\Sigma_2 + \Sigma_1}}
+        {$(a,i) \mapsto (a,3-i) $}
+  &
+    \reversiblefun
+        {}
+        {\ranked{\Sigma_1 \otimes\Sigma_2}}
+        {\ranked{\Sigma_2 \otimes \Sigma_1}}
+        {$\tensorpair{a,b} \mapsto \tensorpair{b,a} $}
+\end{array}\qquad&\qquad
+\begin{array}{cc}
+  \reversiblefun
+        {}
+        {\rSigma}
+        {\shallowterm {\Sigma} 1}
+        {\includegraphics[scale=.3]{sigma-dot-1}}
+      &
+        \reversiblefun
+        {\composeterm}
+        {1 + \shallowterm \Sigma {\tmonad \Sigma} }
+        { \tmonad \Sigma}
+        {
+        \begin{tabular}{l}
+            Every term is either just a port,\\ or has a root and child subterms.    
+        \end{tabular}    
+        }
+\end{array}
+\end{array}
+$
+
+
+$\begin{array}{ccc}
+        & \textbf{Functions explained in Section~\ref{}}  & \\[5pt]
         \simplefun{}
         {\tmonad(\Sigma_1+\Sigma_2) \ar@<.5ex>[r]^{ \ancfact}
         \ar@<-.5ex>[r]_{\decfact}}
@@ -172,22 +205,7 @@ $$
         {\shallowterm{(\reduce k \Sigma)}{\Gamma^k} \ar[r]^-{\unfold}}
         {\reduce 1(\shallowterm \Sigma \Gamma)}
         {} 
-         \end{array}
-$$
-
-$$
-\begin{array}{cc}
-\textbf{Injections} \qquad&\qquad \textbf{Projections}\\
-\begin{array}{ll}
-\ranked{\Sigma \to \Sigma+\Sigma} & \ranked{\Sigma \to \reduce k \Sigma^k}  \\ \ranked{\reduce k \Sigma \to \reduce {k+l}\Sigma}  &  
-\ranked{\Sigma^n\to  \shallowterm n \Sigma}
-\end{array}\qquad&\qquad
-\begin{array}{ll}
-\ranked{\Sigma+\Sigma\to \Sigma} & \ranked{\Sigma\otimes \Sigma \to \reduce 1 \Sigma} \\\ranked{\reduce {k+1} \Sigma \to \reduce {k}\Sigma+\bot} &
-\ranked{\shallowterm n \Sigma \to \Sigma^n}
-\end{array}
-\end{array}
-$$
+\end{array}$
 \caption{    \label{fig:fo-term}The atomic functions. The functions are parametrised by types  $\rSigma, \ranked{\Sigma_1}, \ranked{\Sigma_2}, \rGamma$. Some of the functions are bijections, as indicated by double arrows, in these cases both the function and its inverse are atomic functions. }
 \end{figure*}
 

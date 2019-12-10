@@ -2,16 +2,17 @@
 \label{sec:trees-transductions}
  In this section, we describe the trees and tree-to-tree functions that are discussed in this paper. The  trees are rooted, node labelled, ranked (the label of a node determines the number of children) and sibling ordered (there is a first child, second child, etc.). 
 A \emph{ranked set} is a set where each element has an associated \emph{arity} in $\set{0,1,2,\ldots}$. We adopt the convention that ranked sets are written in red, e.g.~$\rSigma$ or $\rGamma$.  We use ranked sets as building blocks for trees. The following picture describes the notion of trees that we use and some terminology:\\
-
-\includegraphics[scale=.4]{ranked-tree.pdf}
+\begin{center}
+\includegraphics[scale=.35]{ranked-tree.pdf}
+\end{center}
 
 % When talking about elements of a ranked set, we mean elements of the underlying set.   For a ranked set $A$ and a finite set of variables $X \subseteq \varnames$, we write $\slice A X$ for the elements of $A$ that have arity $X$. 
 
 We use standard tree terminology, such as ancestor, descendant, child, parent. We write $\trees \rSigma$ for the set of trees over a ranked set $\rSigma$. This paper is about \emph{tree-to-tree functions}, which are functions of the type \begin{align*}
 f : \trees \rSigma \to \trees \rGamma.
 \end{align*}
-We also discuss tree languages, i.e.~sets of trees. 
-A tree language can be viewed as the special case of a tree-to-tree function, where the output alphabet $\Gamma$ contains only two letters ``yes'' and ``no'' of arity zero. Later on, we will also discuss terms, which are trees with variables. 
+%We also discuss tree languages, i.e.~sets of trees. 
+%A tree language can be viewed as the special case of a tree-to-tree function, where the output alphabet $\Gamma$ contains only two letters ``yes'' and ``no'' of arity zero. Later on, we will also discuss terms, which are trees with variables. 
 
   
 \subsection{First-order logic and transductions}
@@ -39,9 +40,12 @@ The $i$-th child predicates are only needed for $i$ up to the maximal arity lett
  Apart from defining yes/no properties, first-order logic can also be used  to define transformations on  models. In the context of this paper, we are interested in first-order transductions%\footnote{   First-order transductions are  a special case of a first-order interpretations~\cite[p.~213]{hodges_model_1993}, which use tuples (instead of elements) in the input structure to describe elements in the output structure. As a result, first-order transductions have linear size increase, while first-order interpretations have polynomial size increase. First-order transductions are also a special case of \mso transductions, see~\cite[Section 7]{courcelle_graph_2012}, which use \mso logic instead of first-order logic, and which also allow a step where the input structure is nondeterministically coloured (and therefore the result is a binary relation on structures which is not necessarily functional).}
 , defined below. 
 
-\begin{definition}[First-order transduction]\label{def:fo-transduction}\ 
-\begin{enumerate}
-    \item \emph{Copying.} Fix some  relational vocabulary $\ranked \sigma$ and let $k \in \set{1,2,\ldots}$. Define $k$-copying to be the operation 
+\begin{definition}[First-order transduction]\label{def:fo-transduction}~\\[-10pt]
+%\begin{enumerate}
+ %   \item 
+ 
+
+ 1. \emph{Copying.} Fix some  relational vocabulary $\ranked \sigma$ and let $k \in \set{1,2,\ldots}$. Define $k$-copying to be the operation 
     $$\begin{array}{lll}
      \text{models over $\ranked \sigma$} & \to & 
      \begin{array}{c}
@@ -50,7 +54,9 @@ The $i$-th child predicates are only needed for $i$ up to the maximal arity lett
      \end{array}
     \end{array}$$
 which inputs a model $\mathbb A$, and outputs $k$ disjoint copies of $\mathbb A$, where the  $\mathrm{copy}$ relation is interpreted as the set of tuples $(a_1,\ldots,a_k)$ such that, for  some $a \in \mathbb A$, the first copy of $a$ is  $a_1$, the second copy of $a$ is $a_2$, etc. The $\mathrm{copy}$ relation  is not commutative, because we distinguish the copies.
-\item    \emph{Non-copying first-order transduction.} The syntax of a \emph{non-copying first-order transduction}  is given by:
+\smallskip
+
+2.    \emph{Non-copying first-order transduction.} The syntax of a \emph{non-copying first-order transduction}  is given by:
 \begin{enumerate}
     \item Input relational vocabulary $\ranked\sigma$ and output relational vocalbulary $\ranked{\gamma}$.
     \item A first-order \emph{universe formula} $\varphi(x)$ over $\ranked{\sigma}$.
@@ -61,8 +67,10 @@ The semantics of a non-copying first-order transduction is  a function
     \text{models over $\ranked\sigma$} \quad \to \quad \text{models over $\ranked\gamma$}
 \end{align*}
 defined as follows. If the input model is $\mathbb A$, then the output model is defined as follows: the universe is elements of $\mathbb A$ which satisfy the universe formula, and each relation $R$ is interpreted as those tuples that satisfy $\varphi_R$. 
-\item \emph{First-order transductions.} A \emph{first-order transduction} is defined to be any  composition of $k$-copying (for some $k$) followed by a non-copying first-order transduction. 
- \end{enumerate}
+
+\smallskip
+3. \emph{First-order transductions.} A \emph{first-order transduction} is defined to be any  composition of $k$-copying (for some $k$) followed by a non-copying first-order transduction. 
+% \end{enumerate}
 \end{definition}
 
 
@@ -84,14 +92,16 @@ for some first-order transduction $g$.
 There are also \mso tree-to-tree transductions, these will be discussed later, in Section~\ref{sec:mso-trans}.  We conclude this section with an example of first-order tree-to-tree transduction. A more elaborated example could be found in Appendix~\ref{sec:appendix-example-fo-transductions}.
 
 \begin{example}
-    Let the input and output alphabets be:
+    Let the input and output alphabets be:\vspace{-15pt}
     \mypic{17}
     and consider the tree-to-tree function which removes the unary nodes:
-\mypic{19}
+\begin{center}
+\includegraphics[scale=.35, page=19]{pics.pdf}
+\end{center}
 This is a first-order tree-to-tree transduction, which needs no copying (formally speaking, it uses 1-copying). The domain formula selects nodes which have non-unary labels, and the descendant relation is inherited from the input tree. To define the child relation on the output tree, we need to use the descendant relation in the input tree. A node $x$ in the input tree is an $i$-th child in the output tree if it satisfies the following first-order formula:
 \begin{align*}
     \exists y \ \child i (y) \land \underbrace{y \le x \land   \forall z\ (y < z < x \Rightarrow \blueball(z))}_{\substack{\text{$y$ is the farthest ancestor that can be} \\ \text{reached from $x$ using only unary nodes}}}
 \end{align*}
-This function could not be implemented by a first-order transduction if we replaced the descendant relation by a binary parent-child relation.
+%This function could not be implemented by a first-order transduction if we replaced the descendant relation by a binary parent-child relation.
 \end{example}
 
