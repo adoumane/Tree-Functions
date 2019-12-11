@@ -25,7 +25,7 @@ A matrix power of arity $n$ is used as an abstraction of an $n$-ary register upd
    \end{center}
 When we run a STT on an input tree, we decorate it with register updates following the transition function. In order to evaluate this tree, the first thing to do is to determine, for each register update of the root, its "dependency tree" that is to say the register updates they call, inductively. When register updates are abstracted by matrix powers, this operation of determining the dependency tree is what we call \emph{unfolding}. We illustrate it by the following example 
 \begin{center}
-\includegraphics[scale=.28, page=39]{pics.pdf}
+\includegraphics[scale=.38]{unfold-matrix-power}
 \end{center}
 Formally, \emph{unfolding} is a function of type
 \begin{align*}
@@ -45,7 +45,7 @@ Otherwise, if the input is a nonempty term $a(t_1,\ldots,t_n)$ then the output i
 \end{align*}
 Here is a picture of unfolding for shallow terms:
 \begin{center}
-\includegraphics[scale=.2, page=86]{pics.pdf}
+\includegraphics[scale=.4]{unfold-shallow}
 \end{center}
 More formally, unfolding for shallow terms is defined to be   the composition of the following functions
     \begin{align*}

@@ -180,7 +180,7 @@ Each of these functions will play a key role in one of the main results of the p
         %\end{align*}
         We say that two non-port nodes have \emph{same type} if both have labels in the same  $\ranked{\Sigma_i}$; otherwise we say that non-port nodes have \emph{opposing type}.  Call two non-port nodes \emph{ancestor equivalent}  if they have the same proper ancestors of opposing type. Call two non-port nodes \emph{descendant equivalent}  if they  are ancestor equivalent and they have the same proper descendants of opposing type. Here is a picture, with $\ranked{\Sigma_1}$ being red and $\ranked{\Sigma_2}$ being blue: 
         \begin{center}
-      \includegraphics[scale=.35]{facto-up-down.pdf}
+      \includegraphics[scale=.3]{facto-up-down.pdf}
         \end{center}
         Both ancestor and descendant equivalences are factorisations; and in each case equivalence classes contain only nodes of same type.  The function $\ancfact$ maps a term to (the term of terms corresponding to) its ancestor equivalence relation, likewise we define $\decfact$ for  descendant factorisations.
     
@@ -190,21 +190,25 @@ Each of these functions will play a key role in one of the main results of the p
         \end{align*}
         is the natural extension -- from trees to terms -- of the depth-first traversal, as explained below (the nullary grey nodes represent the labels from $\ranked 0$, and the binary grey nodes represent the labels from $\ranked 2$):
         \begin{center}
-        \includegraphics[scale=.45]{preorder.pdf}
+        \includegraphics[scale=.34]{preorder.pdf}
         \end{center}
 The $\preorder$ function respects the input port order, this is the reason  why we have a fold $\reduce 1$ in the output type. 
-\subsubsection{Unfolding}
-The general idea behind the  unfolding operation 
-\begin{align*}
-\ranked{
-    \unfoldsmall : \shallowterm {(\reduce k   \Sigma)} {\Gamma^k} \to \reduce 1 (\shallowterm \Sigma \Gamma)
-}
-\end{align*} 
-is to eliminate a $k$-fold by matching it with a $k$-th power. 
-The unfolding operation is explained in the following picture for $k=2$: 
-        \begin{center}
-        \includegraphics[scale=.36]{shallow-unfold.pdf}
-        \end{center}
+
+\input{unfold}
+%\subsubsection{Unfolding}
+%The general idea behind the  unfolding operation 
+%\begin{align*}
+%\ranked{
+%    \unfoldsmall : \shallowterm {(\reduce k   \Sigma)} {\Gamma^k} \to \reduce 1 (\shallowterm \Sigma \Gamma)
+%}
+%\end{align*} 
+%is to eliminate a $k$-fold by matching it with a $k$-th power. 
+%The unfolding operation is explained in the following picture for $k=2$: 
+%        \begin{center}
+%        \includegraphics[scale=.36]{shallow-unfold.pdf}
+%        \end{center}
+
+
 % One of the main results in this paper will be  that an iterated version of the unfold operation, of type
 % \begin{align*}
 % \ranked{    \tmonad (\reduce k \Sigma^k) \to \reduce k (\tmonad \Sigma)^k,}
