@@ -7,36 +7,46 @@ In this section, we present an overview of the proof of Theorem~\ref{thm:main}. 
     {\bf #1.} #2
 \end{center}
 }
-\begin{enumerate}
-\item \emph{Section~\ref{sec:to-transductions}: from the atomic functions and combinators to first-order transductions.} The easier part of Theorem~\ref{thm:main} is the  right-to-left implication, which is proved by a straightforward induction on the derivation:
+%\begin{enumerate}
+%\item
+
+1. \emph{Section~\ref{sec:to-transductions}: from the atomic functions and combinators to first-order transductions.} The easier part of Theorem~\ref{thm:main} is the  right-to-left implication, which is proved by a straightforward induction on the derivation:
 \announce
 {Proposition~\ref{prop:to-logic}}
 {Every derivable tree-to-tree function is a first-order tree-to-tree transduction.}
  
  The remaining four steps in the proof, namely Sections~\ref{sec:fo-translation}--\ref{sec:matrix-power}, are devoted to the left-to-right implication, i.e.~deriving every first-order tree-to-tree transduction.
 
-    \item \emph{Section~\ref{sec:fo-translation}: first-order tree relabellings.} We begin the proof of the left-to-right  implication  with a special case of first-order tree-to-tree transductions, which we call \emph{first-order  tree relabellings.} In such a  function, every node of the input tree  is given a new label, depending on first-order definable properties of the node. An example is:  ``if a leaf $x$ in the input tree has at least one ancestor with label $a$, then replace the label of $x$ with the letter $c$''. First-order rational tree functions do not cover all first-order transductions, because they do not change the shape of the input tree, but they are an important subcase.
+\smallskip
+  %  \item
+  2. \emph{Section~\ref{sec:fo-translation}: first-order tree relabellings.} We begin the proof of the left-to-right  implication  with a special case of first-order tree-to-tree transductions, which we call \emph{first-order  tree relabellings.} In such a  function, every node of the input tree  is given a new label, depending on first-order definable properties of the node. An example is:  ``if a leaf $x$ in the input tree has at least one ancestor with label $a$, then replace the label of $x$ with the letter $c$''. First-order rational tree functions do not cover all first-order transductions, because they do not change the shape of the input tree, but they are an important subcase.
     The main result of Section~\ref{sec:fo-translation} is:
     \announce
     {Proposition~\ref{prop:forat}}
     {Every first-order tree relabelling is derivable.}
     The main tool used in the proof of Proposition~\ref{prop:forat} is a theorem of Schlingloff~\cite[Theorem 2.6]{schlingloff1992expressive}, which can be seen as tree version of Kamp's theorem about {\sc ltl} being  expressively complete for first-order logic.  
-    \item \emph{Section~\ref{sec:stt}: streaming tree transducers. }To prove that  first-order tree-to-tree transductions are derivable, it will be more convenient to use an automaton model. In Section~\ref{sec:stt}, we present  this  automaton model, which we call \emph{register transducers}\footnote{These are the only kind of register transducer used in this paper. A more complete name would be first-order tree-to-tree register transducers.}. This  is a bottom-up tree automaton, which uses registers to store parts of the output tree. The model is based on streaming tree transducers from~\cite{alur2017streaming}, but it is  appropriately restricted so that it matches first-order logic, as opposed to monadic second-order logic which was used in~\cite{alur2017streaming}. The main result of Section~\ref{sec:stt} is:
+    
+    \smallskip
+    %\item
+    3. \emph{Section~\ref{sec:stt}: streaming tree transducers. }To prove that  first-order tree-to-tree transductions are derivable, it will be more convenient to use an automaton model. In Section~\ref{sec:stt}, we present  this  automaton model, which we call \emph{register transducers}\footnote{These are the only kind of register transducer used in this paper. A more complete name would be first-order tree-to-tree register transducers.}. This  is a bottom-up tree automaton, which uses registers to store parts of the output tree. The model is based on streaming tree transducers from~\cite{alur2017streaming}, but it is  appropriately restricted so that it matches first-order logic, as opposed to monadic second-order logic which was used in~\cite{alur2017streaming}. The main result of Section~\ref{sec:stt} is:
     \announce
     {Theorem~\ref{thm:stt}}
     {Every first-order  tree-to-tree transduction can be computed by a  register transducer.}
     The proof of the above theorem, like for similar results in~\cite{alur2017streaming} or~\cite[Theorem 23]{engelfrietMSODefinableString2001}, is based on the composition method in logic. 
     The converse implication is also true, and follows from Propositions~\ref{prop:to-logic} and~\ref{prop:many-register}.
     
-     \item \emph{Section~\ref{sec:one-register}: register transducers with one register.} By Theorem~\ref{thm:stt}, in order to prove the left-to-right implication in Theorem~\ref{thm:main}, it is enough to show that register transducers can only compute  derivable  functions. As a first step, we prove the special case of one register only. For such automata, the computed function turns out to be a composition of a first-order tree relabelling, as treated  Proposition~\ref{prop:forat}, and the evaluation (i.e.~computation of the $\beta$-normal form) of certain restricted   simply typed $\lambda$-terms. The main result of Section~\ref{sec:one-register} is that these restricted $\lambda$-terms can be normalised by a derivable function, as stated in the following theorem:
+    \smallskip
+     %\item
+     4. \emph{Section~\ref{sec:one-register}: register transducers with one register.} By Theorem~\ref{thm:stt}, in order to prove the left-to-right implication in Theorem~\ref{thm:main}, it is enough to show that register transducers can only compute  derivable  functions. As a first step, we prove the special case of one register only. For such automata, the computed function turns out to be a composition of a first-order tree relabelling, as treated  Proposition~\ref{prop:forat}, and the evaluation (i.e.~computation of the $\beta$-normal form) of certain restricted   simply typed $\lambda$-terms. The main result of Section~\ref{sec:one-register} is that these restricted $\lambda$-terms can be normalised by a derivable function, as stated in the following theorem:
     \announce
     {Theorem~\ref{thm:normalise}}
     {Consider  simply typed $\lambda$-terms which are affine (every bound variable is used at most once), use  a fixed number of variables, and where all subterms have types from a fixed finite set of simple types. Then $\beta$-normalisation is derivable. }
     
-
-    \item \emph{Section~\ref{sec:matrix-power}: general register transducers.}  In Section~\ref{sec:matrix-power}, we complete the proof of Theorem~\ref{thm:main}:
+\smallskip
+    %\item 
+    5.\emph{Section~\ref{sec:matrix-power}: general register transducers.}  In Section~\ref{sec:matrix-power}, we complete the proof of Theorem~\ref{thm:main}:
     \announce
     {Proposition~\ref{prop:many-register}}
     {Every function computed by a register transducer is derivable.}
     The above result, together with Theorem~\ref{thm:stt}, completes the proof of the left-to-right implication in Theorem~\ref{thm:main}. The proof of Proposition~\ref{prop:many-register} is the observation that register automata with many registers can be reduced to register automata with one register, using an iterated version unfolding operation. Next, we show that the latter operation can itself be derived, using  the Factorisation Forest Theorem of Imre Simon~\cite{simon_factorization_1990}.
-\end{enumerate}
+%\end{enumerate}

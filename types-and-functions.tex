@@ -218,18 +218,18 @@ The unfolding operation is explained in the following picture for $k=2$:
 % \end{align*}
 % where $g$ is defined so that it matches ...
 
-\noindent\begin{example}[Filter]\label{ex:filter} 
+\noindent\begin{example}\label{ex:filter} 
  To get a feeling for the atomic functions and combinators, we derive the function
 $$ \ranked{f:\tmonad (\rSigma+\rGamma)\to\tmonad \rSigma}$$
 discussed earlier, which erases the elements of $\rGamma$ from the input term, where $\rGamma$ is a finite set of unary symbols. 
 
-Consider the atomic function $\ranked{\unit_\rSigma:\rSigma\to\tmonad\rSigma}$ and the constant function $\ranked{\mathrm{empty}:\rGamma\to\tmonad\rSigma}$ which associates to every element of $\rGamma$ the empty term. The function $\ranked{\mathrm{empty}}$ is atomic because its domain is finite. We start by lifting $\ranked{\unit_\rSigma}$ and $\ranked{\mathrm{empty}}$ to the type constructor $+$, then we compose the result with the atomic projection function as follows
+Consider the atomic function $\ranked{\unit:\rSigma\to\tmonad\rSigma}$ and the constant function $\ranked{\epsilon:\rGamma\to\tmonad\rSigma}$ which associates to every element of $\rGamma$ the empty term. The function $\ranked{\epsilon}$ is atomic because its domain is finite. We start by lifting $\ranked{\unit}$ and $\ranked{\epsilon}$ to the type constructor $+$, then we compose the result with the atomic projection function as follows
 \begin{align*}
 \xymatrix{
-    \ranked{\rSigma+\rGamma}\quad \ar[r]^-{\ranked{\unit_\Sigma+\mathsf{empty}}} & \quad \ranked{\tmonad\rSigma+\tmonad\rSigma}\ar[r]^-{} &\tmonad\rSigma
+    \ranked{\rSigma+\rGamma}\quad \ar[r]^-{\ranked{\unit+\epsilon}} & \quad \ranked{\tmonad\rSigma+\tmonad\rSigma}\ar[r]^-{} &\tmonad\rSigma
 },
 \end{align*}
-We lift the obtained function to terms, and compose the result with the $\flatt_\rSigma$ function to obtain our function $\ranked{f}$.  
+We lift the obtained function to terms, and compose it with the $\flatt$ function to obtain our function $\ranked{f}$.  
 \end{example}
 
 More examples of derived functions are given in Appendix.~\ref{sec:AppendixExamples}.
