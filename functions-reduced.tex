@@ -1,0 +1,103 @@
+\begin{figure}
+\fbox{
+\begin{minipage}{1\linewidth}
+\begin{itemize}
+\item \textbf{Unit of the monad $\tmonad$.} 
+        $$\begin{array}{rlll}
+\unit: &\rSigma &\ranked{\to} & \tmonad \rSigma \\[2pt]
+&a &\mapsto& a\tensorpair{0,\dots,0}
+       \end{array}$$ 
+\item \textbf{Flat of the monad $\tmonad$.} 
+        $$\begin{array}{rlll}
+\flatt: &\tmonad\tmonad\rSigma &\ranked{\to} & \tmonad \rSigma \\[2pt]
+&t\tensorpair{t_1,\dots,t_n} &\mapsto& \flatt(t)\tensorpair{\flatt(t_1),\dots,\flatt(t_n)}\\[2pt]
+& 0\tensorpair{0} & \mapsto & 0
+       \end{array}$$ 
+\item \textbf{Unit of the graded monad $\reduce k$.} 
+        $$\begin{array}{rlll}
+\unit: &\rSigma &\ranked{\to} & \reduce 1 \rSigma \\[2pt]
+&a &\mapsto& a/(i\mapsto(i,1))
+       \end{array}$$ 
+\item \textbf{Flat of the graded monad $\reduce k$.} 
+        $$\begin{array}{rlll}
+\flatt: &\reduce k \reduce l \rSigma &\ranked{\to} & \reduce {k.l} \rSigma \\[2pt]
+&(a/f)/g &\mapsto& a/(f\circ g)
+       \end{array}$$ 
+\end{itemize}
+\end{minipage}
+}
+\caption{Basic functions for terms ad fold.}\label{fig:monad}
+\end{figure}
+
+\begin{figure}
+\fbox{
+\begin{minipage}{1\linewidth}
+\begin{itemize}
+\item \textbf{Projection and co-projection.} 
+$$
+\begin{array}{llllll}
+\ranked{\rSigma + \rSigma} &\ranked{\to} & \rSigma \qquad & \qquad \rSigma  &\ranked{\overset{\iota_i}{\to}} & \ranked{\rSigma + \rSigma} \\[0pt]
+(a,i)&\mapsto& a   \qquad & \qquad  a &\mapsto& (a,i) 
+       \end{array}
+$$
+\item \textbf{Commutativity.} 
+$$
+\begin{array}{rllrll}
+\ranked{\rSigma + \rGamma} &\ranked{\to} & \ranked{\rGamma + \rSigma} \qquad & \qquad \ranked{\rSigma \otimes \rGamma} &\ranked{\to} & \ranked{\rGamma \otimes \rSigma} \\[0pt]
+(a,i)&\mapsto& (a,3-i)  \qquad & \qquad
+\tensorpair{a,b}&\mapsto& \tensorpair{b,a}
+       \end{array}
+$$
+\item \textbf{Associativity.}
+$$
+\begin{array}{rllrll}
+\ranked{(\rSigma + \rGamma) + \rDelta} &\hspace{-.2cm}\ranked{\to}&\hspace{-.2cm} \ranked{\rGamma + (\rSigma+\rDelta)}  & \ranked{(\rSigma \otimes \rGamma) \otimes \rDelta} &\hspace{-.2cm}\ranked{\to}&\hspace{-.2cm} \ranked{\rSigma \otimes (\rGamma \otimes \rDelta)} \\[2pt]
+ ((a,1),1)&\hspace{-.2cm}\mapsto&\hspace{-.2cm} (a,1) & 
+\tensorpair{\tensorpair{a,b},c}&\hspace{-.2cm}\mapsto&\hspace{-.2cm}\tensorpair{a,\tensorpair{b,c}}\\[2pt]
+         ((a,2),1)&\hspace{-.2cm}\mapsto&\hspace{-.2cm}((a,1),2) & & &\\[2pt]
+         (a,2) &\hspace{-.2cm}\mapsto&\hspace{-.2cm} ((a,2),2) & & &
+       \end{array}
+$$
+\item \textbf{Distributivity.}
+$$\begin{array}{rll}
+\ranked{(\Sigma_1 + \Sigma_2)\otimes \Gamma }& \ranked{\to} &\ranked{(\Sigma_1 \otimes \Gamma) + (\Sigma_2 \otimes \Gamma)}\\[2pt]
+\tensorpair{(a,i),b}&\mapsto& (\tensorpair{a,b},i)
+\end{array}$$
+\end{itemize}
+\end{minipage}
+}
+\caption{Basic functions for product and coproduct.}\label{fig:product}
+\end{figure}
+
+\begin{figure}
+\fbox{
+\begin{minipage}{1\linewidth}
+\begin{itemize}
+\item \textbf{Factorisations.}
+$$\begin{array}{cc}
+        \ranked{
+        \xymatrix@C=1cm{
+\tmonad(\Sigma_1+\Sigma_2) \ar@<.5ex>[r]^{ \ancfact}
+        \ar@<-.5ex>[r]_{\decfact}& \tmonad(\tmonad \Sigma_1 + \tmonad \Sigma_2)
+        }}
+    \end{array}$$ 
+\item \textbf{Pre-order.}
+$$\begin{array}{cc}
+        \ranked{
+        \xymatrix@C=.7cm{
+\tmonad \Sigma \ar[r]& \reduce 1 \tmonad(\rSigma + 0 + 2)
+        }}
+    \end{array}$$ 
+\item \textbf{Unfolding.}
+$$\begin{array}{cc}
+        \ranked{
+        \xymatrix@C=.7cm{
+\shallowterm{(\reduce k \Sigma)}{\Gamma^k} \ar[r]& \reduce 1(\shallowterm \Sigma \Gamma)
+        }}
+    \end{array}$$ 
+\end{itemize}
+\end{minipage}
+}
+\caption{Functions explained in Section~\ref{sec:atomic-and-combinators}}\label{fig:not-explained}
+\end{figure}
+

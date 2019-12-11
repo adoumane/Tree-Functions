@@ -1,10 +1,10 @@
 \newcommand{\simplefun}[4]{
     \begin{tabular}{cc}
         $\ranked{
-        \xymatrix@C=1cm{
+        \xymatrix@C=.7cm{
 #2 \ar[r]^-{#1}& #3
         }}$
-        \\[10pt]
+        \\[5pt]
         {#4}
     \end{tabular}   
  }
@@ -12,11 +12,11 @@
  \newcommand{\reversiblefun}[4]{
     \begin{tabular}{cc}
         $\ranked{
-        \xymatrix@C=1cm{
+        \xymatrix@C=.7cm{
 #2 \ar@<.5ex>[r]^-{#1}& #3
 \ar@<.5ex>[l]
         }}$
-        \\[10pt]
+        \\[5pt]
         {#4}
     \end{tabular}   
  }
@@ -36,61 +36,83 @@
  
 
 \begin{figure*}
-\begin{center}
-$$\qquad\begin{array}{cc}
+$\qquad\begin{array}{cc}
 \textbf{Monad $\tmonad$} & \textbf{Graded monad $\reduce k$} \\[5pt]
 \begin{array}{cc}
    \simplefun
-        {\unit_\Sigma}
+        {}
         {\Sigma}
         {\tmonad \Sigma}
         {
       \includegraphics[scale=0.33]{unit}}
         & 
         \simplefun
-        {\flatt_\Sigma}
+        {}
         {\tmonad \tmonad \Sigma}
         {\tmonad \Sigma} 
         {  \includegraphics[scale=0.33]{flat}}
 \end{array} \quad&\quad \begin{array}{cc}
 \simplefun
-        {\mathrm{g-unit}_\Sigma}
+        {}
         {\Sigma}
         {\reduce 1 \Sigma}
         {
         \includegraphics[scale=0.33]{g-unit}}
         & 
         \simplefun
-        {\mathrm{g-flat}_\Sigma}
+        {}
         {\reduce k \reduce l \Sigma}
         {\reduce{k.l} \Sigma} 
         {  \includegraphics[scale=0.33]{g-flat}}
 \end{array}
-\end{array}$$
-\end{center}
+\end{array}$\\[15pt]
 
 
 $
+\begin{array}{c}
+  \textbf{Accociativity} \\[5pt]
 \begin{array}{ccc}
- & \textbf{Accociativity} &\\[5pt]
- \ranked{(\Sigma \otimes \Gamma)\otimes \Delta \to \Sigma \otimes (\Gamma\otimes \Delta)} & \ranked{(\Sigma + \Gamma)+ \Delta \to \Sigma + (\Gamma+ \Delta)}  & \ranked{(\Sigma \cdot \Gamma)\cdot \Delta \to \Sigma \cdot (\Gamma \cdot \Delta)}\\[15pt]
- & \textbf{Distributivity} &\\[5pt]
+	\simplefun
+        {}
+        {(\Sigma \otimes \Gamma)\otimes \Delta}
+        {\Sigma \otimes (\Gamma\otimes \Delta)}
+        {$\tensorpair{\tensorpair{a,b},c}\mapsto \tensorpair{a,\tensorpair{b,c}}$} 	
+ 	& \simplefun
+        {}
+        {(\Sigma + \Gamma)+ \Delta }
+        { \Sigma + (\Gamma+ \Delta)}
+        {$\begin{array}{lll}
+        ((a,1),1)& \to &(a,1)\\
+         ((a,2),1)& \to & ((a,1),2)\\
+         (a,2) & \to & ((a,2),2)
+        \end{array}$} 	
+ 	&  \simplefun
+        {}
+        {(\Sigma \cdot \Gamma)\cdot \Delta }
+        { \Sigma \cdot (\Gamma \cdot \Delta)}
+        {\includegraphics[scale=.3]{associativity-shallow}} 
+\end{array} 
+\\[15pt]
+ \textbf{Distributivity} \\[5pt]
+\begin{array}{ccc}
 \reversiblefun
         {}
         {\shallowterm {(\Sigma_1 + \Sigma_2)} \Gamma}
         {(\shallowterm {\Sigma_1} \Gamma) + (\shallowterm {\Sigma_2} \Gamma)}
-        {}
+        {$(a,i)\tensorpair{t_1,\dots,t_n} \to (a\tensorpair{t_1,\dots,t_n},i)$}
         &
         \reversiblefun
         {}
         {(\Sigma_1 + \Sigma_2)\otimes \Gamma}
-        {(\Sigma_1 \otimes \Gamma) + (\Sigma_2 \otimes \Gamma)}{}
-        &       \simplefun
+        {(\Sigma_1 \otimes \Gamma) + (\Sigma_2 \otimes \Gamma)}
+        {$\tensorpair{(a,i),b}\to (\tensorpair{a,b},i)$}
+        &       
+        \simplefun
         {}
         {\reduce k (\Sigma_1 + \Sigma_2)}
-        {\reduce k \Sigma_1 + \reduce k \Sigma_2}{}
-      %  {$(a,i)/f \mapsto ((a/f),i)$}
-      \\[-15pt]  
+        {\reduce k \Sigma_1 + \reduce k \Sigma_2}
+         {$(a,i)/f \mapsto ((a/f),i)$}
+      \\[15pt]  
       \reversiblefun
         {}
         {\shallowterm {(\Sigma_1 \otimes \Sigma_2)} \Gamma}
@@ -117,9 +139,10 @@ $
         {}
         {(\reduce k \Sigma_1) \otimes (\reduce k {\Sigma_2})}
          {\reduce k (\Sigma_1 \otimes \Sigma_2)}
-        {\includegraphics[scale=.33]{tensor-fold-distrib-2}}  \\[5pt] 
-
-         \simplefun
+        {\includegraphics[scale=.33]{tensor-fold-distrib-2}}  
+         \end{array}\\
+\begin{array}{cc}
+  \simplefun
         {}
         {\shallowterm \Sigma {\reduce k \Gamma}}
          {\reduce k (\shallowterm \Sigma {\Gamma})}{\includegraphics[scale=.33]{shallow-fold-distrib}} &        
@@ -128,28 +151,61 @@ $
         {\tmonad {\reduce 1\Sigma}}
          {\reduce 1 \tmonad \Sigma}
          {\includegraphics[scale=.33]{unfold-1}}
-         & 
-         \simplefun
-        {}
-        {\tmonad {\reduce k \Sigma}}
-         {\reduce k \tmonad \reduce k \Sigma}
-         {\includegraphics[scale=.33]{external-unfold-1}}
+\end{array}   
          \end{array}
-$
+$\\[15pt]
 
-$$
-\begin{array}{cc}
-\textbf{Injections} \qquad&\qquad \textbf{Projections}\\
-\begin{array}{ll}
-\ranked{\Sigma \to \Sigma+\Sigma} & \ranked{\Sigma \to \reduce k \Sigma^k}  \\ \ranked{\reduce k \Sigma \to \reduce {k+l}\Sigma}  &  
-\ranked{\Sigma^n\to  \shallowterm n \Sigma}
-\end{array}\qquad&\qquad
-\begin{array}{ll}
-\ranked{\Sigma+\Sigma\to \Sigma} & \ranked{\Sigma\otimes \Sigma \to \reduce 1 \Sigma} \\\ranked{\reduce {k+1} \Sigma \to \reduce {k}\Sigma+\bot} &
-\ranked{\shallowterm n \Sigma \to \Sigma^n}
+$
+\begin{array}{c}
+\textbf{Injections}\\[5pt]
+\begin{array}{cccc}
+	\simplefun
+        {\iota_i}
+        {\Sigma}
+        {\Sigma+\Sigma}
+        {$a \mapsto (a,i)$}		
+	& \simplefun
+        {}
+        {\Sigma}
+        { \reduce k \Sigma^k}
+        {\includegraphics[scale=.3]{tensor-injection}}	 
+	&
+	\simplefun
+        {}
+        {\reduce k \Sigma}
+        { \reduce {k+1}\Sigma}
+        {\includegraphics[scale=.3]{add-fold}}	 
+	&\simplefun
+        {}
+        {\Sigma^n}
+        { \shallowterm n \Sigma}
+        {\includegraphics[scale=.3]{tensor-injection-2}}	
+\end{array} \\[15pt]
+\textbf{Projections}\\[5pt]
+\begin{array}{cccc}
+	\simplefun
+        {}
+        {\Sigma+\Sigma}
+        {\Sigma}
+        {$(a,i)\to a$}	
+	& \simplefun
+        {}
+        {\Sigma\otimes \Sigma}
+        {\reduce 1 \Sigma}
+        {\includegraphics[scale=.3]{tensor-projection-1}}	 
+	& \simplefun
+        {}
+        {\reduce {k+1} \Sigma}
+        {\reduce {k}\Sigma+\bot}
+        {\includegraphics[scale=.3]{reduce-fold}}	 
+	& \simplefun
+        {}
+        {\shallowterm n \Sigma }
+        {\Sigma^n}
+        {\includegraphics[scale=.3]{tensor-projection-2}}	
 \end{array}
 \end{array}
-$$
+$\\[15pt]
 
 $
 \begin{array}{cc}
@@ -185,26 +241,41 @@ $
         }
 \end{array}
 \end{array}
-$
+$\\[15pt]
 
 
-$\begin{array}{ccc}
-        & \textbf{Functions explained in Section~\ref{}}  & \\[5pt]
-        \simplefun{}
-        {\tmonad(\Sigma_1+\Sigma_2) \ar@<.5ex>[r]^{ \ancfact}
-        \ar@<-.5ex>[r]_{\decfact}}
-        {\tmonad(\tmonad \Sigma_1 + \tmonad \Sigma_2)} 
-        {} 
+$\begin{array}{c}
+        \textbf{Functions explained in Section~\ref{sec:atomic-and-combinators}}   \\[5pt]
+\begin{array}{cccc}
+\begin{tabular}{cc}
+        $\ranked{
+        \xymatrix@C=1cm{
+\tmonad(\Sigma_1+\Sigma_2) \ar@<.5ex>[r]^{ \ancfact}
+        \ar@<-.5ex>[r]_{\decfact}& \tmonad(\tmonad \Sigma_1 + \tmonad \Sigma_2)
+        }}$
+        \end{tabular} 
+                  &
+      \begin{tabular}{cc}
+        $\ranked{
+        \xymatrix@C=.7cm{
+\tmonad \Sigma \ar[r]^-{\preorder}& \reduce 1 \tmonad(\rSigma + 0 + 2)
+        }}$
+    \end{tabular}
         &
-        \simplefun{}
-        {\tmonad \Sigma \ar[r]^-{\preorder}}
-        {\reduce 1 \tmonad(\rSigma + 0 + 2)}
-        {} 
-        &
-        \simplefun{}
-        {\shallowterm{(\reduce k \Sigma)}{\Gamma^k} \ar[r]^-{\unfold}}
-        {\reduce 1(\shallowterm \Sigma \Gamma)}
-        {} 
+       \begin{tabular}{cc}
+        $\ranked{
+        \xymatrix@C=.7cm{
+\shallowterm{(\reduce k \Sigma)}{\Gamma^k} \ar[r]^-{\unfold}& \reduce 1(\shallowterm \Sigma \Gamma)
+        }}$
+    \end{tabular}
+    &
+      \begin{tabular}{cc}
+        $\ranked{
+        \xymatrix@C=.9cm{
+\tmonad {\reduce k \Sigma} \ar[r]^-{\text{external}}_{\text{unfold}\ }& \reduce k \tmonad \reduce k \Sigma
+        }}$
+    \end{tabular}
+\end{array}   
 \end{array}$
 \caption{    \label{fig:fo-term}The atomic functions. The functions are parametrised by types  $\rSigma, \ranked{\Sigma_1}, \ranked{\Sigma_2}, \rGamma$. Some of the functions are bijections, as indicated by double arrows, in these cases both the function and its inverse are atomic functions. }
 \end{figure*}

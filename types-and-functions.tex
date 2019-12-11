@@ -53,7 +53,7 @@ A term can naturally be seen as a ranked element, its arity being the number of 
               %\item 
                   \smallskip
             
-     3. \emph{Product.} An element of the   \emph{product}%\footnote{
+     3. \emph{Product.} An element of the   \emph{product} %\footnote{
 %                  A more precise name would be \emph{tensor product}. The alternative product, call it \emph{Cartesian product}, would have as $n$-ary elements  pairs $(a_1,a_2)$ such that both $a_1$ and $a_2$ have arity $n$. Since we do not use Cartesian product, we write product without specifying that we mean the tensor product.
 %              } 
  $\ranked{\Sigma_1 \otimes \Sigma_2}$  is a  pair $\tensorpair{a_1,a_2}$ where $a_i \in \ranked{\Sigma_i}$. The arity  of this pair is the sum of arities of its components $a_1$ and $a_2$. We draw pairs like this:
@@ -68,13 +68,13 @@ A term can naturally be seen as a ranked element, its arity being the number of 
             If $i\in  \set{1,\ldots,\arity a}$, then the second component of $f(i)$ specifies to which group the $i$-th port of $a$ will participate, while the first component specifies its place in this group. In the picture above, the arity of $a$ is $6$, the arity of $a/f$ is $4$, and $k$, the size of the groups,  is $2$. For instance we have that $f(1)=(1,2)$, because the first port of $a$ participated to the group forming the first port of $a/f$, and because it is the second element in this group.
     \smallskip
                     
-      5. \emph{Shallow terms.} The  ranked set $\shallowterm \rGamma \rSigma$ of  \emph{shallow terms} is defined as
-        \begin{align*}
-            \ranked {\shallowterm \rSigma \rGamma \eqdef \coprod_{a \in \rSigma} \underbrace{\rGamma\otimes\ldots\otimes\rGamma}_{\text{arity of $a$}}}.
-        \end{align*}
-        The coproduct in the above definition is infinite when $\rSigma$ is infinite. 
-        An equivalent definition is that a shallow term  is the special case of  a term over $\rSigma \redplus \rGamma$ where  the root has label from $\rSigma$,  children have labels  from $\rGamma$, and grand-children are ports. We draw shallow terms like terms:
-        \mypic{76}
+%      5. \emph{Shallow terms.} The  ranked set $\shallowterm \rGamma \rSigma$ of  \emph{shallow terms} is defined as
+%        \begin{align*}
+%            \ranked {\shallowterm \rSigma \rGamma \eqdef \coprod_{a \in \rSigma} \underbrace{\rGamma\otimes\ldots\otimes\rGamma}_{\text{arity of $a$}}}.
+%        \end{align*}
+%        The coproduct in the above definition is infinite when $\rSigma$ is infinite. 
+%        An equivalent definition is that a shallow term  is the special case of  a term over $\rSigma \redplus \rGamma$ where  the root has label from $\rSigma$,  children have labels  from $\rGamma$, and grand-children are ports. We draw shallow terms like terms:
+%        \mypic{76}
    % \end{enumerate}
 \end{definition}
 
@@ -89,8 +89,8 @@ can be lifted along the type constructors to new arity preserving  functions
 \label{eq:liftplus}\funcitem{f_1 + f_2}{\Sigma_1 + \Sigma_2}{\Gamma_1 + \Gamma_2} \\
 \funcitem{(f_1,f_2)}{\Sigma_1 \otimes \Sigma_2}{\Gamma_1 \otimes \Gamma_2}\\
 \funcitem{\reduce k f_1}{\reduce k \Sigma_1}{\reduce k \Gamma_1}\\
-\funcitem{\tmonad f_1}{\tmonad \Sigma_1}{\tmonad \Gamma_1}\\
-\label{eq:liftshallow}\funcitem{\shallowterm{f_1}{f_2}}{\shallowterm{\Sigma_1}{\Sigma_2}}{\shallowterm {\Gamma_1}{\Gamma_2}} 
+\funcitem{\tmonad f_1}{\tmonad \Sigma_1}{\tmonad \Gamma_1}
+%\\\label{eq:liftshallow}\funcitem{\shallowterm{f_1}{f_2}}{\shallowterm{\Sigma_1}{\Sigma_2}}{\shallowterm {\Gamma_1}{\Gamma_2}} 
 \end{eqnarray}
 
 We now introduce the main new definition of this paper.
@@ -99,14 +99,14 @@ We now introduce the main new definition of this paper.
     The class of \emph{derivable} functions is the least class which:
     \begin{itemize}
     \item contains, for every $\rSigma$, the (unique) arity preserving function $\ranked{\Sigma \to \bot}$, and all arity-preserving functions with finite domain;
-        \item contains the atomic functions in Figure~\ref{fig:fo-term};
-        \item is closed under composition and type liftings (1)--(5).
+        \item contains the atomic functions in Figures~\ref{fig:monad},\ref{fig:product} and \ref{fig:not-explained};
+        \item is closed under composition and type liftings (1)--(4).
     \end{itemize}
 \end{definition}
 
 %\include{figure-fot}
 
-The atomic functions describe the monad structure of terms, the (graded) monad structure of folds, some obvious distributivity, commutativity and (co)projection operations. These operations are canonical in the sens that they can be guessed from  types\footnote{The (co)projection functions are canonical in a very precise way: they are the unique functions making some diagrams commute. We wonder if our basic functions are also canonical in such a precise way. We leave this question for future work.}. Our list of functions contains also three less obvious operations whose definitions are  deferred to Section~\ref{sec:atomic-and-combinators}. Before giving these definitions, we state the main result of the paper. 
+The atomic functions describe the monad structure of terms, the (graded) monad structure of folds, some obvious distributivity, commutativity and (co)projection operations.  Our list of functions contains also three less obvious operations whose definitions are  deferred to Section~\ref{sec:atomic-and-combinators}. Before giving these definitions, we state the main result of the paper. 
 
 % \begin{example}
 %     To get a feeling for the atomic functions and combinators, we derive the function
@@ -158,7 +158,8 @@ The atomic functions describe the monad structure of terms, the (graded) monad s
 \end{theorem}
 
 %\subsection{Proposition of another presentation of atomic functions}
-\input{functions}
+%\input{functions}
+\input{functions-reduced}
 
 \subsection{The atomic functions not explained in Figure~\ref{fig:fo-term}}
 \label{sec:atomic-and-combinators}
