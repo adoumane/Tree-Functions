@@ -1,6 +1,6 @@
 
 \section{First-order tree functions}
-The goal of this paper is to describe the first-order tree-to-tree functions as the smallest class which contains certain atomic functions, and which is closed under applying certain combinators. To achieve this goal, we discuss functions that transform not just trees, but also \emph{terms}, which are trees with distinguished ports that can be substituted with trees (or other terms). One of the main points of using terms is that  they have a substitution structure, i.e.~one can build a terms of terms. 
+The goal of this paper is to describe the first-order tree-to-tree functions as the smallest class which contains certain prime functions, and which is closed under applying certain combinators. To achieve this goal, we discuss functions that transform not just trees, but also \emph{terms}, which are trees with distinguished ports that can be substituted with trees (or other terms). One of the main points of using terms is that  they have a substitution structure, i.e.~one can build a terms of terms. 
 
 \paragraph*{Types.} In the end we are interseted about tree-to-tree functions. However, to construct such functions, we will use intermediate operations which transform terms,  pairs of terms, or terms of terms, etc.
  The following definition describes the types that can be used by the intermediate operations.
@@ -8,9 +8,9 @@ The goal of this paper is to describe the first-order tree-to-tree functions as 
 
 
 \begin{definition}[Types]\label{def:types}
-    Define a \emph{type} to be any ranked set which can be obtained from the atomic types by applying the type constructors, as described below. We denote by $\Tt$ the set of all types. 
+    Define a \emph{type} to be any ranked set which can be obtained from the prime types by applying the type constructors, as described below. We denote by $\Tt$ the set of all types. 
     \begin{itemize}
-        \item {\bf Atomic types.} 
+        \item {\bf prime types.} 
            \begin{enumerate}
             \item every ranked set with finitely many elements;
             \item a ranked set, call it  $\llone$, which has one element on every arity;
@@ -53,12 +53,12 @@ Moreover, $f$ should satisfy the following two conditions\footnote{These conditi
 %\end{align*}
 
 
-\paragraph*{Atomic functions.} Having described the types, we now describe the atomic functions that transform elements of these types.
+\paragraph*{prime functions.} Having described the types, we now describe the prime functions that transform elements of these types.
 
 
 
 
-\begin{definition}[Atomic functions]\label{def:atomic-functions} The \emph{atomic functions} are the following functions (for every types $\Sigma,\Gamma,\Sigma_0,\Sigma_1$): 
+\begin{definition}[prime functions]\label{def:prime-functions} The \emph{prime functions} are the following functions (for every types $\Sigma,\Gamma,\Sigma_0,\Sigma_1$): 
 \begin{enumerate}
     \item The unique arity-preserving function $! : \Sigma \to \llone$
     \item Every arity-preserving function $f : \Sigma \to \Gamma$ such that    $\{x \in \Sigma \ \mid \ f(x)\neq x\}$ is finite. In particular, every finite domain arity-preserving function $f : \Sigma \to \Gamma$ and the identity function $f : \Sigma \to \Sigma$.
@@ -107,7 +107,7 @@ Be aware that we should prove that the image of an element from $\terms \Sigma^{
 
 
 
-The atomic functions can be combined into more complex functions using the following combinators.
+The prime functions can be combined into more complex functions using the following combinators.
 \begin{definition}
      [Combinators] \label{def:combinators} \ 
     \begin{enumerate}
@@ -141,7 +141,7 @@ We are now ready to define the first-order tree functions, which are the topic o
 
 \begin{definition}[First-order tree functions] \label{def:fo-tree-functions} \ 
     \begin{itemize}
-        \item A \emph{first-order term functions} is any function that can be  generated from the atomic functions from Definition~\ref{def:atomic-functions} by applying the  combinators from Definition~\ref{def:combinators}.
+        \item A \emph{first-order term functions} is any function that can be  generated from the prime functions from Definition~\ref{def:prime-functions} by applying the  combinators from Definition~\ref{def:combinators}.
         \item  A \emph{first-order tree function} is any first-order term function restricted to trees, i.e.~terms of arity zero.
     \end{itemize}    
 \end{definition}
@@ -309,6 +309,6 @@ We are now ready to state the main result of this paper.
     \end{itemize}
 \end{theorem}
 
-The bottom-up inclusion, i.e.~the proof that every first-order tree function is a first-order tree-to-tree transduction, is proved by induction in Section~\ref{sec:to-transductions}.  The bottom-up inclusion is true by design, i.e.~the atomic functions and combinators were designed so that they could be easily  simulated using first-order transductions. 
+The bottom-up inclusion, i.e.~the proof that every first-order tree function is a first-order tree-to-tree transduction, is proved by induction in Section~\ref{sec:to-transductions}.  The bottom-up inclusion is true by design, i.e.~the prime functions and combinators were designed so that they could be easily  simulated using first-order transductions. 
 
-The hard part of the theorem is showing that every first-order tree-to-tree transduction can be broken up, using the combinators, into the atomic functions. The proof strategy for the hard part is presented in Section~\ref{sec:strategy}, and is then realised in Sections~\ref{sec:fo-translation} and~\ref{sec:one-register}.
+The hard part of the theorem is showing that every first-order tree-to-tree transduction can be broken up, using the combinators, into the prime functions. The proof strategy for the hard part is presented in Section~\ref{sec:strategy}, and is then realised in Sections~\ref{sec:fo-translation} and~\ref{sec:one-register}.

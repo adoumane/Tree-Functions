@@ -5,13 +5,15 @@
 \item \textbf{Unit of the monad $\tmonad$.} 
         $$\begin{array}{rlll}
 \unit: &\rSigma &\ranked{\to} & \tmonad \rSigma \\[2pt]
-&a &\mapsto& a\tensorpair{0,\dots,0}
+&a &\mapsto& a\tensorpair{\portletter,\dots,\portletter}
        \end{array}$$ 
 \item \textbf{Flat of the monad $\tmonad$.} 
         $$\begin{array}{rlll}
 \flatt: &\tmonad\tmonad\rSigma &\ranked{\to} & \tmonad \rSigma \\[2pt]
-&t\tensorpair{t_1,\dots,t_n} &\mapsto& \flatt(t)\tensorpair{\flatt(t_1),\dots,\flatt(t_n)}\\[2pt]
-& 0\tensorpair{0} & \mapsto & 0
+%&t\tensorpair{t_1,\dots,t_n} &\mapsto& \flatt(t)\tensorpair{\flatt(t_1),\dots,\flatt(t_n)}\\[2pt]
+&t\tensorpair{t_1,\dots,t_n} &\mapsto& \text{$t$ with port $i$ replaced by}\\
+& &  & \text{$\flatt(t_i)$ for $i \in \set{1,\ldots,n}$}\\[2pt]
+& \portletter & \mapsto & \portletter
        \end{array}$$ 
 \item \textbf{Unit of the graded monad $\reduce k$.} 
         $$\begin{array}{rlll}
@@ -21,12 +23,12 @@
 \item \textbf{Flat of the graded monad $\reduce k$.} 
         $$\begin{array}{rlll}
 \flatt: &\reduce k \reduce l \rSigma &\ranked{\to} & \reduce {k.l} \rSigma \\[2pt]
-&(a/f)/g &\mapsto& a/(f\circ g)
-       \end{array}$$ 
+&(a/f)/g &\mapsto& a/(f\bowtie g)
+       \end{array}$$          
 \end{itemize}
 \end{minipage}
 }
-\caption{Basic functions for terms ad fold.}\label{fig:monad}
+\caption{Prime functions for terms and fold.}\label{fig:monad}
 \end{figure}
 
 \begin{figure}
@@ -44,8 +46,9 @@ $$
 $$
 \begin{array}{rllrll}
 \ranked{\rSigma + \rGamma} &\ranked{\to} & \ranked{\rGamma + \rSigma} \qquad & \qquad \ranked{\rSigma \otimes \rGamma} &\ranked{\to} & \ranked{\rGamma \otimes \rSigma} \\[0pt]
-(a,i)&\mapsto& (a,3-i)  \qquad & \qquad
-\tensorpair{a,b}&\mapsto& \tensorpair{b,a}
+(a,1)&\mapsto& (a,2)  \qquad & \qquad
+\tensorpair{a,b}&\mapsto& \tensorpair{b,a}\\
+(a,2)& \mapsto& (a,1)
        \end{array}
 $$
 \item \textbf{Associativity.}
@@ -66,7 +69,7 @@ $$\begin{array}{rll}
 \end{itemize}
 \end{minipage}
 }
-\caption{Basic functions for product and coproduct.}\label{fig:product}
+\caption{Prime functions for product and coproduct.}\label{fig:product}
 \end{figure}
 
 \begin{figure}
@@ -98,6 +101,6 @@ $$\begin{array}{cc}
 \end{itemize}
 \end{minipage}
 }
-\caption{Functions explained in Section~\ref{sec:atomic-and-combinators}}\label{fig:not-explained}
+\caption{Functions explained in Section~\ref{sec:prime-and-combinators}}\label{fig:not-explained}
 \end{figure}
 
