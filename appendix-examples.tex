@@ -70,7 +70,7 @@ We denote by $\ranked{\Gamma_1}$ the ranked set obtained from $\rGamma$ by setti
 where $\ranked{g}$ is defined on the elements of $\rGamma$ as follows
 \begin{align*}
 \ranked{g: \Gamma} & \ranked{\to  \tmonad(\Gamma+\Gamma_1+1 )}\\
-      a & \mapsto a\tensorpair{1\tensorpair{a_1\tensorpair{0}},\dots, 1\tensorpair{a_1\tensorpair{0}}}
+      a & \mapsto a\tensorpair{1\tensorpair{a_1\tensorpair{*}},\dots, 1\tensorpair{a_1\tensorpair{*}}}
 \end{align*}
 In our example, the action of $\ranked{g}$ on the elements of $\rGamma$ looks like this
 \begin{center}
@@ -99,9 +99,9 @@ And let $k$ be the function
 \end{align*}
 which is the identity function, except for the following terms in which it is defined as follows
 $$\begin{array}{rll}
-a\tensorpair{0,\dots, 0}& \mapsto & \tensorpair{a,0}\tensorpair{0,\dots,0}\\
-b_1\tensorpair{a\tensorpair{0,\dots,0}}&\mapsto& \tensorpair{a,b_0}\tensorpair{0,\dots,0}\\
-b_1\tensorpair{0} &\mapsto& 0
+a\tensorpair{*,\dots, *}& \mapsto & \tensorpair{a,0}\tensorpair{*,\dots,*}\\
+b_1\tensorpair{a\tensorpair{*,\dots,*}}&\mapsto& \tensorpair{a,b_0}\tensorpair{*,\dots,*}\\
+b_1\tensorpair{*} &\mapsto& *
 \end{array}$$
 \end{enumerate}
 We apply the function $\ranked{h}$ to the factors $\ranked{\tmonad 1}$ and the function $\ranked{k}$ to the factors $\ranked{\tmonad(\rGamma+\rGamma_1)}$. Doing so, we obtain a term in $\ranked{\tmonad\tmonad((\Gamma+\Gamma_1)\otimes(\Gamma_0+0))}$, which we flatten, then we erase the symbols $\ranked{\Gamma_1}$ using the function $\mathsf{Filter}$ of Example~\ref{ex:filter} to obtain the desired term. 
@@ -190,7 +190,7 @@ We define the partial shallow unfolding functions to be the function of type
 \ranked{{\reduce k \Sigma}*{\Gamma^k} \to \reduce k ({\Sigma}*{\Gamma})} 
 \end{align*}
  \begin{center}
-\includegraphics[scale=.4]{partial-shallow-unfold.pdf}
+\includegraphics[scale=.35]{partial-shallow-unfold.pdf}
  \end{center}
 \end{example}
 
@@ -200,7 +200,7 @@ We define the partial shallow unfolding functions to be the function of type
 \end{align*}
 which coincides with the unfolding function when restricted to a very specific class of inputs: the image of every twist is a singleton. Below is an example illustrating the function $\ranked{f}$ 
   \begin{center}
-\includegraphics[scale=.3]{one-unfold.pdf}
+\includegraphics[scale=.25]{one-unfold.pdf}
  \end{center}
 The function $f$ can be implemented by a derivable function, which we construct using following steps. We use the example above as a running example to illustrate our construction.
 \begin{itemize}

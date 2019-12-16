@@ -2,17 +2,17 @@
 In this part of the appendix, we prove Theorem~\ref{thm:stt}, which says that every first-order tree-to-tree transduction is recognised by a register transducer. 
 
 According to Definition~\ref{def:fo-transduction}, a first-order transductions is a composition of any number of functions each of which is either  copying (item 1) or a non-copying first-order transduction (item 2). In other words:
-\begin{align*}
-\text{first-order transductions} \quad \eqdef \quad (\text{copying} \cup \text{(non-copying first-order transductions)})^*
-\end{align*}
+$$\begin{array}{c}
+\text{first-order transductions} \\ \eqdef (\text{copying} \cup \text{(non-copying first-order transductions)})^*
+\end{array}$$
 where the star denotes closure under composition. Although register transducers are closed under composition, this is not very   easy to show directly, and therefore we begin by simplifying the function composition in the definition of first-order transductions.  It is not hard to see that copying commutes with non-copying first-order transductions in the following sense:
 \begin{align*}
-    \text{copying} \circ  \text{(non-copying first-order transductions)}  \subseteq   \\ \text{(non-copying first-order transductions)} \circ \text{copying}.
+    \text{copying} \circ  \text{(non-copying first-order transductions)}  \\ \subseteq   \text{(non-copying first-order transductions)} \circ \text{copying}.
     \end{align*}
 Furthermore, since the class of copying functions is closed under composition, and the same is true for non-copying first-order transductions, we get the following normal form of first-order transductions:
-\begin{align*}
-    \text{first-order transductions} =  \text{(non-copying first-order transductions)} \circ \text{copying}.
-    \end{align*}
+$$\begin{array}{c}
+    \text{first-order transductions} \\=  \text{(non-copying first-order transductions)} \circ \text{copying}.
+    \end{array}$$
 Therefore, in order to prove Theorem~\ref{thm:stt}, it suffices to show that a register transducer can compute any function which first copies the nodes of the input tree a fixed number of times, and then applies a non-copying first-order transduction. 
 % To make notation lighter, we ignore the copying, and only show that register transducers can simulate non copying first-order transductions. The proof with copying follows the same lines. 
 
@@ -31,8 +31,10 @@ to be the function of type
    \end{align*}
 which maps a node $x$ of the output tree to the node of the input tree that was used to define it. (The origin in a copying function is the node that is being copied, while the node in a non-copying transduction is the node of the input structure that represents the node of the output structure.) For a node $x$ in an input tree $t$, define the origin colouring of $x$ to be the function 
 \begin{align*}
- y \in \text{nodes in $f(t)$} \quad \mapsto \quad  \begin{cases}
-    \text{below} & \text{ if the origin of $y$ is $x$ or a descendant of $x$}\\
+ y \in \text{nodes in $f(t)$} \ \ \mapsto \  \begin{cases}
+    \text{below} & \begin{array}{l}
+    \text{if the origin of $y$ is $x$}\\ \text{or a descendant of $x$}
+\end{array}     \\
     \text{not below} & \text{otherwise.}
 \end{cases}
 \end{align*}
@@ -79,7 +81,9 @@ We now define the invariant that will be satisfied by the register transducer. (
     where $\preceq$ is the pre-order on nodes in the output tree and $\rootnode{s_i}$ denotes the  unique node in $s_i$ which is an ancestor of all other nodes in $s_i$. After processing the subtree of $x$ in the input tree, the register valuation of the register transducer is 
     \begin{align*}
         r_i^j  \mapsto \begin{cases}
-            \text{$s_i$ viewed as a term over the output alphabet} & \text{if $s_i$ has arity $j$}\\
+            \begin{array}{l}
+            \text{$s_i$ viewed as a term} \\[-2pt] \text{over the output alphabet}
+            \end{array} & \text{if $s_i$ has arity $j$}\\[10pt]
             \text{undefined} & \text{otherwise}.
         \end{cases}
     \end{align*}

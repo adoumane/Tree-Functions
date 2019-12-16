@@ -62,11 +62,7 @@ However, checking whether the type of a \lambdaterm and the type of its sub-term
 %Note that contrarily to normalization, well-typedeness does not require linearity to be in FO.
 
 \begin{theorem}\label{prop:WellTypedFo}
-    For every typed set $X$ and every finite set $S$ of simple types, the tree language 
-    \begin{align*}
-    \NonLinTerms S X = \set{ \text{ Well-typed \lambdaterms over the variables X whose subterms have type in $S$}}
-    \end{align*}
-    is first-order definable 
+    For every typed set $X$ and every finite set $S$ of simple types, the tree language $\NonLinTerms S X$ of Well-typed \lambdaterms over the variables X whose subterms have type in $S$, is first-order definable. 
 \end{theorem}
 
 To prove this property, we will start by showing that for $\lambda$-terms in $\NonLinTerms S X$ (that is if we already know that a $\lambda$-term is well-typed and that all its sub-terms have types in $S$) checking if their type is $\tau$, where $\tau$ is a type in $S$, is a FO property:
@@ -80,15 +76,13 @@ Before establishing this lemma, let us see how Thm.~\ref{prop:WellTypedFo} can b
  \smallskip
  
 Consider the unary formula $\mathsf{Lambda}(u)$, which expresses that $u$ is a binder node, that its type and the type of its child match well and both belong to $S$: 
-\begin{align*}
-\mathsf{Lambda}(u) := \underbrace{\lambda x(u)}_{\substack{\text{$u$ has label $\lambda x$}}} \wedge\bigvee_{\substack{\sigma\rightarrow\tau \in S\\x:\sigma}}  \underbrace{\varphi_{\sigma\rightarrow\tau}(u)}_{\substack{\text{$u$ has type $\sigma\rightarrow\tau$}}}  \wedge \underbrace{\exists v\ \ \mathrm{Succ}_1(u, v) \wedge \varphi_\tau (v)}_{\substack{\text{the child of $u$ has type $\tau$}}}
-\end{align*}
-
+$$\begin{array}{ll}
+\mathsf{Lambda}(u) &:= \underbrace{\lambda x(u)}_{\substack{\text{$u$ has label $\lambda x$}}} \wedge\bigvee_{\substack{\sigma\rightarrow\tau \in S\\x:\sigma}}  \underbrace{\varphi_{\sigma\rightarrow\tau}(u)}_{\substack{\text{$u$ has type $\sigma\rightarrow\tau$}}}  \\ & \wedge \underbrace{\exists v\ \ \mathrm{Succ}_1(u, v) \wedge \varphi_\tau (v)}_{\substack{\text{the child of $u$ has type $\tau$}}}
+\end{array}$$
 Similarly, consider the unary formula $\mathsf{Application}(u)$ which checks that a node is an application node, that the type of its children match well and that both belong to $S$: 
-\begin{align*}
-\mathsf{Application}(u) := \underbrace{@(u)}_{\substack{\text{$u$ has label @}}}  \wedge \ \exists v, w\ \ \bigvee_{\sigma\rightarrow\tau \in S}  \underbrace{\mathrm{Succ}_1(u, v) \wedge \varphi_{\sigma\rightarrow\tau} (v)}_{\substack{\text{the left child of $u$ has type $\sigma\rightarrow\tau$}}} \wedge \underbrace{\mathrm{Succ}_2(u, w) \wedge \varphi_{\sigma} (w)}_{\substack{\text{the right child of $u$ has type $\sigma$}}}
-\end{align*}
-
+$$\begin{array}{l}
+\mathsf{Application}(u) := \underbrace{@(u)}_{\substack{\text{$u$ has label @}}} \wedge \\ \exists v, w \underset{\sigma\rightarrow\tau \in S}{\bigvee}  \underbrace{\mathrm{Succ}_1(u, v) \wedge \varphi_{\sigma\rightarrow\tau} (v)}_{\substack{\text{the left child of $u$ has type $\sigma\rightarrow\tau$}}} \wedge \underbrace{\mathrm{Succ}_2(u, w) \wedge \varphi_{\sigma} (w)}_{\substack{\text{the right child of $u$ has type $\sigma$}}}
+\end{array}$$
 Finally, consider the formula $\mathsf{Variable}(u)$, which expresses that $u$ is a variable node, whose type is in $S$:
 \begin{align*}
 \mathsf{Variable}(u) :=  \bigvee_{x:\sigma\in S}\underbrace{x(u)}_{\substack{\text{$u$ has label $x$}}} 
@@ -110,7 +104,9 @@ Let us show that the following unary query is expressible in first-order logic
  For that, notice that the type of a well-typed term depends only on its left-most branch. In fact, the type of a term is exactly the type of its left-most branch in the following sens.
 
 Consider the (unranked) alphabet $ X^\lambda:= X\cup \{@, \lambda x | x\in X\}$. We can equip the words over $X^\lambda$ with the following typing rules:
-$$\frac{}{x: \sigma} \qquad \frac{u:\tau}{u\lambda x: \sigma\rightarrow \tau} \qquad \frac{u:\sigma\rightarrow\tau}{u@:\tau}\qquad\text{(where $x$ is of type $\sigma$ and $\sigma,\tau \in S$)}$$
+$$\frac{}{x: \sigma} \qquad \frac{u:\tau}{u\lambda x: \sigma\rightarrow \tau} \qquad \frac{u:\sigma\rightarrow\tau}{u@:\tau}$$
+where $x$ is of type $\sigma$ and $\sigma,\tau \in S$.
+
 We say that $w$ is of type $\tau$ and write $w:\tau$ if there is a typing derivation for $w:\tau$.
 
 We can associate to every branch of a $\lambda$-term a word over $X^\lambda$ corresponding to the sequence of its labels read bottom-up. By induction on $\lambda$-terms, we can easily show that the type of a $\lambda$-term is the type of the word corresponding to its leftmost branch. 
@@ -205,7 +201,9 @@ Let us go back to the proof of Thm.~\ref{prop:one-register}. We proceed by induc
 \begin{proposition}\label{thm:evalOneType}
  For every typed set $X$, every finite set $S$ of simple types and every $x\in X$ and $\sigma\in S$, the function 
     \begin{align*}
-        M \in  \LinTerms S X \quad \mapsto \quad  \text{The \lambdaterm obtained by reducing all the $x$-redexes of type $\sigma$ in $M$} 
+        M \in  \LinTerms S X \quad \mapsto \quad  \begin{array}{l}
+        \text{The \lambdaterm obtained by reducing all}\\ \text{the $x$-redexes of type $\sigma$ in $M$} 
+        \end{array}
     \end{align*}
     is derivable.
 \end{proposition}
@@ -230,7 +228,7 @@ As discussed earlier in the proof sketch, we will need to evaluate \lambdaterms 
 \end{align*}
 Thus, \lambdaterms with ports are the inhabitants of $\tmonad \lamrank X$. Normalization of these terms generalize that of usual \lambdaterms in a straightforward way: the $i$-th port is replaced by a fresh variable $x_i$, the obtained \lambdaterm (without ports) is evaluated as usual, then the variable $x_i$ is replaced back by the port $i$, as one can see in the following example.  
   \begin{center}
-\includegraphics[scale=1.5]{normalization-with-ports.pdf}
+\includegraphics[scale=1.4]{normalization-with-ports.pdf}
 \end{center}
   Note that when a \lambdaterm is linear, its normal form has the same number of ports. Note also that respecting the original order of ports in the normal form (which is important for compositionality) may twist ports, as in the example above. As a consequence, normalization of linear \lambdaterms with ports is an arity preserving function of  type:
   \begin{align*}
@@ -295,7 +293,7 @@ Let us go back to the proof of our proposition. Consider two inner nodes $n, m$ 
 By Lemma~\ref{lem:internalLemma}, $m$ is smaller w.r.t. the depth-first order than the node $r$ of the variable bound by $q$ . 
 We are then left with the following two situations. The first case, illustrated by the left figure below, is when $r$ is a descendant of $m$ in $t$. In this case, after one reduction step $n$ will be a descendant of of $m$. The other case is when $m$ is in the left of $r$ in $t$, as illustrated by the right figure below. In this case, after one reduction step, the lowest common ancestor between $m$ and $n$ will be a descendant of $p$, and we can conclude by induction hypothesis. 
 \begin{center}
-\includegraphics[scale=.7]{cases-lemma.pdf}
+\includegraphics[scale=.5]{cases-lemma.pdf}
 \end{center}
 \end{itemize}
 This concludes the proof of the first claim.
@@ -372,10 +370,13 @@ In this term, the nodes of the normal form appear in the right order thanks to P
  \begin{align*}
  \ranked{g: \tmonad(X^\lambda+X^\lambda+0+2) \to \reduce 1\tmonad(X^\lambda+X^\lambda+0+2)}
  \end{align*}
- which is the identity function, except for the following finite set of terms for which it is defined as follows: 
+ which is the identity function, except for the following finite set of terms for which it is defined in figure~\ref{fig:definition-g}.
+\begin{figure*}
 \begin{center}
 \includegraphics[scale=.15]{MyPic18.jpg}
 \end{center}
+\caption{Definiton of the function $g$.} \label{fig:definition-g}
+\end{figure*}
 The red elements are those belonging to the first copy of $\lamrank X$.
 \smallskip
 
@@ -416,8 +417,8 @@ such that for every linear \lambdaterm $t$
 \begin{proof}
 We define the function $f$ as the composition of the following three functions
 \begin{align*}
-\ranked{\tmonad \ranked{X^\lambda} \xrightarrow{\quad g\quad} \tmonad (\ranked{X^\lambda}+1) \xrightarrow{\quad \mathsf{block}^\uparrow\quad} \tmonad (\tmonad\ranked{X^\lambda}+\tmonad 1)
-\xrightarrow{\quad \mathsf{erase}\quad} \tmonad \tmonad\ranked{X^\lambda}}
+\ranked{\tmonad \ranked{X^\lambda} \xrightarrow{\ g\ } \tmonad (\ranked{X^\lambda}+1) \xrightarrow{\ \mathsf{block}^\uparrow\ } \tmonad (\tmonad\ranked{X^\lambda}+\tmonad 1)
+\xrightarrow{\ \mathsf{erase}\ } \tmonad \tmonad\ranked{X^\lambda}}
 \end{align*}
 The function $g$ is a first-order rational tree function, which indicates, using the unary symbol $1$, the places wheres two distinct blocks of $f$ will be separated. We will describe it more precisely a bit later. The function $\mathsf{block}^\uparrow$ will create these blocks and finally, we erase all the factors $\ranked{\tmonad 1}$.
 

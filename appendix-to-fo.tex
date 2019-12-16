@@ -9,7 +9,9 @@ Let us start be defining the function
     \end{align*}
     Furthermore, for each $a \in \rSigma$ we  distinguish a  sequence (whose length is the arity of $a$) of elements in $\underline a$, which are called the ports of $\underline a$.   The definitions are by induction on the structure of $\rSigma$, as given below.
     \begin{itemize}
-        \item \emph{Finite ranked sets.} Elements of a ranked set   $\rSigma =  \set{a_1,\ldots,a_k}$ are modeled  using a vocabulary which has unary relations $a_1,\ldots,a_k$ and $P_1,\ldots,P_m$ where $m$ is the maximal arity of elements in $\rSigma$. 
+        \item \emph{Finite ranked sets.} Elements of a ranked set   \begin{align*}
+        \rSigma =  \set{a_1,\ldots,a_k}
+        \end{align*} are modeled  using a vocabulary which has unary relations $a_1,\ldots,a_k$ and $P_1,\ldots,P_m$ where $m$ is the maximal arity of elements in $\rSigma$. 
         For $a \in \rSigma$ of arity $n$, the  universe of $\underline a$ is $\set{0,1,\ldots,n}$, with the ports being $1,\ldots,n$. 
             The  relation $P_i$  is interpreted as $\set i$ when $i \in \set{1,\ldots,n}$ and as the empty set otherwise. The relation $a_i$ is interpreted as $\set 0$ when $a = a_i$ and as the empty set otherwise. 
         \item \emph{Coproduct.}  Elements of the coproduct $\ranked{\Sigma_1 + \Sigma_2}$ are modeled using the disjoint union of the vocabularies of $\ranked{\Sigma_1}$ and $\ranked{\Sigma_2}$. 
@@ -21,7 +23,7 @@ Let us start be defining the function
         \item \emph{Cartesian product.}   Cartesian pairs in  $\ranked{\Sigma_1 \otimes \Sigma_2}$ are modeled  using the disjoint union of the vocabularies of $\ranked{\Sigma_1}$ and $\ranked{\Sigma_2}$, plus an extra binary relation $R$.  
             The model associated to a Cartesian pair   $ (a_1,a_2)$,  is      the disjoint union $\underline{a_1} +  \underline {a_2}$, in the same sense as in the previous item for $\otimes$,  with the binary relation $R$ interpreted as 
                 \begin{align*}
-                    \set{(\text{$i$-th port of $\underline {a_1}$}, \text{$i$-th port of $\underline a_2$}): i \in \set{1,\ldots,\text{arity of $(a_1,a_2)$}}} 
+                   \quad \set{(\text{$i$-th port of $\underline {a_1}$}, \text{$i$-th port of $\underline a_2$}): i \in [1,\text{arity of $(a_1,a_2)$}]} 
                 \end{align*}
                 The ports are inherited from   $\underline {a_1}$.
         \item \emph{Folding.}   For $k \in \set{1,2,\ldots}$, elements of   $\reduce k \rSigma$ are modeled using the  vocabulary of $\rSigma$ plus two extra binary relations $\portord$ and $R$. If $a \in \rSigma$ has arity $nk$, then the model associated to $a/f$ -- which has arity $n$ --   is obtained from  $\underline{a}$ by adding a copy of the model below, where $\sqsubset$ is the natural ordering on integers
@@ -67,7 +69,7 @@ The proof proceeds by induction, following the definition of derivable functions
    Given an element $x$ of $\rSigma$, let us show how  $\unit_\rSigma(x)$ can be implemented using a FO transduction.  The copying constant is 2,
     the first copy will contain the whole structure $\underline{x}$ and the second copy will select only the ports of $\underline{x}$ which will serve as the ports of the structure $\underline{\unit_\rSigma(x)}$, as illustrated by the following picture 
 \begin{center}
-    \includegraphics[scale=.3]{to-logic-unit.pdf}
+    \includegraphics[scale=.18]{to-logic-unit.pdf}
     \end{center}    
       The universe formulas are then:
     \begin{align*}

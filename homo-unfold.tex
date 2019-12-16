@@ -127,29 +127,22 @@ which coincides with term unfolding for all inputs which are homogeneous.
 \end{lemma}
 
 \begin{lemma}
-Let
+Let $\alpha:[1,k]\to [1,k]$ and $\beta:[1,k]\to [1,k]$ be two monotone functions such that
 \begin{align*}
-\alpha:\set{1,\dots,k}\to\set{1,\dots,k}\qquad
-\beta:\set{1,\dots,k}\to\set{1,\dots,k}
-\end{align*} 
-be two monotone functions such that
-\begin{align*}
-\alpha\beta=\alpha
+\alpha\beta=\alpha.
 \end{align*}
-\begin{itemize}
-\item If the graph of $\alpha$ is not weakly connected, then so is the graph of $\beta$. 
-\item Moreover, if $m\in \set{1,\dots, k}$ is such that 
+ If the graph of $\alpha$ is not weakly connected, then so is the graph of $\beta$. Moreover, if $m\in \set{1,\dots, k}$ is such that 
 \begin{align*}
-\alpha\set{1,\dots,m}\subseteq \set{1,\dots,m} \qquad \text{and}\qquad 
-\alpha\set{m+1,\dots,k}\subseteq \set{m+1,\dots,k}
+\alpha[1,m] \subseteq [1,m]  \text{ and } 
+\alpha[m+1,k]\subseteq [m+1,k]
 \end{align*}
 then we have also 
 \begin{align*}
-\beta\set{1,\dots,m}\subseteq \set{1,\dots,m} \qquad \text{and}\qquad 
-\beta\set{m+1,\dots,k}\subseteq \set{m+1,\dots,k}
+\beta[1,m]\subseteq [1,m] \text{ and }
+\beta[m+1,k]\subseteq [m+1,k]
 \end{align*}
-\item If the graphs of $\alpha$ and $\beta$ are both weakly connected, then the image of $\alpha$ and the image of $\beta$ are both singletons.
-\end{itemize}
+
+ If the graphs of $\alpha$ and $\beta$ are both weakly connected, then the image of $\alpha$ and the image of $\beta$ are both singletons.
 \end{lemma}
 
 \begin{proof}[Proof of Lemma~\ref{lem:homo-2-twist}]
