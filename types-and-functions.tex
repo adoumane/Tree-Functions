@@ -1,19 +1,20 @@
 \section{Derivable functions}
-In this section, we state the main result of this paper, which describes  the  first-order tree-to-tree functions in terms of  certain atomic functions by using certain combinators.  A typical combinator is composition of functions.
+In this section, we state the main result of this paper: the  first-order tree-to-tree transductions are exactly the class which is obtained by starting with certain prime functions (such as depth-first traversal) and applying certain  combinators (such as function composition). 
 
-\paragraph*{The category of ranked sets.} Even if our goal is to generate first-order tree-to-tree transductions, our basic functions will not necessarily transform trees into trees. For example, we will need to manipulate pairs of trees or trees of trees etc. Clearly, these data structures are encodable by trees, however this would make the basic functions rather complex. We make the choice of introducing new types for our basic functions in order to get simple basic functions.
+\paragraph*{The datatypes.}  Our goal is to describe tree-to-tree functions. However, we will decompose the functions, so that the   intermediate functions will work on other datatypes, such as pairs of trees or trees of trees etc. These datatypes  can be encoded in trees, but such encoding would be cumbersome. Following~\cite{bojanczykRegularFirstOrderList2018}, we  introduce additional  datatype constructors, such as pairing.
 
-Among the types that we introduce, the most important one is certainly the type of \emph{terms}. This type appears when we want to decompose our trees into smaller parts, as illustrated by the figure below. Each small part of the tree is not a tree as it has dangling ports.  We call \emph{terms} such trees with ports. 
+Among these constructors, the most important one is \emph{terms}. Terms generalise trees, by allowing for dangling edges, called ports. Terms appear when  decomposing trees into smaller parts, as illustrated by the figure below. 
+% Each  part of the tree is not a tree as it has dangling ports.  We call \emph{terms} such trees with ports. 
 \begin{center}
 \includegraphics[scale=.32, page=15]{pics.pdf}
 \end{center}
-A term can naturally be seen as a ranked element, its arity being the number of its ports. Because the set of terms is itself a ranked set,  we can create terms of terms.  A consequence of using terms is that we will work in the category of ranked sets; i.e.~the types we use will be ranked sets and the functions we consider are arity-preserving functions between ranked sets. As in Section~\ref{sec:trees-transductions}, we write ranked sets in red. We also use red for operations that output ranked sets. 
+A term has an arity, which is  the number of ports. Because the set of terms is itself a ranked set,  we can create terms of terms.  A consequence of using terms is that we  work in the category of ranked sets; i.e.~our datatypes represent ranked sets and the functions we consider are arity-preserving functions between ranked sets.  As mentioned before, we use  red for ranked sets; we also use red  for operations that output ranked sets. 
 
 %\footnote{This is a difference of trees as opposed to strings~\cite{bojanczykRegularFirstOrderList2018}, where ranked sets are not needed, because a part of a string is also a string.}
  
 %
 %
-%The crucial property of the atomic functions and  the combinators is that they use ranked sets. This is because the type constructor of this paper, namely terms, uses ranked sets.  Roughly speaking, a term is a tree with missing parts. The missing parts arise when we  isolate smaller parts of a bigger tree, as illustrated in the following picture:
+%The crucial property of the prime functions and  the combinators is that they use ranked sets. This is because the type constructor of this paper, namely terms, uses ranked sets.  Roughly speaking, a term is a tree with missing parts. The missing parts arise when we  isolate smaller parts of a bigger tree, as illustrated in the following picture:
 
 
 
@@ -28,24 +29,25 @@ A term can naturally be seen as a ranked element, its arity being the number of 
 
 
 
-\paragraph*{Types.} The following definition describes the  ranked sets that will be allowed as domains and co-domains of our functions.  We call such ranked sets \emph{types}.
+The following definition describes the  ranked sets that will be allowed as domains and co-domains of our functions.  
+% We call such ranked sets \emph{types}.
 %  The general idea is that we start with finite ranked sets, and close these under the following type constructors: coproducts, two kinds of product (Cartesian and tensor), taking terms, and a type constructor that allows to merge ports.
 %  and the matrix power. 
 % The  matrix power -- which is possibly the least natural type constructor -- will be motivated and discussed in more detail later on.
 
 
-
-\begin{definition}[Types] \label{def:types} Every  ranked set with finitely many elements is a type. The set $\ranked{\bot}$ which contains a single  element for each arity is also a type. We denote by $n$ the $n$-ary element of $\ranked{\bot}$.  Furthermore, types are closed under applying the following type constructors:
+\begin{definition}[Datatypes] \label{def:types} Every  ranked set with finitely many elements is a datatype. The ranked set
+    \begin{align*}
+    \termset = \set{\naryterm 0, \naryterm 1, \naryterm 2,\ldots},
+    \end{align*}
+    which contains a single  element $\naryterm i$ for each arity $i$ is also a datatype.  Datatypes are closed under applying the following datatype constructors:
     %\begin{enumerate}
     %\item
     \smallskip 
     
-    1. \emph{Terms.} An element of $\tmonad \rSigma$, the set of \emph{terms over $\rSigma$}, is a tree over alphabet $\rSigma \redplus \redzero$.  The nodes with labels from $\redzero$  -- which are leaves --  are called \emph{ports}. The arity of a term is the number of ports. We draw terms like this:
-            \mypic{51}
-            \smallskip
-            
+        
       %\item 
-    2. \emph{Coproduct.} An element of the \emph{coproduct} $\ranked{\Sigma_1 + \Sigma_2}$ is a co-pair of the form  $(i,a)$ where $i \in \set{1,2}$ and $a \in \ranked{\Sigma_i}$. The arity is inherited from $a$. 
+    1. \emph{Coproduct.} An element of the \emph{coproduct} $\ranked{\Sigma_1 + \Sigma_2}$ is of the form  $(i,a)$ where $i \in \set{1,2}$ and $a \in \ranked{\Sigma_i}$. The arity is inherited from $a$. 
       
 %We draw co-pairs like this:
 %       \mypic{61}
@@ -53,20 +55,35 @@ A term can naturally be seen as a ranked element, its arity being the number of 
               %\item 
                   \smallskip
             
-     3. \emph{Product.} An element of the   \emph{product} %\footnote{
+     2. \emph{Product.} An element of the   \emph{product} %\footnote{
 %                  A more precise name would be \emph{tensor product}. The alternative product, call it \emph{Cartesian product}, would have as $n$-ary elements  pairs $(a_1,a_2)$ such that both $a_1$ and $a_2$ have arity $n$. Since we do not use Cartesian product, we write product without specifying that we mean the tensor product.
 %              } 
  $\ranked{\Sigma_1 \otimes \Sigma_2}$  is a  pair $\tensorpair{a_1,a_2}$ where $a_i \in \ranked{\Sigma_i}$. The arity  of this pair is the sum of arities of its components $a_1$ and $a_2$. We draw pairs like this:
         \mypic{52}       
             \smallskip
-            
-     4. \emph{Folding.} For every $k \in \set{1,2,3,\ldots}$, we have a unary type constructor $\reduce k \rSigma$  which is used to reduce arities, by grouping ports into groups of size at most $k$.  An $n$-ary element of $\reduce k \rSigma$, which is called a \emph{$k$-fold}, consists of an element      $a \in \rSigma$  together with an  injective  function
+    
+            3. \emph{Terms.}  A term over $\rSigma$ is either a port, or has the form $a \tensorpair{t_1,\ldots,t_n}$ where $a \in \rSigma$ has arity $n$, and $t_1,\ldots,t_n$ are already defined terms. The arity of a term is the number of ports. The ranked set of terms, denoted by $\tmonad \rSigma$,  is the least solution of the inductive equation:
             \begin{align*}
-                f : \set{1,\ldots,\arity a} \to \set{1,\ldots,k} \times  \set{1,\ldots,n}.
+            \tmonad \rSigma = \overbrace{\redset{\portletter}}^\text{port}  \ranked{+\coprod_{\black {a \in} \rSigma}} \overbrace{\ranked{\tmonad \rSigma \otimes \cdots \otimes \tmonad \rSigma}}^{\text{arity of $a$ times}}
+            \end{align*}  where $\coprod$ denotes possibly infinite coproduct. We draw terms like this:
+            \mypic{51}
+            \smallskip
+            
+     4. \emph{Folding.} For every $k \in \set{1,2,3,\ldots}$, we have a unary datatype constructor $\reduce k \rSigma$, which groups ports into groups of size at most $k$.  An $n$-ary element of $\reduce k \rSigma$, which is called a \emph{$k$-fold}, consists of an element      $a \in \rSigma$  together with an  injective \emph{grouping}  function
+            \begin{align*}
+                f : \set{1,\ldots,\arity a} \to \underbrace{\set{1,\ldots,n}}_{\text{which group}} \times  \underbrace{\set{1,\ldots,k}}_{\substack{\text{which position}\\ \text{in the group}}}.
             \end{align*}
             We denote such an element as $a/f$ and draw it like this: \mypic{53}
-            If $i\in  \set{1,\ldots,\arity a}$, then the second component of $f(i)$ specifies to which group the $i$-th port of $a$ will participate, while the first component specifies its place in this group. In the picture above, the arity of $a$ is $6$, the arity of $a/f$ is $4$, and $k$, the size of the groups,  is $2$. For instance we have that $f(1)=(1,2)$, because the first port of $a$ participated to the group forming the first port of $a/f$, and because it is the second element in this group.
-    \smallskip
+            In the above picture, $k=2$, $n=4$, the arity of $a$ is 6, and $f$ is
+            \begin{align*}
+            \begin{array}{rccccccc}
+                i \in \set{1,\ldots,\arity a} &  \quad &1 & 2 & 3 & 4 & 5 & 6\\
+                \text{group of $f(i)$} &  & 1 & 1 & 4 & 2 & 3 & 4\\
+                \text{position of $f(i)$} & & 2 & 1 & 1 & 2 & 1 & 2 
+            \end{array}
+            \end{align*}
+            % If $i\in  \set{1,\ldots,\arity a}$, then the second component of $f(i)$ specifies to which group the $i$-th port of $a$ will participate, while the first component specifies its place in this group. In the picture above, the arity of $a$ is $6$, the arity of $a/f$ is $4$, and $k$, the size of the groups,  is $2$. For instance we have that $f(1)=(1,2)$, because the first port of $a$ participated to the group forming the first port of $a/f$, and because it is the second element in this group.
+    
                     
 %      5. \emph{Shallow terms.} The  ranked set $\shallowterm \rGamma \rSigma$ of  \emph{shallow terms} is defined as
 %        \begin{align*}
@@ -78,16 +95,17 @@ A term can naturally be seen as a ranked element, its arity being the number of 
    % \end{enumerate}
 \end{definition}
 
-
+\smallskip
 \newcommand{\funcitem}[3]{\ranked{#1  } &:& \ranked{#2} \rto  \ranked{#3}}
-All of the type constructors  above are functors, in the sense  that  arity preserving functions
+This completes the definition of the datatype constructors. 
+All datatype constructors are functors, in the sense  that  arity preserving functions
 \begin{align*}
 \ranked{f_1 : \Sigma_1 \to \Gamma_1 \qquad f_2 : \Sigma_2 \to \Gamma_2}
 \end{align*}       
-can be lifted along the type constructors to new arity preserving  functions
+can be lifted, in the natural way, along the type constructors to new arity preserving  functions
 \begin{eqnarray}
 \label{eq:liftplus}\funcitem{f_1 + f_2}{\Sigma_1 + \Sigma_2}{\Gamma_1 + \Gamma_2} \\
-\funcitem{(f_1,f_2)}{\Sigma_1 \otimes \Sigma_2}{\Gamma_1 \otimes \Gamma_2}\\
+\funcitem{\tensorpair{f_1,f_2}}{\Sigma_1 \otimes \Sigma_2}{\Gamma_1 \otimes \Gamma_2}\\
 \funcitem{\reduce k f_1}{\reduce k \Sigma_1}{\reduce k \Gamma_1}\\
 \funcitem{\tmonad f_1}{\tmonad \Sigma_1}{\tmonad \Gamma_1}
 %\\\label{eq:liftshallow}\funcitem{\shallowterm{f_1}{f_2}}{\shallowterm{\Sigma_1}{\Sigma_2}}{\shallowterm {\Gamma_1}{\Gamma_2}} 
@@ -96,20 +114,21 @@ can be lifted along the type constructors to new arity preserving  functions
 We now introduce the main new definition of this paper.
 
 \begin{definition}[Derivable function]
-    The class of \emph{derivable} functions is the least class which:
+    The class of \emph{derivable} functions is the least class which contains:
     \begin{itemize}
-    \item contains, for every $\rSigma$, the (unique) arity preserving function $\ranked{\Sigma \to \bot}$, and all arity-preserving functions with finite domain;
-        \item contains the atomic functions in Figures~\ref{fig:monad},\ref{fig:product} and \ref{fig:not-explained};
-        \item is closed under composition and type liftings (1)--(4).
-    \end{itemize}
+    \item for every $\rSigma$, the unique arity preserving function $\ranked{\Sigma \to \termset}$;
+    \item  all arity preserving functions with finite domain;
+        \item  the prime functions in Figures~\ref{fig:monad},\ref{fig:product} and \ref{fig:not-explained};
+         \end{itemize}
+and which is closed under composition and  liftings (1)--(4).
 \end{definition}
 
 %\include{figure-fot}
 
-The atomic functions describe the monad structure of terms, the (graded) monad structure of folds, some obvious distributivity, commutativity and (co)projection operations.  Our list of functions contains also three less obvious operations whose definitions are  deferred to Section~\ref{sec:atomic-and-combinators}. Before giving these definitions, we state the main result of the paper. 
+The prime functions from Figures~\ref{fig:monad} and~\ref{fig:product} are intended to be simple syntactic transformations, without computational content. They describe the monad structure of terms, the (graded) monad structure of folds, some obvious distributivity, commutativity and (co)projection operations. Figure~\ref{fig:not-explained} contains  three less obvious operations, whose definitions are  deferred to Section~\ref{sec:prime-and-combinators}. Before giving these definitions, we state the main result of the paper. 
 
 % \begin{example}
-%     To get a feeling for the atomic functions and combinators, we derive the function
+%     To get a feeling for the prime functions and combinators, we derive the function
 %     \begin{align*}
 %     \tensorpair{a,b} \in \ranked{\rSigma^2} \qquad \mapsto \qquad  \tensorpair{b,a} \in \ranked{\rSigma^2}
 %     \end{align*}
@@ -140,7 +159,7 @@ The atomic functions describe the monad structure of terms, the (graded) monad s
 % \end{align*}
 % and a similar situation holds for unary folds $\reduce 1$.  More generally, the family of folds $\set{\reduce k}_{k}$ is a graded monad. Finally, the operation $\tmonad \reduce 1 \rSigma \rto \reduce 1 \tmonad \rSigma$ is a distributive law of these two monads.
 
-% For a derivable function, its domain and co-domain are types as in Definition~\ref{def:types}, in particular the domain and co-domain are ranked sets. The atomic functions are arity-preserving and the combinators preserve this property, and therefore all derivable functions are arity-preserving. 
+% For a derivable function, its domain and co-domain are types as in Definition~\ref{def:types}, in particular the domain and co-domain are ranked sets. The prime functions are arity-preserving and the combinators preserve this property, and therefore all derivable functions are arity-preserving. 
 
 
 % We are now ready to state the main theorem of this paper. 
@@ -157,17 +176,17 @@ The atomic functions describe the monad structure of terms, the (graded) monad s
     
 \end{theorem}
 
-%\subsection{Proposition of another presentation of atomic functions}
+%\subsection{Proposition of another presentation of prime functions}
 \input{functions-reduced}
 %\input{functions}
-\subsection{The atomic functions not explained in Figure~\ref{fig:fo-term}}
-\label{sec:atomic-and-combinators}
-In this section, we define the atomic functions whose definitions were not given in Figure~\ref{fig:fo-term}. 
-Each of these functions will play a key role in one of the main results of the paper. We will highlight the moments when such functions are used.  
+\subsection{The prime functions from Figure~\ref{fig:not-explained}}
+\label{sec:prime-and-combinators}
+In this section, we define the prime functions from Figure~\ref{fig:not-explained}. 
+Each of these functions will play a key role in one of the main results of the paper.
+%  We will highlight the moments when such functions are used.  
 
 \subsubsection{Factorisations}
-    Let $t \in \tmonad \rSigma$ be a term. 
-    There are two equivalent definitions of factorisations of $t$. One definition is that a factorisation is an equivalence relation on non-port nodes where every equivalence class is a factor; the other definition is that it is any term $s  \in \tmonad \tmonad \rSigma$ which flattens to $t$. 
+    Let $t \in \tmonad \rSigma$ be a term. A factorisation of $t$ is a partition of the term into smaller terms. This can be formalised using two  equivalent definitions. One definition is that a factorisation is an equivalence relation on non-port nodes where every equivalence class is a factor (connected via the parent-child relation). The other definition is that a factorisation is any term $s  \in \tmonad \tmonad \rSigma$ which flattens to $t$. 
     The two definitions are easily seen to be equivalent, in the sense that there is a one-to-one correspondence between factorisation equivalences and factorisation terms.
     %  which is explained in the following picture:
     % \mypic{14}
@@ -223,11 +242,11 @@ The $\preorder$ function respects the input port order, this is the reason  why 
 % where $g$ is defined so that it matches ...
 
 \noindent\begin{example}\label{ex:filter} 
- To get a feeling for the atomic functions and combinators, we derive the function
+ To get a feeling for the prime functions and combinators, we derive the function
 $$ \ranked{f:\tmonad (\rSigma+\rGamma)\to\tmonad \rSigma}$$
 discussed earlier, which erases the elements of $\rGamma$ from the input term, where $\rGamma$ is a finite set of unary symbols. 
 
-Consider the atomic function $\ranked{\unit:\rSigma\to\tmonad\rSigma}$ and the constant function $\ranked{\epsilon:\rGamma\to\tmonad\rSigma}$ which associates to every element of $\rGamma$ the empty term. The function $\ranked{\epsilon}$ is atomic because its domain is finite. We start by lifting $\ranked{\unit}$ and $\ranked{\epsilon}$ to the type constructor $+$, then we compose the result with the atomic projection function as follows
+Consider the prime function $\ranked{\unit:\rSigma\to\tmonad\rSigma}$ and the constant function $\ranked{\epsilon:\rGamma\to\tmonad\rSigma}$ which associates to every element of $\rGamma$ the empty term. The function $\ranked{\epsilon}$ is prime because its domain is finite. We start by lifting $\ranked{\unit}$ and $\ranked{\epsilon}$ to the type constructor $+$, then we compose the result with the prime projection function as follows
 \begin{align*}
 \xymatrix{
     \ranked{\rSigma+\rGamma}\quad \ar[r]^-{\ranked{\unit+\epsilon}} & \quad \ranked{\tmonad\rSigma+\tmonad\rSigma}\ar[r]^-{} &\tmonad\rSigma

@@ -58,7 +58,7 @@ More formally, unfolding for shallow terms is defined to be   the composition of
              \reduce k(\shallowterm{\reduce k {\Sigma^k}}{ {\Gamma^k}})  \ar[r]_{{\mathrm{Matching}}} &  \ranked{ \reduce k(\shallowterm{\Sigma^k}{ {\Gamma}}) } \ar[u]_{\mathrm{Commutativity}} 
         } 
     \end{align*}
-Since our atomic functions and combinators do not have any general mechanisms for induction, it is not clear how to derive the unfolding operation. In fact, it is not derivable in general, but it will become derivable after imposing a monotonicity requirement. The need for this condition is shown in Example~\ref{eq:twist}.  Let us define it in the following.
+Since our prime functions and combinators do not have any general mechanisms for induction, it is not clear how to derive the unfolding operation. In fact, it is not derivable in general, but it will become derivable after imposing a monotonicity requirement. The need for this condition is shown in Example~\ref{eq:twist}.  Let us define it in the following.
 
 For a port $i$ in an element of the matrix power $a/f \in \mati k \rSigma$ define its \emph{twist} to be the partial function from $\set{1,\ldots,k}$ to itself 
 which is the composition of 
