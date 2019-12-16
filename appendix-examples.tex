@@ -2,14 +2,20 @@
 
 \subsection{Examples of fo tree-to-tree transductions}\label{sec:appendix-example-fo-transductions}
 \begin{example}\label{ex:pre-order}
-    Consider a ranked alphabet
-    \mypic{21}
+    Consider the ranked alphabets
+\begin{center}
+    \includegraphics[scale=.4]{input-alphabet}
+    
+    \includegraphics[scale=.4]{output-alphabet}
+\end{center}    
     and the tree-to-tree function which does a pre-order traversal of the input tree, as described in the following picture:
-    \mypic{30}
+\begin{center}
+ \includegraphics[scale=.34, page=30]{pics}
+\end{center}
      The above function is first-order tree-to-tree transduction. We use four copies of the input tree: one for the binary gray nodes, two for the gray nodes of arity zero, and one for the nodes of the input tree. The key observation is that the pre-order  is first-order definable: a node $x$ is before $y$ in the pre-order if either $x \le y$, or there exist nodes $x',y'$ such that 
-     \begin{align*}
-         x' \le x \quad \land \quad  y' \le y \quad \land \quad \underbrace{\forall z \ z < x' \Leftrightarrow z < y'}_{\text{$x',y'$ are siblings}} \quad \land \quad \underbrace{\bigvee_{i<j}\child i (x') \land \child j(y').}_{\text{$x'$ is an earlier sibling than $y'$}}
-     \end{align*}
+     $$\begin{array}{c}
+      x' \le x \quad \land \quad  y' \le y \quad \land \quad  \underbrace{\forall z \ z < x' \Leftrightarrow z < y'}_{\text{$x',y'$ are siblings}} \quad \\ \land \quad \underbrace{\bigvee_{i<j}\child i (x') \land \child j(y').}_{\text{$x'$ is an earlier sibling than $y'$}}
+     \end{array}$$
      Note that the disjunction over  $i<j$ is finite, since the maximal arity of nodes is determined by the alphabet. 
 \end{example}
 
@@ -24,18 +30,18 @@ Given two types $\rSigma, \rGamma$ and an arity preserving  function $\ranked{f:
 \end{align*}
 \end{example}
 
-\noindent\begin{example}[Filter]\label{ex:filter} Consider the types $\rGamma, \rSigma$  where $\rGamma$ is a finite type of unary symbols. Consider the function:
-$$ \ranked{f:\tmonad (\rSigma+\rGamma)\to\tmonad \rSigma}$$
-which erases the elements of $\rGamma$ from the input term. This function is well defined since erasing unary symbols does not break the tree structure of the input.
-Let us explain why this is a derivable function.
-Consider the basic functions $\ranked{\unit_\rSigma:\rSigma\to\tmonad\rSigma}$ and the constant function $\ranked{\mathsf{empty}:\rGamma\to\tmonad\rSigma}$ which associates to every element of $\rGamma$ the empty term. We compose the following two functions 
-\begin{align*}
-\xymatrix{
-    \ranked{\rSigma+\rGamma}\quad \ar[r]^-{\ranked{\unit_\Sigma+\mathsf{empty}}} & \quad \ranked{\tmonad\rSigma+\tmonad\rSigma}\ar[r]^-{\ranked{\mathrm{forget}}} &\tmonad\rSigma
-},
-\end{align*}
-Then we lift the obtained function to terms, and compose the result with the $\flatt$ function to obtain our function $\ranked{f}$.  
-\end{example}
+%\noindent\begin{example}[Filter]\label{ex:filter} Consider the types $\rGamma, \rSigma$  where $\rGamma$ is a finite type of unary symbols. Consider the function:
+%$$ \ranked{f:\tmonad (\rSigma+\rGamma)\to\tmonad \rSigma}$$
+%which erases the elements of $\rGamma$ from the input term. This function is well defined since erasing unary symbols does not break the tree structure of the input.
+%Let us explain why this is a derivable function.
+%Consider the basic functions $\ranked{\unit_\rSigma:\rSigma\to\tmonad\rSigma}$ and the constant function $\ranked{\mathsf{empty}:\rGamma\to\tmonad\rSigma}$ which associates to every element of $\rGamma$ the empty term. We compose the following two functions 
+%\begin{align*}
+%\xymatrix{
+%    \ranked{\rSigma+\rGamma}\quad \ar[r]^-{\ranked{\unit_\Sigma+\mathsf{empty}}} & \quad \ranked{\tmonad\rSigma+\tmonad\rSigma}\ar[r]^-{\ranked{\mathrm{forget}}} &\tmonad\rSigma
+%},
+%\end{align*}
+%Then we lift the obtained function to terms, and compose the result with the $\flatt$ function to obtain our function $\ranked{f}$.  
+%\end{example}
 
 \noindent \begin{example}[Parent and children]\label{ex:sibling}  Let $\rGamma$ be a finite type. We define $\ranked{\rGamma_0}$  to be the ranked set obtained from $\rGamma$ by setting the arity of every element to $0$.  
 \medskip
@@ -44,13 +50,17 @@ $$\ranked{ \mathsf{Parent}: \tmonad \rGamma \to \tmonad (\rGamma\otimes (\rGamma
 which adds to every node of a term in $\tmonad \rSigma$ the label  of its parent if it has one, and $0$ if it is the root.
 
 % from  $(\rGamma\cup\bot)^{\leq n}$, whose lenght is the arity of the node, and such that the $i^{th}$ element of the  list is the symbol of its $i^{th}$ sibling if it has one, otherwise it is $\bot$.
-Let us explain how $\ranked{\mathsf{Parent}}$ can be derived. To illustrate this construction, we use the following term over the alphabet $\ranked{\set{1+2+3}}$ as a running example.
+Let us explain how $\ranked{\mathsf{Parent}}$ can be derived. To illustrate this construction, we use the following alphabet
 \begin{center}
-		 \includegraphics[scale=.6]{parent-1.pdf}
+		 \includegraphics[scale=.4]{parent-alphabet.pdf}
+		\end{center}
+and the following term as a running example.
+\begin{center}
+		 \includegraphics[scale=.4]{parent-example.pdf}
 		\end{center}
 We denote by $\ranked{\Gamma_1}$ the ranked set obtained from $\rGamma$ by setting the arity of every element to $1$. If $a$ is a element of $\rGamma$, we denote by $a_1$ the corresponding element of $\ranked{\Gamma_1}$. In our example, the alphabet $\ranked{\Gamma_1}$ is
 \begin{center}
-		\includegraphics[scale=.5]{parent-2.pdf}
+		\includegraphics[scale=.4]{parent-unary-alphabet.pdf}
 		\end{center}
 \begin{enumerate}
 \item  First, we apply the homomorphism 
@@ -64,11 +74,11 @@ where $\ranked{g}$ is defined on the elements of $\rGamma$ as follows
 \end{align*}
 In our example, the action of $\ranked{g}$ on the elements of $\rGamma$ looks like this
 \begin{center}
-		\includegraphics[scale=.5]{parent-3.pdf}
+		\includegraphics[scale=.4]{parent-function-g.pdf}
 				\end{center}
 Hence, after the application of the homomorphism $\ranked{\mathsf{Hom}_g}$, our initial term becomes
 \begin{center}
-		\includegraphics[scale=.5]{parent-4.pdf}
+		\includegraphics[scale=.4]{parent-hom.pdf}
 		\end{center}
 \item We apply the factorization 
 \begin{align*}
@@ -76,7 +86,7 @@ Hence, after the application of the homomorphism $\ranked{\mathsf{Hom}_g}$, our 
 \end{align*}
  to separate the symbol $1$ form the other symbols. After this operation, each node lies in the same factor as (the element of $\ranked{\Gamma_1}$ representing) its parent. In our example, the obtained term is the following
 \begin{center}
-		\includegraphics[scale=.5]{parent-5.pdf}
+		\includegraphics[scale=.5]{parent-block.pdf}
 		\end{center}
 \item Consider the function 
 \begin{align*}
