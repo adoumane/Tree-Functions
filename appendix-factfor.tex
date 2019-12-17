@@ -1,9 +1,17 @@
-\section{The matrix power}
+\section{Decomposing the prime function unfold}
 \label{ap:matrix-power}
 \newcommand{\treeunfold}{\mathrm{unfold}}
 
-\subsection{The need for monotonicity in the unfold operation}
+Among our prime functions, the less satisfactory one is certainly the unfloding function, as discussed in Section~\ref{}. In this section, we will decompose it into a collection of functions containing no form of iteration. 
 
+Here is a road map for this part of the appendix.
+\begin{enumerate}
+\item We first explain in Section~\ref{eq:twist} why the monotonicity condition is important for the unfolding function. This section is unrelated to the decomposition issues, and can be skept by the reader only interested in decomposing the unfolding function.
+\item In Section~\ref{sec:functions-decomposing-unfolding}, we present a collection of functions which are intended to replace the unfolding function. We show that each of these functions is a first-order transduction.
+\item Finally we show in Section~\ref{sec:proof-decompose-unfold} that the unfolding can be derived from the functions introduced in Section~\ref{sec:functions-decomposing-unfolding} and our prime functions presented in Section~\ref{}. 
+\end{enumerate}
+
+\subsection{The need for monotonicity in the unfolding}
 \begin{example}\label{eq:twist}
     Consider the following elements in a second matrix power:
 \begin{center}
@@ -17,7 +25,11 @@ where the output would contain a white leaf if and only if the input has odd dep
 \end{example}
 The problem in the above example is that the letter $a$ does a swap on its ports, which leads to counting modulo two. To forbid such swaps, we impose a monotonicity requirement that matches the monotonicity requirement for register updates in register transducers.
 
-\subsection{Proof of Proposition~\ref{prop:monotone-unfold}}
+\subsection{New datatypes and prime functions to replace the unfolding}\label{sec:functions-decomposing-unfolding}
+
+\input{functions}
+
+\subsection{Decomposing the unfolding function}\label{sec:proof-decompose-unfold}
 This part of the appendix is devoted to proving Proposition~\ref{prop:monotone-unfold}, which says that  for  every finite ranked set $\rSigma$ and every $k \in \set{1,2,\ldots}$ there is a derivable function 
     \begin{align*}
     \ranked{ f : \tmonad \mati k \Sigma \to \mati k {(\tmonad \Sigma)}}
