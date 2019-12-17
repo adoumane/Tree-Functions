@@ -4,27 +4,41 @@
 \begin{itemize}
 \item \textbf{Unit of the monad $\tmonad$.} 
         $$\begin{array}{rlll}
-\unit: &\rSigma &\ranked{\to} & \tmonad \rSigma \\[2pt]
-&a &\mapsto& a\tensorpair{\portletter,\dots,\portletter}
+\unit: &\rSigma &\ranked{\to} & \tmonad \rSigma 
+% \\[2pt]
+% &a &\mapsto& a\tensorpair{\portletter,\dots,\portletter}
        \end{array}$$ 
-\item \textbf{Flat of the monad $\tmonad$.} 
+\item \textbf{Product of the monad $\tmonad$.} 
         $$\begin{array}{rlll}
-\flatt: &\tmonad\tmonad\rSigma &\ranked{\to} & \tmonad \rSigma \\[2pt]
-%&t\tensorpair{t_1,\dots,t_n} &\mapsto& \flatt(t)\tensorpair{\flatt(t_1),\dots,\flatt(t_n)}\\[2pt]
-&t\tensorpair{t_1,\dots,t_n} &\mapsto& \text{$t$ with port $i$ replaced by}\\
-& &  & \text{$\flatt(t_i)$ for $i \in \set{1,\ldots,n}$}\\[2pt]
-& \portletter & \mapsto & \portletter
+\flatt: &\tmonad\tmonad\rSigma &\ranked{\to} & \tmonad \rSigma 
+% \\[2pt]
+% %&t\tensorpair{t_1,\dots,t_n} &\mapsto& \flatt(t)\tensorpair{\flatt(t_1),\dots,\flatt(t_n)}\\[2pt]
+% &t\tensorpair{t_1,\dots,t_n} &\mapsto& \text{$t$ with port $i$ replaced by}\\
+% & &  & \text{$\flatt(t_i)$ for $i \in \set{1,\ldots,n}$}\\[2pt]
+% & \portletter & \mapsto & \portletter
        \end{array}$$ 
 \item \textbf{Unit of the graded monad $\reduce k$.} 
         $$\begin{array}{rlll}
-\unit: &\rSigma &\ranked{\to} & \reduce 1 \rSigma \\[2pt]
-&a &\mapsto& a/(i\mapsto(i,1))
+\unit: &\rSigma &\ranked{\to} & \reduce 1 \rSigma 
+% \\[2pt]
+% &a &\mapsto& a/(i\mapsto(i,1))
        \end{array}$$ 
-\item \textbf{Flat of the graded monad $\reduce k$.} 
+\item \textbf{Product of the graded monad $\reduce k$.} 
         $$\begin{array}{rlll}
-\flatt: &\reduce k \reduce l \rSigma &\ranked{\to} & \reduce {k.l} \rSigma \\[2pt]
-&(a/f)/g &\mapsto& a/(f\bowtie g)
-       \end{array}$$          
+\flatt: &\reduce k \reduce l \rSigma &\ranked{\to} & \reduce {k.l} \rSigma 
+% \\[2pt]
+% &(a/f)/g &\mapsto& a/(f\bowtie g)
+       \end{array}$$    
+       \item \textbf{Inductive structure of terms (for finite $\rSigma$ only).}
+       $$\begin{array}{cc}
+        \ranked{
+        \xymatrix@C=2cm{
+\tmonad \Sigma \ar@<.5ex>[r]^-{\text{decompose}}
+        & 
+        \ar@<.5ex>[l]^-{\text{compose}}
+        \redset{\portletter}  +\coprod_{\black {a \in} \rSigma}} \overbrace{\tmonad \rSigma \otimes \cdots \otimes \tmonad \rSigma}^{\black{\text{arity of $a$ times}}}
+        } 
+    \end{array}$$ 
 \end{itemize}
 \end{minipage}
 }
