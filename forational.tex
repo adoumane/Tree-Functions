@@ -1,52 +1,45 @@
-\section{First-order tree relabellings}\label{sec:fo-translation}
-The rest of the paper is devoted to the left-to-right implication in Theorem~\ref{thm:main}, which says that every first-order tree-to-tree transduction is derivable. As discussed in the proof strategy from Section~\ref{sec:strategy}, we begin with a special case of first-order tree-to-tree transductions, namely first-order relabellings. 
-
-Define a \emph{unary   query over $\rSigma$} to be a first-order formula $\varphi(x)$ with one free variable, which uses the  vocabulary of models associated to  trees over $\rSigma$, as per Definition~\ref{def:tree-model}. Given a tree over $\rSigma$, a unary  query selects a subset of nodes. An example of a unary query is ``$x$ has at least four ancestors''. 
-
-\begin{definition}[First-order tree relabelling] \label{def:forat}  A \emph{first-order tree relabelling} is given by two finite ranked sets, called the \emph{input and output alphabets}, and a family 
-    \begin{align*}
-    \set{\varphi_a(x)}_{a \in \text{ output alphabet}}
-    \end{align*}
-    of unary queries over the input alphabet such that:
-    \begin{enumerate}
-        \item[(*)] for every tree over the input alphabet and node in that tree, there is a unique output letter $a$ such that $\varphi_a(x)$ selects the node; furthermore, the arity of $a$ is the same as the arity of (the label of) the node. 
-    \end{enumerate}
-The semantics of a  first-order tree relabelling is a function from trees over the input alphabet to trees over the output alphabet, which changes the label of every node in the input tree to the unique letter described in  (*). 
-      \end{definition}
-
-
-A first-order tree relabeling is a very special case of a first-order tree-to-tree transduction, where only the labeling of the input tree is changed, while the universe as well as the child and descendant relations are not affected. 
-The goal of this section is to prove the following proposition.
+\section{First-order  relabellings}\label{sec:fo-translation}
+In this section we prove that every first-order tree labelling, which is used in our transducer model to compute the register updates, is a derivable function. 
 \begin{proposition} \label{prop:forat}    
-    First-order tree relabelings are derivable.
-\end{proposition}   
-The key step in the proof is  Lemma~\ref{lem:schlingloff} below, which decomposes  first-order tree labelings into  simpler functions. 
-For a unary query  over $\rSigma$,  its \emph{characteristic function} is the function of type
-\begin{align*}
- \trees \rSigma \to \trees (\rSigma + \rSigma)
-\end{align*}
-which replaces the label of each node by its first or second copy, depending on whether the node is selected by the query. The following lemma shows that every first-order tree relabeling can be obtained by composing local label changes, together with characteristic functions of certain simple unary queries. 
+    Every first-order relabelling is derivable.
+\end{proposition}
+This result is based on a result of Schlingloff~\cite[Theorem 4.5]{schlingloff1992expressive}, which gives a temporal logic for trees that has the same expressive power as first-order logic. The operators in this temporal logic (which are tree variants of the since and until operators of {\sc ltl}) can be viewed as very simple first-order relabellings; by the completeness result of Schlingloff it is enough to show that these operators are derivable.  
 
-\begin{lemma}\label{lem:schlingloff} The first-order tree relabelings are equal to the smallest class of functions which is closed under composition and which  contains the following functions:
+For a first-order  unary tree query  over $\rSigma$,  define its  \emph{characteristic function} to be the function of type
+\begin{align*}
+ \trees \rSigma \to \trees (\ranked{\rSigma + \rSigma})
+\end{align*}
+which replaces the label of each node by its first or second copy, depending on whether the node is selected by the query. The following lemma says that every first-order tree relabelling can be obtained by composing local label changes, together with characteristic functions of certain simple unary queries. 
+
+\begin{lemma}\label{lem:schlingloff} The first-order tree relabellings are exactly the least class of functions which is closed under composition and which  contains the following functions:
     \begin{enumerate}
-        \item \label{it:relabeling} \emph{Relabeling}. To every finite $\rGamma,\rSigma$ and $\ranked {f : \rSigma \to \rGamma}$, the tree lifting $\trees \ranked f : \trees \rSigma \to \trees \rGamma$.
-        \item \label{it:child} \emph{Child.} For every $\rSigma$ and  $i \in \set{1,2,\ldots}$, the characteristic function of the  unary query 
+        \item \label{it:relabelling} \emph{Letter-to-letter homomorphisms}. For  every finite $\rGamma,\rSigma$ and $\ranked {f : \rSigma \to \rGamma}$, its tree lifting $\trees \ranked f : \trees \rSigma \to \trees \rGamma$.
+        \item \label{it:temporal-operators} For every finite  $\rSigma$ and its subsets $\rDelta, \rGamma \subseteq \rSigma$, the characteristic functions of type
         \begin{align*}
-            \underbrace{\child i (x).}_{\text{$x$ is an $i$-th child}}
+            \trees \rSigma \to \trees(\ranked{\rSigma + \rSigma})
         \end{align*}
-         \item \label{it:until} \emph{Until.} For every finite $\rGamma, \rDelta \subseteq \rSigma$,  the characteristic function of the unary query
-         \begin{align*}
-              \underbrace{\exists y\ y > x \land \rDelta(y) \land  \forall z \ (x < z < y \Rightarrow \rGamma(z)).}_{\substack{\text{$x$ has a descendant $y$ with label in $\rDelta$, such that}\\ \text{all nodes strictly between $x$ and $y$ have label in $\rGamma$}}} 
-         \end{align*} 
-         \item \label{it:since}\emph{Since.} For every $\rGamma, \rDelta \subseteq \rSigma$,    the characteristic function of the unary query
-         \begin{align*}
-              \underbrace{\exists y\ y < x \land \rDelta(y) \land  \forall z \ (y < z < x \Rightarrow \rGamma(z)).}_{\substack{\text{$x$ has a descendant $y$ with label in $\rDelta$, such that}\\ \text{all nodes strictly between $x$ and $y$ have label in $\rGamma$}}}  
-         \end{align*} 
+        of the following unary first-order tree queries:
+        \begin{enumerate}
+            \item \label{it:child} \emph{Child:} $x$ is an $i$-th child, for $i \in \set{1,2,\ldots}$
+            \begin{align*}
+            \child i (x); 
+            \end{align*}
+             \item \label{it:until} \emph{Until:}  $x$ has a descendant $y$ with label in $\rDelta$, such that all nodes strictly between $x$ and $y$ have label in $\rGamma$
+             \begin{align*} 
+                  \exists y\ y > x \land \rDelta(y) \land  \forall z \ (x < z < y \Rightarrow \rGamma(z));
+             \end{align*} 
+             \item \label{it:since}\emph{Since:} $x$ has a descendant $y$ with label in $\rDelta$, such that all nodes strictly between $x$ and $y$ have label in $\rGamma$
+             \begin{align*}
+                  \exists y\ y < x \land \rDelta(y) \land  \forall z \ (y < z < x \Rightarrow \rGamma(z)).
+             \end{align*} 
+        \end{enumerate}
     \end{enumerate}
-    In items \ref{it:child} -- \ref{it:since}, the alphabet is $\rSigma$, so the characteristic functions have type $\trees \rSigma \to \trees(\rSigma + \rSigma)$. 
+    
 \end{lemma}
 
-This lemma follows easily from a result of Schlingloff~\cite[Theorem 2.6]{schlingloff1992expressive}, which says that all first-order definable tree properties can be defined using a temporal logic that has operators similar to the ones used in items~\ref{it:child} -- \ref{it:since} of the lemma. The exact reduction to Schlingloff's theorem is given in Appendix~\ref{sec:AppendixForat}.
+The  lemma follows directly from Schlingloff~\cite[Theorem 2.6]{schlingloff1992expressive}, who proves that all first-order definable tree properties can be defined using a temporal logic that has operators similar to the ones used in items~\ref{it:temporal-operators} of the lemma. Note that the temporal logic is a two-way logic, because the truth value of \emph{until} depends on the descendants of the node $x$, while \emph{since} depends on the ancestors. In fact, there is no temporal logic which characterises first-order logic, uses only descendants, and has finitely many operators~\cite[Theorem 5.5]{bojanczykWreathProductsForest2012}. 
+The exact reduction to Schlingloff's theorem is  in Appendix~\ref{sec:AppendixForat}.
 
 
-In light of Lemma~\ref{lem:schlingloff},  Proposition~\ref{prop:forat} will follow once we  show that all functions  used in the lemma are derivable. The relabelings from item~\ref{it:relabeling} are immediate: we simply lift to terms (and therefore also trees) the function $\ranked f$, which is derivable by virtue of having a finite domain. The remaining functions are also derivable, as shown in Appendix~\ref{sec:relabeling}, lemmas~\ref{lem:nextmod}, \ref {lem:untilmod} and \ref{lem:sincemod}. 
+In light of Lemma~\ref{lem:schlingloff},  Proposition~\ref{prop:forat} will follow once we  show that all functions  used in the lemma are derivable. The relabellings from item~\ref{it:relabelling} are derivable as  a special case of homomorphisms discussed in Example~\ref{ex:filter}.   The remaining functions are also derivable, as shown in Appendix~\ref{sec:AppendixForat}.
+% i lemmas~\ref{lem:nextmod}, \ref {lem:untilmod} and \ref{lem:sincemod}. 

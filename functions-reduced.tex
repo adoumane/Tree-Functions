@@ -45,14 +45,15 @@
 \caption{Prime functions for terms and fold.}\label{fig:monad}
 \end{figure}
 
+% \miktodo{Seems that were are missing projections and co-projections for $\otimes$}
 \begin{figure}
 \fbox{
 \begin{minipage}{1\linewidth}
 \begin{itemize}
-\item \textbf{Projection and co-projection.} 
+\item \textbf{Co-projections.} 
 $$
 \begin{array}{llllll}
-\ranked{\rSigma + \rSigma} &\ranked{\to} & \rSigma \qquad & \qquad \rSigma  &\ranked{\overset{\iota_i}{\to}} & \ranked{\rSigma + \rSigma} \\[0pt]
+\ranked{\rSigma + \rSigma} &\ranked{\to} & \rSigma \qquad & \qquad \ranked{\rSigma_i}  &\ranked{\overset{\iota_i}{\to}} & \ranked{\rSigma_1 + \rSigma_2} \\[0pt]
 (a,i)&\mapsto& a   \qquad & \qquad  a &\mapsto& (a,i) 
        \end{array}
 $$

@@ -114,6 +114,7 @@ can be lifted, in the natural way, along the type constructors to new arity pres
 \label{eq:liftplus}\funcitem{f_1 + f_2}{\Sigma_1 + \Sigma_2}{\Gamma_1 + \Gamma_2} \\
 \funcitem{\tensorpair{f_1,f_2}}{\Sigma_1 \otimes \Sigma_2}{\Gamma_1 \otimes \Gamma_2}\\
 \funcitem{\reduce k f_1}{\reduce k \Sigma_1}{\reduce k \Gamma_1}\\
+\label{eq:liftterm}
 \funcitem{\tmonad f_1}{\tmonad \Sigma_1}{\tmonad \Gamma_1}
 %\\\label{eq:liftshallow}\funcitem{\shallowterm{f_1}{f_2}}{\shallowterm{\Sigma_1}{\Sigma_2}}{\shallowterm {\Gamma_1}{\Gamma_2}} 
 \end{eqnarray}
@@ -195,25 +196,24 @@ Each of these functions will play a key role in one of the main results of the p
 %  We will highlight the moments when such functions are used.  
 
 
-\subsubsection{Factorisations}
-    Let $t \in \tmonad \rSigma$ be a term. A factorisation of $t$ is a partition of the term into smaller terms. This can be formalised using two  equivalent definitions. One definition is that a factorisation is an equivalence relation on non-port nodes where every equivalence class is a factor (connected via the parent-child relation). The other definition is that a factorisation is any term $s  \in \tmonad \tmonad \rSigma$ which flattens to $t$. 
-    The two definitions are easily seen to be equivalent, in the sense that there is a one-to-one correspondence between factorisation equivalences and factorisation terms.
+\paragraph*{Factorisations}
+We begin with the factorisation functions 
+\begin{align*}
+    \overbrace{\ancfact}^{\text{ancestor}}, \overbrace{\decfact}^{\text{descendant}}  : \ranked{\tmonad(\Sigma_1+\Sigma_2) \to \tmonad(\tmonad \Sigma_1 + \tmonad \Sigma_2)}.
+\end{align*}
+Define a \emph{factorisation} of a term   to be any term of terms that flattens to it. 
+% Another definition is that  a factorisation is an equivalence relation on non-port nodes where every equivalence class is a factor (connected via the parent-child relation). 
+    % The two definitions are easily seen to be equivalent, in the sense that there is a one-to-one correspondence between factorisation in the two meanings.
     %  which is explained in the following picture:
     % \mypic{14}
-    Suppose that $\ranked{\Sigma_1}$ and $\ranked{\Sigma_2}$ are ranked sets. The ancestor and descendant factorisations 
-        \begin{align*}
-            \overbrace{\ancfact}^{\text{ancestor}}, \overbrace{\decfact}^{\text{descendant}}  : \ranked{\tmonad(\Sigma_1+\Sigma_2) \to \tmonad(\tmonad \Sigma_1 + \tmonad \Sigma_2)}
-        \end{align*}
-        are defined as follows. Consider an input term
-            $t \in \ranked{\tmonad(\Sigma_1+\Sigma_2)}.$
-        %\end{align*}
+The factorisation functions $\ancfact$ and $\decfact$ are used to transform a term  into a factorisations; with the partition of the input alphabet used to choose the factorisation.  Consider an input term $t \in \ranked{\tmonad(\rSigma_1 + \rSigma_2)}$.
         We say that two non-port nodes have \emph{same type} if both have labels in the same  $\ranked{\Sigma_i}$; otherwise we say that non-port nodes have \emph{opposing type}.  Call two non-port nodes \emph{ancestor equivalent}  if they have the same proper ancestors of opposing type. Call two non-port nodes \emph{descendant equivalent}  if they  are ancestor equivalent and they have the same proper descendants of opposing type. Here is a picture, with $\ranked{\Sigma_1}$ being red and $\ranked{\Sigma_2}$ being blue: 
         \begin{center}
       \includegraphics[scale=.3]{facto-up-down.pdf}
         \end{center}
-        Both ancestor and descendant equivalences are factorisations; and in each case equivalence classes contain only nodes of same type.  The function $\ancfact$ maps a term to (the term of terms corresponding to) its ancestor equivalence relation, likewise we define $\decfact$ for  descendant factorisations.
+        For both of these equivalence relations, the equivalence classes are connected with respect to the parent-child relation, and therefore the equivalences can be seen as factorisations. Furthermore, the equivalence classes contain only nodes of same type.  The function $\ancfact$ maps a term to factorisation corresponding to its ancestor equivalence relation, likewise we define $\decfact$ for  descendant factorisations.
     
-        \subsubsection{Pre-order traversal.} The preorder traversal function  
+        \paragraph*{Pre-order traversal.} The preorder traversal function  
         \begin{align*}
             \ranked{\preorder : \tmonad \Sigma \to \reduce 1 \tmonad (\rSigma + 0 + 2)}
         \end{align*}
@@ -251,18 +251,20 @@ The $\preorder$ function respects the input port order, this is the reason  why 
 % \end{align*}
 % where $g$ is defined so that it matches ...
 
+\paragraph*{Examples of derivations.} This completes the description of the prime functions.  To get a feeling for the derivable functions, we derive the function from Example~\ref{ex:filter-first}.
 \noindent\begin{example}\label{ex:filter} 
- To get a feeling for the prime functions and combinators, we derive the function
-$$ \ranked{f:\tmonad (\rSigma+\rGamma)\to\tmonad \rSigma}$$
-discussed earlier, which erases the elements of $\rGamma$ from the input term, where $\rGamma$ is a finite set of unary symbols. 
-
-Consider the prime function $\ranked{\unit:\rSigma\to\tmonad\rSigma}$ and the constant function $\ranked{\epsilon:\rGamma\to\tmonad\rSigma}$ which associates to every element of $\rGamma$ the empty term. The function $\ranked{\epsilon}$ is prime because its domain is finite. We start by lifting $\ranked{\unit}$ and $\ranked{\epsilon}$ to the type constructor $+$, then we compose the result with the prime projection function as follows
-\begin{align*}
-\xymatrix{
-    \ranked{\rSigma+\rGamma}\quad \ar[r]^-{\ranked{\unit+\epsilon}} & \quad \ranked{\tmonad\rSigma+\tmonad\rSigma}\ar[r]^-{} &\tmonad\rSigma
-},
-\end{align*}
-We lift the obtained function to terms, and compose it with the $\flatt$ function to obtain our function $\ranked{f}$.  
+   Define a \emph{term homomorphism}  to be any function of type $\tmonad \rSigma \to \tmonad \rGamma$ which is obtained by applying some function
+   \begin{align*}
+   \ranked{h : \rSigma \to \tmonad \rGamma}
+   \end{align*}
+   to every node of the input term. Examples of term homomorphisms include the function from Example~\ref{ex:filter-first} which removes all unary letters, or the $k$-copying function in item 1 of the definition of first-order tree-to-tree transductions.  We claim that every term homomorphism with a finite input alphabet is derivable. The function $\ranked{h}$ is a prime function, because it has a finite domain thanks to the assumption that the input alphabet is finite. We can list $\ranked h$ to terms using~\eqref{eq:liftterm}, and then compose it with the flattening operation in the term monad, thus giving the homomorphism:
+   \begin{align*}
+   \ranked{\xymatrix{
+\tmonad \rSigma \ar[r]^{\tmonad h} &
+\tmonad \tmonad \rGamma \ar[r]^{\flatt} &
+\tmonad \rGamma
+   }}
+   \end{align*} 
 \end{example}
 
 More examples of derived functions are given in Appendix.~\ref{sec:AppendixExamples}.

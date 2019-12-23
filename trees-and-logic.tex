@@ -40,6 +40,8 @@ The $i$-th child predicates are only needed for $i$ up to the maximal arity lett
  \paragraph*{Tree-to-tree functions.}
  Apart from defining yes/no properties, first-order logic can also be used  to define transformations on  models. In the context of this paper, we are interested in first-order transductions, defined below.  Roughly speaking, a first-order transductions takes a finite many copies of the input model, and then uses first-order logic to define new relations.
 
+%  Define an \emph{$n$-ary  first-order query for trees over  $\rSigma$} to be a first-order formula $\varphi(x)$ with one free variable, which uses the  vocabulary of models associated to  trees over $\rSigma$, as per Definition~\ref{def:tree-model}. Given a tree over $\rSigma$, a unary  query selects a subset of nodes. An example of a unary query is ``$x$ has at least four ancestors''. 
+
 
 \begin{definition}[First-order tree-to-tree transduction] \label{def:fo-transduction} A tree-to-tree function is called a  \emph{first-order transduction} if can be obtained  by composing any number of operations\footnote{In fact, there is a normal form of first-order transductions, namely at most two phases are needed: first  item 1 and item 2, see e.g.~\cite[Section 7.1.5]{courcelle1991}} of the following two kinds:
 \begin{enumerate}
@@ -119,7 +121,7 @@ By definition, first-order tree-to-tree transductions are closed under compositi
 
 
 
-\begin{example}
+\begin{example}\label{ex:filter-first}
     Let the input and output alphabets be:\vspace{-15pt}
     \mypic{17}
     and consider the  function which removes the unary nodes:

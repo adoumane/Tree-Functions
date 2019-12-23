@@ -3,9 +3,9 @@
 
 \section{Register tree transducers}
 \label{sec:stt}
-In this section, we introduce an automaton model for tree-to-tree functions, and prove that it defines the same functions as first-order tree-to-tree transductions. 
-The automaton model is roughly based on streaming tree transducers~\cite{alur2017streaming}.
-It processes the input tree bottom-up, and uses registers to store parts of the output tree.
+In this section, we begin the proof of the harder implication in Theorem~\ref{thm:main}, which says that every first-order tree-to-tree transduction is derivable. To prove this, we will pass through an automaton model for tree transductions. 
+This automaton model is roughly based on existing transducer models for \mso transductions from~\cite{bloem_comparison_2000,alur2017streaming}.
+It processes the input tree bottom-up, and uses registers to store parts of the output tree. The semantics of the transducer model involves two phases: (a) mapping the input tree to an expression that uses register updates; (b) evaluating the expression. We will then show that each of the two phases represents a derivable functions.
 
 %Before giving a formal definition, we present an example based on  pre-order traversal from Example~\ref{ex:pre-order}.
 %\begin{example}\label{ex:preorder-register} In Example~\ref{ex:pre-order}, we considered a tree-to-tree function which computed pre-order traversal, using the following input and output alphabets:
@@ -34,80 +34,109 @@ It processes the input tree bottom-up, and uses registers to store parts of the 
 
 %We now proceed with a more formal definition of register tree transducers.
 
-\paragraph*{Register valuations and updates.}   Let $\ranked{\Gamma, R}$ be finite ranked sets.
-A \emph{register valuation} over output alphabet $\rGamma$ and register names $\ranked R$ is defined to be any arity-preserving function from the register names $\regnames$ to terms $\tmonad \rGamma$. Here is an example, which uses registers $r,s$ of arities two and zero:
+\paragraph*{Register valuations and updates.} We begin by explaining the purpose of the registers.  The registers store terms, which are parts of the output tree. The registers are ranked: registers of arity zero  store trees, registers of arity one store unary terms, etc.  Fix two finite ranked sets: the \emph{register names} $\regnames$ and the \emph{output alphabet} $\rGamma$.
+A \emph{register valuation} is defined to be any arity-preserving function from the register names $\regnames$ to terms $\tmonad \rGamma$. Here is an example:
 \mypic{31}
-To transform register valuations, we use \emph{register updates}.  For  $n \in \set{0,1,\ldots}$, an \emph{$n$-ary register update} (over $\rGamma$ and $\ranked R$) is defined to be any arity-preserving function
-\begin{align}\label{eq:reg-operation}
+The set of register updates is not a ranked set, hence we write it in black.
+To transform register valuations, we use \emph{register updates}.  The idea is that an $n$-ary register update is an operation which inputs $n$ register valuations and outputs a single register valuation. For  $n \in \set{0,1,\ldots}$, an \emph{$n$-ary register update}  is defined to be any arity-preserving function
+\begin{align*}
+    %\label{eq:reg-operation}
     \ranked {u : \regnames \rto \tmonad ( \rGamma + \underbrace{{\regnames + \cdots + \regnames}}_{\text{$n$ times}})}
-\end{align}
-In particular, a register update of arity zero is the same as a register valuation.
+\end{align*}
+In particular, a register update of arity zero is the same as a register valuation.  
 Here is a picture of a binary register update:
 \mypic{32}
-Every $n$-ary register update $\ranked u$ induces a operation of type 
+Every $n$-ary register update induces a operation of type 
 \begin{align*}
 \text{(register valuations)}^n \to \text{register valuations},
 \end{align*}
-which outputs the register valuation obtained from $\ranked u$ by replacing  the $i$-th copy of a register name with the  contents of that register in the $i$-th input register valuation. 
+which outputs a register valuation obtained by taking the update, and replacing the $i$-th copy of a register name with the  contents of that register in the $i$-th input register valuation. 
 
-Since register updates have arities, the register updates are a ranked set, and therefore  we can build trees  with nodes labelled by register updates. For such a  tree 
+Register updates have arities, and therefore the ranked set of register updates can be used as labels for trees. For such a  tree 
 \begin{align*}
     t \in  \trees(\ranked{\text{register updates}}),
 \end{align*}
-define its \emph{evaluation} to be the register valuation defined by induction in the natural way: the evaluation of a tree with root label $\ranked u$ and child subtrees $t_1,\ldots,t_n$ is obtained  by applying the register update $\ranked u$ to the evaluations of the $t_1,\ldots, t_n$. In the special case of $n=0$, the tree $t$ consists of a register update of arity zero, which is the same thing as a register valuation. 
+define its \emph{evaluation} to be the register valuation defined by induction in the natural way: the evaluation of a tree is the register valuation obtained by applying the register update in the root to the register updates obtained by evaluating the child subtrees. (For a tree which is just a leaf, the leaf is labelled by a register update of arity zero, which is the same thing as a register valuation). 
 
 % A register update can be applied not only to register valuations, but also to register updates (which generalise register valuations, since register valuations are register updates of arity 0): if $\ranked{u}$ is an $n$-ary register update, and $\ranked{u_1,\ldots,u_n}$ are register updates of arities $m_1,\ldots,m_n$, then the register update
 % \begin{align*}
 % \ranked{u}(\ranked {u_1},\ldots,\ranked{u_n})  \qquad \text{of arity $m_1+\cdots + m_n$}
 % \end{align*}
 
-\paragraph*{Register transducers.} Having defined registers and their updates, we proceed to define register transducers. The general idea is that the transducer assigns to each node of the input tree a register update using a first-order tree relabeling, these register updates are then evaluated, and the output tree is found in a designated output register. 
+\paragraph*{First-order tree relabellings.} A peculiarity of the model is that it does not have states. Instead of states, it uses first-order relabelling -- see below for the definition -- tto  directly assign to each node of the input tree a register update that will be applied in that node\footnote{In this sense our model is more similar to the two-phase process used by Bloem and Engelfriet in~\cite[Theorem 17]{bloem_comparison_2000}, and less similar to the state based model of streaming tree transducers of Alur and D'Antoni~\cite{alur2017streaming}. Since we are interested in capturing first-order transformations, we use first-order relabellings instead of \mso relabellings as in~\cite[p.11]{bloem_comparison_2000}.}.
 
 
 
-\begin{definition}[Register  Transducer]\label{def:stt}
-The syntax of a register transducer consists of: 
+\begin{definition}[First-order tree relabelling] \label{def:forat}  A \emph{first-order tree relabelling} is given by two finite ranked sets $\rSigma$ and $\rGamma$, called the \emph{input and output alphabets}, and a family 
+    \begin{align*}
+    \set{\varphi_a(x)}_{a \in \rGamma}
+    \end{align*}
+    of first-order formulas, which have one free variable and use the vocabulary of trees over  $\rSigma$ (we call such formulas first-order  unary tree queries over $\rSigma$). These formulas need to satisfy the following restriction:
+    \begin{enumerate}
+        \item[(*)] for every tree over the input alphabet and node in that tree, there is a unique output letter $a \in \rGamma$ such that $\varphi_a(x)$ selects the node; furthermore, the arity of $a$ is the same as the arity of (the label of) the node. 
+    \end{enumerate}
+The semantics of a  first-order tree relabelling is a function 
+\begin{align*}
+\trees \rSigma \to \trees \rGamma,
+\end{align*}
+which changes the label of every node in the input tree to the unique letter described in  (*). 
+      \end{definition}
+
+
+A first-order tree relabelling is a very special case of a first-order tree-to-tree transduction, where only the labelling of the input tree is changed, while the universe as well as the child and descendant relations are not affected. 
+
+\paragraph*{Register transducers.} Having defined registers, register updates, and first-order tree relabellings, we are now ready to define our model of register transducers.
+
+
+\begin{definition}[First-order register transducer]\label{def:stt}
+The syntax of a first-order register transducer consists of: 
 \begin{itemize}
-    \item Input and output alphabets $\rSigma$ and $\rGamma$, which are finite ranked sets.
+    \item \emph{Input and output alphabets} $\rSigma$ and $\rGamma$, which are finite ranked sets.
     \item A finite ranked set of \emph{registers} $\regnames$, equipped with a total order.
-    \item A distinguished \emph{output register} in $\regnames$ of arity zero.
+    \item A designated \emph{output register} $r \in \regnames$, of arity zero.
     \item A \emph{transition function}, which is a  first-order tree relabelling of type
     \begin{align*}
       \trees{\rSigma} \to \trees{\rDelta}
     \end{align*}for some finite set $\rDelta$ of  register updates over $\regnames$ and $\rGamma$, 
     such that all register updates in  $\rDelta$ are single-use and monotone, as defined below:
     \begin{enumerate}
-        \item \emph{Single-use.}  An $n$-ary register update $\ranked{u}$ is  called  \emph{single-use} if   every
+        \item \emph{Single-use\footnote{The  single-use restriction  is a standard feature of transducer models with linear size increase~\cite{bloem_comparison_2000, alurStreamingStringTransducers2011,alur2017streaming}.   It prohibits iterated duplication of registers, which would lead to exponential size outputs.    
+        }.}  An $n$-ary register update $\ranked{u}$ is  called  \emph{single-use} if   every
         \begin{align*}
             r \in \ranked{\underbrace{\regnames + \cdots + \regnames}_{\text{$n$ times}}}
         \end{align*}
         appears in at most one of the terms $\set{\ranked u(s)}_{s \in \regnames}$, and it appears at most once in that term. 
-        \item \emph{Monotone.} An $n$-ary  register update $\ranked u$ is called monotone (with respect to the fixed total ordering on registers) if for every $i \in \set{1,\ldots,n}$, the relation defined by
+        \item \emph{Monotone.} An $n$-ary  register update $\ranked u$ is called monotone (with respect to the total ordering on registers) if for every $i \in \set{1,\ldots,n}$, the binary relation $\to_i$ on register names $r,s \in \regnames$  defined by
         \begin{align*} 
             r \to_i s \quad \text{if} \quad  \text{the $i$-th copy of $r$ appears in $\ranked u(s)$},
         \end{align*}
-        which is a partial function from $r$ to $s$ when $\ranked u$ is single-use, satisfies:
+        which is a partial function from $r$ to $s$ when $\ranked u$ is single-use, is monotone:
         \begin{align*}
-            r_1 \leq r_2 \text{ and } r_1 \to_i s_1 \text{ and } r_2 \to_i s_2  \qquad \text{implies} \qquad  s_1 \leq s_2
+            r_1 \leq r_2 \land r_1 \to_i s_1  \land  r_2 \to_i s_2  \quad \Rightarrow \quad  s_1 \leq s_2
         \end{align*}
     \end{enumerate}
+    % \item A \emph{final function}
+    % \begin{align*}
+    %  F : \trees \rSigma \to \trees (\ranked{\regnames + \rGamma}),
+    % \end{align*}
+    % which has finitely many outputs  and such that for every output $t$, the   inverse image $F^{-1}(t)$ is first-order definable. The final function has no single-use or monotonicity requirements, it is also not necessarily a tree relabelling (in fact, it cannot be a tree relabelling, because it has finitely many outputs).
 \end{itemize}
 \end{definition}
 
-The function computed by a register transducer is the composition the following three operations:
-\begin{align*}
-\xymatrix@C=1.6cm{
-    \trees{\rSigma} {\ar[r]^{\text{transition}}_{\text{function}}} & \trees {\rDelta} \ar[r]^-{
-    \text{evaluate}
-    } & \rDelta {\ar[r]^{\text{content of }}_{\text{output register}}} & \trees \rGamma
-}
-\end{align*}
+The semantics of the transducer is  the function from trees over the input alphabet to trees over the output alphabet  that is defined as follows. First, apply the transition function to the input tree, yielding a tree of register updates. Second, evaluate the tree of register updates, yielding a register valuation. Finally, the output tree is the contents of the designated output register.
 
-The  single-use restriction in the above definition is a standard feature of transducer models aimed at capturing transformations of linear size increase~\cite{alurStreamingStringTransducers2011,alur2017streaming}. It prohibits iterated duplication of registers, which would lead to exponential size outputs. The more unusual aspects of our model are the monotonicity requirement and the use of first-order tree relabellings. In fact, our model can be seen as a variant of  single-use streaming tree transducers from~\cite{alur2017streaming} with the following two differences (apart from less important differences in the employed syntax):
-\begin{enumerate}
-    \item  In~\cite{alur2017streaming}, there is no order on the registers and the monotonicity requirement is lifted. The monotonicity requirement in Definition~\ref{def:stt}  is related to our use of first-order logic, and not monadic second-order logic as in~\cite{alur2017streaming}. Monotonicity    prohibits swapping registers in cycles, which could be exploited by a transducer to do modulo counting (which can be done in monadic second-order logic, but not in first-order logic).
-    \item In~\cite{alur2017streaming}, the transition function can use monadic second-order logic (as opposed to first-order logic as used in our model), but it does not have lookahead (as opposed to our model, where the update associated to a node  of the input tree can depend on the all other nodes in the input tree, and not just those that are earlier in pre-order traversal).  We conjecture that monotonicity -- which is essential to our model -- cannot be achieved without   lookahead.
-\end{enumerate}
+% the composition the following three operations:
+% \begin{align*}
+% \xymatrix@C=1.6cm{
+%     \trees{\rSigma} {\ar[r]^{\text{transition}}_{\text{function}}} & \trees {\rDelta} \ar[r]^-{
+%     \text{evaluate}
+%     } & \rDelta {\ar[r]^{\text{content of }}_{\text{output register}}} & \trees \rGamma
+% }
+% \end{align*}
+
+
+The main difference of our model with respect to prior work is that we want to capture  tree transformations defined in first-order logic, as opposed to \mso used in~\cite{bloem_comparison_2000,alurStreamingStringTransducers2011,alur2017streaming}. This is the reason for the monotonicity requirement in Definition~\ref{def:stt}. Monotonicity    prohibits swapping registers in cycles, which could be exploited by a transducer to do modulo counting (which can be done in monadic second-order logic, but not in first-order logic). 
+% We conjecture that monotonicity -- which is essential to our model -- cannot be achieved without
 
  
 % The following two examples explain the single-use and monotonicity restrictions. 
@@ -127,7 +156,11 @@ The main result of this section is Theorem~\ref{thm:stt} below, which says that 
 \begin{theorem}\label{thm:stt}
     Every first-order tree-to-tree transduction is recognised by a  register transducer. 
 \end{theorem}
-The converse inclusion in the above theorem is also true, i.e.~every register transducer recognises a first-order tree-to-tree transduction; this will follow from Propositions~\ref{prop:forat} and~\ref{prop:many-register}. 
+
+The converse  inclusion in the above theorem is also true. This is can be shown directly without much difficulty, following the same lines as in~\cite[Section 5]{bloem_comparison_2000}.  The converse inclusion also follows indirectly  from the other results in this paper: (a) we will show in the following sections that every function computed by the transducer is derivable; and (b)  derivable functions are first-order tree-to-tree transductions by the easy implication in Theorem~\ref{thm:main}.
+
+\paragraph*{Proof strategy for Sections~\ref{sec:fo-translation}--\ref{sec:one-register}.} Thanks to Theorem~\ref{thm:stt}, to prove that every first-order tree-to-tree transduction is derivable, it suffices to prove derivability for first-order register transducers. The computation in the transducer has two main steps: a first-order relabelling, followed by evaluation of the register updates. The first step will be handled in Section~\ref{sec:fo-translation}, and the second step will be handled in Sections~\ref{sec:stt-derivable} and~\ref{sec:one-register}.
+
 
 
 
