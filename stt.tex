@@ -5,7 +5,8 @@
 \label{sec:stt}
 In this section, we begin the proof of the harder implication in Theorem~\ref{thm:main}, which says that every first-order tree-to-tree transduction is derivable. To prove this, we will pass through an automaton model for tree transductions. 
 This automaton model is roughly based on existing transducer models for \mso transductions from~\cite{bloem_comparison_2000,alur2017streaming}.
-It processes the input tree bottom-up, and uses registers to store parts of the output tree. The semantics of the transducer model involves two phases: (a) mapping the input tree to an expression that uses register updates; (b) evaluating the expression. We will then show that each of the two phases represents a derivable functions.
+It processes the input tree bottom-up,
+\amitodo{This is ot true?} and uses registers to store parts of the output tree. The semantics of the transducer model involves two phases: (a) mapping the input tree to an expression that uses register updates; (b) evaluating the expression. We will then show that each of the two phases represents a derivable functions.
 
 %Before giving a formal definition, we present an example based on  pre-order traversal from Example~\ref{ex:pre-order}.
 %\begin{example}\label{ex:preorder-register} In Example~\ref{ex:pre-order}, we considered a tree-to-tree function which computed pre-order traversal, using the following input and output alphabets:

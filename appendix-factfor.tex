@@ -2,55 +2,46 @@
 \label{ap:matrix-power}
 \newcommand{\treeunfold}{\mathrm{unfold}}
 
-Among our prime functions, the less satisfactory one is certainly the unfloding function, as discussed in Section~\ref{}. In this section, we will decompose it into a collection of functions containing no form of iteration. 
+Among our prime functions, the less satisfactory one is certainly the unfloding function. In this section, we will decompose it into a collection of functions containing no form of iteration. 
 
-Here is a road map for this part of the appendix.
-\begin{enumerate}
-\item We first explain in Section~\ref{eq:twist} why the monotonicity condition is important for the unfolding function. This section is unrelated to the decomposition issues, and can be skept by the reader only interested in decomposing the unfolding function.
-\item In Section~\ref{sec:functions-decomposing-unfolding}, we present a collection of functions which are intended to replace the unfolding function. We show that each of these functions is a first-order transduction.
-\item Finally we show in Section~\ref{sec:proof-decompose-unfold} that the unfolding can be derived from the functions introduced in Section~\ref{sec:functions-decomposing-unfolding} and our prime functions presented in Section~\ref{}. 
-\end{enumerate}
 
-\subsection{The need for monotonicity in the unfolding}
-\begin{example}\label{eq:twist}
-    Consider the following elements in a second matrix power:
-\begin{center}
-\includegraphics[scale=.3, page=84]{pics.pdf}
-\end{center}
-Let $t_n \in \trees \mati 2 \rSigma$ be the tree which consists of a path with $n$ nodes using the unary label $a$, followed by a leaf with label $b$. If we apply term unfolding to this tree, and then project to the first coordinate, then we get a tree with a white leaf if and only if  $n$ is even.  If term unfolding were derivable, then thanks to the results from Section~\ref{sec:to-transductions}  we would get a first-order tree-to-tree transduction 
-\begin{align*}
-\trees \redset{a,b} \to \trees \rSigma
-\end{align*}
-where the output would contain a white leaf if and only if the input has odd depth. This is in turn would imply that having even depth for trees over $\redset{a,b}$ is first-order definable, which it is not, because first-order logic cannot do modulo counting.
-\end{example}
-The problem in the above example is that the letter $a$ does a swap on its ports, which leads to counting modulo two. To forbid such swaps, we impose a monotonicity requirement that matches the monotonicity requirement for register updates in register transducers.
 
-\subsection{New datatypes and prime functions to replace the unfolding}\label{sec:functions-decomposing-unfolding}
+\subsection{New prime functions replacing the unfolding}\label{sec:functions-decomposing-unfolding}
+
+The prime functions which are intended to replace the unfolding function use a new datatype constructor called \emph{shallow terms}. it is defined as follows.  
+
+\paragraph*{Shallow terms.} Let $\rSigma$ and $\rGamma$ be two ranked sets. An element of the shallow terms datatype denoted $\shallowterm \rSigma \rGamma$, is an expression of the form $a\tensorpair{b_1,\dots,b_n}$ where $a$ is an $n$-ary element of $\rSigma$ and $b_1,\dots, b_n$ are elements of $\rGamma$. We draw shallow terms like this:
+\mypic{54}
+Clearly, a shallow term is just a particular case of terms.
+
+\paragraph*{New prime functions.} Let us present now the prime functions which will replace the unfolding function. Prime functions of Figure~\ref{fig:prime-for-shallow-terms} are some basic functions for the new shallow term datatype. Figure~\ref{fig:additional-distrib-prime} contains some new ditributivity laws and Figure~\ref{fig:additional-prime-for-fold} contains some additional laws for the fold datatype. Prime functions of Figure~\ref{fig:weak-unfolding} are weak versions of the unfolding function, containing no form of iteration. 
 
 \input{functions}
 
-\subsection{Decomposing the unfolding function}\label{sec:proof-decompose-unfold}
-This part of the appendix is devoted to proving Proposition~\ref{prop:monotone-unfold}, which says that  for  every finite ranked set $\rSigma$ and every $k \in \set{1,2,\ldots}$ there is a derivable function 
-    \begin{align*}
-    \ranked{ f : \tmonad \mati k \Sigma \to \mati k {(\tmonad \Sigma)}}
-    \end{align*}
-    which coincides with term unfolding for monotone inputs.
+
+The main result of this section is that the unfolding can be replaced by the more atomic functions of Figures~\ref{fig:prime-for-shallow-terms}, \ref{fig:additional-distrib-prime}, \ref{fig:additional-prime-for-fold} and ~\ref{fig:weak-unfolding}, in  presence of the other prime functions presented in Section~\ref{sec:derivable-functions}, as stated in the following theorem
+ 
+\begin{theorem}\label{thm:decompose-unfolding}
+The unfolding function can be derived using the functions of Figures~\ref{fig:prime-for-shallow-terms}, \ref{fig:additional-distrib-prime}, \ref{fig:additional-prime-for-fold}, ~\ref{fig:weak-unfolding}, and the prime functions of Section~\ref{sec:derivable-functions}.
+\end{theorem}
+
+%\subsection{Decomposing the unfolding function}\label{sec:proof-decompose-unfold}
 
 
-Our proof strategy is to show that term unfolding can be derived for certain homogeneous (see below) monotone inputs, and then to show that every input can be decomposed into simpler inputs in a homogeneous way. The notion of homogeneous inputs, and the result about  decomposing of arbitrary inputs into homogeneous inputs, are presented in Section~\ref{sec:factfor}. Next, in Section~\ref{sec:homo-unfold}, we show how term unfolding can be done for homogeneous inputs. Finally, in Section~\ref{sec:monotone-unfold-proof} we prove Proposition~\ref{prop:monotone-unfold} by combining  the results of Sections~\ref{sec:factfor} and~\ref{sec:homo-unfold}.
+Our proof strategy is to show that term unfolding can be derived for certain homogeneous (see below) monotone inputs, and then to show that every input can be decomposed into simpler inputs in a homogeneous way. The notion of homogeneous inputs, and the result about  decomposing of arbitrary inputs into homogeneous inputs, are presented in Section~\ref{sec:factfor}. Next, in Section~\ref{sec:homo-unfold}, we show how term unfolding can be done for homogeneous inputs. Finally, in Section~\ref{sec:monotone-unfold-proof} we prove Theorem~\ref{thm:decompose-unfolding} by combining  the results of Sections~\ref{sec:factfor} and~\ref{sec:homo-unfold}.
 
 \input{factfor}
 \input{homo-unfold}
 
-\subsection{Proof of Proposition~\ref{prop:monotone-unfold}}
+\subsection{Proof of Theorem~\ref{thm:decompose-unfolding}}
 \label{sec:monotone-unfold-proof}
-In this section, we complete the proof of Proposition~\ref{prop:monotone-unfold}.  We say that a nested factorisation in $\tmonadn n \mati k \rSigma$ is \emph{monotone} if all of the labels from $\mati k \rSigma$ that appear in it are monotone. 
+In this section, we complete the proof of Theorem~\ref{thm:decompose-unfolding}.  We say that a nested factorisation in $\tmonadn n \mati k \rSigma$ is \emph{monotone} if all of the labels from $\mati k \rSigma$ that appear in it are monotone. 
 Consider the homomorphism which maps a branch to its corresponding twist, and which gives the completely undefined function in case the twist is not monotone.  The homomorphism uses an aperiodic monoid, as discussed in Example~\ref{ex:partial-monoton-functions}. 
  Apply the Factorisation Forest Theorem with respect to this homomorphism, yielding a derivable function
 \begin{align*}
 \ranked{ f : \tmonad \mati k \rSigma \to \tmonadn n \mati k \rSigma}
 \end{align*}
-which produces only nested factorisations that are  hereditarily homogeneous. (Also, because monotone functions are closed under composition, it follows that if  an input to $\ranked f$ is monotone, then the same is true for the output.) Therefore,  Proposition~\ref{prop:monotone-unfold} follows by composing the function $\ranked f$ with the function $\ranked {g_n}$ from the following lemma. 
+which produces only nested factorisations that are  hereditarily homogeneous. (Also, because monotone functions are closed under composition, it follows that if  an input to $\ranked f$ is monotone, then the same is true for the output.) Therefore,  Theorem~\ref{thm:decompose-unfolding} follows by composing the function $\ranked f$ with the function $\ranked {g_n}$ from the following lemma. 
 
 \begin{lemma}\label{lem:ind-homo-twist}
     For every finite ranked set $\rSigma$ and  $n \in \set{1,2,\ldots}$ there is a derivable function

@@ -2,7 +2,106 @@
 \subsection{Term unfolding for homogeneous inputs}
 \label{sec:homo-unfold}
 
+\subsubsection{Preliminaries}
 
+\paragraph*{Error raising.} We can think of the type $\ranked{1}$ as an error type. Indeed, the following raising error functions are derivable.
+\begin{lemma}\label{lem:error-raising}
+Let $\rSigma$ and $\rGamma$ be two datatypes. The functions
+$$\begin{array}{rll}
+\ranked{\tmonad(\Sigma+1)} &\ranked{\to }&\ranked{\tmonad \Sigma +1}\\
+\ranked{(\Sigma+1) \otimes (\Gamma+1)} &\ranked{\to} &\ranked{\Sigma\otimes \Gamma+1 }\\
+\ranked{\shallowterm {(\Sigma+1)}{(\Gamma+1)}} &\ranked{\to} &\ranked{\shallowterm\Sigma\Gamma +1}\\
+\ranked{\reduce k (\Sigma+1)} &\ranked{\to} &\ranked{\reduce k \Sigma +1} 
+\end{array}$$
+which are defined as follows
+\begin{align*}
+ t \text{ of arity } n \ \ \mapsto \  \begin{cases}
+    t & 
+    \text{if $t$ does not contain any element of $\ranked{1}$,}\\
+    n & \text{otherwise.}
+\end{cases}
+\end{align*} are derivable.
+\end{lemma}
+These functions can be easily derived using Proposition~\ref{prop:forat} and distributivity prime functions. The details of the proof are left as an exercise to the reader.
+ 
+\paragraph*{Partial functions.} Thinking of $\ranked{1}$ as an error datatype, a function of type $\ranked{\Sigma \to \Gamma +1}$
+can be seen as a partial function from $\rSigma$ to $\rGamma$. We write 
+\begin{align*}
+\ranked{\Sigma\rightharpoonup \Gamma}
+\end{align*}
+as a notation for the function type $\ranked{\Sigma \to \Gamma +1}$.  
+Using the error raising mechanisms discussed earlier, we can manipulate transparently partial function. Indeed, all datatype constructors can be lifted to partial functions, by composing the liftings (1)--(4) with the error raising functions from Lemma~\ref{lem:error-raising}. For example, if $\ranked{f:\Sigma\rightharpoonup \Gamma}$ is a partial function, then $\ranked{\tmonad f:\tmonad\Sigma\rightharpoonup \tmonad\Gamma}$ is defined as the composition
+\begin{align*}
+\ranked{\tmonad\Sigma\xrightarrow{\tmonad f} \tmonad(\Gamma+1) \xrightarrow{\text{Error raising}} \tmonad \Gamma +1}.
+\end{align*}
+
+
+\paragraph*{Partial shallow unfold}
+ If $\rGamma$ and $\rDelta$ are types, we define $\ranked{\Gamma\odot\Delta}$ to be $\ranked{\Gamma.(\set{1}+\Delta)}$. We call its inhabitants the \emph{partial shallow} terms. A partial shallow term looks like this
+\begin{center}
+\includegraphics[scale=.4]{partial-shallow-term.pdf}
+\end{center}
+We define the \emph{partial shallow unfolding} function as the extension  of the shallow unfold function of Figure~\ref{fig:weak-unfolding} to partial shallow terms. It is the function of type 
+\begin{align*}
+\ranked{{\reduce k \Sigma}\odot{\Gamma^k} \to \reduce k ({\Sigma}\odot{\Gamma})} 
+\end{align*}
+defined as in the following picture
+ \begin{center}
+\includegraphics[scale=.4]{partial-shallow-unfold.pdf}
+ \end{center}
+
+
+\subsubsection{Term unfolding for constant-twist inputs}
+
+We say that a term $ t \in \tmonad \mati k \rSigma$ is a \emph{constant-twist term}  if each twist of an internal branches is a constant function. Note that the internal twists need not to be the same constant function. Here is an example of a constant-twist term
+
+  \begin{center}
+\includegraphics[scale=.4]{one-unfold.pdf}
+ \end{center}
+ This section is devoted to proving the following lemma. 
+
+\begin{lemma}\label{lem:homo-twist}
+    Let $k \in \set{1,2,\ldots}$. There is a derivable operation 
+    \begin{align*}
+        \ranked{f : \tmonad \mati k \rSigma \to \mati k {(\tmonad \Sigma)} }
+        \end{align*}      
+which coincides with unfolding for all constant-twist inputs.
+\end{lemma}
+
+\begin{proof}
+The function $f$ can be implemented by a derivable function, which we construct using following steps. We use the example above as a running example to illustrate our construction.
+\begin{itemize}
+ \item We start by unfolding the external twits using the corresponding basic function. We get a term in $\ranked{\reduce k \tmonad \Sigma^{[k]}}$. Our example becomes like this
+   \begin{center}
+\includegraphics[scale=.4]{one-unfold1.pdf}
+ \end{center}
+ \item Next, we will transform each matrix power node into a tensor product as follows 
+ \begin{align*}
+ \ranked{ \Sigma^{[k]} \rightarrow \reduce k (\reduce k \Sigma \otimes \dots \reduce k \Sigma) \to \reduce 1 (\reduce k \Sigma)^k}
+ \end{align*}
+ The idea here is that, since the image of each twist is a singleton,  the ports of the matrix power are independent. We can then transform safely each node into a tensor product. After that, we transform each tensor product $\ranked{(\reduce k \Sigma)^k}$ into a shallow term $\ranked{k.\reduce k \Sigma}$ which we see itself as a term of type $\ranked{\tmonad(k+\reduce k\Sigma)}$. After the application of the unfolding function $\mathrm{unfold}_1$ followed by a flattening, and the simplification of $\ranked{\reduce k \reduce 1 \tmonad (k+\reduce k \Sigma)}$ into $\ranked{\reduce k \tmonad (k+\reduce k \Sigma)}$ we get a term in $\ranked{\reduce k \tmonad(k+\reduce k \Sigma)}$. Our running example becomes as follows after this step
+   \begin{center}
+\includegraphics[scale=.4]{one-unfold2.pdf}
+ \end{center}
+ \item Now we apply the factorization 
+ \begin{align*}
+ \ranked{\tmonad (k + \reduce k \Sigma)\to \tmonad \tmonad(k + \reduce k \Sigma)}
+ \end{align*}
+ which regroups each element $\ranked{\reduce k \Sigma}$ with its children of type $\ranked{k}$ in the same factor, and leaves the other nodes in isolated factors. At this point our term looks like this
+   \begin{center}
+\includegraphics[scale=.3]{one-unfold3.pdf}
+ \end{center}
+ Note that we have two kind of factors: the first is a singleton and contains only a node labeled by $\ranked{k}$, the other kind of factors are those partial shallow terms $\ranked{(\reduce k \Sigma) * k}$. The idea now is to reflect this distinction in the type. That is to apply the function
+ \begin{align*}
+ \ranked{\tmonad \tmonad(k + \reduce k \Sigma) \to k. \tmonad ((\reduce k \Sigma)*k)}
+ \end{align*}
+ This function can be implemented easily using the decomposition function, the functions which maps every type to $\ranked{\bot}$ and mechanisms of raising errors. 
+ \item Now the idea is to transform each node $\ranked{(\reduce k \Sigma)*k}$ into a $\rSigma$ one. We do so by transforming $\ranked{k}$ into $\ranked{1^k}$ (this function is basic since its domain is finite), then by applying the partial shallow unfold function of Example~\ref{ex:partial-shallow-unfold}, as illustrated by the following picture
+   \begin{center}
+\includegraphics[scale=.3]{one-unfold4.pdf}
+ \end{center}
+ \end{itemize}
+\end{proof}
 
 \subsubsection{Term unfolding for $\alpha$-homogeneous inputs}
 \label{subsec:alpha-homo-unfold}
