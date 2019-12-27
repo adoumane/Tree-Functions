@@ -23,7 +23,12 @@ Fix a register transducer, with register names $\regnames$ and output alphabet $
 
 \paragraph*{The $\lambda$-representation of terms.} 
 To describe the register updates in a transducer, we will use notions from $\lambda$-calculus.  
-We assume that the reader is familiar with the basic notions of the simply typed $\lambda$-calculus; more detailed definitions can be found in~\cite{sorensen_lectures_2006}; we will also give more precise definitions in Section~\ref{sec:one-register}.
+We will also give more precise description of the $\lambda$-calculus in Section~\ref{sec:one-register}; for the moment it is enough to assume that $\lambda$-terms are like trees, except that they allow variables $x,y,z,\ldots$; binding the variables using $\lambda x, \lambda y, \lambda z, \ldots$ and applying one term to another. The evaluation of $\lambda$-terms is performed by $\beta$-reduction
+\begin{align*}
+(\lambda x. M) N \qquad \to_\beta \qquad M[x:=N],
+\end{align*}
+which substitutes a variable by an argument. The $\lambda$-terms that we use are going to be simply typed, which will imply that $\beta$-reduction eventually terminates, arriving at a normal form (called the value of the $\lambda$-term), and this normal form will not depend on the order in which $\beta$-reduction was performed. 
+
 % Define a \emph{$\lambda$-term} to be an expression built using the following grammar
 % \begin{align*}
 %  \underbrace{x,y,z,\ldots}_{\text{variables}} \quad \underbrace{MN}_{\text{application}} \quad \underbrace{\lambda x.M}_{\text{$\lambda$-abstraction}}.

@@ -1,0 +1,25 @@
+
+
+\subsection{Examples of derivations} 
+\label{sec:example-derivations}
+We conclude this section with  examples of derivable  functions. 
+ 
+\noindent\begin{example}\label{ex:filter} 
+   Define a \emph{term homomorphism}  to be any function of type $\tmonad \rSigma \to \tmonad \rGamma$ which is obtained by applying some function
+   \begin{align*}
+   \ranked{h : \rSigma \to \tmonad \rGamma}
+   \end{align*}
+   to every node of the input term. Examples of term homomorphisms include the function from Example~\ref{ex:filter-first} which removes all unary letters, or the $k$-copying function in item 1 of the definition of first-order tree-to-tree transductions.  We claim that every term homomorphism with a finite input alphabet is derivable. The function $\ranked{h}$ is a prime function, because it has a finite domain thanks to the assumption that the input alphabet is finite. We can list $\ranked h$ to terms using~\eqref{eq:liftterm}, and then compose it with the flattening operation in the term monad, thus giving the homomorphism:
+   \begin{align*}
+   \ranked{\xymatrix{
+\tmonad \rSigma \ar[r]^{\tmonad h} &
+\tmonad \tmonad \rGamma \ar[r]^{\flatt} &
+\tmonad \rGamma
+   }}
+   \end{align*} 
+\end{example}
+
+\begin{example}
+    Mirror image.
+\end{example}
+More examples of derived functions are given in Appendix.~\ref{sec:AppendixExamples}.
