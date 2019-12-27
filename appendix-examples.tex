@@ -1,6 +1,10 @@
+\amitodo{There is a new symbol for ports. Adapt this new notation.}
+\amitodo{The notation $1$ for $\bot$ is a bit ambiguous. There is a possible confusipon with the elment $1$. What should I think of $\set{1}$?}
 \section{Examples}
 
 \subsection{Examples of fo tree-to-tree transductions}\label{sec:appendix-example-fo-transductions}
+
+
 \begin{example}\label{ex:pre-order}
     Consider the ranked alphabets
 \begin{center}
@@ -30,18 +34,18 @@ Given two types $\rSigma, \rGamma$ and an arity preserving  function $\ranked{f:
 \end{align*}
 \end{example}
 
-%\noindent\begin{example}[Filter]\label{ex:filter} Consider the types $\rGamma, \rSigma$  where $\rGamma$ is a finite type of unary symbols. Consider the function:
-%$$ \ranked{f:\tmonad (\rSigma+\rGamma)\to\tmonad \rSigma}$$
-%which erases the elements of $\rGamma$ from the input term. This function is well defined since erasing unary symbols does not break the tree structure of the input.
-%Let us explain why this is a derivable function.
-%Consider the basic functions $\ranked{\unit_\rSigma:\rSigma\to\tmonad\rSigma}$ and the constant function $\ranked{\mathsf{empty}:\rGamma\to\tmonad\rSigma}$ which associates to every element of $\rGamma$ the empty term. We compose the following two functions 
-%\begin{align*}
-%\xymatrix{
-%    \ranked{\rSigma+\rGamma}\quad \ar[r]^-{\ranked{\unit_\Sigma+\mathsf{empty}}} & \quad \ranked{\tmonad\rSigma+\tmonad\rSigma}\ar[r]^-{\ranked{\mathrm{forget}}} &\tmonad\rSigma
-%},
-%\end{align*}
-%Then we lift the obtained function to terms, and compose the result with the $\flatt$ function to obtain our function $\ranked{f}$.  
-%\end{example}
+\noindent\begin{example}[Filter]\label{ex:filter} Consider the types $\rGamma, \rSigma$  where $\rGamma$ is a finite type of unary symbols. Consider the function:
+$$ \ranked{f:\tmonad (\rSigma+\rGamma)\to\tmonad \rSigma}$$
+which erases the elements of $\rGamma$ from the input term. This function is well defined since erasing unary symbols does not break the tree structure of the input.
+Let us explain why this is a derivable function.
+Consider the basic functions $\ranked{\unit_\rSigma:\rSigma\to\tmonad\rSigma}$ and the constant function $\ranked{\mathsf{empty}:\rGamma\to\tmonad\rSigma}$ which associates to every element of $\rGamma$ the empty term. We compose the following two functions 
+\begin{align*}
+\xymatrix{
+    \ranked{\rSigma+\rGamma}\quad \ar[r]^-{\ranked{\unit_\Sigma+\mathsf{empty}}} & \quad \ranked{\tmonad\rSigma+\tmonad\rSigma}\ar[r]^-{\ranked{\mathrm{forget}}} &\tmonad\rSigma
+},
+\end{align*}
+Then we lift the obtained function to terms, and compose the result with the $\flatt$ function to obtain our function $\ranked{f}$.  
+\end{example}
 
 \noindent \begin{example}[Parent and children]\label{ex:sibling}  Let $\rGamma$ be a finite type. We define $\ranked{\rGamma_0}$  to be the ranked set obtained from $\rGamma$ by setting the arity of every element to $0$.  
 \medskip
@@ -153,7 +157,18 @@ factor as the nodes of $f$ would have a descendant in $\rGamma$. The factor $g$ 
 
 Let us consider the functions 
 $$\begin{array}{llll}
-\ranked{\mathsf{Yes}_\rGamma :} & \rGamma &\ranked{\to} &\ranked{ \rSigma+\rSigma}\\
+\ranked{\mathsf{Yes}_\rGamma :} & \rGamma &\ranked{\to} &\ranked{ \rSigma+\rSigma}\\%\noindent\begin{example}[Filter]\label{ex:filter} Consider the types $\rGamma, \rSigma$  where $\rGamma$ is a finite type of unary symbols. Consider the function:
+%$$ \ranked{f:\tmonad (\rSigma+\rGamma)\to\tmonad \rSigma}$$
+%which erases the elements of $\rGamma$ from the input term. This function is well defined since erasing unary symbols does not break the tree structure of the input.
+%Let us explain why this is a derivable function.
+%Consider the basic functions $\ranked{\unit_\rSigma:\rSigma\to\tmonad\rSigma}$ and the constant function $\ranked{\mathsf{empty}:\rGamma\to\tmonad\rSigma}$ which associates to every element of $\rGamma$ the empty term. We compose the following two functions 
+%\begin{align*}
+%\xymatrix{
+%    \ranked{\rSigma+\rGamma}\quad \ar[r]^-{\ranked{\unit_\Sigma+\mathsf{empty}}} & \quad \ranked{\tmonad\rSigma+\tmonad\rSigma}\ar[r]^-{\ranked{\mathrm{forget}}} &\tmonad\rSigma
+%},
+%\end{align*}
+%Then we lift the obtained function to terms, and compose the result with the $\flatt$ function to obtain our function $\ranked{f}$.  
+%\end{example}
  \ranked{\mathsf{Yes}_{\ranked{\rSigma\setminus\rGamma}:}}& \ranked{\rSigma\setminus\rGamma}&\ranked{\to} &\ranked{ \rSigma+\rSigma}\\
 \ranked{\mathsf{No}_{\ranked{\rSigma\setminus\rGamma}: }}&\ranked{\rSigma\setminus\rGamma} &\ranked{\to}& \ranked{ \rSigma+\rSigma}
 \end{array}$$
@@ -181,57 +196,4 @@ Using similar arguments as before, we can conclude that:
 The ancestor function is obtained by applying $\ranked{\mathsf{root}_{f,g}}$ followed by a flattening.
 \end{example}
 
-\noindent\begin{example}[Partial unfold]\label{ex:partial-shallow-unfold} If $\rGamma$ and $\rDelta$ are types, we define $\ranked{\Gamma*\Delta}$ to be $\ranked{\Gamma.(1+\Delta)}$. We call its inhabitants the \emph{partial shallow} terms. A partial shallow term looks like this, where we omitted to draw the element 1:
-\begin{center}
-\includegraphics[scale=.4]{partial-shallow-term.pdf}
-\end{center}
-We define the partial shallow unfolding functions to be the function of type
-\begin{align*}
-\ranked{{\reduce k \Sigma}*{\Gamma^k} \to \reduce k ({\Sigma}*{\Gamma})} 
-\end{align*}
- \begin{center}
-\includegraphics[scale=.35]{partial-shallow-unfold.pdf}
- \end{center}
-\end{example}
 
-\noindent\begin{example} Consider the function $\ranked{f}$ 
- \begin{align*}
-\ranked{f : \tmonad \Sigma^{[k]} \rightarrow  (\tmonad \Sigma)^{[k]}}
-\end{align*}
-which coincides with the unfolding function when restricted to a very specific class of inputs: the image of every twist is a singleton. Below is an example illustrating the function $\ranked{f}$ 
-  \begin{center}
-\includegraphics[scale=.25]{one-unfold.pdf}
- \end{center}
-The function $f$ can be implemented by a derivable function, which we construct using following steps. We use the example above as a running example to illustrate our construction.
-\begin{itemize}
- \item We start by unfolding the external twits using the corresponding basic function. We get a term in $\ranked{\reduce k \tmonad \Sigma^{[k]}}$. Our example becomes like this
-   \begin{center}
-\includegraphics[scale=.3]{one-unfold1.pdf}
- \end{center}
- \item Next, we will transform each matrix power node into a tensor product as follows 
- \begin{align*}
- \ranked{ \Sigma^{[k]} \rightarrow \reduce k (\reduce k \Sigma \otimes \dots \reduce k \Sigma) \to \reduce 1 (\reduce k \Sigma)^k}
- \end{align*}
- The idea here is that, since the image of each twist is a singleton,  the ports of the matrix power are independent. We can then transform safely each node into a tensor product. After that, we transform each tensor product $\ranked{(\reduce k \Sigma)^k}$ into a shallow term $\ranked{k.\reduce k \Sigma}$ which we see itself as a term of type $\ranked{\tmonad(k+\reduce k\Sigma)}$. After the application of the unfolding function $\mathrm{unfold}_1$ followed by a flattening, and the simplification of $\ranked{\reduce k \reduce 1 \tmonad (k+\reduce k \Sigma)}$ into $\ranked{\reduce k \tmonad (k+\reduce k \Sigma)}$ we get a term in $\ranked{\reduce k \tmonad(k+\reduce k \Sigma)}$. Our running example becomes as follows after this step
-   \begin{center}
-\includegraphics[scale=.3]{one-unfold2.pdf}
- \end{center}
- \item Now we apply the factorization 
- \begin{align*}
- \ranked{\tmonad (k + \reduce k \Sigma)\to \tmonad \tmonad(k + \reduce k \Sigma)}
- \end{align*}
- which regroups each element $\ranked{\reduce k \Sigma}$ with its children of type $\ranked{k}$ in the same factor, and leaves the other nodes in isolated factors. At this point our term looks like this
-   \begin{center}
-\includegraphics[scale=.3]{one-unfold3.pdf}
- \end{center}
- Note that we have two kind of factors: the first is a singleton and contains only a node labeled by $\ranked{k}$, the other kind of factors are those partial shallow terms $\ranked{(\reduce k \Sigma) * k}$. The idea now is to reflect this distinction in the type. That is to apply the function
- \begin{align*}
- \ranked{\tmonad \tmonad(k + \reduce k \Sigma) \to k. \tmonad ((\reduce k \Sigma)*k)}
- \end{align*}
- This function can be implemented easily using the decomposition function, the functions which maps every type to $\ranked{\bot}$ and mechanisms of raising errors. 
- \item Now the idea is to transform each node $\ranked{(\reduce k \Sigma)*k}$ into a $\rSigma$ one. We do so by transforming $\ranked{k}$ into $\ranked{1^k}$ (this function is basic since its domain is finite), then by applying the partial shallow unfold function of Example~\ref{ex:partial-shallow-unfold}, as illustrated by the following picture
-   \begin{center}
-\includegraphics[scale=.3]{one-unfold4.pdf}
- \end{center}
- \end{itemize}
-\end{example}

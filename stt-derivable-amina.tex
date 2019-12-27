@@ -55,6 +55,7 @@ When the outputs are viewed as trees, the function
 }
 \end{align}
 is not arity-preserving, since all outputs have arity zero. For tree inputs, $\lambda$-representation is the identity function. 
+\amitodo{I do not see the point of defining the lambda representation of term. Need for a smooth transition?}
 
 \paragraph*{The $\lambda$-representation of register updates.} To represent register updates using $\lambda$-terms, we use  the matrix power. Unlike for terms,    $\lambda$-representation of register updates is an  arity preserving function, of type
 \begin{align}\label{eq:lambda-representation-regup}
@@ -68,6 +69,8 @@ is not arity-preserving, since all outputs have arity zero. For tree inputs, $\l
 where $k$ is the number of registers. This function is illustrated in Figure~\ref{fig:labmda-representation-for-register-updates}. 
 \miktodo{Give a definition, maybe?}
 We will not claim that this function is derivable in general; but it will be derivable if we restrict the domain to a finite set of register updates, by virtue of having a finite domain.
+
+
 
 \begin{figure}[]
     \centering
