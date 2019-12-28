@@ -191,9 +191,46 @@ Using similar arguments as before, we can conclude that:
 \begin{itemize}
 \item The nodes inside $\rGamma$ factors have $\rGamma$ ancestors.  
 \item If a $\ranked{\rSigma\setminus\rGamma}$ factor is the root of the factorized term, then its nodes do not have a $\rGamma$ ancestor.
-\item   If a $\ranked{\rSigma\setminus\rGamma}$ factor is not the root of the factorized term, then its nodes do have a $\rGamma$ ancestor.
+\item   If a $\ranked{\rSigma\setminus\rGamma}$ factor is not the root of the factorized term, then its nodes do have a $\rGamma[Descendants and ancestors]\label{ex:descendant}$ ancestor.
 \end{itemize}
 The ancestor function is obtained by applying $\ranked{\mathsf{root}_{f,g}}$ followed by a flattening.
 \end{example}
+
+\begin{example}[Error raising.]\label{ex:error-raising}
+We can think of the type $\ranked{1}$ as an error type. Indeed, the following raising error functions are derivable.
+\begin{lemma}\label{lem:error-raising}
+Let $\rSigma$ and $\rGamma$ be two datatypes. The functions
+$$\begin{array}{rll}
+\ranked{\tmonad(\Sigma+1)} &\ranked{\to }&\ranked{\tmonad \Sigma +1}\\
+\ranked{(\Sigma+1) \otimes (\Gamma+1)} &\ranked{\to} &\ranked{\Sigma\otimes \Gamma+1 }\\
+\ranked{\shallowterm {(\Sigma+1)}{(\Gamma+1)}} &\ranked{\to} &\ranked{\shallowterm\Sigma\Gamma +1}\\
+\ranked{\reduce k (\Sigma+1)} &\ranked{\to} &\ranked{\reduce k \Sigma +1} 
+\end{array}$$
+which are defined as follows
+\begin{align*}
+ t \text{ of arity } n \ \ \mapsto \  \begin{cases}
+    t & 
+    \text{if $t$ does not contain any element of $\ranked{1}$,}\\
+    n & \text{otherwise.}
+\end{cases}
+\end{align*} are derivable.
+\end{lemma}
+These functions can be easily derived using Proposition~\ref{prop:forat} and distributivity prime functions. The details of the proof are left as an exercise to the reader.
+\end{example}
+
+\begin{example}[Partial functions.]
+Thinking of $\ranked{1}$ as an error datatype, a function of type $\ranked{\Sigma \to \Gamma +1}$
+can be seen as a partial function from $\rSigma$ to $\rGamma$. We write 
+\begin{align*}
+\ranked{\Sigma\rightharpoonup \Gamma}
+\end{align*}
+as a notation for the function type $\ranked{\Sigma \to \Gamma +1}$.  
+Using the error raising mechanisms discussed earlier, we can manipulate transparently partial function. Indeed, all datatype constructors can be lifted to partial functions, by composing the liftings (1)--(4) with the error raising functions from Lemma~\ref{lem:error-raising}. For example, if $\ranked{f:\Sigma\rightharpoonup \Gamma}$ is a partial function, then $\ranked{\tmonad f:\tmonad\Sigma\rightharpoonup \tmonad\Gamma}$ is defined as the composition
+\begin{align*}
+\ranked{\tmonad\Sigma\xrightarrow{\tmonad f} \tmonad(\Gamma+1) \xrightarrow{\text{Error raising}} \tmonad \Gamma +1}.
+\end{align*}
+\end{example}
+ 
+
 
 

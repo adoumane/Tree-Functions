@@ -4,40 +4,8 @@
 
 \subsubsection{Preliminaries}
 
-\paragraph*{Error raising.} We can think of the type $\ranked{1}$ as an error type. Indeed, the following raising error functions are derivable.
-\begin{lemma}\label{lem:error-raising}
-Let $\rSigma$ and $\rGamma$ be two datatypes. The functions
-$$\begin{array}{rll}
-\ranked{\tmonad(\Sigma+1)} &\ranked{\to }&\ranked{\tmonad \Sigma +1}\\
-\ranked{(\Sigma+1) \otimes (\Gamma+1)} &\ranked{\to} &\ranked{\Sigma\otimes \Gamma+1 }\\
-\ranked{\shallowterm {(\Sigma+1)}{(\Gamma+1)}} &\ranked{\to} &\ranked{\shallowterm\Sigma\Gamma +1}\\
-\ranked{\reduce k (\Sigma+1)} &\ranked{\to} &\ranked{\reduce k \Sigma +1} 
-\end{array}$$
-which are defined as follows
-\begin{align*}
- t \text{ of arity } n \ \ \mapsto \  \begin{cases}
-    t & 
-    \text{if $t$ does not contain any element of $\ranked{1}$,}\\
-    n & \text{otherwise.}
-\end{cases}
-\end{align*} are derivable.
-\end{lemma}
-These functions can be easily derived using Proposition~\ref{prop:forat} and distributivity prime functions. The details of the proof are left as an exercise to the reader.
- 
-\paragraph*{Partial functions.} Thinking of $\ranked{1}$ as an error datatype, a function of type $\ranked{\Sigma \to \Gamma +1}$
-can be seen as a partial function from $\rSigma$ to $\rGamma$. We write 
-\begin{align*}
-\ranked{\Sigma\rightharpoonup \Gamma}
-\end{align*}
-as a notation for the function type $\ranked{\Sigma \to \Gamma +1}$.  
-Using the error raising mechanisms discussed earlier, we can manipulate transparently partial function. Indeed, all datatype constructors can be lifted to partial functions, by composing the liftings (1)--(4) with the error raising functions from Lemma~\ref{lem:error-raising}. For example, if $\ranked{f:\Sigma\rightharpoonup \Gamma}$ is a partial function, then $\ranked{\tmonad f:\tmonad\Sigma\rightharpoonup \tmonad\Gamma}$ is defined as the composition
-\begin{align*}
-\ranked{\tmonad\Sigma\xrightarrow{\tmonad f} \tmonad(\Gamma+1) \xrightarrow{\text{Error raising}} \tmonad \Gamma +1}.
-\end{align*}
-
-
 \paragraph*{Partial shallow unfold}
- If $\rGamma$ and $\rDelta$ are types, we define $\ranked{\Gamma\odot\Delta}$ to be $\ranked{\Gamma.(\set{1}+\Delta)}$. We call its inhabitants the \emph{partial shallow} terms. A partial shallow term looks like this
+ If $\rGamma$ and $\rDelta$ are types, we define $\ranked{\Gamma\odot\Delta}$ to be $\ranked{\Gamma.(\Delta+\set{1})}$. We call its inhabitants the \emph{partial shallow} terms. A partial shallow term looks like this, where we omitted to draw the element $1$ 
 \begin{center}
 \includegraphics[scale=.4]{partial-shallow-term.pdf}
 \end{center}
@@ -49,31 +17,51 @@ defined as in the following picture
  \begin{center}
 \includegraphics[scale=.4]{partial-shallow-unfold.pdf}
  \end{center}
+the partial shallow unfolding function can be derived as follows. Consider the functions $\ranked{f}$ and $\ranked{g}$ defined as follows
+\begin{align*}
+\ranked{f:\Gamma^k \xrightarrow{\text{Increse-fold}} \reduce k  \Gamma^k \xrightarrow{\reduce k (\iota_1)^k} \reduce k  (\Gamma+1)^k}  \\ 
+\ranked{g:1 \xrightarrow{\text{k-Unit}} \reduce k 1^k \xrightarrow{\reduce k (\iota_2)^k} \reduce k  (\Gamma+1)^k }
+\end{align*}
+We start by lifting $f$ and $g$ as follows
+\begin{align*}
+\ranked{\reduce k \Sigma \odot \Gamma^k\overset{\text{{\tiny def}}}{=} \reduce k \Sigma \cdot (\Gamma^k+1) \to  \reduce k \Sigma \cdot \reduce k (\Gamma+1)^k}
+\end{align*}
+We compose the obtained function with the prime function which distributes   the shallow product over the fold:
+\begin{align*}
+\ranked{\reduce k \Sigma \cdot \reduce k (\Gamma+1)^k \to \reduce k (\reduce k \Sigma \cdot (\Gamma+1)^k)}
+\end{align*}
+Now we can apply the shallow unfold function, more precisely we lift it along the constructor $\reduce k$. Then we compose the result with the product of the graded monad:
+\begin{align*}
+\ranked{\reduce k (\reduce k \Sigma \cdot (\Gamma+1)^k) \xrightarrow{\reduce k \text{Shallow unfold}} \reduce k \reduce 1 ( \Sigma \cdot (\Gamma+1)) }
+\end{align*}
+Then we compose the result with the product of the graded monad, to obtain the desired function
+\begin{align*}
+\ranked{\reduce k \reduce 1 (\Sigma \cdot (\Gamma+1)) \xrightarrow{\flatt} \reduce k \Sigma \cdot (\Gamma+1) \overset{\text{{\tiny def}}}{=} \reduce k \Sigma \odot \Gamma}
+\end{align*}
 
-
-\subsubsection{Term unfolding for constant-twist inputs}
+\paragraph*{Term unfolding for constant-twist inputs}
 
 We say that a term $ t \in \tmonad \mati k \rSigma$ is a \emph{constant-twist term}  if each twist of an internal branches is a constant function. Note that the internal twists need not to be the same constant function. Here is an example of a constant-twist term
 
   \begin{center}
-\includegraphics[scale=.4]{one-unfold.pdf}
+\includegraphics[scale=.35]{one-unfold.pdf}
  \end{center}
  This section is devoted to proving the following lemma. 
 
 \begin{lemma}\label{lem:homo-twist}
-    Let $k \in \set{1,2,\ldots}$. There is a derivable operation 
+    Let $k \in \set{1,2,\ldots}$. There is a derivable function 
     \begin{align*}
-        \ranked{f : \tmonad \mati k \rSigma \to \mati k {(\tmonad \Sigma)} }
+        \ranked{f : \tmonad \mati k \rSigma \rightharpoonup \mati k {(\tmonad \Sigma)} }
         \end{align*}      
 which coincides with unfolding for all constant-twist inputs.
 \end{lemma}
 
 \begin{proof}
-The function $f$ can be implemented by a derivable function, which we construct using following steps. We use the example above as a running example to illustrate our construction.
-\begin{itemize}
- \item We start by unfolding the external twits using the corresponding basic function. We get a term in $\ranked{\reduce k \tmonad \Sigma^{[k]}}$. Our example becomes like this
+The function $f$ can be derived using the following steps. We use the example of the constant-twists term above as a running example.  
+\begin{enumerate}
+\item We start by applying the external unfolding function.  We get a term in $\ranked{\reduce k \tmonad \Sigma^{[k]}}$. Our example becomes like this
    \begin{center}
-\includegraphics[scale=.4]{one-unfold1.pdf}
+\includegraphics[scale=.35]{one-unfold1.pdf}
  \end{center}
  \item Next, we will transform each matrix power node into a tensor product as follows 
  \begin{align*}
@@ -81,7 +69,7 @@ The function $f$ can be implemented by a derivable function, which we construct 
  \end{align*}
  The idea here is that, since the image of each twist is a singleton,  the ports of the matrix power are independent. We can then transform safely each node into a tensor product. After that, we transform each tensor product $\ranked{(\reduce k \Sigma)^k}$ into a shallow term $\ranked{k.\reduce k \Sigma}$ which we see itself as a term of type $\ranked{\tmonad(k+\reduce k\Sigma)}$. After the application of the unfolding function $\mathrm{unfold}_1$ followed by a flattening, and the simplification of $\ranked{\reduce k \reduce 1 \tmonad (k+\reduce k \Sigma)}$ into $\ranked{\reduce k \tmonad (k+\reduce k \Sigma)}$ we get a term in $\ranked{\reduce k \tmonad(k+\reduce k \Sigma)}$. Our running example becomes as follows after this step
    \begin{center}
-\includegraphics[scale=.4]{one-unfold2.pdf}
+\includegraphics[scale=.35]{one-unfold2.pdf}
  \end{center}
  \item Now we apply the factorization 
  \begin{align*}
@@ -89,18 +77,31 @@ The function $f$ can be implemented by a derivable function, which we construct 
  \end{align*}
  which regroups each element $\ranked{\reduce k \Sigma}$ with its children of type $\ranked{k}$ in the same factor, and leaves the other nodes in isolated factors. At this point our term looks like this
    \begin{center}
-\includegraphics[scale=.3]{one-unfold3.pdf}
+\includegraphics[scale=.35]{one-unfold3.pdf}
  \end{center}
- Note that we have two kind of factors: the first is a singleton and contains only a node labeled by $\ranked{k}$, the other kind of factors are those partial shallow terms $\ranked{(\reduce k \Sigma) * k}$. The idea now is to reflect this distinction in the type. That is to apply the function
+ Note that this factorization have the following shape: the root is labeled by $k$, and all the other nodes have labels in $\ranked{(\reduce k \Sigma) \odot k}$. We want to reflect this structure in  the type by applying the following function
  \begin{align*}
- \ranked{\tmonad \tmonad(k + \reduce k \Sigma) \to k. \tmonad ((\reduce k \Sigma)*k)}
+ \ranked{\tmonad \tmonad(k + \reduce k \Sigma) \to k. \tmonad ((\reduce k \Sigma)\odot k)}
  \end{align*}
- This function can be implemented easily using the decomposition function, the functions which maps every type to $\ranked{\bot}$ and mechanisms of raising errors. 
- \item Now the idea is to transform each node $\ranked{(\reduce k \Sigma)*k}$ into a $\rSigma$ one. We do so by transforming $\ranked{k}$ into $\ranked{1^k}$ (this function is basic since its domain is finite), then by applying the partial shallow unfold function of Example~\ref{ex:partial-shallow-unfold}, as illustrated by the following picture
+ This function can be implemented easily using the decomposition function, the functions which maps every type to $\ranked{1}$ and mechanisms of raising errors. 
+ \item In each node $\ranked{(\reduce k \Sigma)\odot k}$, we transform $\ranked{k}$ into $\ranked{1^k}$ (this function is basic since its domain is finite). After that, we apply the partial shallow unfold function, composed with the prime functions eliminating the $1$ and decreasing the fold:
+\begin{align*}
+\ranked{(\reduce k \Sigma)\odot k \to \reduce k (\Sigma \odot 1) \to \reduce k \Sigma \to \reduce 1 \Sigma}
+\end{align*} 
+  as illustrated by the following picture
    \begin{center}
 \includegraphics[scale=.3]{one-unfold4.pdf}
  \end{center}
- \end{itemize}
+ \item At this point we have a term of type $\ranked{\reduce k (k\cdot \tmonad \reduce 1 \Sigma)}$. We apply the untwist function
+ \begin{align*}
+ \ranked{\tmonad \reduce 1 \Sigma \to \reduce 1 \tmonad \Sigma}
+ \end{align*}
+ then the function which transforms shallow terms into tensor product
+ \begin{align*}
+ \ranked{k \cdot \reduce 1 \tmonad \Sigma \to (\reduce 1 \tmonad \Sigma)^k}
+ \end{align*}
+ Now our term is of type $\ranked{\reduce k (\reduce 1 \tmonad \Sigma)^k}$. To conclude, we apply the prime function which permutes the tensor product with the fold, then we apply the product of the graded monad. 
+ \end{enumerate}
 \end{proof}
 
 \subsubsection{Term unfolding for $\alpha$-homogeneous inputs}
@@ -128,7 +129,7 @@ We proceed by induction on $k$. When $k=1$, the unfolding coincides with the bas
 Let us treat the inductive case. For that, we introduce a tool that will be useful to analyze the function $\alpha$. For a function $$\alpha: \set{1,\ldots,k} \to \set{1,\ldots,k}$$ define  \emph{its graph} as the directed graph whose set of vertices is $\set{1,\ldots,k}$, and which contains an edge $i\rightarrow j$ if $\alpha(i)=j$. Note that the out-degree of the nodes is $1.$
 
 \medskip
-In the proof of the inductive case, we distinguish two cases. The first one is when the graph of $\alpha$ is not weakly connected. In this case, by monotonicity of $\alpha$, we can find $m\in \set{1,k-1}$ such that $\alpha(\set{1,m})\subseteq\set{1,m}$ and $\alpha(\set{m+1,k})\subseteq\set{m+1,k}$. The idea is then to create two copies of the original tree: in the first one we keep only the first $m$ elements of the tensor product of each node, and in the second one we keep the last $k-m$ copies. Then we unfold these terms by applying the induction hypothesis, and  finally we gather them to obtain the  unfolding of the original term. 
+In the proof of the inductive case, we distinguish two cases. The first one is when the graph of $\alpha$ is not weakly connected. In this case, by monotonicity of $\alpha$, we can find $m\in \set{1,k-1}$ such that $\alpha(\set{1,m})\subseteq\set{1,m}$ and $\alpha(\set{m+1,k})\subseteq\set{m+1,k}$. The idea is then to create two copies of the original term: in the first one we keep only the first $m$ elements of the tensor product of each node, and in the second one we keep the last $k-m$ copies. Then we unfold these terms by applying the induction hypothesis, and  finally we gather them to obtain the  unfolding of the original term. 
 
 %\smallskip
 %To illustrate this case, we consider the following function $\alpha$, whose graph is shown below
@@ -175,7 +176,7 @@ which keeps only the last $k-m$ elements of the tensor product, then applies the
 %\end{align*}
 
 
-When we apply $f_1$ and $f_2$ to the two copies of the original term, we get a term of type 
+When we apply $\ranked{f_1}$ and $\ranked{f_2}$ to the two copies of the original term, we get a term of type 
 \begin{align*}
 \ranked{ \reduce 2 (\mati m {(\tmonad \Sigma)}\otimes  \mati {k-m} {(\tmonad\Sigma)})}
 \end{align*}
@@ -191,7 +192,11 @@ When we apply $f_1$ and $f_2$ to the two copies of the original term, we get a t
 % \begin{center}
 % \includegraphics[scale=.08]{MyPic31.jpg}
 % \end{center}
-Apres une serie dinjections, de distributivites et de reductions de fold on obtien le resultat. Ptit truc: lorsqu'on reduit les fold, on a un bottom, qu'on fait remonter a la surface en utilisant une fonction d'error raising, a la fin on s'en debarasse dans le type en plongeant $\bot$ dans un arbre si on suppose que notre signature contient un element zeroaire et un element bianire. 
+At this point, we are almost done, we only need to transform the type in order to match the desired type. For that we increase the fold by applying the following prime functions
+\begin{align*}
+\ranked{\reduce m (\tmonad \Sigma)^m \to \reduce k (\tmonad \Sigma)^m \qquad \reduce {k-m} (\tmonad \Sigma)^{k-m} \to \reduce k (\tmonad \Sigma)^{k} }
+\end{align*}
+We swap the fold with the tensor product using the corresponding prime function, then we decrease the fold. This concludes the proof of the first case.
 \medskip
 
 Now consider the case where the graph of $\alpha$ is weakly connected. By monotonicity, we can show that either
@@ -201,10 +206,21 @@ Now consider the case where the graph of $\alpha$ is weakly connected. By monoto
 By symmetry, we suppose wlog that $\alpha^{-1}(k)=\emptyset$. We suppose also that $\alpha(k)=k-1$, the general case can be treated in a similar way.
 We consider as example the following function $\alpha$, whose graph, drawn below, is weakly connected
 \begin{center}
-\includegraphics[scale=.1]{MyPic32.jpg}
+\includegraphics[scale=.4]{graph-of-alpha}
 \end{center}
-we consider also the following $\alpha$-homogeneous term, where $\alpha$ is the function above, as running example for the weakly connected case. 
-
+Consider the function
+\begin{align*}
+\ranked{\reduce k \Sigma^k \to \reduce 2 (\reduce {k-1} \Sigma^{k-1}\otimes \Sigma)}
+\end{align*}
+which acts as in the following picture
+\begin{center}
+\includegraphics[scale=.4]{connected-alpha-hom}
+\end{center}
+If we inject both $\ranked{\reduce {k-1} \Sigma^{k-1}}$ and $\ranked{\Sigma}$ into $\rDelta\eqdef\ranked{\reduce {k-1} \Sigma^{k-1}+\Sigma}$, we get a term in the matrix power $\mati 2 \rDelta$. Note that the twists of such elements are the constant 1. We can then apply the unfolding function for constant-twists inputs
+\begin{align*}
+\ranked{\tmonad \mati 2 \Delta \to \mati 2 {\tmonad \Delta}}
+\end{align*}
+We can decompose the term $\tmonad \rDelta$ into  $\ranked{(\tmonad \reduce {k-1} \Sigma^{k-1})\odot \Sigma}$, by analyzing its structure. Now we can apply the induction hypothesis to unfold  $\ranked{\tmonad \reduce {k-1} \Sigma^{k-1}}$ into $\ranked{\reduce {k-1} (\tmonad \Sigma)^{k-1}}$. By applying the prime functions which permute the fold with the tensor product then increase the fold, we obtain the desired term.
 \end{proof}
 
 
