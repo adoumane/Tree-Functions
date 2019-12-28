@@ -106,11 +106,11 @@ $$\begin{array}{cc}
 \tmonad \Sigma \ar[r]& \reduce 1 \tmonad(\rSigma + 0 + 2)
         }}
     \end{array}$$ 
-\item \textbf{Unfolding.}
+\item \textbf{Monotone unfolding.}
 $$\begin{array}{cc}
         \ranked{
         \xymatrix@C=.7cm{
-\tmonad \mati k{\Sigma} \ar[r]& \mati k{( \tmonad \Sigma)}
+ \tmonad \reduce k \overbrace{(\rSigma \otimes \cdots \otimes \rSigma)}^{\black{\text{$k$ times}}} \ar[r]& \termset +   \reduce k \overbrace{(\tmonad\rSigma \otimes \cdots \otimes \tmonad\rSigma)}^{\black{\text{$k$ times}}} 
         }}
     \end{array}$$ 
 \end{itemize}

@@ -33,23 +33,25 @@ The set of terms can be phrased in terms of tensor products and coproducts, as t
 \end{align*}  where $\ranked \coprod$ denotes possibly infinite coproduct.
 
 \paragraph*{Folding.}
-The final datatype constructor called \emph{folding}. Folding has two main purposes: (1) reordering ports in a term; and (2) reducing arities by grouping ports into groups. More formally, there is one unary constructor $\reduce k \rSigma$ for every $k \in \set{1,2,3,\ldots}$.  An $n$-ary element of $\reduce k \rSigma$, which is called a \emph{$k$-fold}, consists of an element      $a \in \rSigma$  together with an  injective \emph{grouping}  function
+The final datatype constructor called \emph{folding}. Folding has two main purposes: (1) reordering ports in a term; and (2) reducing arities by grouping ports into groups. More formally, there is one unary constructor $\reduce k \rSigma$ for every $k \in \set{1,2,3,\ldots}$.  An $n$-ary element of $\reduce k \rSigma$, which is called a \emph{$k$-fold}, consists of an element      $a \in \rSigma$  together with an injective    \emph{grouping}  function
 \begin{align*}
-    f : \set{1,\ldots,\arity a} \to \underbrace{\set{1,\ldots,n}}_{\text{which group}} \times  \underbrace{\set{1,\ldots,k}}_{\substack{\text{which position}\\ \text{in the group}}}.
+    f :  \text{ports of $a$} \to \underbrace{\set{1,\ldots,n} \times \set{1,\ldots,k} }_{\text{these pairs are called \emph{sub-ports}}}
 \end{align*}
 We denote such an element as $a/f$ and draw it like this: \mypic{53}
-In the above picture there are $n=4$ groups of $k=3$ elements. The arity of $a$ is 5, and the 5 ports of $a$ are mapped by the grouping function to pairs (group, position) according to the lines in the picture. 
+In the above picture there are $4 \times 3$ sub-ports.
 
-Already for $k=1$, the constructor $\reduce 1$ is non-trivial, since it can reorder ports (using a non-monotone grouping function), or add dummy ports (using a non-surjective grouping function).
+Already for $k=1$, the constructor $\reduce 1$ is non-trivial. For example,  $\reduce 1 \tmonad \rSigma$ is a generalisation of terms where ports are not necessarily ordered left-to-right (because the grouping function need not be monotone), and some ports need not appear (because the grouping function need not be total); in other words this is the same as terms in the usual sense of universal algebra, with the restriction that each variable is used at most once (sometimes called linearity).
+
 When viewed as a family of datatype constructors,  folds have a monad-like structure -- they are a graded  monad~\cite[p. 518]{fujiShinyaMellies2016}. The unit is the operation 
 \mypic{98}
-of type $\ranked{\Sigma \to \reduce 1 \Sigma}$, while  the product (or flattening) is the family of operations $\ranked{\reduce k \reduce m \Sigma \to \reduce {k \cdot l} \Sigma}$, indexed by $k,l \in \set{1,2,\ldots}$ that is illustrated in the following picture:
+of type $\ranked{\Sigma \to \reduce 1 \Sigma}$, while  the product (or flattening) is the family of operations $\ranked{\reduce {k_2} \reduce {k_1} \Sigma \to \reduce {k_1 \cdot k_2} \Sigma}$, indexed by $k_1,k_2 \in \set{1,2,\ldots}$ that is illustrated in the following picture:
 \mypic{99}
-More formally, the flattening of two folds $(a/f)/g$ has the grouping function defined by
+More formally, the flattening of two folds $(a/{f_1})/{f_2}$ has the grouping function defined
 \begin{align*}
-i \mapsto (x', \!\!\!\!\overbrace{(y',y)}^{\substack{\text{represented}\\ \text{as a number in}\\ \text{$\set{1,\ldots,kl}$}}}\!\!\!\!) \qquad \text{where} \begin{cases}
-    (x,y) &= f(i)\\
-    (x',y') &= g(x)Figure
+    % \label{eq:fold-grouping}
+i \mapsto (i_2, \underbrace{(q_1 -1)k_2 + q_2}_{\substack{\text{bijection between} \\ \set{1,\ldots,k_1} \times \set{1\ldots,k_2} \\ \text{and $\set{1,\ldots,k_1k_2}$}}}) \qquad \text{where} \begin{cases}
+    (i_1,p_1) &= f_1(i)\\
+    (i_2,p_2) &= f_2(i_1)
 \end{cases}
 \end{align*}
 % $k=2$, $n=4$, and $a$ has arity $a$. There  The groups are  and the arity of $a$ is 6, and $f$ is
@@ -95,11 +97,13 @@ i \mapsto (x', \!\!\!\!\overbrace{(y',y)}^{\substack{\text{represented}\\ \text{
     \begin{align*}
     \ranked{\tmonad \rSigma \qquad \rSigma_1 \otimes \rSigma_2 \qquad \rSigma_1 + \rSigma_2 \qquad \reduce k \rSigma},
     \end{align*}
-    to ranked sets which are either finite or equal to 
+    to ranked sets which are either finite or equal to the \emph{terminal ranked set}  defined by\footnote{The reason for this notation is that the terminal set can be used to model partial functions. A partial function of type  $\ranked{ \Sigma \to \Gamma}$ can be modelled as a total function of type $\ranked{\Sigma \to \Gamma + \termset}$, which outputs elements of $\termset$ instead of  undefined values.
+    }
     \begin{align*}
     \termset \eqdef  \underbrace{\redset{\naryterm 0, \naryterm 1, \naryterm 2,\ldots}.}_{\substack{\text{for each arity $i$, one} \\ \text{element denoted by $i$}}}
     \end{align*}
 \end{definition}
+
 
 \subsection{Derivable functions}
 \smallskip
@@ -121,7 +125,7 @@ can be lifted, in the natural way, along the type constructors to new arity pres
 
 We now introduce the main new definition of this paper.
 
-\begin{definition}[Derivable function]
+\begin{definition}[Derivable function]\label{def:derivable-function}
     The class of \emph{derivable} functions is the least class which contains:
     \begin{itemize}
     \item for every $\rSigma$, the unique arity preserving function $\ranked{\Sigma \to \termset}$;
@@ -196,7 +200,7 @@ Each of these functions will play a key role in one of the main results of the p
 %  We will highlight the moments when such functions are used.  
 
 
-\paragraph*{Factorisations}
+\subsubsection{Factorisations}
 We begin with the factorisation functions 
 \begin{align*}
     \overbrace{\ancfact}^{\text{ancestor}}, \overbrace{\decfact}^{\text{descendant}}  : \ranked{\tmonad(\Sigma_1+\Sigma_2) \to \tmonad(\tmonad \Sigma_1 + \tmonad \Sigma_2)}.
@@ -208,12 +212,13 @@ Define a \emph{factorisation} of a term   to be any term of terms that flattens 
     % \mypic{14}
 The factorisation functions $\ancfact$ and $\decfact$ are used to transform a term  into a factorisations; with the partition of the input alphabet used to choose the factorisation.  Consider an input term $t \in \ranked{\tmonad(\rSigma_1 + \rSigma_2)}$.
         We say that two non-port nodes have \emph{same type} if both have labels in the same  $\ranked{\Sigma_i}$; otherwise we say that non-port nodes have \emph{opposing type}.  Call two non-port nodes \emph{ancestor equivalent}  if they have the same proper ancestors of opposing type. Call two non-port nodes \emph{descendant equivalent}  if they  are ancestor equivalent and they have the same proper descendants of opposing type. Here is a picture, with $\ranked{\Sigma_1}$ being red and $\ranked{\Sigma_2}$ being blue: 
-        \begin{center}
-      \includegraphics[scale=.3]{facto-up-down.pdf}
-        \end{center}
+        \mypic{111}
+    %     \begin{center}
+    %   \includegraphics[scale=.3]{facto-up-down.pdf}
+    %     \end{center}
         For both of these equivalence relations, the equivalence classes are connected with respect to the parent-child relation, and therefore the equivalences can be seen as factorisations. Furthermore, the equivalence classes contain only nodes of same type.  The function $\ancfact$ maps a term to factorisation corresponding to its ancestor equivalence relation, likewise we define $\decfact$ for  descendant factorisations.
     
-        \paragraph*{Pre-order traversal.} The preorder traversal function  
+        \subsubsection{Pre-order traversal.} The preorder traversal function  
         \begin{align*}
             \ranked{\preorder : \tmonad \Sigma \to \reduce 1 \tmonad (\rSigma + 0 + 2)}
         \end{align*}
@@ -251,21 +256,4 @@ The $\preorder$ function respects the input port order, this is the reason  why 
 % \end{align*}
 % where $g$ is defined so that it matches ...
 
-\paragraph*{Examples of derivations.} This completes the description of the prime functions.  To get a feeling for the derivable functions, we derive the function from Example~\ref{ex:filter-first}.
-\noindent\begin{example}\label{ex:filter} 
-   Define a \emph{term homomorphism}  to be any function of type $\tmonad \rSigma \to \tmonad \rGamma$ which is obtained by applying some function
-   \begin{align*}
-   \ranked{h : \rSigma \to \tmonad \rGamma}
-   \end{align*}
-   to every node of the input term. Examples of term homomorphisms include the function from Example~\ref{ex:filter-first} which removes all unary letters, or the $k$-copying function in item 1 of the definition of first-order tree-to-tree transductions.  We claim that every term homomorphism with a finite input alphabet is derivable. The function $\ranked{h}$ is a prime function, because it has a finite domain thanks to the assumption that the input alphabet is finite. We can list $\ranked h$ to terms using~\eqref{eq:liftterm}, and then compose it with the flattening operation in the term monad, thus giving the homomorphism:
-   \begin{align*}
-   \ranked{\xymatrix{
-\tmonad \rSigma \ar[r]^{\tmonad h} &
-\tmonad \tmonad \rGamma \ar[r]^{\flatt} &
-\tmonad \rGamma
-   }}
-   \end{align*} 
-\end{example}
-
-More examples of derived functions are given in Appendix.~\ref{sec:AppendixExamples}.
 

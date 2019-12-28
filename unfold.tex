@@ -1,30 +1,6 @@
-\paragraph*{Unfolding of the matrix power.}
-%The general idea behind the  unfolding operation 
-%\begin{align*}
-%\ranked{
-%    \unfoldsmall : \shallowterm {(\reduce k   \Sigma)} {\Gamma^k} \to \reduce 1 (\shallowterm \Sigma \Gamma)
-%}
-%\end{align*} 
-%is to eliminate a $k$-fold by matching it with a $k$-th power. 
-%The unfolding operation is explained in the following picture for $k=2$: 
-%        \begin{center}
-%        \includegraphics[scale=.36]{shallow-unfold.pdf}
-%        \end{center}
-
-\begin{figure}[]
-    \mypic{101}    
-    \caption{Unfolding the matrix power}
-    \label{fig:unfold}
-\end{figure}
-We now explain the unfolding operation 
-\begin{align*}
-    \ranked{\unfold : \tmonad \reduce k \overbrace{(\rSigma \otimes \cdots \otimes \rSigma)}^{\black{\text{$k$ times}}} \to  \reduce k \overbrace{(\tmonad\rSigma \otimes \cdots \otimes \tmonad\rSigma)}^{\black{\text{$k$ times}}}\ }.
-    \end{align*}
-We begin by introducing some notation.
-%Roughly speaking, the several trees are the contents of registers in a register automaton.
-%, and the single tree that represents them is the computation tree of the register automaton.  We then show that several trees stored in a computation  can be unfolded in a derivable way. 
-\miktodo{mention the restriciton on monotone twists}
-
+\subsubsection{Unfolding of the matrix power}
+\label{sec:unfolding}
+The final prime function is called monotone unfolding. The general idea is that this function unpacks a representation of several trees inside a single tree.  Before describing this function in more detail,  we introduce some notation.
 \begin{definition}
     [Matrix power] For $k \in \set{1,2,\ldots}$ define the $k$-th matrix power\footnote{
         The name  matrix power is based the matrix power in  universal algebra (for the latter, see~\cite{Taylor1975} or~\cite{szendrei1990simple}). Roughly speaking, the restrictions that we place on the original definition correspond to the single-use and monotone conditions from Definition~\ref{def:stt}. 
@@ -34,11 +10,62 @@ to be
  \mati k \rSigma \quad \eqdef \quad \ranked{\reduce k \rSigma^k}.
 \end{align*}
 \end{definition}
-In terms of the matrix power notation, the type of the unfolding function is $\ranked{\tmonad \mati k{\Sigma} \to \mati k{( \tmonad \Sigma)}}$. 
-Here is a picture of a  binary element in the third matrix power:
+Here is a picture of elements in the third matrix power:
 \mypic{102}
-An $n$-ary  element of the $k$-th matrix power  can be seen as having a group of $k$ incoming edges, and each of the $n$ ports can be seen as a group of $k$ outgoing edges. The idea  unfolding  is that it matches the $k$ incoming edges in a node with the $k$ outgoing edges in the parent port; it also removes the unreachable nodes. This is illustrated in Figure~\ref{fig:unfold}. The unfolding operation will be discussed in more detail in Section~\ref{sec:stt-derivable}, and a formal definition is given in the appendix.
+We use the name \emph{registers} for the coordinates $1,\ldots,k$ in the $k$-th matrix power. This terminology will be motivated later on in the paper, where the coordinates of the matrix power will correspond to registers in transducer. 
 
+
+\begin{figure}[]
+    \mypic{101}    
+    \caption{Unfolding the matrix power}
+    \label{fig:unfold}
+\end{figure}
+
+An element of the $k$-th matrix power  can be seen as having a group of $k$ incoming edges, and each of its ports  can be seen as a group of $k$ outgoing edges. The idea behind  unfolding  is that it matches the $k$ incoming edges in a node with the $k$ outgoing edges in the parent port; it also removes the unreachable nodes. This is illustrated in Figure~\ref{fig:unfold}. A formal definition of the  unfolding operation  is given in the appendix.
+
+There are two variants of the unfolding operation:
+\begin{align*}
+    \underbrace{\ranked{\tmonad \mati k{\Sigma} \to \mati k{( \tmonad \Sigma)}}}_{\text{general unfolding}} \qquad 
+    \underbrace{\ranked{\tmonad \mati k{\Sigma} \to \termset + \mati k{( \tmonad \Sigma)}}}_{\text{monotone unfolding}} 
+    \end{align*}    
+The general variant is the one that we have just described. The monotone variant -- which is the one that is included in the prime functions from Figure~\ref{fig:not-explained} -- is explained below.
+
+
+
+% For an element of the matrix power
+% \begin{align*}
+% a =    \tensorpair{a_1,\ldots,a_k}/f \in \mati k \rSigma,
+%     \end{align*}
+% define its \emph{rewiring function} to be  the function
+%     \begin{align*}
+%     \coprod_{i \in \set{1,\ldots,k}} \text{ports of $a_i$} \quad \to \quad  \underbrace{\text{(ports of $a$)} \times \set{1,\ldots,k}}_{\text{sub-ports of $a$}}
+%     \end{align*}
+% which is obtained by first interpreting of $a_i$ as one of the ports in the tensor tuple $\tensorpair{a_1,\ldots,a_k}$, and then applying the grouping function $f$. Here is a picture:
+% \begin{center}
+%     (todo picture)
+% \end{center}
+% For a node $v$ of the term $t$ and $i \in \set{1,\ldots,k}$, define the $i$-th sub-node of $v$ to be the pair  $(v,i)$. We define a tree structure on sub-nodes as follows. Let   $(v,i)$ be a sub-node, and let $a_i \in \rSigma$ be the $i$-th component in the label of node $v$.  The arity of the sub-node $(v,i)$ is inherited from $a_i$, and its children are defined as follows. Take a port $x \in \set{1,\ldots,\text{arity of $a_i$}}$.  Apply the rewiring function to $(i,x)$, yielding a pair $(j,y)$. Take the $y$-th child of node $v$, call it $w$. The $x$-th child of $(v,i)$ is defined to be $j$-th sub-node of the $y$-th child of $v$.
+
+% The unfolding of $t$ is  defined using the above tree structure. For $j \in \set{1,\ldots,k}$, the root of $t_i$ is the $i$-th sub-node of the root of $t$. The nodes in $t_i$ are all of the sub-nodes of $t$ that can be reached from this root by the child relation defined above, with the corresponding tree structure. Finally, 
+
+\paragraph*{Monotone unfolding.} The general unfolding operation is too powerful to be included in the derivable functions. To see the problem, consider the following example, where two registers are swapped in each node of the input tree:
+\mypic{108}
+For inputs with an odd number of swaps (as in the above picture), the output of unfolding has a white leaf in the first register, and for inputs with an even number of swaps, the output has a white leaf in the first register. This shows how  general unfold can simulate  a certain amount of modulo counting, and therefore cannot be captured by first-order transductions. In fact, as we will see later in Theorem~\ref{thm:chain-transductions} -- having general unfold would lead to a more general class of transductions, corresponding to a fragment of \mso called \emph{chain logic}.
+
+To avoid the problems with cyclic swaps, we impose a monotonicity restriction.  Let  $a \in \mati k \rSigma$ be an element of the matrix power,  let $p,q \in \set{1,\ldots,k}$ be registers, and let  $i$ be a port of $a$. We write $
+     q \to_i p$
+if register $q$ in the $i$-th outgoing edge  is connected to  register $p$ in root, as described in the following picture:
+\mypic{109}
+One can see that $\to_i$ is a partial function from $\set{1,\ldots,k}$ to $\set{1,\ldots,k}$. We call it the  \emph{twist function of the $i$-th port}. For example, the twist function in of the unique port in 
+\mypic{110}
+swaps registers $1$ and $2$. The idea behind monotone unfolding is to prohibit such swapping. Call  element of the matrix power  \emph{monotone} if for every port, its twist functions is monotone (when restricted to inputs where it is defined). The \emph{monotone unfolding} function is then defined as follows: if the input contains at least one label which is non-monotone, then the output is the error value $\termset$, otherwise the output is the same as for the general unfolding.
+
+\paragraph*{Is unfolding derivable?} The  prime functions in our main theorem  are meant to be simple syntactic rewritings. It is debatable whether the  unfolding operation can be called a simple syntactic rewriting. For example, proving that monotone unfolding is a first-order transductions requires some non-trivial effort, including an invocation of the Sch\"utzenberger-McNaughton-Papert theorem about first-order logic on words being the same as counter-free automata~\cite[Theorem 10.5]{McNaughtonPapert71}. From this perspective, one can naturally ask: is it possible to break down monotone unfolding into simpler primitives?
+In the appendix, we devote considerable resources to answering this question. We propose one new  datatype
+\begin{align*}
+\shallowterm \rSigma \rGamma \quad \eqdef   \quad \ranked{\coprod_{\black{a \in} \rSigma} } \overbrace{\ranked{\Gamma \otimes \cdots \otimes \Gamma},}^{\text{arity of $a$ times}}
+\end{align*}
+which represents trees of depth two, together with seventeen additional prime functions, which can be called syntactic rewriting without stretching the reader's patience. Then, we show that monotone unfolding can be derived, in the presence of  the new datatype and functions. The proof of this result is one of the main technical contributions of this paper, and takes half of the appendix.
 
 % Suppose that the input is 
 % \begin{align*}
