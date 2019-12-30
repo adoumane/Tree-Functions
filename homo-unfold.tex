@@ -48,7 +48,7 @@ We say that a term $ t \in \tmonad \mati k \rSigma$ is a \emph{constant-twist te
  \end{center}
  This section is devoted to proving the following lemma. 
 
-\begin{lemma}\label{lem:homo-twist}
+\begin{lemma}\label{lem:constant-twist}
     Let $k \in \set{1,2,\ldots}$. There is a derivable function 
     \begin{align*}
         \ranked{f : \tmonad \mati k \rSigma \rightharpoonup \mati k {(\tmonad \Sigma)} }
@@ -241,7 +241,7 @@ The rest of this section is devoted to proving the following lemma.
 which coincides with term unfolding for all inputs which are homogeneous.
 \end{lemma}
 
-\begin{lemma}
+\begin{lemma}\label{lem:decomp-twist-2}
 Let $\alpha:[1,k]\to [1,k]$ and $\beta:[1,k]\to [1,k]$ be two monotone functions such that
 \begin{align*}
 \alpha\beta=\alpha.
@@ -257,9 +257,18 @@ then we have also
 \beta[m+1,k]\subseteq [m+1,k]
 \end{align*}
 
- If the graphs of $\alpha$ and $\beta$ are both weakly connected, then the image of $\alpha$ and the image of $\beta$ are both singletons.
+ If the graphs of $\alpha$ and $\beta$ are both weakly connected, then  $\alpha$ and  $\beta$ are both constant functions.
 \end{lemma}
 
 \begin{proof}[Proof of Lemma~\ref{lem:homo-2-twist}]
-
+We proceed by induction on $k$. The base case, ie when $k=1$ is realized by the untwist prime function. Let us treat the inductive case. First, we factorize our term in such a way that in each factor, either all the internal twits are weakly connected, or all of them are not weakly connected. To realize this factorization, it is enough to detect the first nodes (that is the closest to the root) where the twist becomes not weakly connected. Indeed, by Lemma\ref{lem:decomp-twist-2}, we know that the twits of the sub-tree rooted in such nodes are all not weakly connected. To detect these node, the following prime function is of particular interest
+\begin{center}
+\includegraphics[scale=.4]{last-prime-function}
+\end{center}
+If we analyze this factorization, it has the form $\ranked{\tmonad \mati k \Sigma \odot \tmonad \mati k \Sigma}$, where the root contains only connected internal twists and the leaves only weakly connected internal twists. By Lemma~\ref{lem:decomp-twist-2}, we know that the internal twists of the root  are constant, and that in each leave, there is an integer $m$ such that every internal twist $\alpha$ satisfies
+\begin{align*}
+\alpha[1,m] \subseteq [1,m]  \text{ and } 
+\alpha[m+1,k]\subseteq [m+1,k].
+\end{align*}
+To unfold the root, we apply Proposition\ref{lem:constant-twist}. To unfold each leave, we proceed by induction, in the exact same way as the non-connected case in the proof of Proposition~\ref{lem:homo-twist}. Finally to untwist the whole term, we apply the prime shallow unfold function. 
 \end{proof}
