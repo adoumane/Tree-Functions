@@ -66,7 +66,22 @@ The semantics of $4$-$\mathsf{CTL}$ formulas is as before. The connective $\next
 % Let us explain how Lemma~\ref{} can be derived from Theorem~\ref{}. First Comment plonger les arbres de $\trees \rGamma$ dans le framework de Schlingloff. Soit $b$ l'arite maximale des elements de $\rGamma$. On denote par $\overline{\rGamma}$ le (unranked) set underlying $\rGamma$. 
 %Il y a un plongement naturel 
 %$$ \overline{\bullet}: \trees\rGamma \to \trees_b\Gamma$$
- 
+
+\paragraph*{Encoding our trees by Schlingloff's trees}
+\paragraph*{Translating first-order formulas}
+\begin{lemma} Let $\rGamma$ be a ranked set and $\phi$ be a first-order formula.
+\begin{align*}
+\forall t\in \trees \rGamma, \qquad t\models \phi \leftrightarrow t \models [\phi]
+\end{align*} 
+\end{lemma}
+
+\paragraph*{From 4-CLT to 2-CTL}
+ \begin{lemma} Let $\rGamma$ be a ranked set and $\phi$ be a first-order formula.
+\begin{align*}
+\forall t\in \trees \rGamma, \qquad t\models \overline{\phi} \leftrightarrow [t] \models \phi
+\end{align*} 
+\end{lemma}
+
 \subsection{First-order relabelling are derivable}\label{sec:relabeling}
 
 \begin{lemma}\label{lem:nextmod}
