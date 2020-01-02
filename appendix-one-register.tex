@@ -190,7 +190,7 @@ In this section we show that computing the normal form of $\LinTerms S X$ terms 
 
 Let us introduce some terminology before presenting the proof of this theorem. In a $\lambda$-term, we call \emph{redex} a pattern of the following form 
 \begin{center}
-\includegraphics[scale=1.5]{redex.pdf}
+\includegraphics[scale=1.5]{pictures/redex.pdf}
 \end{center}
 that is, an application node whose left child is an abstraction node. In a well-typed $\lambda$-term, we define the \emph{type of a redex} to be the type of the left sub-term of its application node. In the figure above, the type of the redex is $\tau\rightarrow\sigma$. If the abstraction node of a redex is labeled by $\lambda x$, we say that $x$ is the variable of the redex and that it is an \emph{$x$-redex}. 
 
@@ -228,7 +228,7 @@ As discussed earlier in the proof sketch, we will need to evaluate \lambdaterms 
 \end{align*}
 Thus, \lambdaterms with ports are the inhabitants of $\tmonad \lamrank X$. Normalization of these terms generalize that of usual \lambdaterms in a straightforward way: the $i$-th port is replaced by a fresh variable $x_i$, the obtained \lambdaterm (without ports) is evaluated as usual, then the variable $x_i$ is replaced back by the port $i$, as one can see in the following example.  
   \begin{center}
-\includegraphics[scale=1.4]{normalization-with-ports.pdf}
+\includegraphics[scale=1.4]{pictures/normalization-with-ports.pdf}
 \end{center}
   Note that when a \lambdaterm is linear, its normal form has the same number of ports. Note also that respecting the original order of ports in the normal form (which is important for compositionality) may twist ports, as in the example above. As a consequence, normalization of linear \lambdaterms with ports is an arity preserving function of  type:
   \begin{align*}
@@ -250,7 +250,7 @@ Since thin $\lambda$-terms branch only on redexes, the result of their evaluatio
 
 The left $\lambda$-term below is linear and thin. The colored nodes are the ones which are not redexes nor the variables of these redexes. The right $\lambda$-term is its normal form: we can see that the order of in which the nodes appear top-down follows the depth-first traversal of the original $\lambda$-term.  
 \begin{center}
-		\includegraphics[scale=.28]{normalisation-thin}
+		\includegraphics[scale=.28]{pictures/normalisation-thin}
 		\end{center}
 
 \begin{proposition}\label{prop:EvaluateThin}
@@ -280,7 +280,7 @@ The node $n$ is the greatest (that is the left-most) node in the sub-term $t|_m$
 We proceed by induction on the length of the path between $m$ and $n$. When it is $0$ the result is clear. Suppose by contradiction that it is strictly greater than $0$ and that there is a node $o$ which is strictly greater than $n$. We take $o$ to be the smallest node which is greater than $n$. Since $t$ is thin, the least common ancestor $l$ between $n$ and $o$ is an application node of a redex. Since $n$ is smaller than $o$, $n$ is the left descendant  of $l$, in other words it is the descendant of the left child $p$
 of $l$, which is a binder. The node $m, n, o$ and $p$ are illustrated below:
 \begin{center}
-		\includegraphics[scale=.4]{lemma-thin.pdf}
+		\includegraphics[scale=.4]{pictures/lemma-thin.pdf}
 \end{center} 
  By induction hypothesis, the variable
 bound by $p$ is strictly greater than $n$. Is is also strictly smaller than $o$, which gives a contradiction and concludes the proof. 
@@ -293,7 +293,7 @@ Let us go back to the proof of our proposition. Consider two inner nodes $n, m$ 
 By Lemma~\ref{lem:internalLemma}, $m$ is smaller w.r.t. the depth-first order than the node $r$ of the variable bound by $q$ . 
 We are then left with the following two situations. The first case, illustrated by the left figure below, is when $r$ is a descendant of $m$ in $t$. In this case, after one reduction step $n$ will be a descendant of of $m$. The other case is when $m$ is in the left of $r$ in $t$, as illustrated by the right figure below. In this case, after one reduction step, the lowest common ancestor between $m$ and $n$ will be a descendant of $p$, and we can conclude by induction hypothesis. 
 \begin{center}
-\includegraphics[scale=.4]{cases-lemma}
+\includegraphics[scale=.4]{pictures/cases-lemma}
 \end{center}
 \end{itemize}
 This concludes the proof of the first claim.
@@ -302,7 +302,7 @@ This concludes the proof of the first claim.
 
 Let us construct now a derivable function which computes the normal form of linear thin $\lambda$-terms. We illustrate this construction on the term $t$ below which will be our running example in this proof. 
 \begin{center}
-\includegraphics[scale=.4]{running-thin}
+\includegraphics[scale=.4]{pictures/running-thin}
 \end{center}
 
 \begin{proof}[Proof of Proposition~\ref{prop:EvaluateThin}] Let $t$ be a linear thin $\lambda$-term in $\tmonad \lamrank X$.
@@ -339,7 +339,7 @@ The query $\varphi$ being first-order, its characteristic function is derivable 
 When we apply this function to $t$, we get a term in $\tmonad(\lamrank X+\lamrank X)$ term below. 
 Below is the effect of this first step on our running example. We colored in red the nodes belonging to the first copy of $\lamrank X$, that is the nodes satisfying the query $\varphi$. These nodes are the ones that will disappear in the normal form of $t$. 
 \begin{center}
-\includegraphics[scale=.4]{running-thin-2}
+\includegraphics[scale=.4]{pictures/running-thin-2}
 \end{center}
 \item After that, we apply the depth-first traversal function 
 \begin{align*}
@@ -347,7 +347,7 @@ Below is the effect of this first step on our running example. We colored in red
 \end{align*}
 After this step, our initial term becomes
 \begin{center}
-\includegraphics[scale=.4]{running-thin-3}
+\includegraphics[scale=.4]{pictures/running-thin-3}
 \end{center}  
 In this term, the nodes of the normal form appear in the right order thanks to Prop.~\ref{prop:normal-form-depth-first}. Now, we only need to get rid of the redexes and the variable nodes that participated in the computation of the normal form (that is the ones colored in red) together with the nodes $\grayball$ and $\grayballbin$ introduced by the depth-first traversal function. 
 \item For this purpose, we apply the function 
@@ -363,7 +363,7 @@ In this term, the nodes of the normal form appear in the right order thanks to P
  
  After this step, our example term becomes    
 \begin{center}
-\includegraphics[scale=.4]{running-thin-4}
+\includegraphics[scale=.4]{pictures/running-thin-4}
 \end{center}
 
 \item Now consider the function 
@@ -373,7 +373,7 @@ In this term, the nodes of the normal form appear in the right order thanks to P
  which is the identity function, except for the following finite set of terms for which it is defined in figure~\ref{fig:definition-g}.
 \begin{figure*}
 \begin{center}
-\includegraphics[scale=.4]{function-g}
+\includegraphics[scale=.4]{pictures/function-g}
 \end{center}
 \caption{Definition of the function $g$.} \label{fig:definition-g}
 \end{figure*}
@@ -386,7 +386,7 @@ Now back to our term, we replace the  $\ranked{\tmonad 1}$ factors by the empty 
 \end{align*}
 which untwists two consecutive applications of $\reduce 1$. Doing so, we get a term of type  $$\ranked{\reduce 1\tmonad(X^\lambda+X^\lambda+0+2)}$$ which is  the normal form of $t$. Our running example becomes then
 \begin{center}
-\includegraphics[scale=.4]{running-thin-5}
+\includegraphics[scale=.4]{pictures/running-thin-5}
 \end{center}
 
 \item Note that we obtained the desired term, but not with the desired type. To obtain a term in 
@@ -402,7 +402,7 @@ $\ranked{\reduce 1\tmonad{X^\lambda}}$, we get rid of the labels $0+2$ by transf
 
 In a linear $\lambda$-term, we call \emph{full redex} a set of nodes  containing a redex, the node of its variable, together with the set of nodes between them, as illustrated below
 \begin{center}
-\includegraphics[scale=1.5]{full-redex.pdf}
+\includegraphics[scale=1.5]{pictures/full-redex.pdf}
 \end{center}
 
 

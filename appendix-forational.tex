@@ -23,14 +23,14 @@ In this section, we provide more details about the proof of Lemma~\ref{lem:schli
     \end{enumerate}
     In items \ref{it:child} -- \ref{it:since}, the alphabet is $\rSigma$, so the characteristic functions have type $\trees \rSigma \to \trees(\rSigma + \rSigma)$. 
 \end{lemma}
-Clearly the functions in the lemma are first-order tree relabelings, and first-order tree relabelings are easily seen to be closed under composition, which gives the right-to-left inclusion in the lemma. The hard part is the left-to-right inclusion, which says that every first-order tree relabeling can be decomposed into functions as in items~\ref{it:relabeling} -- \ref{it:since}. 
+Clearly the functions in the lemma are first-order tree relabeling, and first-order tree relabeling are easily seen to be closed under composition, which gives the right-to-left inclusion in the lemma. The hard part is the left-to-right inclusion, which says that every first-order tree relabeling can be decomposed into functions as in items~\ref{it:relabeling} -- \ref{it:since}. 
 The first  step in the proof of  the right-to-left inclusion is the observation that  every first-order tree relabeling can be decomposed as 
 \begin{align*}
     g \circ f_1 \circ \cdots \circ f_n
 \end{align*}
 where $g$ is a relabeling as in item~\ref{it:relabeling} of the lemma and each $f_i$ is a  characteristic function of some unary query (not necessarily of the simple form indicated in items~\ref{it:child} -- \ref{it:since} in the lemma). This is a simple observation: the functions $f_1,\ldots,f_n$ annotate the tree with the truth values of the unary queries used in the definition of the  first-order relabeling, and $g$ uses these truth values to select the appropriate output label. The hard part of the lemma is showing that each $f_i$  can be further decomposed into functions as indicated in the lemma. This is where we us the result of Schlingloff~\cite[Theorem 2.6]{schlingloff1992expressive}, which says that all first-order definable tree properties can be defined using a temporal logic that has operators similar to the ones used in items~\ref{it:child} -- \ref{it:since} of the lemma. 
 
-The following table summeraizes our framework (first column) and Shcligloff's one (second column). The first row describes the model of trees under consideration, the second row the correponding version of first-order logic, and the third row the correponding temporal logic. 
+The following table summarizes our framework (first column) and Schlingloff's one (second column). The first row describes the model of trees under consideration, the second row the corresponding version of first-order logic, and the third row the corresponding temporal logic. 
 \begin{center}
 \begin{tabular}{C{1.8cm}|C{2.8cm}|C{2.8cm}|}
 \cline{2-3}
@@ -59,14 +59,14 @@ Schlingloff's theorem says that P-FO formulas are equivalent to 4-CTL formulas. 
 For this purpose, we will show how to translate every ranked tree $t$ over $\rGamma$ into a model $[t]$ over a well chosen set of propositions $P$. Then we will apply the following scheme
 
  
-    $$\xymatrix@C=2cm{
+    $$\xymatrix@C=2.5cm{
         \varphi \in \rGamma\text{-FO} 
-        \ar[r]^{\forall t, \ t\models \varphi \ \leftrightarrow \ [t] \models \psi}_{\text{Lemma}~\ref{lem:from-Gamma-to-P-FO}}
+        \ar@{<->}[r]^{\forall t, \ t\models \varphi \ \leftrightarrow \ [t] \models \psi}_{\text{Lemma}~\ref{lem:from-Gamma-to-P-FO}}
         &
         \psi \in P \text{-FO}
-        \ar[d]^{\substack{\text{Schlingloff}\\\text{theorem}}} \\
+        \ar@{<->}[d]^{\substack{\text{Schlingloff's}\\\text{theorem}}} \\
        \theta \in \text{2-CTL}
-        \ar[r]^{\forall t, \ t\models \theta \ \leftrightarrow \ [t] \models \delta}_{\text{Lemma}~\ref{lem:from-4-CTL-to-2CTL}}
+        \ar@{<->}[r]^{\forall t, \ t\models \theta \ \leftrightarrow \ [t] \models \delta}_{\text{Lemma}~\ref{lem:from-4-CTL-to-2CTL}}
         &
         \delta \in \text{4-CTL}
     }$$    

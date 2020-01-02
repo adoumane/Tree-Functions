@@ -1,16 +1,15 @@
-\amitodo{There is a new symbol for ports. Adapt this new notation.}
-\amitodo{The notation $1$ for $\bot$ is a bit ambiguous. There is a possible confusipon with the elment $1$. What should I think of $\set{1}$?}
+
 \section{Examples}
 
-\subsection{Examples of fo tree-to-tree transductions}\label{sec:appendix-example-fo-transductions}
+\subsection{Example of an FO tree-to-tree transduction}\label{sec:appendix-example-fo-transductions}
 
 
 \begin{example}\label{ex:pre-order}
     Consider the ranked alphabets
 \begin{center}
-    \includegraphics[scale=.4]{input-alphabet}
+    \includegraphics[scale=.4]{pictures/input-alphabet}
     
-    \includegraphics[scale=.4]{output-alphabet}
+    \includegraphics[scale=.4]{pictures/output-alphabet}
 \end{center}    
     and the tree-to-tree function which does a pre-order traversal of the input tree, as described in the following picture:
 \begin{center}
@@ -38,10 +37,10 @@ Given two types $\rSigma, \rGamma$ and an arity preserving  function $\ranked{f:
 $$ \ranked{f:\tmonad (\rSigma+\rGamma)\to\tmonad \rSigma}$$
 which erases the elements of $\rGamma$ from the input term. This function is well defined since erasing unary symbols does not break the tree structure of the input.
 Let us explain why this is a derivable function.
-Consider the basic functions $\ranked{\unit_\rSigma:\rSigma\to\tmonad\rSigma}$ and the constant function $\ranked{\mathsf{empty}:\rGamma\to\tmonad\rSigma}$ which associates to every element of $\rGamma$ the empty term. We compose the following two functions 
+Consider the basic functions $\ranked{\unit:\rSigma\to\tmonad\rSigma}$ and the constant function $\ranked{\mathsf{empty}:\rGamma\to\tmonad\rSigma}$ which associates to every element of $\rGamma$ the empty term. We compose the following two functions 
 \begin{align*}
 \xymatrix{
-    \ranked{\rSigma+\rGamma}\quad \ar[r]^-{\ranked{\unit_\Sigma+\mathsf{empty}}} & \quad \ranked{\tmonad\rSigma+\tmonad\rSigma}\ar[r]^-{\ranked{\mathrm{forget}}} &\tmonad\rSigma
+    \ranked{\rSigma+\rGamma}\quad \ar[r]^-{\ranked{\unit+\mathsf{empty}}} & \quad \ranked{\tmonad\rSigma+\tmonad\rSigma}\ar[r]^-{\ranked{\mathrm{forget}}} &\tmonad\rSigma
 },
 \end{align*}
 Then we lift the obtained function to terms, and compose the result with the $\flatt$ function to obtain our function $\ranked{f}$.  
@@ -56,15 +55,15 @@ which adds to every node of a term in $\tmonad \rSigma$ the label  of its parent
 % from  $(\rGamma\cup\bot)^{\leq n}$, whose lenght is the arity of the node, and such that the $i^{th}$ element of the  list is the symbol of its $i^{th}$ sibling if it has one, otherwise it is $\bot$.
 Let us explain how $\ranked{\mathsf{Parent}}$ can be derived. To illustrate this construction, we use the following alphabet
 \begin{center}
-		 \includegraphics[scale=.4]{parent-alphabet.pdf}
+		 \includegraphics[scale=.4]{pictures/parent-alphabet.pdf}
 		\end{center}
 and the following term as a running example.
 \begin{center}
-		 \includegraphics[scale=.4]{parent-example.pdf}
+		 \includegraphics[scale=.4]{pictures/parent-example.pdf}
 		\end{center}
 We denote by $\ranked{\Gamma_1}$ the ranked set obtained from $\rGamma$ by setting the arity of every element to $1$. If $a$ is a element of $\rGamma$, we denote by $a_1$ the corresponding element of $\ranked{\Gamma_1}$. In our example, the alphabet $\ranked{\Gamma_1}$ is
 \begin{center}
-		\includegraphics[scale=.4]{parent-unary-alphabet.pdf}
+		\includegraphics[scale=.4]{pictures/parent-unary-alphabet.pdf}
 		\end{center}
 \begin{enumerate}
 \item  First, we apply the homomorphism 
@@ -74,15 +73,15 @@ We denote by $\ranked{\Gamma_1}$ the ranked set obtained from $\rGamma$ by setti
 where $\ranked{g}$ is defined on the elements of $\rGamma$ as follows
 \begin{align*}
 \ranked{g: \Gamma} & \ranked{\to  \tmonad(\Gamma+\Gamma_1+1 )}\\
-      a & \mapsto a\tensorpair{1\tensorpair{a_1\tensorpair{*}},\dots, 1\tensorpair{a_1\tensorpair{*}}}
+      a & \mapsto a\tensorpair{1\tensorpair{a_1\tensorpair{\portletter}},\dots, 1\tensorpair{a_1\tensorpair{\portletter}}}
 \end{align*}
 In our example, the action of $\ranked{g}$ on the elements of $\rGamma$ looks like this
 \begin{center}
-		\includegraphics[scale=.4]{parent-function-g.pdf}
+		\includegraphics[scale=.4]{pictures/parent-function-g.pdf}
 				\end{center}
 Hence, after the application of the homomorphism $\ranked{\mathsf{Hom}_g}$, our initial term becomes
 \begin{center}
-		\includegraphics[scale=.4]{parent-hom.pdf}
+		\includegraphics[scale=.4]{pictures/parent-hom.pdf}
 		\end{center}
 \item We apply the factorization 
 \begin{align*}
@@ -90,7 +89,7 @@ Hence, after the application of the homomorphism $\ranked{\mathsf{Hom}_g}$, our 
 \end{align*}
  to separate the symbol $1$ form the other symbols. After this operation, each node lies in the same factor as (the element of $\ranked{\Gamma_1}$ representing) its parent. In our example, the obtained term is the following
 \begin{center}
-		\includegraphics[scale=.5]{parent-block.pdf}
+		\includegraphics[scale=.5]{pictures/parent-block.pdf}
 		\end{center}
 \item Consider the function 
 \begin{align*}
@@ -103,9 +102,9 @@ And let $k$ be the function
 \end{align*}
 which is the identity function, except for the following terms in which it is defined as follows
 $$\begin{array}{rll}
-a\tensorpair{*,\dots, *}& \mapsto & \tensorpair{a,0}\tensorpair{*,\dots,*}\\
-b_1\tensorpair{a\tensorpair{*,\dots,*}}&\mapsto& \tensorpair{a,b_0}\tensorpair{*,\dots,*}\\
-b_1\tensorpair{*} &\mapsto& *
+a\tensorpair{\portletter,\dots, \portletter}& \mapsto & \tensorpair{a,0}\tensorpair{\portletter,\dots,\portletter}\\
+b_1\tensorpair{a\tensorpair{\portletter,\dots,\portletter}}&\mapsto& \tensorpair{a,b_0}\tensorpair{\portletter,\dots,\portletter}\\
+b_1\tensorpair{\portletter} &\mapsto& \portletter
 \end{array}$$
 \end{enumerate}
 We apply the function $\ranked{h}$ to the factors $\ranked{\tmonad 1}$ and the function $\ranked{k}$ to the factors $\ranked{\tmonad(\rGamma+\rGamma_1)}$. Doing so, we obtain a term in $\ranked{\tmonad\tmonad((\Gamma+\Gamma_1)\otimes(\Gamma_0+0))}$, which we flatten, then we erase the symbols $\ranked{\Gamma_1}$ using the function $\mathsf{Filter}$ of Example~\ref{ex:filter} to obtain the desired term. 
@@ -149,7 +148,7 @@ To derive $\ranked{\mathsf{Descendant}_\rGamma}$, we start by applying the facto
 
 % as in the following figure, where $\rGamma$ is represented by the blue nodes and $\ranked{\rSigma\setminus \rGamma}$ by the yellow ones:
 %\begin{center}
-%\includegraphics[scale=.3]{descendant.pdf}
+%\includegraphics[scale=.3]{pictures/descendant.pdf}
 %\end{center}
 Obviously, all the nodes of the $\rGamma$ factors have a descendant in $\rGamma$. 
 In the $\ranked{\rSigma\setminus\rGamma}$ factors which are not leaves in the factorized term, all the nodes have a $\rGamma$ descendant in the original term. To show this, take $f$ to be one of these factors, and suppose by contradiction that one of its nodes does not have a descendant in $\rGamma$. By definition of $\ancfact$, all the elements of $f$ do not have a descendant in $\rGamma$ as well. Since $f$ is not a leaf, it has a child $g$. The factor $g$ cannot be a $\rGamma$
@@ -197,20 +196,20 @@ The ancestor function is obtained by applying $\ranked{\mathsf{root}_{f,g}}$ fol
 \end{example}
 
 \begin{example}[Error raising.]\label{ex:error-raising}
-We can think of the type $\ranked{1}$ as an error type. Indeed, the following raising error functions are derivable.
+We can think of the type $\ranked{\bot}$ as an error type. Indeed, the following raising error functions are derivable.
 \begin{lemma}\label{lem:error-raising}
 Let $\rSigma$ and $\rGamma$ be two datatypes. The functions
 $$\begin{array}{rll}
-\ranked{\tmonad(\Sigma+1)} &\ranked{\to }&\ranked{\tmonad \Sigma +1}\\
-\ranked{(\Sigma+1) \otimes (\Gamma+1)} &\ranked{\to} &\ranked{\Sigma\otimes \Gamma+1 }\\
-\ranked{\shallowterm {(\Sigma+1)}{(\Gamma+1)}} &\ranked{\to} &\ranked{\shallowterm\Sigma\Gamma +1}\\
-\ranked{\reduce k (\Sigma+1)} &\ranked{\to} &\ranked{\reduce k \Sigma +1} 
+\ranked{\tmonad(\Sigma+\bot)} &\ranked{\to }&\ranked{\tmonad \Sigma +\bot}\\
+\ranked{(\Sigma+\bot) \otimes (\Gamma+\bot)} &\ranked{\to} &\ranked{\Sigma\otimes \Gamma+\bot }\\
+\ranked{\shallowterm {(\Sigma+\bot)}{(\Gamma+\bot)}} &\ranked{\to} &\ranked{\shallowterm\Sigma\Gamma +\bot}\\
+\ranked{\reduce k (\Sigma+\bot)} &\ranked{\to} &\ranked{\reduce k \Sigma +\bot} 
 \end{array}$$
 which are defined as follows
 \begin{align*}
  t \text{ of arity } n \ \ \mapsto \  \begin{cases}
     t & 
-    \text{if $t$ does not contain any element of $\ranked{1}$,}\\
+    \text{if $t$ does not contain any element of $\ranked{\bot}$,}\\
     n & \text{otherwise.}
 \end{cases}
 \end{align*} are derivable.
@@ -219,15 +218,15 @@ These functions can be easily derived using Proposition~\ref{prop:forat} and dis
 \end{example}
 
 \begin{example}[Partial functions.]
-Thinking of $\ranked{1}$ as an error datatype, a function of type $\ranked{\Sigma \to \Gamma +1}$
+Thinking of $\ranked{\bot}$ as an error datatype, a function of type $\ranked{\Sigma \to \Gamma +\bot}$
 can be seen as a partial function from $\rSigma$ to $\rGamma$. We write 
 \begin{align*}
 \ranked{\Sigma\rightharpoonup \Gamma}
 \end{align*}
-as a notation for the function type $\ranked{\Sigma \to \Gamma +1}$.  
+as a notation for the function type $\ranked{\Sigma \to \Gamma +\bot}$.  
 Using the error raising mechanisms discussed earlier, we can manipulate transparently partial function. Indeed, all datatype constructors can be lifted to partial functions, by composing the liftings (1)--(4) with the error raising functions from Lemma~\ref{lem:error-raising}. For example, if $\ranked{f:\Sigma\rightharpoonup \Gamma}$ is a partial function, then $\ranked{\tmonad f:\tmonad\Sigma\rightharpoonup \tmonad\Gamma}$ is defined as the composition
 \begin{align*}
-\ranked{\tmonad\Sigma\xrightarrow{\tmonad f} \tmonad(\Gamma+1) \xrightarrow{\text{Error raising}} \tmonad \Gamma +1}.
+\ranked{\tmonad\Sigma\xrightarrow{\tmonad f} \tmonad(\Gamma+\bot) \xrightarrow{\text{Error raising}} \tmonad \Gamma +\bot}.
 \end{align*}
 \end{example}
  

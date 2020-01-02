@@ -7,7 +7,7 @@
 \paragraph*{Partial shallow unfold}
  If $\rGamma$ and $\rDelta$ are types, we define $\ranked{\Gamma\odot\Delta}$ to be $\ranked{\Gamma.(\Delta+\set{1})}$. We call its inhabitants the \emph{partial shallow} terms. A partial shallow term looks like this, where we omitted to draw the element $1$ 
 \begin{center}
-\includegraphics[scale=.4]{partial-shallow-term.pdf}
+\includegraphics[scale=.4]{pictures/partial-shallow-term.pdf}
 \end{center}
 We define the \emph{partial shallow unfolding} function as the extension  of the shallow unfold function of Figure~\ref{fig:weak-unfolding} to partial shallow terms. It is the function of type 
 \begin{align*}
@@ -15,7 +15,7 @@ We define the \emph{partial shallow unfolding} function as the extension  of the
 \end{align*}
 defined as in the following picture
  \begin{center}
-\includegraphics[scale=.4]{partial-shallow-unfold.pdf}
+\includegraphics[scale=.4]{pictures/partial-shallow-unfold.pdf}
  \end{center}
 the partial shallow unfolding function can be derived as follows. Consider the functions $\ranked{f}$ and $\ranked{g}$ defined as follows
 \begin{align*}
@@ -44,7 +44,7 @@ Then we compose the result with the product of the graded monad, to obtain the d
 We say that a term $ t \in \tmonad \mati k \rSigma$ is a \emph{constant-twist term}  if each twist of an internal branches is a constant function. Note that the internal twists need not to be the same constant function. Here is an example of a constant-twist term
 
   \begin{center}
-\includegraphics[scale=.35]{one-unfold.pdf}
+\includegraphics[scale=.35]{pictures/one-unfold.pdf}
  \end{center}
  This section is devoted to proving the following lemma. 
 
@@ -61,7 +61,7 @@ The function $f$ can be derived using the following steps. We use the example of
 \begin{enumerate}
 \item We start by applying the external unfolding function.  We get a term in $\ranked{\reduce k \tmonad \Sigma^{[k]}}$. Our example becomes like this
    \begin{center}
-\includegraphics[scale=.35]{one-unfold1.pdf}
+\includegraphics[scale=.35]{pictures/one-unfold1.pdf}
  \end{center}
  \item Next, we will transform each matrix power node into a tensor product as follows 
  \begin{align*}
@@ -69,7 +69,7 @@ The function $f$ can be derived using the following steps. We use the example of
  \end{align*}
  The idea here is that, since the image of each twist is a singleton,  the ports of the matrix power are independent. We can then transform safely each node into a tensor product. After that, we transform each tensor product $\ranked{(\reduce k \Sigma)^k}$ into a shallow term $\ranked{k.\reduce k \Sigma}$ which we see itself as a term of type $\ranked{\tmonad(k+\reduce k\Sigma)}$. After the application of the unfolding function $\mathrm{unfold}_1$ followed by a flattening, and the simplification of $\ranked{\reduce k \reduce 1 \tmonad (k+\reduce k \Sigma)}$ into $\ranked{\reduce k \tmonad (k+\reduce k \Sigma)}$ we get a term in $\ranked{\reduce k \tmonad(k+\reduce k \Sigma)}$. Our running example becomes as follows after this step
    \begin{center}
-\includegraphics[scale=.35]{one-unfold2.pdf}
+\includegraphics[scale=.35]{pictures/one-unfold2.pdf}
  \end{center}
  \item Now we apply the factorization 
  \begin{align*}
@@ -77,7 +77,7 @@ The function $f$ can be derived using the following steps. We use the example of
  \end{align*}
  which regroups each element $\ranked{\reduce k \Sigma}$ with its children of type $\ranked{k}$ in the same factor, and leaves the other nodes in isolated factors. At this point our term looks like this
    \begin{center}
-\includegraphics[scale=.35]{one-unfold3.pdf}
+\includegraphics[scale=.35]{pictures/one-unfold3.pdf}
  \end{center}
  Note that this factorization have the following shape: the root is labeled by $k$, and all the other nodes have labels in $\ranked{(\reduce k \Sigma) \odot k}$. We want to reflect this structure in  the type by applying the following function
  \begin{align*}
@@ -90,7 +90,7 @@ The function $f$ can be derived using the following steps. We use the example of
 \end{align*} 
   as illustrated by the following picture
    \begin{center}
-\includegraphics[scale=.3]{one-unfold4.pdf}
+\includegraphics[scale=.3]{pictures/one-unfold4.pdf}
  \end{center}
  \item At this point we have a term of type $\ranked{\reduce k (k\cdot \tmonad \reduce 1 \Sigma)}$. We apply the untwist function
  \begin{align*}
@@ -134,17 +134,17 @@ In the proof of the inductive case, we distinguish two cases. The first one is w
 %\smallskip
 %To illustrate this case, we consider the following function $\alpha$, whose graph is shown below
 %\begin{center}
-%\includegraphics[scale=.07]{MyPic27.jpg}
+%\includegraphics[scale=.07]{pictures/MyPic27.jpg}
 %\end{center}
 %The graph of $\alpha$ is not weakly connected: it contains two weakly connected components, $\set{1,2}$ and $\set{3}$.
 %Consider the following $\alpha$-homogeneous terms $t$ of $\tmonad \mati k \rSigma$ which will be our running example in the not weakly connected case of the proof. We colored in blue the elements of the first weakly connected part of the graph of $\alpha$ and in green the second part.
 %\begin{center}
-%\includegraphics[scale=.07]{MyPic28.jpg}
+%\includegraphics[scale=.07]{pictures/MyPic28.jpg}
 %\end{center}
 Let us now implement the ideas we discussed above. We start by unfolding the external twists, using the basic external unfold function. This way, the domain of every external twist  cannot be shared by the two disconnected components of the domain of $\alpha$.
 %Our running example becomes like this:
 %\begin{center}
-%\includegraphics[scale=.07]{MyPic29.jpg}
+%\includegraphics[scale=.07]{pictures/MyPic29.jpg}
 %\end{center}
 Then, we duplicate the input term using the basic function 
 \begin{align*}
@@ -163,7 +163,7 @@ which keeps only the last $k-m$ elements of the tensor product, then applies the
 
 %Here is the effect of the functions $f_1$ and $f_2$ on our example
 %\begin{center}
-%\includegraphics[scale=.15]{MyPic30.jpg}
+%\includegraphics[scale=.15]{pictures/MyPic30.jpg}
 %\end{center}
  The function $\ranked{f_1}$ can be derived using the tensor projection function, the merge of folds, then reducing the fold and finally invoking the induction hypothesis. 
 %\begin{align*}
@@ -171,7 +171,7 @@ which keeps only the last $k-m$ elements of the tensor product, then applies the
 %\Hypo{\overbrace{\ranked{\mati k \Sigma \to \reduce k \reduce 1 \Sigma^m}}^{\substack{\text{Lift the projection on the first}\\\text{$m$ elements of the tensor to $\reduce k$}}}}
 %\Hypo{\overbrace{\ranked{\reduce k \reduccomponenetse 1 \Sigma^m \to \reduce k \Sigma^m}}^{\substack{\text{Merge the folds $\reduce k$ and $\reduce 1$}}}}
 %\Hypo{\overbrace{\ranked{\reduce k \Sigma^m \to \mati m {(\Sigma\cdot (1+0))}}}^{\substack{\text{Adjust the degree of the fold}\\\text{to get a matrix power}}}}
-%\Infer{3}[]{\ranked{\mati k \Sigma \to \mati m {(\Sigma\cdot (1+0))}}}
+%\Infer{3}[]{pictures/\ranked{\mati k \Sigma \to \mati m {(\Sigma\cdot (1+0))}}}
 %\end{prooftree}
 %\end{align*}
 
@@ -190,7 +190,7 @@ When we apply $\ranked{f_1}$ and $\ranked{f_2}$ to the two copies of the origina
 % \end{align*}
 % The term we get for our example is the following, which is the unfolding of the original term
 % \begin{center}
-% \includegraphics[scale=.08]{MyPic31.jpg}
+% \includegraphics[scale=.08]{pictures/MyPic31.jpg}
 % \end{center}
 At this point, we are almost done, we only need to transform the type in order to match the desired type. For that we increase the fold by applying the following prime functions
 \begin{align*}
@@ -206,7 +206,7 @@ Now consider the case where the graph of $\alpha$ is weakly connected. By monoto
 By symmetry, we suppose wlog that $\alpha^{-1}(k)=\emptyset$. We suppose also that $\alpha(k)=k-1$, the general case can be treated in a similar way.
 We consider as example the following function $\alpha$, whose graph, drawn below, is weakly connected
 \begin{center}
-\includegraphics[scale=.4]{graph-of-alpha}
+\includegraphics[scale=.4]{pictures/graph-of-alpha}
 \end{center}
 Consider the function
 \begin{align*}
@@ -214,7 +214,7 @@ Consider the function
 \end{align*}
 which acts as in the following picture
 \begin{center}
-\includegraphics[scale=.4]{connected-alpha-hom}
+\includegraphics[scale=.4]{pictures/connected-alpha-hom}
 \end{center}
 If we inject both $\ranked{\reduce {k-1} \Sigma^{k-1}}$ and $\ranked{\Sigma}$ into $\rDelta\eqdef\ranked{\reduce {k-1} \Sigma^{k-1}+\Sigma}$, we get a term in the matrix power $\mati 2 \rDelta$. Note that the twists of such elements are the constant 1. We can then apply the unfolding function for constant-twists inputs
 \begin{align*}
@@ -263,7 +263,7 @@ then we have also
 \begin{proof}[Proof of Lemma~\ref{lem:homo-2-twist}]
 We proceed by induction on $k$. The base case, ie when $k=1$ is realized by the untwist prime function. Let us treat the inductive case. First, we factorize our term in such a way that in each factor, either all the internal twits are weakly connected, or all of them are not weakly connected. To realize this factorization, it is enough to detect the first nodes (that is the closest to the root) where the twist becomes not weakly connected. Indeed, by Lemma\ref{lem:decomp-twist-2}, we know that the twits of the sub-tree rooted in such nodes are all not weakly connected. To detect these node, the following prime function is of particular interest
 \begin{center}
-\includegraphics[scale=.4]{last-prime-function}
+\includegraphics[scale=.4]{pictures/last-prime-function}
 \end{center}
 If we analyze this factorization, it has the form $\ranked{\tmonad \mati k \Sigma \odot \tmonad \mati k \Sigma}$, where the root contains only connected internal twists and the leaves only weakly connected internal twists. By Lemma~\ref{lem:decomp-twist-2}, we know that the internal twists of the root  are constant, and that in each leave, there is an integer $m$ such that every internal twist $\alpha$ satisfies
 \begin{align*}

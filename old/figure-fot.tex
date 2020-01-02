@@ -1,0 +1,157 @@
+
+\newcommand{\simplefunfig}[4]{
+    \begin{tabular}{cc}
+        $\ranked{
+        \xymatrix@C=1.5cm{
+#2 \ar[r]^-{#1}& #3
+        }}$
+        \\
+        {#4}
+    \end{tabular}   
+ }
+
+ \newcommand{\reversiblefunfig}[4]{
+    \begin{tabular}{cc}
+        $\ranked{
+        \xymatrix@C=1.5cm{
+#2 \ar@<.5ex>[r]^-{#1}& #3
+\ar@<.5ex>[l]
+        }}$
+        \\
+        {#4}
+    \end{tabular}   
+ }
+
+
+
+ \newcommand{\laterfunfig}[3]{
+    \begin{tabular}{cc}
+        $\ranked{
+        \xymatrix@C=1.5cm{
+#1 & #2
+        }}$
+        \\
+#3
+    \end{tabular}   
+ }
+ 
+
+
+
+\begin{figure}
+    \begin{tabular}{cc}
+        \simplefunfig
+        {\iota_i}
+        {\Sigma_i}
+        {\Sigma_1 + \Sigma_2}
+        {$a \mapsto (a,i)$}
+        &
+        \simplefunfig
+        {\mathrm{forget}}
+        {\Sigma+\Sigma}
+        {\Sigma}
+        {$(a,i) \mapsto a$}
+        \\ \\ 
+        % \\ \\
+        % \reversiblefunfig
+        % {\mathrm{swap}}
+        % {\Sigma \otimes \Gamma}
+        % {\Gamma \otimes \Sigma}
+        % {$\tensorpair{a,b} \mapsto \tensorpair{b,a}$}
+        % &
+        \simplefunfig
+        {\distrtensor}
+        {\reduce k (\Sigma_1 + \Sigma_2)}
+        {\reduce k \Sigma_1 + \reduce k \Sigma_2}
+        {$(a,i)/f \mapsto ((a/f),i)$}
+         & 
+        \reversiblefunfig
+        {\distrtensor}
+        {(\Sigma_1 + \Sigma_2)\otimes \Gamma}
+        {(\Sigma_1 \otimes \Gamma) + (\Sigma_2 \otimes \Gamma)}
+        {$\tensorpair{(a,i),b} \mapsto (\tensorpair{a,b},i)$}
+        \\ \\
+        \reversiblefunfig
+        {\distrtensor}
+        {\shallowterm {(\Sigma_1 + \Sigma_2)} \Gamma}
+        {(\shallowterm {\Sigma_1} \Gamma) + (\shallowterm {\Sigma_2} \Gamma)}
+        {$(a,i)\tensorpair{b_1,\ldots,b_n} \mapsto (a\tensorpair{b_1,\ldots,b_n})$ }
+        &
+        \reversiblefunfig
+        {\distrtensor}
+        {\shallowterm {(\Sigma_1 \otimes \Sigma_2)} \Gamma}
+        {(\shallowterm {\Sigma_1} \Gamma) \otimes (\shallowterm {\Sigma_2} \Gamma)}
+        {
+        \begin{tabular}{c}
+            $\tensorpair{a_1,a_2}\tensorpair{b_1,\ldots,b_n} \mapsto$ \\
+            $\tensorpair{a_1 \tensorpair{b_1,\ldots,b_{n_1}}, a_2\tensorpair{b_{n_1+1},\ldots,b_n} }$  \\
+            where $n_1$ is the arity of $a_1$
+        \end{tabular}    
+        }
+        \\ \\
+        \reversiblefunfig
+        {}
+        {\rSigma}
+        {\shallowterm 1 {\tmonad \Sigma}}
+        {$a \mapsto 1.\tensorpair a$}
+        &
+        \reversiblefunfig
+        {\composeterm}
+        {1 + \shallowterm \Sigma {\tmonad \Sigma} }
+        { \tmonad \Sigma}
+        {
+        \begin{tabular}{c}
+            Every term is either just a port,\\ or has a root and child subterms.    
+        \end{tabular}    
+        } 
+        \\ \\
+        \simplefunfig
+        {}
+        {\Sigma}
+        {\reduce k \Sigma}
+        {$a \mapsto a/(i \mapsto (1,i))$ } &
+        \simplefunfig
+        {}
+        {\reduce {k_1} \reduce {k_2} \Sigma}
+        {\reduce {k_1 \cdot k_2} \Sigma}
+        {$(a/f)/g \mapsto a/(g \circ f)$}
+        \\ \\
+        \simplefunfig
+        {\unit_\Sigma}
+        {\Sigma}
+        {\tmonad \Sigma}
+        {\tablepic{69}}
+        & 
+        \\ \\
+        \simplefunfig
+        {\flatt_\Sigma}
+        {\tmonad \tmonad \Sigma}
+        {\tmonad \Sigma} 
+        {\tablepic{73}}
+        &
+        \simplefunfig
+        {\distrtf}
+        { \tmonad \reduce 1 \Sigma}
+        {\reduce 1 \tmonad \Sigma}
+        {\tablepic{74}}
+        \\ \\
+        \laterfunfig
+        {\tmonad(\Sigma_1+\Sigma_2) \ar@<.5ex>[r]^{ \ancfact}
+        \ar@<-.5ex>[r]_{\decfact}}
+        {\tmonad(\tmonad \Sigma_1 + \tmonad \Sigma_2)} 
+        {see Section~\ref{sec:prime-and-combinators}} 
+        &
+        \laterfunfig
+        {\tmonad \Sigma \ar[r]^-{\preorder}}
+        {\reduce 1 \tmonad(\rSigma + 0 + 2)}
+        {see Section~\ref{sec:prime-and-combinators}} 
+        \\ \\ 
+        \laterfunfig
+        {\shallowterm{(\reduce k \Sigma)}{\Gamma^k} \ar[r]^-{\unfold}}
+        {(\shallowterm \Sigma \Gamma)^k}
+        {see Section~\ref{sec:prime-and-combinators}} 
+    \end{tabular} 
+    \caption{    \label{fig:fo-term}The prime functions. The functions are parametrised by types  $\rSigma, \ranked{\Sigma_1}, \ranked{\Sigma_2}, \rGamma$. In the above, the type $\ranked i$ for $i \in \set{0,1,2}$ represents a  ranked set   with one element of arity $i$. Some of the functions are bijections, as indicated by double arrows, in these cases both the function and its inverse are prime functions. }
+\end{figure}
+
+
