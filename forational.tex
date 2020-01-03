@@ -1,24 +1,21 @@
 \section{First-order  relabellings}\label{sec:fo-translation}
-In this section we prove that every first-order tree labelling, which is used in our transducer model to compute the register updates, is a derivable function. 
+In this section we prove derivability of the first computation step used in first-order register transducers.
 \begin{proposition} \label{prop:forat}    
     Every first-order relabelling is derivable.
 \end{proposition}
-This result is based on a result of Schlingloff~\cite[Theorem 4.5]{schlingloff1992expressive}, which gives a temporal logic for trees that has the same expressive power as first-order logic. The operators in this temporal logic (which are tree variants of the since and until operators of {\sc ltl}) can be viewed as very simple first-order relabellings; by the completeness result of Schlingloff it is enough to show that these operators are derivable.  
-
-For a first-order  unary tree query  over $\rSigma$,  define its  \emph{characteristic function} to be the function of type
+To prove the proposition, we use a decomposition of first-order relabellings into simpler functions, in the style of the Krohn-Rhodes theorem. 
+%  a characterisation of first-order logic on trees in terms of temporal logic, which was proved by Schlingloff~\cite[Theorem 4.5]{schlingloff1992expressive}. The operators in this temporal logic (which are tree variants of the since and until operators of {\sc ltl}) can be viewed as very simple first-order relabellings; by the completeness result of Schlingloff it is enough to show that these operators are derivable.  
+We use the name \emph{unary query} for a first-order formula with one free variable over the vocabulary of trees over a given alphabet $\rSigma$. 
+For a  unary query  over an alphabet $\rSigma$,  define its  \emph{characteristic function} to be the function of type
 \begin{align*}
  \trees \rSigma \to \trees (\ranked{\rSigma + \rSigma})
 \end{align*}
-which replaces the label of each node by its first or second copy, depending on whether the node is selected by the query. The following lemma says that every first-order tree relabelling can be obtained by composing local label changes, together with characteristic functions of certain simple unary queries. 
+which replaces the label of each node by its first or second copy, depending on whether the node is selected by the query. This is a special case of a first-order relabelling. The following lemma  shows how first-order relabellings can  be decomposed into characteristic functions of certain basic unary queries.
 
-\begin{lemma}\label{lem:schlingloff} The first-order tree relabellings are exactly the least class of functions which is closed under composition and which  contains the following functions:
+\begin{lemma}\label{lem:schlingloff} Every first-order relabellings can be obtained by composing the following functions:
     \begin{enumerate}
         \item \label{it:relabelling} \emph{Letter-to-letter homomorphisms}. For  every finite $\rGamma,\rSigma$ and $\ranked {f : \rSigma \to \rGamma}$, its tree lifting $\trees \ranked f : \trees \rSigma \to \trees \rGamma$.
-        \item \label{it:temporal-operators} For every finite  $\rSigma$ and its subsets $\rDelta, \rGamma \subseteq \rSigma$, the characteristic functions of type
-        \begin{align*}
-            \trees \rSigma \to \trees(\ranked{\rSigma + \rSigma})
-        \end{align*}
-        of the following unary first-order tree queries:
+        \item \label{it:temporal-operators} For every finite  $\rSigma$ and its subsets $\rDelta, \rGamma \subseteq \rSigma$, the characteristic functions of the following unary queries over alphabet $\rSigma$:
         \begin{enumerate}
             \item \label{it:child} \emph{Child:} $x$ is an $i$-th child, for $i \in \set{1,2,\ldots}$
             \begin{align*}
@@ -37,9 +34,9 @@ which replaces the label of each node by its first or second copy, depending on 
     
 \end{lemma}
 
-The  lemma follows directly from Schlingloff~\cite[Theorem 2.6]{schlingloff1992expressive}, who proves that all first-order definable tree properties can be defined using a temporal logic that has operators similar to the ones used in items~\ref{it:temporal-operators} of the lemma. Note that the temporal logic is a two-way logic, because the truth value of \emph{until} depends on the descendants of the node $x$, while \emph{since} depends on the ancestors. In fact, there is no temporal logic which characterises first-order logic, uses only descendants, and has finitely many operators~\cite[Theorem 5.5]{bojanczykWreathProductsForest2012}. 
+The  lemma follows from a result of  Schlingloff~\cite[Theorem 2.6]{schlingloff1992expressive}, which says  that all first-order definable tree properties can be defined using a temporal logic that has operators similar to the ones used in items~\ref{it:temporal-operators} of the lemma. Note that the temporal logic is a two-way logic, because the truth value of \emph{until} depends on the descendants of the node $x$, while \emph{since} depends on the ancestors. In fact, there is no temporal logic which characterises first-order logic, uses only descendants, and has finitely many operators~\cite[Theorem 5.5]{bojanczykWreathProductsForest2012}. 
 The exact reduction to Schlingloff's theorem is  in Appendix~\ref{sec:AppendixForat}.
 
 
-In light of Lemma~\ref{lem:schlingloff},  Proposition~\ref{prop:forat} will follow once we  show that all functions  used in the lemma are derivable. The relabellings from item~\ref{it:relabelling} are derivable as  a special case of homomorphisms discussed in Example~\ref{ex:filter}.   The remaining functions are also derivable, as shown in Appendix~\ref{sec:AppendixForat}.
+The relabellings from item~\ref{it:relabelling} are   a special case of homomorphisms discussed in Example~\ref{ex:filter}, and hence derivable. In Appendix~\ref{sec:AppendixForat}, we show that functions from item~\ref{it:temporal-operators} are also derivable (in the proof, a key role is played by the factorisation functions discussed in Section~\ref{sec:factorisation-functions}). It follows that all first-order relabellings are derivable, thus  completing the proof of  Proposition~\ref{prop:forat}.
 % i lemmas~\ref{lem:nextmod}, \ref {lem:untilmod} and \ref{lem:sincemod}. 

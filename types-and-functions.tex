@@ -4,7 +4,14 @@ In this section, we state the main result of this paper, which says that the  fi
 \subsection{Datatypes}
 \label{sec:datatype-constructors}
  Our goal is to decompose tree-to-tree functions into simpler prime functions. The simpler  functions will work on other datatypes, such as pairs of trees or trees of trees etc. These datatypes  can be encoded in trees, but such encoding would be cumbersome. We choose to make the datatype constructors -- such as pairing or disjoint union --  explicit,  following~\cite{bojanczykRegularFirstOrderList2018}.
-All datatypes represent ranked sets, i.e.~each element of a datatype has an arity. The atomic datatypes are finite ranked sets, e.g.~alphabets for trees. 
+All datatypes represent ranked sets, i.e.~each element of a datatype has an arity.
+
+\paragraph*{Atomic datatypes.} The atomic datatypes are finite ranked sets, i.e.~those with finitely many elements, and the  \emph{terminal ranked set}  defined by
+\begin{align*}
+\termset \eqdef  \underbrace{\redset{\naryterm 0, \naryterm 1, \naryterm 2,\ldots}.}_{\substack{\text{for each arity $i$, one} \\ \text{element denoted by $i$}}}
+\end{align*}  
+The reason for the $\termset$ notation is that the terminal set can be used to model partial functions: a partial function with output  type  $\rSigma$ can be seen as a total function of output type $\rSigma + \termset$, which uses  $\termset$  for  undefined values.
+
 
 \paragraph*{Terms.} The central datatype constructor is the  \emph{term} constructor. Terms generalise trees, by allowing for dangling edges, called ports. We allow ports so that we can decompose trees (and even terms) into smaller pieces, as  illustrated by the figure below. 
 % Each  part of the tree is not a tree as it has dangling ports.  We call \emph{terms} such trees with ports. 
@@ -24,8 +31,9 @@ There are two binary datatype constructors
 \begin{align*}
 \underbrace{\ranked{\Sigma_1 \product \Sigma_2}}_{\text{product}} \qquad \underbrace{\ranked{\Sigma_1 + \Sigma_2}}_{\text{coproduct}}
 \end{align*}
-An element of the product is a pair $\tensorpair{a_1,a_2}$ where $a_i \in \ranked{\Sigma_i}$. The arity of the pair is the sum of arities of its two coordinates $a_1$ and $a_2$. We draw pairs like this:
-\mypic{52}     
+An element of the product is a pair $\tensorpair{a_1,a_2}$ where $a_i \in \ranked{\Sigma_i}$. The arity of the pair is the sum of arities of its two coordinates $a_1$ and $a_2$. 
+% We draw pairs like this:
+% \mypic{52}     
 An element of the coproduct is a pair $(i,a)$ where $i \in \set{1,2}$ and $a \in \ranked{\Sigma_i}$. The arity is inherited from $a$. 
 
 The set of terms can be phrased in terms of  products and coproducts, as the least solution of the equation:
@@ -46,7 +54,11 @@ Already for $k=1$, the constructor $\reduce 1$ is non-trivial. For example,  $\r
 
 When viewed as a family of datatype constructors,  folds have a monad-like structure -- they are a graded  monad in the sense of~\cite[p. 518]{fujiShinyaMellies2016}. The unit is the operation 
 \mypic{98}
-of type $\ranked{\Sigma \to \reduce 1 \Sigma}$, while  the product (or flattening) is the family of operations $\ranked{\reduce {k_2} \reduce {k_1} \Sigma \to \reduce {k_1 \cdot k_2} \Sigma}$, indexed by $k_1,k_2 \in \set{1,2,\ldots}$ that is illustrated in the following picture:
+of type $\ranked{\Sigma \to \reduce 1 \Sigma}$, while  the product (or flattening) in the graded monad is the family of operations of type 
+\begin{align*}
+    \ranked{\reduce {k_2} \reduce {k_1} \Sigma \to \reduce {k_1 \cdot k_2} \Sigma},
+\end{align*}
+indexed by $k_1,k_2 \in \set{1,2,\ldots}$, that is illustrated below:
 \mypic{100}
 More formally, the flattening of a double fold $(a/{f_1})/{f_2}$ has the grouping function defined by
 \begin{align*}
@@ -124,12 +136,7 @@ We now introduce the main  definition of this paper.
     \begin{align*}
     \ranked{\tmonad \rSigma \qquad \rSigma_1 \product \rSigma_2 \qquad \rSigma_1 + \rSigma_2 \qquad \reduce k \rSigma},
     \end{align*}
-    to ranked sets which are either finite (have finitely many elements) or equal to the \emph{terminal ranked set}  defined by\footnote{The reason for the $\termset$ notation is that the terminal set can be used to define partial functions. A partial function with output  type  $\rSigma$ can be seen as a total function of output type $\rSigma + \termset$, which uses  $\termset$  for  undefined values.
-    }
-    \begin{align*}
-    \termset \eqdef  \underbrace{\redset{\naryterm 0, \naryterm 1, \naryterm 2,\ldots}.}_{\substack{\text{for each arity $i$, one} \\ \text{element denoted by $i$}}}
-    \end{align*}  
-    % \item 
+    to ranked sets which are either finite or the terminal set $\termset$.
     An arity-preserving function between two datatypes is called \emph{derivable}  if it can be generated, using function composition and the liftings 
     \eqref{eq:liftplus}--\eqref{eq:liftterm}, from the following functions:
     \begin{itemize}
@@ -216,6 +223,7 @@ Each of these functions will play a key role in one of the main results of the p
 
 
 \subsubsection{Factorisations}
+\label{sec:factorisation-functions}
 We begin with the two factorisation functions 
 \begin{align*}
     \ancfact,\decfact  : \ranked{\tmonad(\Sigma_1+\Sigma_2) \to \tmonad(\tmonad \Sigma_1 + \tmonad \Sigma_2)}.
