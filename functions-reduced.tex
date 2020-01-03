@@ -2,33 +2,20 @@
 \fbox{
 \begin{minipage}{1\linewidth}
 \begin{itemize}
-\item \textbf{Unit of the monad $\tmonad$.} 
-        $$\begin{array}{rlll}
-\unit: &\rSigma &\ranked{\to} & \tmonad \rSigma 
+\item \textbf{Unit and product in  the monad $\tmonad$.} 
+        $$\begin{array}{rlllcrlll}
+\unit: &\rSigma &\ranked{\to} & \tmonad \rSigma & \qquad &
+\flatt: &\tmonad\tmonad\rSigma &\ranked{\to} & \tmonad \rSigma
 % \\[2pt]
 % &a &\mapsto& a\tensorpair{\portletter,\dots,\portletter}
        \end{array}$$ 
-\item \textbf{Product of the monad $\tmonad$.} 
-        $$\begin{array}{rlll}
-\flatt: &\tmonad\tmonad\rSigma &\ranked{\to} & \tmonad \rSigma 
-% \\[2pt]
-% %&t\tensorpair{t_1,\dots,t_n} &\mapsto& \flatt(t)\tensorpair{\flatt(t_1),\dots,\flatt(t_n)}\\[2pt]
-% &t\tensorpair{t_1,\dots,t_n} &\mapsto& \text{$t$ with port $i$ replaced by}\\
-% & &  & \text{$\flatt(t_i)$ for $i \in \set{1,\ldots,n}$}\\[2pt]
-% & \portletter & \mapsto & \portletter
-       \end{array}$$ 
-\item \textbf{Unit of the graded monad $\reduce k$.} 
-        $$\begin{array}{rlll}
-\unit: &\rSigma &\ranked{\to} & \reduce 1 \rSigma 
+\item \textbf{Unit and product in the graded monad $\reduce k$.} 
+        $$\begin{array}{rlllcrlll}
+\unit: &\rSigma &\ranked{\to} & \reduce 1 \rSigma & \qquad &
+\flatt: &\reduce k \reduce l \rSigma &\ranked{\to} & \reduce {k.l} \rSigma 
 % \\[2pt]
 % &a &\mapsto& a/(i\mapsto(i,1))
        \end{array}$$ 
-\item \textbf{Product of the graded monad $\reduce k$.} 
-        $$\begin{array}{rlll}
-\flatt: &\reduce k \reduce l \rSigma &\ranked{\to} & \reduce {k.l} \rSigma 
-% \\[2pt]
-% &(a/f)/g &\mapsto& a/(f\bowtie g)
-       \end{array}$$    
        \item \textbf{Inductive structure of terms (for finite $\rSigma$ only).}
        $$\begin{array}{cc}
         \ranked{
@@ -36,16 +23,23 @@
 \tmonad \Sigma \ar@<.5ex>[r]^-{\text{decompose}}
         & 
         \ar@<.5ex>[l]^-{\text{compose}}
-        \redset{\portletter}  +\coprod_{\black {a \in} \rSigma}} \overbrace{\tmonad \rSigma \otimes \cdots \otimes \tmonad \rSigma}^{\black{\text{arity of $a$ times}}}
+        \redset{\portletter}  +\coprod_{\black {a \in} \rSigma}} 
+        \powersmall{(\tmonad \rSigma)}{\text{arity of $a$}}
         } 
     \end{array}$$ 
+    \item \textbf{Remove unused fold.}
+    $$\begin{array}{rlll}
+         &\reduce k \rSigma &\ranked{\to} &  \rSigma + \termset
+         \\[2pt]
+         &(a/f) &\mapsto& \text{$a$ if $a$ has arity 0, undefined otherwise}
+               \end{array}$$ 
 \end{itemize}
 \end{minipage}
 }
 \caption{Prime functions for terms and fold.}\label{fig:monad}
 \end{figure}
 
-% \miktodo{Seems that were are missing projections and co-projections for $\otimes$}
+% \miktodo{Seems that were are missing projections and co-projections for $\product$}
 \begin{figure}
 \fbox{
 \begin{minipage}{1\linewidth}
@@ -60,7 +54,7 @@ $$
 \item \textbf{Commutativity.} 
 $$
 \begin{array}{rllrll}
-\ranked{\rSigma + \rGamma} &\ranked{\to} & \ranked{\rGamma + \rSigma} \qquad & \qquad \ranked{\rSigma \otimes \rGamma} &\ranked{\to} & \ranked{\rGamma \otimes \rSigma} \\[0pt]
+\ranked{\rSigma + \rGamma} &\ranked{\to} & \ranked{\rGamma + \rSigma} \qquad & \qquad \ranked{\rSigma \product \rGamma} &\ranked{\to} & \ranked{\rGamma \product \rSigma} \\[0pt]
 (a,1)&\mapsto& (a,2)  \qquad & \qquad
 \tensorpair{a,b}&\mapsto& \tensorpair{b,a}\\
 (a,2)& \mapsto& (a,1)
@@ -69,7 +63,7 @@ $$
 \item \textbf{Associativity.}
 $$
 \begin{array}{rllrll}
-\ranked{(\rSigma + \rGamma) + \rDelta} &\hspace{-.2cm}\ranked{\to}&\hspace{-.2cm} \ranked{\rGamma + (\rSigma+\rDelta)}  & \ranked{(\rSigma \otimes \rGamma) \otimes \rDelta} &\hspace{-.2cm}\ranked{\to}&\hspace{-.2cm} \ranked{\rSigma \otimes (\rGamma \otimes \rDelta)} \\[2pt]
+\ranked{(\rSigma + \rGamma) + \rDelta} &\hspace{-.2cm}\ranked{\to}&\hspace{-.2cm} \ranked{\rGamma + (\rSigma+\rDelta)}  & \ranked{(\rSigma \product \rGamma) \product \rDelta} &\hspace{-.2cm}\ranked{\to}&\hspace{-.2cm} \ranked{\rSigma \product (\rGamma \product \rDelta)} \\[2pt]
  ((a,1),1)&\hspace{-.2cm}\mapsto&\hspace{-.2cm} (a,1) & 
 \tensorpair{\tensorpair{a,b},c}&\hspace{-.2cm}\mapsto&\hspace{-.2cm}\tensorpair{a,\tensorpair{b,c}}\\[2pt]
          ((a,2),1)&\hspace{-.2cm}\mapsto&\hspace{-.2cm}((a,1),2) & & &\\[2pt]
@@ -78,7 +72,7 @@ $$
 $$
 \item \textbf{Distributivity.}
 $$\begin{array}{rll}
-\ranked{(\Sigma_1 + \Sigma_2)\otimes \Gamma }& \ranked{\to} &\ranked{(\Sigma_1 \otimes \Gamma) + (\Sigma_2 \otimes \Gamma)}\\[2pt]
+\ranked{(\Sigma_1 + \Sigma_2)\product \Gamma }& \ranked{\to} &\ranked{(\Sigma_1 \product \Gamma) + (\Sigma_2 \product \Gamma)}\\[2pt]
 \tensorpair{(a,i),b}&\mapsto& (\tensorpair{a,b},i)
 \end{array}$$
 \end{itemize}
@@ -110,7 +104,7 @@ $$\begin{array}{cc}
 $$\begin{array}{cc}
         \ranked{
         \xymatrix@C=.7cm{
- \tmonad \reduce k \overbrace{(\rSigma \otimes \cdots \otimes \rSigma)}^{\black{\text{$k$ times}}} \ar[r]& \termset +   \reduce k \overbrace{(\tmonad\rSigma \otimes \cdots \otimes \tmonad\rSigma)}^{\black{\text{$k$ times}}} 
+ \tmonad \reduce k \powersmall \Sigma k \ar[r]& \reduce k \powersmall{(\tmonad \rSigma)} k  +  \termset 
         }}
     \end{array}$$ 
 \end{itemize}

@@ -22,7 +22,8 @@
  \title{First-order tree-to-tree functions}
  \author{Amina and Mikolaj}
  \begin{abstract}
-    We introduce a functional programming language which defines tree-to-tree transformations. We prove that this language describes exactly the first-order tree-to-tree transductions. An important property of our language is that it has iteration constructions -- beyond the iteration that is implicit in primitive such as {\tt map}. We also give an extension of the language that describes exactly the \mso tree-to-tree transductions.
+    We introduce a functional programming language for tree-to-tree transformations, and prove  that it describes exactly the first-order tree-to-tree transductions. The language is based on a basis of  primitive functions (such as preorder traversal of a tree)  and 
+    combinators (such as function composition) that create new functions out of existing ones. We also give an extension of the language that describes exactly the \mso tree-to-tree transductions.
 \end{abstract}
 
  \maketitle
@@ -31,7 +32,6 @@
 \input{intro}
 \input{trees-and-logic}
 \input{types-and-functions}
-\input{example-derivable}
 \input{stt}
 
 %\input{to-transductions}

@@ -1,52 +1,54 @@
 \section{Derivable functions}\label{sec:derivable-functions}
-In this section, we state the main result of this paper: the  first-order tree-to-tree transductions are exactly the class which is obtained by starting with certain prime functions (such as depth-first traversal) and applying certain  combinators (such as function composition). 
+In this section, we state the main result of this paper, which says that the  first-order tree-to-tree transductions are those that  can be  obtained by starting with certain prime functions (such as pre-order traversal from Example~\ref{ex:pre-order-main}) and applying certain  combinators (such as function composition). 
 
 \subsection{Datatypes}
 \label{sec:datatype-constructors}
- Our goal is to describe tree-to-tree functions. However, we will decompose the functions, so that the   intermediate functions will work on other datatypes, such as pairs of trees or trees of trees etc. These datatypes  can be encoded in trees, but such encoding would be cumbersome. Following~\cite{bojanczykRegularFirstOrderList2018}, we  introduce additional  datatype constructors, such as pairing.
-
+ Our goal is to decompose tree-to-tree functions into simpler prime functions. The simpler  functions will work on other datatypes, such as pairs of trees or trees of trees etc. These datatypes  can be encoded in trees, but such encoding would be cumbersome. We choose to make the datatype constructors -- such as pairing or disjoint union --  explicit,  following~\cite{bojanczykRegularFirstOrderList2018}.
 All datatypes represent ranked sets, i.e.~each element of a datatype has an arity. The atomic datatypes are finite ranked sets, e.g.~alphabets for trees. 
 
-\paragraph*{Terms.} The most important datatype constructor is the  \emph{term} constructor. Terms generalise trees, by allowing for dangling edges, called ports. We allow ports so that we can decompose trees (and even terms) into smaller pieces, as  illustrated by the figure below. 
+\paragraph*{Terms.} The central datatype constructor is the  \emph{term} constructor. Terms generalise trees, by allowing for dangling edges, called ports. We allow ports so that we can decompose trees (and even terms) into smaller pieces, as  illustrated by the figure below. 
 % Each  part of the tree is not a tree as it has dangling ports.  We call \emph{terms} such trees with ports. 
 \begin{center}
 \includegraphics[scale=.32, page=15]{pics.pdf}
 \end{center}
-Formally speaking, terms are defined by induction: a term over a (possibly infinite) ranked set $\rSigma$ is either a term which consists only of a port, 
-or it is an expression of the  form $a \tensorpair{t_1,\ldots,t_n}$ where $a \in \rSigma$ has arity $n$, and $t_1,\ldots,t_n$ are already defined terms. The arity of a term is the number of ports. Terms of arity zero are the same as trees. We write $\tmonad \rSigma$ for the ranked set of terms over an ranked set $\rSigma$.    Terms form a monad, in the category of ranked sets and arity-preserving functions. The unit of the monad, which is an operation of type $\ranked{\rSigma \to \tmonad \rSigma}$, is illustrated in the following picture:
+Formally speaking, terms are defined by induction: a term over a  ranked set $\rSigma$ is either a term which consists only of a port, 
+or it is an expression of the  form $a \tensorpair{t_1,\ldots,t_n}$ where $a \in \rSigma$ has arity $n$, and $t_1,\ldots,t_n$ are already defined terms. The arity of a term is the number of ports. Terms of arity zero are the same as trees. We write $\tmonad \rSigma$ for the ranked set of terms over an ranked set $\rSigma$.    
+
+Terms form a monad, in the category of ranked sets and arity-preserving functions (see~\cite[Section 9.2]{bojanczykRecognisableLanguagesMonads2015} for a similar monad). The unit of the monad, which is an operation of type $\ranked{\rSigma \to \tmonad \rSigma}$, is illustrated in the following picture:
 \mypic{98}
 The product of the monad, which is an operation of type $\ranked{\tmonad \tmonad \rSigma \to \tmonad \rSigma}$ that we call \emph{flattening}, is illustrated in the following picture:
 \mypic{97}
 
 \paragraph*{Products and coproducts.}
-We have two binary datatype constructors
+There are two binary datatype constructors
 \begin{align*}
-\underbrace{\ranked{\Sigma_1 \otimes \Sigma_2}}_{\text{tensor product}} \qquad \underbrace{\ranked{\Sigma_1 + \Sigma_2}}_{\text{coproduct}}
+\underbrace{\ranked{\Sigma_1 \product \Sigma_2}}_{\text{product}} \qquad \underbrace{\ranked{\Sigma_1 + \Sigma_2}}_{\text{coproduct}}
 \end{align*}
-An element of the tensor product is a pair $\tensorpair{a_1,a_2}$ where $a_i \in \ranked{\Sigma_i}$. The arity of the pair is the sum of arities of $a_1$ and $a_2$. We draw pairs like this:
+An element of the product is a pair $\tensorpair{a_1,a_2}$ where $a_i \in \ranked{\Sigma_i}$. The arity of the pair is the sum of arities of its two coordinates $a_1$ and $a_2$. We draw pairs like this:
 \mypic{52}     
 An element of the coproduct is a pair $(i,a)$ where $i \in \set{1,2}$ and $a \in \ranked{\Sigma_i}$. The arity is inherited from $a$. 
 
-The set of terms can be phrased in terms of tensor products and coproducts, as the least solution of the equation:
+The set of terms can be phrased in terms of  products and coproducts, as the least solution of the equation:
 \begin{align*}
-\tmonad \rSigma = \overbrace{\redset{\portletter}}^\text{port}  \ranked{+\coprod_{\black {a \in} \rSigma}} \overbrace{\ranked{\tmonad \rSigma \otimes \cdots \otimes \tmonad \rSigma}}^{\text{arity of $a$ times}}
-\end{align*}  where $\ranked \coprod$ denotes possibly infinite coproduct.
+\tmonad \rSigma = \redset{\portletter}  \ranked{+\coprod_{\black {a \in} \rSigma}} 
+\powersmall{(\tmonad \rSigma)} {\text{arity of $a$}}
+\end{align*}  where $\ranked \coprod$ denotes possibly infinite coproduct, $\portletter$ denotes the unary term that consists only of a port, and $\powersmall X n$ denotes the $n$-fold product of a ranked set $\ranked X$ with itself.
 
 \paragraph*{Folding.}
-The final datatype constructor called \emph{folding}. Folding has two main purposes: (1) reordering ports in a term; and (2) reducing arities by grouping ports into groups. More formally, there is one unary constructor $\reduce k \rSigma$ for every $k \in \set{1,2,3,\ldots}$.  An $n$-ary element of $\reduce k \rSigma$, which is called a \emph{$k$-fold}, consists of an element      $a \in \rSigma$  together with an injective    \emph{grouping}  function
+The final datatype constructor called \emph{folding}. Folding has two main purposes: (1) reordering ports in a term; and (2) reducing arities by grouping ports into groups. More formally, folding is not one constructor, but a family of unary constructors $\reduce k \rSigma$, one  for every $k \in \set{1,2,3,\ldots}$.  An $n$-ary element of $\reduce k \rSigma$, which is called a \emph{$k$-fold}, consists of an element      $a \in \rSigma$  together with an injective    \emph{grouping}  function
 \begin{align*}
-    f :  \text{ports of $a$} \to \underbrace{\set{1,\ldots,n} \times \set{1,\ldots,k} }_{\text{these pairs are called \emph{sub-ports}}}
+    f :  \underbrace{\set{1,\ldots,\text{arity of $a$}}}_{\substack{\text{an element of this set is}\\\text{called a  port of $a$}}} \to \underbrace{\set{1,\ldots,n} \times \set{1,\ldots,k} }_{\text{these pairs are called \emph{sub-ports}}}
 \end{align*}
 We denote such an element as $a/f$ and draw it like this: \mypic{53}
 In the above picture there are $4 \times 3$ sub-ports.
 
 Already for $k=1$, the constructor $\reduce 1$ is non-trivial. For example,  $\reduce 1 \tmonad \rSigma$ is a generalisation of terms where ports are not necessarily ordered left-to-right (because the grouping function need not be monotone), and some ports need not appear (because the grouping function need not be total); in other words this is the same as terms in the usual sense of universal algebra, with the restriction that each variable is used at most once (sometimes called linearity).
 
-When viewed as a family of datatype constructors,  folds have a monad-like structure -- they are a graded  monad~\cite[p. 518]{fujiShinyaMellies2016}. The unit is the operation 
+When viewed as a family of datatype constructors,  folds have a monad-like structure -- they are a graded  monad in the sense of~\cite[p. 518]{fujiShinyaMellies2016}. The unit is the operation 
 \mypic{98}
 of type $\ranked{\Sigma \to \reduce 1 \Sigma}$, while  the product (or flattening) is the family of operations $\ranked{\reduce {k_2} \reduce {k_1} \Sigma \to \reduce {k_1 \cdot k_2} \Sigma}$, indexed by $k_1,k_2 \in \set{1,2,\ldots}$ that is illustrated in the following picture:
-\mypic{99}
-More formally, the flattening of two folds $(a/{f_1})/{f_2}$ has the grouping function defined
+\mypic{100}
+More formally, the flattening of a double fold $(a/{f_1})/{f_2}$ has the grouping function defined by
 \begin{align*}
     % \label{eq:fold-grouping}
 i \mapsto (i_2, \underbrace{(q_1 -1)k_2 + q_2}_{\substack{\text{bijection between} \\ \set{1,\ldots,k_1} \times \set{1\ldots,k_2} \\ \text{and $\set{1,\ldots,k_1k_2}$}}}) \qquad \text{where} \begin{cases}
@@ -83,9 +85,25 @@ i \mapsto (i_2, \underbrace{(q_1 -1)k_2 + q_2}_{\substack{\text{bijection betwee
 %\end{definition}
 
 
+\smallskip
+\newcommand{\funcitem}[3]{\ranked{#1  } &:& \ranked{#2} \rto  \ranked{#3}}
 
 
-\paragraph*{Datatypes.} This completes the list of  datatype constructors. The datatypes are then defined by applying the constructors to the prime datatypes, which are either finite ranked sets (those with finitely many elements), or  the terminal ranked set (i.e.~a ranked set which admits a unique function from every other ranked set).
+\paragraph*{Functoriality.} This completes the list of  datatype constructors.  All constructors are functors, in the sense  that  arity preserving functions
+\begin{align*}
+\ranked{f_1 : \Sigma_1 \to \Gamma_1 \qquad f_2 : \Sigma_2 \to \Gamma_2}
+\end{align*}       
+can be lifted, in the natural way, along the type constructors to new arity preserving  functions
+\begin{eqnarray}
+\label{eq:liftplus}\funcitem{f_1 + f_2}{\Sigma_1 + \Sigma_2}{\Gamma_1 + \Gamma_2} \\
+\funcitem{\tensorpair{f_1,f_2}}{\Sigma_1 \product \Sigma_2}{\Gamma_1 \product \Gamma_2}\\
+\funcitem{\reduce k f_1}{\reduce k \Sigma_1}{\reduce k \Gamma_1}\\
+\label{eq:liftterm}
+\funcitem{\tmonad f_1}{\tmonad \Sigma_1}{\tmonad \Gamma_1}
+%\\\label{eq:liftshallow}\funcitem{\shallowterm{f_1}{f_2}}{\shallowterm{\Sigma_1}{\Sigma_2}}{\shallowterm {\Gamma_1}{\Gamma_2}} 
+\end{eqnarray}
+
+% The datatypes are then defined by applying the constructors to the prime datatypes, which are either finite ranked sets (those with finitely many elements), or  the terminal ranked set (i.e.~a ranked set which admits a unique function from every other ranked set).
 % We call such ranked sets \emph{types}.
 %  The general idea is that we start with finite ranked sets, and close these under the following type constructors: coproducts, two kinds of product (Cartesian and tensor), taking terms, and a type constructor that allows to merge ports.
 %  and the matrix power. 
@@ -93,51 +111,45 @@ i \mapsto (i_2, \underbrace{(q_1 -1)k_2 + q_2}_{\substack{\text{bijection betwee
 
 
 
-\begin{definition}[Datatypes] \label{def:types} A \emph{datatype} is any ranked set which can be obtained by applying the constructors 
+
+\subsection{Derivable functions}
+We now introduce the main  definition of this paper.
+
+\begin{definition}[Datatypes and derivable function]\label{def:derivable-function}
+\label{def:types} 
+% \ 
+%  \begin{enumerate}
+    % \item 
+    A \emph{datatype} is any ranked set which can be obtained by applying the constructors 
     \begin{align*}
-    \ranked{\tmonad \rSigma \qquad \rSigma_1 \otimes \rSigma_2 \qquad \rSigma_1 + \rSigma_2 \qquad \reduce k \rSigma},
+    \ranked{\tmonad \rSigma \qquad \rSigma_1 \product \rSigma_2 \qquad \rSigma_1 + \rSigma_2 \qquad \reduce k \rSigma},
     \end{align*}
-    to ranked sets which are either finite or equal to the \emph{terminal ranked set}  defined by\footnote{The reason for this notation is that the terminal set can be used to model partial functions. A partial function of type  $\ranked{ \Sigma \to \Gamma}$ can be modelled as a total function of type $\ranked{\Sigma \to \Gamma + \termset}$, which outputs elements of $\termset$ instead of  undefined values.
+    to ranked sets which are either finite (have finitely many elements) or equal to the \emph{terminal ranked set}  defined by\footnote{The reason for the $\termset$ notation is that the terminal set can be used to define partial functions. A partial function with output  type  $\rSigma$ can be seen as a total function of output type $\rSigma + \termset$, which uses  $\termset$  for  undefined values.
     }
     \begin{align*}
     \termset \eqdef  \underbrace{\redset{\naryterm 0, \naryterm 1, \naryterm 2,\ldots}.}_{\substack{\text{for each arity $i$, one} \\ \text{element denoted by $i$}}}
-    \end{align*}
-\end{definition}
-
-
-\subsection{Derivable functions}
-\smallskip
-\newcommand{\funcitem}[3]{\ranked{#1  } &:& \ranked{#2} \rto  \ranked{#3}}
-This completes the definition of the datatype constructors. 
-All datatype constructors are functors, in the sense  that  arity preserving functions
-\begin{align*}
-\ranked{f_1 : \Sigma_1 \to \Gamma_1 \qquad f_2 : \Sigma_2 \to \Gamma_2}
-\end{align*}       
-can be lifted, in the natural way, along the type constructors to new arity preserving  functions
-\begin{eqnarray}
-\label{eq:liftplus}\funcitem{f_1 + f_2}{\Sigma_1 + \Sigma_2}{\Gamma_1 + \Gamma_2} \\
-\funcitem{\tensorpair{f_1,f_2}}{\Sigma_1 \otimes \Sigma_2}{\Gamma_1 \otimes \Gamma_2}\\
-\funcitem{\reduce k f_1}{\reduce k \Sigma_1}{\reduce k \Gamma_1}\\
-\label{eq:liftterm}
-\funcitem{\tmonad f_1}{\tmonad \Sigma_1}{\tmonad \Gamma_1}
-%\\\label{eq:liftshallow}\funcitem{\shallowterm{f_1}{f_2}}{\shallowterm{\Sigma_1}{\Sigma_2}}{\shallowterm {\Gamma_1}{\Gamma_2}} 
-\end{eqnarray}
-
-We now introduce the main new definition of this paper.
-
-\begin{definition}[Derivable function]\label{def:derivable-function}
-    The class of \emph{derivable} functions is the least class which contains:
+    \end{align*}  
+    % \item 
+    An arity-preserving function between two datatypes is called \emph{derivable}  if it can be generated, using function composition and the liftings 
+    \eqref{eq:liftplus}--\eqref{eq:liftterm}, from the following functions:
     \begin{itemize}
     \item for every $\rSigma$, the unique arity preserving function $\ranked{\Sigma \to \termset}$;
     \item  all arity preserving functions with finite domain;
         \item  the prime functions in Figures~\ref{fig:monad},\ref{fig:product} and \ref{fig:not-explained};
          \end{itemize}
-and which is closed under composition and  liftings (1)--(4).
+% \end{enumerate}
+  
+
+   
 \end{definition}
+
+\input{functions-reduced}
 
 %\include{figure-fot}
 
 The prime functions in Figure~\ref{fig:monad} describe the monad structure of terms and folds, and were explained in Section~\ref{sec:datatype-constructors}. The prime functions in Figure~\ref{fig:product} are  simple syntactic transformations, which are intended to have no computational content.  Figure~\ref{fig:not-explained} contains   less obvious operations, whose definitions are  deferred to Section~\ref{sec:prime-and-combinators}. Before giving these definitions, we state the main result of the paper. 
+
+\input{example-derivable}
 
 % \begin{example}
 %     To get a feeling for the prime functions and combinators, we derive the function
@@ -151,15 +163,15 @@ The prime functions in Figure~\ref{fig:monad} describe the monad structure of te
 %     \begin{align*}
 %     \ranked{
 %         \xymatrix{
-%             \rSigma \otimes \rSigma \ar[r] &
-%             (\shallowterm \redone \rSigma) \otimes (\shallowterm \redone \rSigma) \ar[r] &
-%             \shallowterm{(\redone \otimes \redone)}  {(\rSigma+\rSigma)} \ar[r] & \shallowterm \redtwo \rSigma
+%             \rSigma \product \rSigma \ar[r] &
+%             (\shallowterm \redone \rSigma) \product (\shallowterm \redone \rSigma) \ar[r] &
+%             \shallowterm{(\redone \product \redone)}  {(\rSigma+\rSigma)} \ar[r] & \shallowterm \redtwo \rSigma
 %         }
 %     }
 %     \end{align*}
 %     which is described in the following picture:
 %     \mypic{78}
-%     The last function applies the bijection $\ranked{\redone \otimes \redone \to \redtwo}$, which is derivable by virtue of having a finite domain. 
+%     The last function applies the bijection $\ranked{\redone \product \redone \to \redtwo}$, which is derivable by virtue of having a finite domain. 
 
 %     Next, we can swap the children of 
 % \end{example}
@@ -176,57 +188,65 @@ The prime functions in Figure~\ref{fig:monad} describe the monad structure of te
 
 % We are now ready to state the main theorem of this paper. 
 
-\begin{theorem}\label{thm:main}
-    Let $\rSigma,\rGamma$ be finite ranked sets. A function 
+By abuse of notation, we say that a tree-to-tree function  
     \begin{align*}
         f : \trees \rSigma \to \trees \rGamma
     \end{align*}
-    is a first-order tree-to-tree transduction if and only if it is the restriction to trees of some derivable
+    is \emph{derivable} if it is the restriction to trees of some derivable partial function
     \begin{align*}
-        \ranked {f : \tmonad \Sigma \to \tmonad \Gamma}.
+        \ranked {f : \tmonad \Sigma \to \tmonad \Gamma + \termset}.
     \end{align*}
-    
+
+\begin{theorem}\label{thm:main} A tree-to-tree function is a first-order transduction if and only if it is derivable.
 \end{theorem}
 
-The bottom-up implication in the above theorem is proved by a straightforward induction on the derivation. We associate to each datatype a relational structure; for example the relational structure associated to a pair $\tensorpair {a_1,a_2}$ is the disjoint union of the relational structures associated to $a_1$ and $a_2$. These relational structures can then be transformed using first-order transductions.   We then show that all prime functions are first-order transductions (adapted suitably to structures other than trees); and that this property is preserved under applying the combinators.  This proof is in the appendix, and the rest of the paper is devoted to the top-down implication in the theorem, which says that every first-order transduction can be decomposed into the prime functions.
+
+The right-to-left implication in the above theorem is proved by a straightforward induction on the derivation. The general idea is that we associate to each datatype a relational structure; for example the relational structure associated to a pair $\tensorpair {a_1,a_2}$ is the disjoint union of the relational structures associated to $a_1$ and $a_2$.  In the appendix, we show that all prime functions are first-order transductions (adapted suitably to structures other than trees); and that this property is preserved under applying the combinators.  
+
+The  left-to-right implication in the theorem, which says that every first-order transduction is derivable, is discussed in Sections~\ref{sec:stt}--\ref{sec:one-register}.
 %\subsection{Proposition of another presentation of prime functions}
-\input{functions-reduced}
+
 
 %\input{functions}
 \subsection{The prime functions from Figure~\ref{fig:not-explained}}
 \label{sec:prime-and-combinators}
-Before continuing with the proof of top-down implication in Theorem~\ref{thm:main}, we  describe the prime functions from Figure~\ref{fig:not-explained}. 
+In this section, we  describe the prime functions from Figure~\ref{fig:not-explained}. 
 Each of these functions will play a key role in one of the main results of the paper.
 %  We will highlight the moments when such functions are used.  
 
 
 \subsubsection{Factorisations}
-We begin with the factorisation functions 
+We begin with the two factorisation functions 
 \begin{align*}
-    \overbrace{\ancfact}^{\text{ancestor}}, \overbrace{\decfact}^{\text{descendant}}  : \ranked{\tmonad(\Sigma_1+\Sigma_2) \to \tmonad(\tmonad \Sigma_1 + \tmonad \Sigma_2)}.
+    \ancfact,\decfact  : \ranked{\tmonad(\Sigma_1+\Sigma_2) \to \tmonad(\tmonad \Sigma_1 + \tmonad \Sigma_2)}.
 \end{align*}
-Define a \emph{factorisation} of a term   to be any term of terms that flattens to it. 
+% \begin{align*}
+%     \overbrace{\ancfact}^{\text{ancestor}}, \overbrace{\decfact}^{\text{descendant}}  : \ranked{\tmonad(\Sigma_1+\Sigma_2) \to \tmonad(\tmonad \Sigma_1 + \tmonad \Sigma_2)}.
+% \end{align*}
+These are used to factorise a term into smaller parts. 
+Define a \emph{factorisation} of a term   to be any term of terms that flattens to it.  An alternative view is that a factorisation is an equivalence relation on nodes in a term, where every equivalence class is connected via the parent-child relation.
 % Another definition is that  a factorisation is an equivalence relation on non-port nodes where every equivalence class is a factor (connected via the parent-child relation). 
     % The two definitions are easily seen to be equivalent, in the sense that there is a one-to-one correspondence between factorisation in the two meanings.
     %  which is explained in the following picture:
     % \mypic{14}
-The factorisation functions $\ancfact$ and $\decfact$ are used to transform a term  into a factorisations; with the partition of the input alphabet used to choose the factorisation.  Consider an input term $t \in \ranked{\tmonad(\rSigma_1 + \rSigma_2)}$.
-        We say that two non-port nodes have \emph{same type} if both have labels in the same  $\ranked{\Sigma_i}$; otherwise we say that non-port nodes have \emph{opposing type}.  Call two non-port nodes \emph{ancestor equivalent}  if they have the same proper ancestors of opposing type. Call two non-port nodes \emph{descendant equivalent}  if they  are ancestor equivalent and they have the same proper descendants of opposing type. Here is a picture, with $\ranked{\Sigma_1}$ being red and $\ranked{\Sigma_2}$ being blue: 
+
+The factorisation functions $\ancfact$ and $\decfact$ are used to transform a term  into a factorisation in a way that is guided by the partition of the input alphabet.  
+Consider an input term $t \in \ranked{\tmonad(\rSigma_1 + \rSigma_2)}$.
+        We say that two non-port nodes have \emph{same type} if both have labels in the same  $\ranked{\Sigma_i}$; otherwise we say that non-port nodes have \emph{opposing type}. Define  two equivalence relations on non-port nodes in a term as follows: (a) nodes are \emph{$\uparrow$-equivalent}  if they have the same type and the same proper ancestors of opposing type; (b) nodes are  \emph{$\downarrow$-equivalent}  if they  are $\uparrow$-equivalent and have the same proper descendants of opposing type.
+           Here is a picture of the equivalence classes, with $\ranked{\Sigma_1}$ being red and $\ranked{\Sigma_2}$ being blue: 
         \mypic{111}
     %     \begin{center}
     %   \includegraphics[scale=.3]{facto-up-down.pdf}
     %     \end{center}
-        For both of these equivalence relations, the equivalence classes are connected with respect to the parent-child relation, and therefore the equivalences can be seen as factorisations. Furthermore, the equivalence classes contain only nodes of same type.  The function $\ancfact$ maps a term to factorisation corresponding to its ancestor equivalence relation, likewise we define $\decfact$ for  descendant factorisations.
+        For both  equivalence relations, the equivalence classes are connected  under the parent-child relation, and therefore the equivalences can be seen as factorisations. These factorisations are produced by the functions $\ancfact$ and $\decfact$. 
     
-        \subsubsection{Pre-order traversal.} The preorder traversal function  
+        \subsubsection{Pre-order traversal.} The pre-order traversal function  
         \begin{align*}
             \ranked{\preorder : \tmonad \Sigma \to \reduce 1 \tmonad (\rSigma + 0 + 2)}
         \end{align*}
-        is the natural extension -- from trees to terms -- of the depth-first traversal, as explained below (the nullary grey nodes represent the labels from $\ranked 0$, and the binary grey nodes represent the labels from $\ranked 2$):
-        \begin{center}
-        \includegraphics[scale=.34]{pictures/preorder.pdf}
-        \end{center}
-The $\preorder$ function respects the input port order, this is the reason  why we have a fold $\reduce 1$ in the output type. 
+        is the natural extension -- from trees to terms -- of the pre-order function in Example~\ref{ex:pre-order-main}. The fold in the output type is used to re-order the ports in a way which matches the input term, as illustrated in the following picture:
+        \mypic{113}
+      
 
 \input{unfold}
 %\subsubsection{Unfolding}

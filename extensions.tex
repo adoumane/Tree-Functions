@@ -12,11 +12,5 @@ An immediate corollary of the above lemma is that, once we extend the derivable 
 \end{theorem}
 In the above result, we simply throw in all \mso relabellings as prime functions. In contrast,  in the first-order case from the main theorem of this paper, we took care to have a small number of primitives. The small number of primitives for first-order logic  was possible thanks in part to the Schlingloff theorem that allowed decomposing first-order relabellings (see Section~\ref{sec:fo-translation}).  In principle, such a decomposition might be possible also for the \mso case, but proving it  would likely require developing new Krohn-Rhodes theory for tree languages, which seems to be a very hard problem that is outside the scope of this paper.
 
-\paragraph*{Chain logic.} What would happen if we used the general  unfolding operation instead of the monotone one? It turns out that the corresponding transductions would also have clean logical description, in terms of a fragment of \mso that was introduced by  Wolfgang Thomas and called \emph{chain logic}, see~\cite[Section 2]{thomas1992} or~\cite[Section 2.5.3]{bojanczykDecidablePropertiesTree2004}. Define chain logic to be the fragment of \mso where set quantification is restricted to chains (i.e.~sets of nodes where every two nodes are comparable by  the descendant relation). Define a \emph{chain logic tree-to-tree transduction} to be the special case of an \mso tree-to-tree transduction where chain logic is used instead of \mso. 
-
-\begin{theorem}\label{thm:chain-transductions}
-    A tree-to-tree function is a chain logic tree-to-tree transduction if and only if it (is the tree restriction of a function that)  belongs to the class obtained by lifting the monotonicity restriction on unfolding in   Definition~\ref{def:derivable-function}. 
-\end{theorem}
-
 
 
