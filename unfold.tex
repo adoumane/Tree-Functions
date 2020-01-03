@@ -76,7 +76,7 @@ swaps coordinates $1$ and $2$.  Call  an element of the matrix power  \emph{mono
 \paragraph*{Is unfolding derivable?} The  prime functions in our main theorem  are meant to be simple syntactic rewritings. It is debatable whether the  unfolding operation can be called a simple syntactic rewriting. For example, proving that monotone unfolding is a first-order transduction requires non-trivial effort, including an invocation of the Sch\"utzenberger-McNaughton-Papert theorem about first-order logic on words being the same as counter-free automata. From this perspective, one can naturally ask: is it possible to break down monotone unfolding into simpler primitives?
 In the appendix, we devote considerable resources to answering this question. We propose one new  datatype
 % \begin{align*}
-% \shallowterm \rSigma \rGamma \quad \eqdef   \quad \ranked{\coprod_{\black{a \in} \rSigma} } \overbrace{\ranked{\Gamma \otimes \cdots \otimes \Gamma},}^{\text{arity of $a$ times}}
+% \shallowterm \rSigma \rGamma \quad \eqdef   \quad \ranked{\coprod_{\black{a \in} \rSigma} } \overbrace{\ranked{\Gamma \product \cdots \product \Gamma},}^{\text{arity of $a$ times}}
 % \end{align*}
 % which represents trees of depth two, 
 and seventeen additional prime functions, which can be called syntactic rewriting without stretching the reader's patience. Then, we show that monotone unfolding can be derived, in the presence of  the new datatype and functions. The proof of this result is one of the main technical contributions of this paper.
@@ -91,7 +91,7 @@ and seventeen additional prime functions, which can be called syntactic rewritin
 % For $i \in \set{1,\ldots,k}$ construct a term $s_i$ as follows. The root label is $a_i$. If the arity of $a_i$ is $n_i$, then let $t_{ij}$ be the tree 
 % For two ranked sets $\rSigma$ and $\rGamma$, define 
 % \begin{align*}
-% \shallowterm \rSigma \rGamma \quad \eqdef   \quad \ranked{\coprod_{\black{a \in} \rSigma} } \overbrace{\ranked{\Gamma \otimes \cdots \otimes \Gamma}}^{\text{arity of $a$ times}}
+% \shallowterm \rSigma \rGamma \quad \eqdef   \quad \ranked{\coprod_{\black{a \in} \rSigma} } \overbrace{\ranked{\Gamma \product \cdots \product \Gamma}}^{\text{arity of $a$ times}}
 % \end{align*}
 % \begin{align*}
 %     \ranked{

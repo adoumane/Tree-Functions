@@ -74,8 +74,8 @@ $
 \begin{array}{ccc}
 	\simplefun
         {}
-        {(\Sigma \otimes \Gamma)\otimes \Delta}
-        {\Sigma \otimes (\Gamma\otimes \Delta)}
+        {(\Sigma \product \Gamma)\product \Delta}
+        {\Sigma \product (\Gamma\product \Delta)}
         {$\tensorpair{\tensorpair{a,b},c}\mapsto \tensorpair{a,\tensorpair{b,c}}$} 	
  	& \simplefun
         {}
@@ -103,8 +103,8 @@ $
         &
         \reversiblefun
         {}
-        {(\Sigma_1 + \Sigma_2)\otimes \Gamma}
-        {(\Sigma_1 \otimes \Gamma) + (\Sigma_2 \otimes \Gamma)}
+        {(\Sigma_1 + \Sigma_2)\product \Gamma}
+        {(\Sigma_1 \product \Gamma) + (\Sigma_2 \product \Gamma)}
         {$\tensorpair{(a,i),b}\to (\tensorpair{a,b},i)$}
         &       
         \simplefun
@@ -115,8 +115,8 @@ $
       \\[15pt]  
       \reversiblefun
         {}
-        {\shallowterm {(\Sigma_1 \otimes \Sigma_2)} \Gamma}
-        {(\shallowterm {\Sigma_1} \Gamma) \otimes (\shallowterm {\Sigma_2} \Gamma)}
+        {\shallowterm {(\Sigma_1 \product \Sigma_2)} \Gamma}
+        {(\shallowterm {\Sigma_1} \Gamma) \product (\shallowterm {\Sigma_2} \Gamma)}
         {\includegraphics[scale=.33]{tensor-shallow-distrib}}
 %        {(a,i)\tensorpair{b_1,\ldots,b_n} \mapsto (a\tensorpair{b_1\ldots,b_n}) }
 %       &
@@ -131,14 +131,14 @@ $
          & 
 	\simplefun
         {}
-        {\reduce k (\Sigma_1 \otimes \Sigma_2)}
-        {\reduce k ((\reduce k {\Sigma_1})\otimes (\reduce k \Sigma_2))}
+        {\reduce k (\Sigma_1 \product \Sigma_2)}
+        {\reduce k ((\reduce k {\Sigma_1})\product (\reduce k \Sigma_2))}
         {\includegraphics[scale=.33]{tensor-fold-distrib-1}}        
 	&
 	 \simplefun
         {}
-        {(\reduce k \Sigma_1) \otimes (\reduce k {\Sigma_2})}
-         {\reduce k (\Sigma_1 \otimes \Sigma_2)}
+        {(\reduce k \Sigma_1) \product (\reduce k {\Sigma_2})}
+         {\reduce k (\Sigma_1 \product \Sigma_2)}
         {\includegraphics[scale=.33]{tensor-fold-distrib-2}}  
          \end{array}\\
 \begin{array}{cc}
@@ -190,7 +190,7 @@ $
         {$(a,i)\to a$}	
 	& \simplefun
         {}
-        {\Sigma\otimes \Sigma}
+        {\Sigma\product \Sigma}
         {\reduce 1 \Sigma}
         {\includegraphics[scale=.3]{tensor-projection-1}}	 
 	& \simplefun
@@ -219,8 +219,8 @@ $
   &
     \reversiblefun
         {}
-        {\ranked{\Sigma_1 \otimes\Sigma_2}}
-        {\ranked{\Sigma_2 \otimes \Sigma_1}}
+        {\ranked{\Sigma_1 \product\Sigma_2}}
+        {\ranked{\Sigma_2 \product \Sigma_1}}
         {$\tensorpair{a,b} \mapsto \tensorpair{b,a} $}
 \end{array}\qquad&\qquad
 \begin{array}{cc}
@@ -316,7 +316,7 @@ $\begin{array}{c}
 %        \end{array}$$
 %\item \textbf{Associativity functions.}
 %$$\begin{array}{lll}
-%\ranked{(\Sigma \otimes \Gamma)\otimes \Delta \to \Sigma \otimes (\Gamma\otimes \Delta)} \quad &\quad \ranked{(\Sigma + \Gamma)+ \Delta \to \Sigma + (\Gamma+ \Delta)}  \quad&\quad \ranked{(\Sigma . \Gamma). \Delta \to \Sigma . (\Gamma . \Delta)}
+%\ranked{(\Sigma \product \Gamma)\product \Delta \to \Sigma \product (\Gamma\product \Delta)} \quad &\quad \ranked{(\Sigma + \Gamma)+ \Delta \to \Sigma + (\Gamma+ \Delta)}  \quad&\quad \ranked{(\Sigma . \Gamma). \Delta \to \Sigma . (\Gamma . \Delta)}
 %\end{array}$$
 %\item \textbf{Distributivity functions}.
 %$$\begin{array}{ll}
@@ -328,8 +328,8 @@ $\begin{array}{c}
 %         & 
 %        \reversiblefun
 %        {}
-%        {(\Sigma_1 + \Sigma_2)\otimes \Gamma}
-%        {(\Sigma_1 \otimes \Gamma) + (\Sigma_2 \otimes \Gamma)}
+%        {(\Sigma_1 + \Sigma_2)\product \Gamma}
+%        {(\Sigma_1 \product \Gamma) + (\Sigma_2 \product \Gamma)}
 %        {$\tensorpair{(a,i),b} \mapsto (\tensorpair{a,b},i)$}
 %        \\ \\
 %        \reversiblefun
@@ -340,8 +340,8 @@ $\begin{array}{c}
 %        &
 %        \reversiblefun
 %        {}
-%        {\shallowterm {(\Sigma_1 \otimes \Sigma_2)} \Gamma}
-%        {(\shallowterm {\Sigma_1} \Gamma) \otimes (\shallowterm {\Sigma_2} \Gamma)}
+%        {\shallowterm {(\Sigma_1 \product \Sigma_2)} \Gamma}
+%        {(\shallowterm {\Sigma_1} \Gamma) \product (\shallowterm {\Sigma_2} \Gamma)}
 %        {
 %        \begin{tabular}{c}
 %            $\tensorpair{a_1,a_2}\tensorpair{b_1,\ldots,b_n} \mapsto$ \\
@@ -351,13 +351,13 @@ $\begin{array}{c}
 %            \\
 %	\simplefun
 %        {}
-%        {\reduce k (\Sigma_1 \otimes \Sigma_2)}
-%        {\reduce k ((\reduce k {\Sigma_1})\otimes (\reduce k \Sigma_2))}{picture}        
+%        {\reduce k (\Sigma_1 \product \Sigma_2)}
+%        {\reduce k ((\reduce k {\Sigma_1})\product (\reduce k \Sigma_2))}{picture}        
 %	&
 %	 \simplefun
 %        {}
-%        {(\reduce k \Sigma_1) \otimes (\reduce k {\Sigma_2})}
-%         {\reduce k (\Sigma_1 \otimes \Sigma_2)}
+%        {(\reduce k \Sigma_1) \product (\reduce k {\Sigma_2})}
+%         {\reduce k (\Sigma_1 \product \Sigma_2)}
 %        {picture}  \\
 %        
 %         \simplefun
@@ -369,7 +369,7 @@ $\begin{array}{c}
 %\end{array} $$
 %\item \textbf{Commutativity functions.} 
 %$$\begin{array}{ll}
-%\ranked{\Sigma_1 + \Sigma_2 \to \Sigma_2 + \Sigma_1} \qquad & \qquad  \ranked{\Sigma_1 \otimes \Sigma_2 \to \Sigma_2 \otimes \Sigma_1}
+%\ranked{\Sigma_1 + \Sigma_2 \to \Sigma_2 + \Sigma_1} \qquad & \qquad  \ranked{\Sigma_1 \product \Sigma_2 \to \Sigma_2 \product \Sigma_1}
 %\end{array}
 %$$
 %\item \textbf{Shallow terms.} 
@@ -398,7 +398,7 @@ $\begin{array}{c}
 %\end{array} $$     
 %\item \textbf{The error type $\bot$.} Some error raising mechanisms.
 %$$\begin{array}{llll}
-%\ranked{\Sigma \to \bot} \quad&\quad \ranked{\tmonad(\Sigma+\bot)\to \tmonad\Sigma+\bot} \quad&\quad \ranked{\reduce k (\Sigma+\bot)\to \reduce k\Sigma+\bot}\quad&\quad  \ranked{(\Sigma+\bot)\otimes \Gamma\to \Sigma\otimes \Gamma+\bot}
+%\ranked{\Sigma \to \bot} \quad&\quad \ranked{\tmonad(\Sigma+\bot)\to \tmonad\Sigma+\bot} \quad&\quad \ranked{\reduce k (\Sigma+\bot)\to \reduce k\Sigma+\bot}\quad&\quad  \ranked{(\Sigma+\bot)\product \Gamma\to \Sigma\product \Gamma+\bot}
 %\end{array}$$     
 %\item \textbf{Injections.}
 %$$\begin{array}{llll}
@@ -407,7 +407,7 @@ $\begin{array}{c}
 %\end{array}$$
 %\item \textbf{Projections.}
 %$$\begin{array}{llll}
-%\ranked{\Sigma+\Sigma\to \Sigma} \quad &\quad \ranked{\Sigma\otimes \Sigma \to \reduce 1 \Sigma} \quad & \quad \ranked{\reduce {k+1} \Sigma \to \reduce {k}\Sigma+\bot} \quad & \quad 
+%\ranked{\Sigma+\Sigma\to \Sigma} \quad &\quad \ranked{\Sigma\product \Sigma \to \reduce 1 \Sigma} \quad & \quad \ranked{\reduce {k+1} \Sigma \to \reduce {k}\Sigma+\bot} \quad & \quad 
 %\ranked{\shallowterm n \Sigma \to \Sigma^n} 
 %\end{array}$$
 %\item \textbf{Factorisations.} Same as before.

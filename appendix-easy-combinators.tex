@@ -32,7 +32,7 @@ For   ranked sets $\ranked{\Sigma_1}$, $\ranked{\Sigma_2}$ and $i \in \set{1,2}$
 {
 If $\ranked{\Sigma_1}$ and $\ranked{\Sigma_2}$ are ranked sets, then  their \emph{tensor product}
 \begin{align*}
-    \ranked{\Sigma_1 \otimes \Sigma_2}
+    \ranked{\Sigma_1 \product \Sigma_2}
 \end{align*}
 is also a ranked set. An $n$-ary element of the tensor product is a pair $\tensorpair {a_1,a_2}$ such that $a_i \in \ranked{\Sigma_i}$ and 
 \begin{align*}
@@ -43,11 +43,11 @@ We use angled brackets to distinguish tensor pairs $\tensorpair{a_1,a_2}$ from C
 {
        \item Functions $\set{\ranked{f_i : \Sigma_i \to \Gamma_i}}_{i \in \set{1,2}}$ can tensored: 
        \begin{align*}
-           \ranked{\tensorfun{f_1}{f_2} : \Sigma_1 \otimes \Sigma_2 \to  \Gamma_1 \otimes \Gamma_2}
+           \ranked{\tensorfun{f_1}{f_2} : \Sigma_1 \product \Sigma_2 \to  \Gamma_1 \product \Gamma_2}
        \end{align*}
        \item Tensor  product distributes across coproduct:
        \begin{align*}
-           \ranked{\distrtensor : (\Sigma_1 + \Sigma_2)\otimes \Gamma \to (\Sigma_1 \otimes \Gamma) + (\Sigma_2 \otimes \Gamma)}.
+           \ranked{\distrtensor : (\Sigma_1 + \Sigma_2)\product \Gamma \to (\Sigma_1 \product \Gamma) + (\Sigma_2 \product \Gamma)}.
        \end{align*} 
 }
 
