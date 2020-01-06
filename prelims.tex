@@ -35,7 +35,7 @@ Moreover, $f$ should satisfy the following two conditions\footnote{These conditi
 \item  {\bf Bottom-up monotonicity.} If $i<i'$ and $f(\sigma_i, o)=(m,l)$ and $f(\sigma_{i'},o')=(m,l')$ then $l<l'$. 
 \end{itemize}
 
-%\item {\bf Tensor product $\Sigma \otimes \Gamma$.} An  $n$-ary element of $\Sigma \otimes \Gamma$ is a pair of elements from $\Sigma, \Gamma$, respectively, whose arities  sum up to $n$. \textcolor{red}{No need for tensor. }
+%\item {\bf Tensor product $\Sigma \product \Gamma$.} An  $n$-ary element of $\Sigma \product \Gamma$ is a pair of elements from $\Sigma, \Gamma$, respectively, whose arities  sum up to $n$. \textcolor{red}{No need for tensor. }
 %
     \end{enumerate}  
     \end{itemize}  
@@ -49,7 +49,7 @@ Moreover, $f$ should satisfy the following two conditions\footnote{These conditi
 %\end{center}
 %In fact, the term constructor can be viewed as a least fixpoint of tensor products, as expressed in the following isomorphism:
 %\begin{align*}
-%    \terms \Sigma \quad \simeq \quad  \set \portletter + \coprod_{a \in \Sigma} \underbrace{\terms \Sigma \otimes \cdots \otimes \terms \Sigma}_{\text{arity of $a$ times}}
+%    \terms \Sigma \quad \simeq \quad  \set \portletter + \coprod_{a \in \Sigma} \underbrace{\terms \Sigma \product \cdots \product \terms \Sigma}_{\text{arity of $a$ times}}
 %\end{align*}
 
 
@@ -70,9 +70,9 @@ Moreover, $f$ should satisfy the following two conditions\footnote{These conditi
 \begin{align*}
     (\Sigma_0 + \Sigma_1 ) \times \Gamma \to (\Sigma_0 \times \Gamma) + (\Sigma_1 \times \Gamma)
 \end{align*}
-\item Distribution of $+$ across $\otimes$:
+\item Distribution of $+$ across $\product$:
 \begin{align*}
-    (\Sigma_0 + \Sigma_1 ) \otimes \Gamma \to (\Sigma_0 \otimes \Gamma) + (\Sigma_1 \otimes \Gamma)
+    (\Sigma_0 + \Sigma_1 ) \product \Gamma \to (\Sigma_0 \product \Gamma) + (\Sigma_1 \product \Gamma)
 \end{align*}
 \item Flattening:
 \begin{align*}
@@ -99,7 +99,7 @@ Be aware that we should prove that the image of an element from $\terms \Sigma^{
 
 %\item Assuming that $\Sigma$ is finite, the two canonical bijections (one in each direction) between the ranked sets:
 % \begin{align*}
-%    \terms \Sigma \qquad \text{and} \qquad    \set \portletter + \coprod_{a \in \Sigma} \underbrace{\terms \Sigma \otimes \cdots \otimes \terms \Sigma}_{\text{arity of $a$ times}}
+%    \terms \Sigma \qquad \text{and} \qquad    \set \portletter + \coprod_{a \in \Sigma} \underbrace{\terms \Sigma \product \cdots \product \terms \Sigma}_{\text{arity of $a$ times}}
 %\end{align*}
 
 \end{enumerate}
@@ -132,7 +132,7 @@ The prime functions can be combined into more complex functions using the follow
 
 %\item Tensor product of functions:
 %\begin{align*}
-%    \frac{f_0 : \Sigma_0 \to \Gamma_0 \quad f_1 : \Sigma_1 \to \Gamma_1} {\langle f_0,f_1 \rangle : \Sigma_0 \otimes \Sigma_1 \to \Gamma_0 \otimes \Gamma_1}
+%    \frac{f_0 : \Sigma_0 \to \Gamma_0 \quad f_1 : \Sigma_1 \to \Gamma_1} {\langle f_0,f_1 \rangle : \Sigma_0 \product \Sigma_1 \to \Gamma_0 \product \Gamma_1}
 %\end{align*}
 \end{enumerate}
 \end{definition}
@@ -155,7 +155,7 @@ To illustrate these first-order tree functions, we present a series of examples,
 %\noindent \begin{example}[Identity] For every type $\Sigma$, the identity function $x\in\Sigma\mapsto x\in\Sigma$ is a first-order tree function. This is achieved by induction on the types: the identity function over a finite set of elements is first-order since its domain is finite, and the identity function over $\llone$ is the first-order function $!$. For $\Sigma$ and $\Gamma$ in $\Tt$ , the identity
 %function over $\Sigma+\Gamma$ is the disjoint union of the co-projections $\Sigma \to \Sigma + \Gamma$ and $\Gamma \to \Sigma + \Gamma$. The
 %identity function over $\Sigma \times \Gamma$ is the pairing of the projections $\Sigma \times \Gamma \to \Sigma$ and $\Sigma \times \Gamma \to \Gamma$. The
-%identity function over $\Sigma \otimes \Gamma$ is the tensor product of the identity over $\Sigma$ and the identity over $\Gamma$. Finally,
+%identity function over $\Sigma \product \Gamma$ is the tensor product of the identity over $\Sigma$ and the identity over $\Gamma$. Finally,
 %the identity function over $\terms\Sigma$ is constructed from the identity function over $\Sigma$ using the combinator $\terms$.
 %\end{example}
 %

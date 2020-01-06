@@ -167,10 +167,10 @@ X_1(i\text{-th-child}\wedge \phi)
 \end{lemma}
 \begin{proof}
 To show that $\ranked{f}$ is derivable, we start applying the children function \begin{align*}
-\ranked{\mathsf{Children}:\tmonad\rSigma\to \tmonad (\rSigma\otimes (\rSigma_0+0)^*)}
+\ranked{\mathsf{Children}:\tmonad\rSigma\to \tmonad (\rSigma\product (\rSigma_0+0)^*)}
 \end{align*} from Example~\ref{ex:sibling} which tags every nodes by the list of its children. Consider the function $g$
 $$\begin{array}{rlll}
-\ranked{g:}  \ranked{\rSigma\otimes (\rSigma_0+0)^*} &\ranked{\to}& \ranked{\Sigma +\Sigma}&\\
+\ranked{g:}  \ranked{\rSigma\product (\rSigma_0+0)^*} &\ranked{\to}& \ranked{\Sigma +\Sigma}&\\
             \tensorpair{a,l}                           &
      \mapsto& \tensorpair{a,1}              &\text{if } l[i]\in\ranked{\rGamma_0}, \\
                     &   \mapsto& \tensorpair{a,2} &\text{otherwise.}   

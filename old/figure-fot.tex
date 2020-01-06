@@ -55,8 +55,8 @@
         % \\ \\
         % \reversiblefunfig
         % {\mathrm{swap}}
-        % {\Sigma \otimes \Gamma}
-        % {\Gamma \otimes \Sigma}
+        % {\Sigma \product \Gamma}
+        % {\Gamma \product \Sigma}
         % {$\tensorpair{a,b} \mapsto \tensorpair{b,a}$}
         % &
         \simplefunfig
@@ -67,8 +67,8 @@
          & 
         \reversiblefunfig
         {\distrtensor}
-        {(\Sigma_1 + \Sigma_2)\otimes \Gamma}
-        {(\Sigma_1 \otimes \Gamma) + (\Sigma_2 \otimes \Gamma)}
+        {(\Sigma_1 + \Sigma_2)\product \Gamma}
+        {(\Sigma_1 \product \Gamma) + (\Sigma_2 \product \Gamma)}
         {$\tensorpair{(a,i),b} \mapsto (\tensorpair{a,b},i)$}
         \\ \\
         \reversiblefunfig
@@ -79,8 +79,8 @@
         &
         \reversiblefunfig
         {\distrtensor}
-        {\shallowterm {(\Sigma_1 \otimes \Sigma_2)} \Gamma}
-        {(\shallowterm {\Sigma_1} \Gamma) \otimes (\shallowterm {\Sigma_2} \Gamma)}
+        {\shallowterm {(\Sigma_1 \product \Sigma_2)} \Gamma}
+        {(\shallowterm {\Sigma_1} \Gamma) \product (\shallowterm {\Sigma_2} \Gamma)}
         {
         \begin{tabular}{c}
             $\tensorpair{a_1,a_2}\tensorpair{b_1,\ldots,b_n} \mapsto$ \\

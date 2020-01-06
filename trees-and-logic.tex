@@ -51,7 +51,7 @@ The $i$-th child predicates are only needed for $i$ up to the maximal arity of l
     \mypic{94}
     After $k$-copying, the number of nodes grows $k$ times.
     \item \emph{Non-copying first-order transductions.} This is a tree-to-tree function which uses first-order logic to define a new tree structure over the nodes of the input tree. The syntax of such a transduction is given by:
-     \begin{enumerate}
+     \begin{enumerate} 
         \item  \emph{Input and output alphabets} $\rSigma$ and $\rGamma$, which are finite ranked sets. We use the name \emph{input vocabulary} for the vocabulary of trees over the input alphabet $\rSigma$, likewise we define the \emph{output vocabulary}.
         % \item a \emph{copying constant} $k \in \set{1,2,\ldots}$;
         \item \label{it:universe-formula} A first-order formula over the input vocabulary, with one free variable, called the \emph{universe formula}.
@@ -144,8 +144,8 @@ This is a non-copying first-order  transduction. The universe formula selects no
 \end{example}
 
 
-\begin{example}\label{ex:pre-order-main} Define  \emph{pre-order} to be the following ordering of  nodes in a tree:  $x$ is before  $y$ if either $x$ is an ancestor of $y$, or there exist siblings $x'$ and $y'$ such that $x'$ is an ancestor of $x$, $y'$ is an ancestor of $y$, and $x'$ has a smaller child number than $y'$.  Consider  the tree-to-tree which transforms a tree into a list of its nodes in pre-order, as explained in the following picture:
+\begin{example}\label{ex:pre-order-main} Define  \emph{pre-order} one nodes in a tree as follows:  $x$ is before  $y$ if either $x \le y$, or there exist nodes $x'$ and $y'$ such that $x' \le x$, $y' \le y$, and $x'$ is a sibling of $y'$ with a  smaller child number.  Consider  the tree-to-tree function which transforms a tree into a list of its nodes in pre-order, as explained in the following picture:
     \mypic{112}
-    Because the pre-order can be defined in first-order logic,  the above function is first-order tree-to-tree transduction. Unlike Example~\ref{ex:filter-first}, we need copying, because a node of arity $n$ in the input tree corresponds to $n+2$ nodes in the output tree.
+    Because the pre-order is first-order  definable,  the above function is a first-order tree-to-tree transduction. Unlike Example~\ref{ex:filter-first}, we need copying, because a node of arity $n$ in the input tree corresponds to $n+2$ nodes in the output tree.
 \end{example}
 

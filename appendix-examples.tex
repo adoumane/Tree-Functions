@@ -49,7 +49,7 @@ Then we lift the obtained function to terms, and compose the result with the $\f
 \noindent \begin{example}[Parent and children]\label{ex:sibling}  Let $\rGamma$ be a finite type. We define $\ranked{\rGamma_0}$  to be the ranked set obtained from $\rGamma$ by setting the arity of every element to $0$.  
 \medskip
 Consider the function:
-$$\ranked{ \mathsf{Parent}: \tmonad \rGamma \to \tmonad (\rGamma\otimes (\rGamma_0+0))}$$
+$$\ranked{ \mathsf{Parent}: \tmonad \rGamma \to \tmonad (\rGamma\product (\rGamma_0+0))}$$
 which adds to every node of a term in $\tmonad \rSigma$ the label  of its parent if it has one, and $0$ if it is the root.
 
 % from  $(\rGamma\cup\bot)^{\leq n}$, whose lenght is the arity of the node, and such that the $i^{th}$ element of the  list is the symbol of its $i^{th}$ sibling if it has one, otherwise it is $\bot$.
@@ -93,12 +93,12 @@ Hence, after the application of the homomorphism $\ranked{\mathsf{Hom}_g}$, our 
 		\end{center}
 \item Consider the function 
 \begin{align*}
-\ranked{h: \tmonad 1 \to \tmonad((\Gamma+\Gamma_1)\otimes(\Gamma_0+0))}
+\ranked{h: \tmonad 1 \to \tmonad((\Gamma+\Gamma_1)\product(\Gamma_0+0))}
 \end{align*}
 which is the empty term constant function. It is derivable by lifting the empty term constant function over $1$ to terms.
 And let $k$ be the function
 \begin{align*}
-\ranked{k: \tmonad(\Gamma+\Gamma_1) \to \tmonad((\Gamma+\Gamma_1)\otimes(\Gamma_0+0))}
+\ranked{k: \tmonad(\Gamma+\Gamma_1) \to \tmonad((\Gamma+\Gamma_1)\product(\Gamma_0+0))}
 \end{align*}
 which is the identity function, except for the following terms in which it is defined as follows
 $$\begin{array}{rll}
@@ -107,13 +107,13 @@ b_1\tensorpair{a\tensorpair{\portletter,\dots,\portletter}}&\mapsto& \tensorpair
 b_1\tensorpair{\portletter} &\mapsto& \portletter
 \end{array}$$
 \end{enumerate}
-We apply the function $\ranked{h}$ to the factors $\ranked{\tmonad 1}$ and the function $\ranked{k}$ to the factors $\ranked{\tmonad(\rGamma+\rGamma_1)}$. Doing so, we obtain a term in $\ranked{\tmonad\tmonad((\Gamma+\Gamma_1)\otimes(\Gamma_0+0))}$, which we flatten, then we erase the symbols $\ranked{\Gamma_1}$ using the function $\mathsf{Filter}$ of Example~\ref{ex:filter} to obtain the desired term. 
+We apply the function $\ranked{h}$ to the factors $\ranked{\tmonad 1}$ and the function $\ranked{k}$ to the factors $\ranked{\tmonad(\rGamma+\rGamma_1)}$. Doing so, we obtain a term in $\ranked{\tmonad\tmonad((\Gamma+\Gamma_1)\product(\Gamma_0+0))}$, which we flatten, then we erase the symbols $\ranked{\Gamma_1}$ using the function $\mathsf{Filter}$ of Example~\ref{ex:filter} to obtain the desired term. 
 	
 
 \smallskip
 If $\rGamma$ is a finite ranked set, we define $\ranked{\Gamma^*}$ as
-$$\coprod_{i \leq \text{ maximal arity in } \rGamma} \underbrace{\ranked{\rGamma\otimes \cdots \otimes \rGamma}}_{i\text{ times}}$$
-Now consider the function $$\ranked{\mathsf{Children}:\tmonad\rGamma\to \tmonad (\rGamma\otimes (\rGamma_0+0)^*)}$$ which tags every node of a term in $\tmonad \rGamma$ by the list  of its children symbols. When a child is a port, it is marked by $0$ in the list.
+$$\coprod_{i \leq \text{ maximal arity in } \rGamma} \underbrace{\ranked{\rGamma\product \cdots \product \rGamma}}_{i\text{ times}}$$
+Now consider the function $$\ranked{\mathsf{Children}:\tmonad\rGamma\to \tmonad (\rGamma\product (\rGamma_0+0)^*)}$$ which tags every node of a term in $\tmonad \rGamma$ by the list  of its children symbols. When a child is a port, it is marked by $0$ in the list.
 The function $\ranked{\mathsf{Children}}$ can be derived using a similar construction as above.
 \end{example}
 
@@ -125,7 +125,7 @@ To show this, we first start by applying the function $\ranked{\mathsf{Parent}}$
 
 The function $\ranked{h}$ defined below is derivable since its domain is finite. 
 \begin{align*}
-\ranked{h:\rSigma\otimes(\rSigma_0+0)}&\ranked{\to \rGamma}\\
+\ranked{h:\rSigma\product(\rSigma_0+0)}&\ranked{\to \rGamma}\\
   \tensorpair{a,0} &\mapsto f(a) \\
   \tensorpair{a,b} &\mapsto g(a) \text{ if } b\neq 0.
 \end{align*}
@@ -201,7 +201,7 @@ We can think of the type $\ranked{\bot}$ as an error type. Indeed, the following
 Let $\rSigma$ and $\rGamma$ be two datatypes. The functions
 $$\begin{array}{rll}
 \ranked{\tmonad(\Sigma+\bot)} &\ranked{\to }&\ranked{\tmonad \Sigma +\bot}\\
-\ranked{(\Sigma+\bot) \otimes (\Gamma+\bot)} &\ranked{\to} &\ranked{\Sigma\otimes \Gamma+\bot }\\
+\ranked{(\Sigma+\bot) \product (\Gamma+\bot)} &\ranked{\to} &\ranked{\Sigma\product \Gamma+\bot }\\
 \ranked{\shallowterm {(\Sigma+\bot)}{(\Gamma+\bot)}} &\ranked{\to} &\ranked{\shallowterm\Sigma\Gamma +\bot}\\
 \ranked{\reduce k (\Sigma+\bot)} &\ranked{\to} &\ranked{\reduce k \Sigma +\bot} 
 \end{array}$$

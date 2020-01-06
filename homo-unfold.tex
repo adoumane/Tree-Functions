@@ -65,7 +65,7 @@ The function $f$ can be derived using the following steps. We use the example of
  \end{center}
  \item Next, we will transform each matrix power node into a tensor product as follows 
  \begin{align*}
- \ranked{ \Sigma^{[k]} \rightarrow \reduce k (\reduce k \Sigma \otimes \dots \reduce k \Sigma) \to \reduce 1 (\reduce k \Sigma)^k}
+ \ranked{ \Sigma^{[k]} \rightarrow \reduce k (\reduce k \Sigma \product \dots \reduce k \Sigma) \to \reduce 1 (\reduce k \Sigma)^k}
  \end{align*}
  The idea here is that, since the image of each twist is a singleton,  the ports of the matrix power are independent. We can then transform safely each node into a tensor product. After that, we transform each tensor product $\ranked{(\reduce k \Sigma)^k}$ into a shallow term $\ranked{k.\reduce k \Sigma}$ which we see itself as a term of type $\ranked{\tmonad(k+\reduce k\Sigma)}$. After the application of the unfolding function $\mathrm{unfold}_1$ followed by a flattening, and the simplification of $\ranked{\reduce k \reduce 1 \tmonad (k+\reduce k \Sigma)}$ into $\ranked{\reduce k \tmonad (k+\reduce k \Sigma)}$ we get a term in $\ranked{\reduce k \tmonad(k+\reduce k \Sigma)}$. Our running example becomes as follows after this step
    \begin{center}
@@ -148,7 +148,7 @@ Let us now implement the ideas we discussed above. We start by unfolding the ext
 %\end{center}
 Then, we duplicate the input term using the basic function 
 \begin{align*}
-\ranked{\tmonad \mati k \Sigma\to \reduce 2 (\tmonad \mati k \Sigma\otimes \tmonad \mati k \Sigma)}
+\ranked{\tmonad \mati k \Sigma\to \reduce 2 (\tmonad \mati k \Sigma\product \tmonad \mati k \Sigma)}
 \end{align*}
 To the first copy, we apply the function  
 \begin{align*}
@@ -178,11 +178,11 @@ which keeps only the last $k-m$ elements of the tensor product, then applies the
 
 When we apply $\ranked{f_1}$ and $\ranked{f_2}$ to the two copies of the original term, we get a term of type 
 \begin{align*}
-\ranked{ \reduce 2 (\mati m {(\tmonad \Sigma)}\otimes  \mati {k-m} {(\tmonad\Sigma)})}
+\ranked{ \reduce 2 (\mati m {(\tmonad \Sigma)}\product  \mati {k-m} {(\tmonad\Sigma)})}
 \end{align*}
 %Now, we need to get the fold outside the tensor product. For that, we lift both $\ranked{\mati m {(\tmonad \Sigma)}}$ and $\ranked{\mati {k-m} {(\tmonad \Sigma)}}$ to $\ranked{\reduce k (\tmonad \Sigma)^m}$ and $\ranked{\reduce k (\tmonad \Sigma)^{k-m}}$ respectively. Then we commute the fold with the tensor product using the following basic function:
 %\begin{align*}
-%\ranked{\reduce k (\tmonad \Sigma)^m\otimes\reduce k (\tmonad \Sigma)^{k-m}\to \reduce k (\tmonad \Sigma)^k}
+%\ranked{\reduce k (\tmonad \Sigma)^m\product\reduce k (\tmonad \Sigma)^{k-m}\to \reduce k (\tmonad \Sigma)^k}
 %\end{align*}
 %Then we merge the two  folds $\reduce 2$ and $\reduce k$ into $\reduce {2k}$. After these operations, we get the desired term, but not with the desired type (the type we get is $\ranked{\reduce {2k} (\tmonad\Sigma)^k}$). To get the right type, which is $\ranked{\mati k {(\tmonad\Sigma)}}$, we apply the  function which reduces the degree of the fold
 %\begin{align*}
@@ -210,7 +210,7 @@ We consider as example the following function $\alpha$, whose graph, drawn below
 \end{center}
 Consider the function
 \begin{align*}
-\ranked{\reduce k \Sigma^k \to \reduce 2 (\reduce {k-1} \Sigma^{k-1}\otimes \Sigma)}
+\ranked{\reduce k \Sigma^k \to \reduce 2 (\reduce {k-1} \Sigma^{k-1}\product \Sigma)}
 \end{align*}
 which acts as in the following picture
 \begin{center}

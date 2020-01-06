@@ -1,4 +1,4 @@
-\section{Evaluation of simply typed affine terms}
+\subsection{Evaluation of simply typed affine terms}
 \label{sec:one-register}
 
 In this section, we explain how (a subclass of) $\lambda$-terms can be evaluated using a derivable function. The subclass consists of affine terms which can be typed using a bounded number of types. These notions will be explained in more detail below.  
@@ -10,37 +10,59 @@ Define  \emph{simple types} to be expressions  generated from an atomic type $\o
 \begin{align*}
     \otype \qquad \otype \to \otype \qquad (\otype \to \otype) \to (\otype \to \otype) \qquad \cdots 
 \end{align*}
-For our purposes, one can think of the atomic type as representing trees.
-Let $X$ be a set of variables, each one with an associated simple type.  A $\lambda$-term over these variables can be seen as a tree over the ranked alphabet
+For our purposes, one can think of the atomic type $\otype$ as representing trees over the output alphabet.
+Let $X$ be a set of variables, each one with an associated simple type.  A $\lambda$-term over variables $X$ is any expression that is constructed by starting with the variables, and using $\lambda$-abstraction $\lambda x. M$ and term application $M N$. 
+We say that a $\lambda$-term is \emph{well-typed} if one can associate  to it  a simple type according to the usual typing rules of simply typed $\lambda$-calculus,
+see~\cite[Definition 3.2.1]{sorensen_lectures_2006}. Because variables are typed, a  $\lambda$-term can have either a unique type, or it is not well-typed.  Here is an example of a well-typed $\lambda$-term, with type annotation in blue: 
 \begin{align*}
-  \overbrace{\set{x : x \in X}}^{\text{arity 0}} \cup \overbrace{\set{\lambda x : x \in X}}^{\text{arity 1}} \cup  \overbrace{\set @}^{\text{arity 2}}
-\end{align*}
-where @ is the application symbol that is used to apply one term to another.
-We say that a $\lambda$-term is \emph{well-typed} if one can associate  to it  a simple type according to the usual typing rules of simply typed $\lambda$-calculus\footnote{
-Here we assume that the variables are typed, but the types for the remaining $\lambda$-terms need to be inferred. We could adopt a different approach, more thoroughly in the style of Church, where all term constructors (application and $\lambda$-abstraction) come decorated with the type of the resulting term. We do not do this to make  notation lighter, and also because one show -- see the appendix -- that first-order logic is enough to reconstruct the type of a term once the types of the variables are known. 
-}, see~\cite[Definition 3.2.1]{sorensen_lectures_2006}. Because variables are typed, a  $\lambda$-term can have either a unique type, or it is not well-typed.  Here is an example of a well-typed $\lambda$-term: 
-\begin{center}
-\includegraphics[scale=.3, page=45]{pics.pdf}
-\end{center}
+    \typecolor{\overbrace{
+        \usualcolor{\lambda \typevar y {\otype \to \otype}. \ \lambda \typevar x \otype.}  \ \underbrace{\usualcolor{y (y x).}}_{\otype}}^{(\otype \to \otype) \to \otype \to \otype}}
+    \end{align*}
+
+% \footnote{
+% Here we assume that the variables are typed, but the types for the remaining $\lambda$-terms need to be inferred. We could adopt a different approach, more thoroughly in the style of Church, where all term constructors (application and $\lambda$-abstraction) come decorated with the type of the resulting term. We do not do this to make  notation lighter, and also because one show -- see the appendix -- that first-order logic is enough to reconstruct the type of a term once the types of the variables are known. 
+% }
+    
+% \begin{center}
+% \includegraphics[scale=.3, page=45]{pics.pdf}
+% \end{center}
 We use the standard notion of $\beta$-reduction for $\lambda$-terms, see~\cite[Definition 1.2.1]{sorensen_lectures_2006}.  
 Because of normalisation and confluence for the simply typed $\lambda$-calculus, every well-typed $\lambda$-term has a unique normal form, i.e~a $\lambda$-term to which it $\beta$-reduces (in zero or more steps), and which cannot be further $\beta$-reduced.
 
-Because of iterated duplication, the normal form of a well-typed $\lambda$-term can be exponential, as witnessed by Example~\ref{ex:exponential} in the appendix.
-Because derivable and first-order transductions have linear size increase, they cannot compute normal forms in general. To  avoid this problem, we  limit attention to affine $\lambda$-terms: a $\lambda$-term is called \emph{affine} if every bound variable is used at most once in its scope, but free variables are allowed to appear multiple times. For affine $\lambda$-terms, each step of $\beta$-reduction reduces the size by two or three, and therefore the normal form cannot be bigger than the original $\lambda$-term. 
+A $\lambda$-term  can be seen as a tree over the ranked alphabet
+\begin{align}
+    \label{eq:alphabet-for-lambda-terms}
+  \overbrace{\set{x : x \in X}}^{\text{arity 0}} \cup \overbrace{\set{\lambda x : x \in X}}^{\text{arity 1}} \cup  \overbrace{\set @}^{\text{arity 2}}
+\end{align}
+where @ represents term application. Using this representation, it makes sense to talk about the tree-to-tree function
+\begin{align*}
+\text{$\lambda$-term} \qquad \mapsto \qquad \text{its normal form},
+\end{align*}
+which we call evaluation of $\lambda$ terms. We show that this function is derivable, under two assumptions on the input $\lambda$-term.  The first assumption is that the input $\lambda$-term is \emph{affine}, which means that 
+    every bound variable is used at most once in its scope, but free variables are allowed to appear multiple times.  
+    % If we allowed non-affine terms, then evaluation could lead to normal forms of super-linear size (e.g.~exponential), and thus could not be derivable.  For affine $\lambda$-terms, each step of $\beta$-reduction reduces the size by two or three, and therefore the normal form cannot be bigger than the original $\lambda$-term. 
+     The second assumption is that  the input $\lambda$-term can be typed using a fixed finite set of types $\Tt$. This means that the input has type in $\Tt$, and the same is true for all of its  sub-terms.  In the appendix, we explain why both of these assumptions are needed.
 
-Being affine alone is not enough to normalise terms with first-order transductions. Another obstacle is terms that use types of unbounded complexity, as illustrated by Example~\ref{ex:affine-not-enough} in the appendix.
+
+% Because of iterated duplication, the normal form of a well-typed $\lambda$-term can be exponential, as witnessed by Example~\ref{ex:exponential} in the appendix.
+% Because derivable and first-order transductions have linear size increase, they cannot compute normal forms in general. To  avoid this problem, we  limit attention to affine $\lambda$-terms: a $\lambda$-term is called \emph{affine} if  
+
+% Being affine alone is not enough to normalise terms with first-order transductions. Another obstacle is terms that use types of unbounded complexity, as illustrated by Example~\ref{ex:affine-not-enough} in the appendix.
 % If the size of types that occur in subterms of our affine $\lambda$-terms is not bounded, and if we suppose that there is a first-order transduction which normalises them, then we could derive a first-order formula which performs an equality test between two integers Such a formula cannot exist (even if we allow monadic second-order logic).
 
 
-These examples motivate the following definition. If $X$ is a finite set of simply typed variables and $\Tt$ is a finite set of simple types, we define $\Lambda_\Tt X $ to be the set of affine $\lambda$-terms using variables from $X$, whose subterms have 	 types in $\typeset$.  When restricted to $\lambda$-terms of $\Lambda_\Tt X $, normalisation can be done by a derivable function, and therefore also by a first-order tree-to-tree transduction: 
+
+% we define $\Lambda_\Tt X $ to be the set of affine $\lambda$-terms using variables from $X$, whose subterms have 	 types in $\typeset$.  When restricted to $\lambda$-terms of $\Lambda_\Tt X $, normalisation can be done by a derivable function, and therefore also by a first-order tree-to-tree transduction: 
 
 \begin{theorem}\label{thm:normalise} Let $X$ be a finite set of simply typed variables, and let $\typeset$ be a finite set of simple types.
-    The following tree-to-tree function is derivable (i.e.~it is the restriction of a derivable function on terms):
-    \begin{align*}
-        M \in \Lambda_\Tt X  \quad \mapsto \quad  \text{normal form of $M$}        
-    \end{align*}
-    TODO: add $\bot$
+    The following tree-to-tree function is derivable, assuming that $\lambda$-terms are represented as trees:
+    \begin{itemize}
+        \item{\bf Input.} A $\lambda$-term over variables $X$.
+        \item {\bf Output.} Its normal form, if it can be typed using $\Tt$, and undefined otherwise.
+    \end{itemize}
 \end{theorem}
+
+The proof of the theorem is in Appendix~\ref{sec:eval}. A key role in the proof is played by the pre-order function. 
 
 % Actually, we prove a stronger result, namely that the above function is derivable. In the end, of course, we will prove that all first-order tree-to-tree transductions are derivable, but our proof of this fact will use the derivability of normalisation as stated in Theorem~\ref{thm:normalise}.
 
