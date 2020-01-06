@@ -1,9 +1,11 @@
 
 \section{Introduction}
 
-The purpose of this paper is to find a decomposition of tree-to-tree transducers into simple building blocks. An important inspiration  is the Krohn-Rhodes theorem~\cite[p.~454]{Krohn1965}, which says that every string-to-string function recognised by a Mealy machine can be decomposed into certain prime functions. 
+The purpose of this paper is to decompose tree transformations into simple building blocks. An important inspiration  is the Krohn-Rhodes theorem~\cite[p.~454]{Krohn1965}, which says that every string-to-string function recognised by a Mealy machine can be decomposed into certain prime functions. 
 
-\paragraph*{Regular functions.} We begin by describing the class of regular functions, both for strings and trees. In~\cite[Theorem 13]{engelfrietMSODefinableString2001}, Engelfriet and Hoogeboom proved that deterministic two-way transducers recognise the same string-to-string functions as \mso transductions. Because of this, and thanks to other good properties such as closure under composition~\cite[Theorem 1]{chytilSerialComposition2Way1977} and decidable equivalence~\cite[Theorem 1]{gurariEquivalenceProblemDeterministic1982}, this class of functions is now called the \emph{regular string-to-string functions}. Other  equivalent descriptions of this class include: string transducers of Alur and {\v C}ern{\'y}~\cite{alurExpressivenessStreamingString2010}, regular expressions~\cite{alur2014regular,daveGastinKrishna18}, and a functional programming language~\cite{bojanczykRegularFirstOrderList2018}. 
+\paragraph*{Regular functions.} This paper is mainly about a class of transformations called the regular functions, and especially its first-order definable fragment.  We begin by describing this class, both for strings and trees. 
+
+In~\cite[Theorem 13]{engelfrietMSODefinableString2001}, Engelfriet and Hoogeboom proved that deterministic two-way transducers recognise the same string-to-string functions as \mso transductions. Because of this and other good properties -- such as closure under composition~\cite[Theorem 1]{chytilSerialComposition2Way1977} and decidable equivalence~\cite[Theorem 1]{gurariEquivalenceProblemDeterministic1982} --  this class of functions is now called the \emph{regular string-to-string functions}. Other  equivalent descriptions of this class include: string transducers of Alur and {\v C}ern{\'y}~\cite{alurExpressivenessStreamingString2010}, and several models based on combinators~\cite{alur2014regular,daveGastinKrishna18, bojanczykRegularFirstOrderList2018}. 
  
 % One corollary of the description in~\cite{bojanczykRegularFirstOrderList2018} is that the regular  string-to-string functions are the smallest class of string-to-string functions which is closed under composition, contains functions recognised by one-way deterministic automata, and the following two operations:
 % \begin{eqnarray*}
@@ -12,7 +14,7 @@ The purpose of this paper is to find a decomposition of tree-to-tree transducers
 % \end{eqnarray*}
 % where $w_1,\ldots,w_n \in \set{a,b}^*$ and $|$ is a separator symbol. The deterministic one-way automata themselves can be further decomposed using the Krohn-Rhodes theorem; thus leading a decomposition into very simple prime functions.
 
-Regular functions can also be used for trees. One definition  is the \mso tree-to-tree transductions~\cite[Section 3]{bloem_comparison_2000}. As in the string case, the regular tree-to-tree functions admit many equivalent characterisations: single use attributed tree grammars~\cite{bloem_comparison_2000}, macro tree transducers of linear size increase~\cite[Theorem 7.1]{engelfriet_macro_2003}, and streaming tree transducers~\cite[Theorem 4.6]{alur2017streaming}. The class of functions computed by these models, and its first-order fragment, is the topic of this paper. 
+There are also tree-to-tree regular functions, which can be defined using any of the following equivalent models: \mso tree-to-tree transductions~\cite[Section 3]{bloem_comparison_2000}, single use attributed tree grammars~\cite{bloem_comparison_2000}, macro tree transducers of linear size increase~\cite[Theorem 7.1]{engelfriet_macro_2003}, and streaming tree transducers~\cite[Theorem 4.6]{alur2017streaming}. The  functions computed by these models are the topic of this paper. 
 
 \paragraph*{First-order transductions. } Although \mso transductions are the more popular model, we work mainly with the less expressive model of first-order transductions. Why?
 

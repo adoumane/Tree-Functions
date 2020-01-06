@@ -1,8 +1,8 @@
 \section{Monadic second-order transductions}
 \label{sec:mso-trans}
-Our main theorem characterises first-order tree-to-tree transductions. The more studied type of transductions is \mso tree-to-tree transductions.  What is the notion of derivable functions appropriate to \mso?   
+Our main theorem characterises first-order tree-to-tree transductions. We finish the paper by extending the notion of derivability so that it captures  \mso tree-to-tree transductions. 
 
-Define an \emph{\mso relabelling} in the same way as the first-order relabellings from Definition~\ref{def:forat}, except that the unary queries can use \mso logic instead of first-order logic. In~\cite[Corollary 1]{colcombetCombinatorialTheoremTrees2007}, Colcombet shows that every \mso formula on trees can be replaced by a first-order formula that runs on an \mso relabelling of the input tree. Applying that result to transductions, we get:
+Our solution is not particularly subtle. We simply add, as prime functions, all \mso relabellings, which are defined the  same way as the first-order relabellings from Definition~\ref{def:forat}, except that the unary queries can use \mso logic instead of first-order logic. In~\cite[Corollary 1]{colcombetCombinatorialTheoremTrees2007}, Colcombet shows that every \mso formula on trees can be replaced by a first-order formula that runs on an \mso relabelling of the input tree. Applying that result to transductions, we get:
 \begin{lemma}
     Every \mso tree-to-tree transduction can be decomposed as: (a) an \mso relabelling; followed by (b) a first-order tree-to-tree transduction.
 \end{lemma}
@@ -10,7 +10,7 @@ An immediate corollary of the above lemma is that, once we extend the derivable 
 \begin{theorem}\label{thm:mso-transductions}
     A tree-to-tree function is an \mso tree-to-tree transduction if and only if it can be derived using the extension of Definition~\ref{def:derivable-function} obtained by adding  all \mso relabellings as prime functions. 
 \end{theorem}
-In the above result, we simply throw in all \mso relabellings as prime functions. In contrast,  in the first-order case from the main theorem of this paper, we took care to have a small number of primitives. The small number of primitives for first-order logic  was possible thanks in part to the Schlingloff theorem that allowed decomposing first-order relabellings (see Section~\ref{sec:fo-translation}).  In principle, such a decomposition might be possible also for the \mso case, but proving it  would likely require developing new Krohn-Rhodes theory for tree languages, which seems to be a very hard problem that is outside the scope of this paper.
+In the above result, we simply throw in all \mso relabellings as prime functions. In contrast,  in the first-order case from the main theorem of this paper, we took care to have a small number of primitives. The small number of primitives for first-order logic  was possible thanks in part to the Schlingloff theorem that allowed decomposing first-order relabellings (see Section~\ref{sec:fo-translation}).  In principle, such a decomposition might be possible also for the \mso case, but proving it  would likely require developing new Krohn-Rhodes theory for tree languages, which is a hard problem outside the scope of this paper.
 
 
 

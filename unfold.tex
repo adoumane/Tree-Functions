@@ -1,6 +1,6 @@
 \subsubsection{Unfolding of the matrix power}
 \label{sec:unfolding}
-The final  prime function is called monotone unfolding. The general idea is that this function unpacks a representation of several trees inside a single tree.  Before describing this function in more detail,  we introduce some notation, which is inspired by universal algebra, see~\citep[p.~268]{Taylor1975}. 
+The final  prime function is called monotone unfolding. The general idea is that unfolding unpacks a representation of several trees inside a single tree.  Before describing this function in more detail,  we introduce some notation,  inspired by the matrix power in  universal algebra~\citep[p.~268]{Taylor1975}. 
 \begin{definition}
     [Matrix power] For $k \in \set{1,2,\ldots}$ define the $k$-th matrix power of a ranked set $\rSigma$, denoted by $\mati k \rSigma$, to be the ranked set $\reduce k \powersmall \rSigma k$.
 \end{definition}
@@ -24,8 +24,8 @@ matches the $k$ incoming edges in a node with the $k$ outgoing edges in the pare
 % \begin{align*}
 %     \underbrace{\ranked{\tmonad \mati k{\Sigma} \to \mati k{( \tmonad \Sigma)}}}_{\text{general unfolding}} \qquad 
 %     \underbrace{\ranked{\tmonad \mati k{\Sigma} \to \termset + \mati k{( \tmonad \Sigma)}}}_{\text{monotone unfolding}} 
-%     \end{align*}    
-The general unfolding operation is too powerful  to be included in the derivable functions, which is why the prime  functions from Figure~\ref{fig:not-explained} contain a monotone version that will be explained below.
+%     \end{align*}   
+
 
 
 
@@ -44,26 +44,37 @@ The general unfolding operation is too powerful  to be included in the derivable
 % For a node $v$ of the term $t$ and $i \in \set{1,\ldots,k}$, define the $i$-th sub-node of $v$ to be the pair  $(v,i)$. We define a tree structure on sub-nodes as follows. Let   $(v,i)$ be a sub-node, and let $a_i \in \rSigma$ be the $i$-th component in the label of node $v$.  The arity of the sub-node $(v,i)$ is inherited from $a_i$, and its children are defined as follows. Take a port $x \in \set{1,\ldots,\text{arity of $a_i$}}$.  Apply the rewiring function to $(i,x)$, yielding a pair $(j,y)$. Take the $y$-th child of node $v$, call it $w$. The $x$-th child of $(v,i)$ is defined to be $j$-th sub-node of the $y$-th child of $v$.
 
 % The unfolding of $t$ is  defined using the above tree structure. For $j \in \set{1,\ldots,k}$, the root of $t_i$ is the $i$-th sub-node of the root of $t$. The nodes in $t_i$ are all of the sub-nodes of $t$ that can be reached from this root by the child relation defined above, with the corresponding tree structure. Finally, 
-
- To see the problem with general unfolding, consider the following example, where two coordinates are swapped in each node of the input tree:
-\mypic{108}
-For inputs with an odd number of swaps, the output of unfolding has a white leaf in the first coordinate, and for inputs with an even number of swaps, the output has a white leaf in the first coordinate. This shows how  general unfold can simulate  a certain amount of modulo counting, and therefore needs a stronger logic than first-order logic to be captured.  This logic is called \emph{chain logic},  see~\cite[Section 2]{thomas1992} or~\cite[Section 2.5.3]{bojanczykDecidablePropertiesTree2004}. It is the fragment of  \mso where set quantification is restricted to chains (i.e.~sets of nodes where every two nodes are comparable by  the descendant relation). 
+\paragraph*{Chain logic.}
+The general unfolding operation is too powerful  to be included in the derivable functions, as we explain below. It does, however, admit a characterisation in terms of a fragment of \mso called \emph{chain logic},  see~\cite[Section 2]{thomas1992} or~\cite[Section 2.5.3]{bojanczykDecidablePropertiesTree2004}, whose expressive power is strictly between first-order logic and \mso. Chain logic is defined to be the fragment of  \mso where set quantification is restricted to sets  where all nodes are comparable by  the descendant relation. 
 
 \begin{theorem}\label{thm:chain-transductions}
     The following conditions are equivalent for tree-to-tree functions:
 \begin{itemize}
-    \item is derivable, as in  from Definition~\ref{def:derivable-function}, except that general unfold is used instead of monotone unfold;
+    \item is derivable, as in Definition~\ref{def:derivable-function}, except that general unfold is used instead of monotone unfold;
     \item is a transduction,  as in  Definition~\ref{def:fo-transduction},  except that chain logic is used instead of first-order logic. 
 \end{itemize}
 \end{theorem}
 
-On trees, first-order logic is strictly less expressive than chain logic, which is strictly less expressive than \mso, see~\cite[Fact 2.5.8]{bojanczykDecidablePropertiesTree2004}, and the same inclusions carry over to tree-to-tree transductions.
+\begin{figure}
+    \mypic{108}
+    \caption{Non-monotone unfolding}
+    \label{fig:non-monotone}
+\end{figure}
+
+
+
+ To see why chain logic is needed to describe general unfolding, consider the unfolding in Figure~\ref{fig:non-monotone}, where two coordinates are swapped in each node of the input tree.
+For inputs with an odd number of swaps, the output of unfolding has a white leaf in the first coordinate, and for inputs with an even number of swaps, the output has a white leaf in the first coordinate.  Checking if a path has even length can be done in chain logic, but not in  first-order logic.  
+
+% On trees, first-order logic is strictly less expressive than chain logic, which is strictly less expressive than \mso, see~\cite[Fact 2.5.8]{bojanczykDecidablePropertiesTree2004}, and the same inclusions carry over to tree-to-tree transductions.
 \paragraph*{Monotone unfolding}
-To avoid the problems with cyclic swaps= instead of general unfold, the prime functions in Figure~\ref{fig:not-explained} use a partial operation of type
-\begin{align*}
-    \ranked{\tmonad \mati k{\Sigma} \to \mati k{( \tmonad \Sigma)} + \termset} ,
-\end{align*}
-which is called \emph{monotone unfolding}. This is the same as general unfolding, except that it is defined only for inputs which satisfy a monotonicity restriction that is explained below.
+To avoid the problems with cyclic swaps, we impose a monotonicity requirement on the matrix power. 
+
+% instead of general unfold, the prime functions in Figure~\ref{fig:not-explained} use a partial operation of type
+% \begin{align*}
+%     \ranked{\tmonad \mati k{\Sigma} \to \mati k{( \tmonad \Sigma)} + \termset} ,
+% \end{align*}
+% which is called \emph{monotone unfolding}. This is the same as general unfolding, except that it is defined only for inputs which satisfy a monotonicity restriction that is explained below.
 
  Let  $a \in \mati k \rSigma$ be an element of the matrix power,  let $p,q \in \set{1,\ldots,k}$, and let  $i$ be a port of $a$. We write $
      q \to_i p$
@@ -71,15 +82,17 @@ if coordinate $q$ in the $i$-th outgoing edge  is connected to  coordinate $p$ i
 \mypic{109}
 One can see that $\to_i$ is a partial function from $\set{1,\ldots,k}$ to $\set{1,\ldots,k}$. We call it the  \emph{twist function of the $i$-th port}. For example, the twist function in of the unique port in 
 \mypic{110}
-swaps coordinates $1$ and $2$.  Call  an element of the matrix power  \emph{monotone} if for every port, its twist functions is monotone (when restricted to inputs where it is defined). The monotone unfolding  is undefined if the input contains at least one label which is non-monotone, otherwise the output is the same as for sgeneral unfolding.
+swaps coordinates $1$ and $2$.  Call  an element of the matrix power  \emph{monotone} if for every port, its twist functions is monotone (when restricted to inputs where it is defined). The \emph{monotone unfolding} operation in Figure~\ref{fig:unfold} defined to be the restriction of general unfolding,  which  is undefined if the input contains at least one label which is non-monotone, and otherwise returns the output of the general unfolding.
 
-\paragraph*{Is unfolding derivable?} The  prime functions in our main theorem  are meant to be simple syntactic rewritings. It is debatable whether the  unfolding operation can be called a simple syntactic rewriting. For example, proving that monotone unfolding is a first-order transduction requires non-trivial effort, including an invocation of the Sch\"utzenberger-McNaughton-Papert theorem about first-order logic on words being the same as counter-free automata. From this perspective, one can naturally ask: is it possible to break down monotone unfolding into simpler primitives?
+\paragraph*{Is unfolding derivable?} The  prime functions in our main theorem  are meant to be simple syntactic rewritings. It is debatable whether the  unfolding operation -- even in its monotone variant -- is of this kind. For example, proving that monotone unfolding is a first-order transduction requires non-trivial effort, including an invocation of the Sch\"utzenberger-McNaughton-Papert theorem about first-order logic on words being the same as counter-free automata. 
+
+Is it possible to break down monotone unfolding into simpler primitives?
 In the appendix, we devote considerable resources to answering this question. We propose one new  datatype
 % \begin{align*}
 % \shallowterm \rSigma \rGamma \quad \eqdef   \quad \ranked{\coprod_{\black{a \in} \rSigma} } \overbrace{\ranked{\Gamma \product \cdots \product \Gamma},}^{\text{arity of $a$ times}}
 % \end{align*}
 % which represents trees of depth two, 
-and seventeen additional prime functions, which can be called syntactic rewriting without stretching the reader's patience. Then, we show that monotone unfolding can be derived, in the presence of  the new datatype and functions. The proof of this result is one of the main technical contributions of this paper.
+and seventeen additional prime functions, which can be called syntactic rewriting without straining the reader's patience. Then, we show that monotone unfolding can be derived using   the new datatype and functions. The proof of this result is one of the main technical contributions of this paper.
 % Suppose that the input is 
 % \begin{align*}
 % (\tensorpair{a_1,\ldots,a_k}/f)\tensorpair{t_1,\ldots,t_n} \in 

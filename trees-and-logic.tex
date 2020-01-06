@@ -146,6 +146,7 @@ This is a non-copying first-order  transduction. The universe formula selects no
 
 \begin{example}\label{ex:pre-order-main} Define  \emph{pre-order} one nodes in a tree as follows:  $x$ is before  $y$ if either $x \le y$, or there exist nodes $x'$ and $y'$ such that $x' \le x$, $y' \le y$, and $x'$ is a sibling of $y'$ with a  smaller child number.  Consider  the tree-to-tree function which transforms a tree into a list of its nodes in pre-order, as explained in the following picture:
     \mypic{112}
-    Because the pre-order is first-order  definable,  the above function is a first-order tree-to-tree transduction. Unlike Example~\ref{ex:filter-first}, we need copying, because a node of arity $n$ in the input tree corresponds to $n+2$ nodes in the output tree.
+    This function is a first-order tree-to-tree transduction, 
+    because the pre-order is first-order  definable. Unlike Example~\ref{ex:filter-first}, we need copying, because a node of arity $n$ in the input tree corresponds to $n+2$ nodes in the output tree.
 \end{example}
 
