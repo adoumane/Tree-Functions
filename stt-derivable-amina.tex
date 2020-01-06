@@ -8,12 +8,14 @@ When showing derivability of  evaluation for register updates, we  use the langu
 
 \input{one-register}
 %
+Generalize to non pure lambda terms.
 
 \subsection{Evaluation of register updates}
 \label{sec:updates-endgame}
-In this section, we complete the proof of derivability for the evaluation of register updates. The rough idea is to reduce to the evaluation of $\lambda$-terms as in Theorem~\ref{thm:normalise}. This reduction will involve the matrix power. 
+In this section, we complete the proof of derivability for the evaluation of register updates. The rough idea is to reduce it to the evaluation of $\lambda$-terms as in Theorem~\ref{thm:normalise}. %This reduction will involve the matrix power. 
 
-Fix a first-order register transducer, with register names $\regnames$ and output alphabet $\rGamma$.    From now on, when speaking about register updates or register valuations, we assume these register names and this alphabet. Our goal is to prove the following lemma. 
+Fix a first-order register transducer, with $k$ registers whose names are in $\regnames$ and output alphabet $\rGamma$. We suppose that all our registers are of arity $1$, which is possible by remark~\ref{}.
+From now on, when speaking about register updates or register valuations, we assume these register names and this alphabet. Our goal is to prove the following lemma. 
 \begin{lemma}\label{lem:derive-register-updates}
     The  following tree-to-tree function  is derivable:
     \begin{eqnarray*}
@@ -26,7 +28,31 @@ Fix a first-order register transducer, with register names $\regnames$ and outpu
 As discussed at the beginning of  Section~\ref{sec:stt}, the lemma completes the proof  our main result, Theorem~\ref{thm:main}.  
 It remains to prove the lemma.
 
-\paragraph*{The $\lambda$-representation of terms.} 
+
+The main ingredient to prove Lemma~\ref{lem:derive-register-updates} consists in defining the arity preserving function
+\begin{align*}
+\ranked{\lambda\text{-representation} : \text{register updates}\to \mati k {(\lambda\text{-terms over }\rGamma)} }
+\end{align*}
+which encodes register updates as $k$-th matrix power of $\lambda$-terms. To get the feeling of this function, we will first present it in the case where the automaton has only one unary register. The general case will be presented  in a second step.
+
+\paragraph*{The case of one register (k=1).} There is mismatch between the arity of register updates and the arity of the terms they contain (which is always 1). This is illustrated by the left figure below: the register update is of arity 2, but its content is of arity 1. A consequence of this mismatch is that a term of register updates cannot be seen as a term of terms, and the prime function of flattening and block etc cannot be applied; in other words, the inner structure of register updates is not accessible.
+Let us fix a variable $x$ of type $o$. The $\lambda$-representation, described in the figure below, is intended to bridge this gap, while preserving the behavior of register updates. 
+\begin{center}
+\includegraphics[scale=.36]{pictures/lambda-rep}
+\end{center}
+In words, the $\lambda$-representation transforms the (unique) port of the inner term into $x$ and replaces every letter $r_i$ is by a redex, the pending port of this redex becomes the $i$-th port. This may result in a port swapping (as in the figure): this is why the $\lambda$-representation is a matrix power (1 in this case). 
+
+The $\lambda$-representation does not only match the arities between the register update and their content, it also  respects their behavior, as illustrated by the following diagram.
+\begin{center}
+\includegraphics[scale=.36]{pictures/lambda-rep-diagram}
+\end{center}
+In words, the evaluation of a term of register updates can be simulated, through  $\lambda$-representation, by unfolding and normalization functions, which are derivable. 
+
+\paragraph*{The general case.} Let us describe the $\lambda$-representation in the general case. As in the case $k=1$, the inner portes become the variable $x$, every register name becomes a redex. The issue here is how to combine the ports.
+
+\begin{center}
+\includegraphics[scale=.36]{pictures/lambda-rep-general}
+\end{center}
 % To describe the register updates in a transducer, we will use notions from $\lambda$-calculus.  
 % We will also give more precise description of the $\lambda$-calculus in Section~\ref{sec:one-register}; for the moment it is enough to assume that $\lambda$-terms are like trees, except that they allow variables $x,y,z,\ldots$; binding the variables using $\lambda x, \lambda y, \lambda z, \ldots$ and applying one term to another. The evaluation of $\lambda$-terms is performed by $\beta$-reduction
 % \begin{align*}
