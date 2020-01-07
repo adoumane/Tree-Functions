@@ -14,7 +14,7 @@ Generalize to non pure lambda terms.
 \label{sec:updates-endgame}
 In this section, we complete the proof of derivability for the evaluation of register updates. The rough idea is to reduce it to the evaluation of $\lambda$-terms as in Theorem~\ref{thm:normalise}. %This reduction will involve the matrix power. 
 
-Fix a first-order register transducer, with registers names $\regnames$ and output alphabet $\rGamma$. We suppose that it has $k$ registers and the set f names $\regnames$ is $[1,k]$.
+Fix a first-order register transducer, with registers names $\regnames$ and output alphabet $\rGamma$. We suppose that it has $k$ registers and the set of names $\regnames$ is $[1,k]$. In this case, register valuations and register updates can be though of as lists of terms. 
 From now on, when speaking about register updates or register valuations, we assume these register names and this alphabet. Our goal is to prove the following lemma. 
 \begin{lemma}\label{lem:derive-register-updates}
     The  following tree-to-tree function  is derivable:
@@ -51,8 +51,9 @@ defined as follows. If  $t$ be a term of $\ranked{\tmonad(\Sigma+n R)}$ of arity
 \item[(b)] Binding all the  variables $x_1,\ldots,x_l$  at the beginning of the term, in this order.
 \item[(c)] Applying the following rewriting rule, where $r_i \in \ranked{nR}$
 \begin{align*}
-r_i(t_1,\dots,t_n) \mapsto @(@(\dots @(\portletter, t_1)\dots,t_{n-1}),t_n)
+r_i(t_1,\dots,t_p) \mapsto @(@(\dots @(\portletter, t_1)\dots,t_{p-1}),t_p)
 \end{align*}
+which replaces every $p$-ary letter $r_i$ by a spine of $@$ of lenght $p$.
 This rewriting rules creates, for every name $r_i$, a new port. We call it the \emph{port of $r_i$}.
 \end{enumerate}
 This construction is is illustrated by the following picture.
