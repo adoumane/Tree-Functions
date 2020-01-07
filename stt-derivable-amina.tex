@@ -8,13 +8,27 @@ When showing derivability of  evaluation for register updates, we  use the langu
 
 \input{one-register}
 %
-Generalize to non pure lambda terms.
 
+Theorem~\ref{thm:normalise} can be generalized to non-pure $\lambda$-terms, that is to $\lambda$-terms containing nodes labeled from a finite ranked alphabet $\rGamma$.  We call them $\lambda$-terms over $\rGamma$. In this extension,  bound and free variables, $\beta$-reduction and normalization are unchanged. Regarding typing, we suppose that all the element of $\rGamma$ are typed as follows
+\begin{center}
+\includegraphics[scale=.4]{pictures/type-gamma}
+\end{center}
+With this, well-typedeness extends in a natural way. 
+
+We claim that under the same restrictions, Theorem~\ref{thm:normalise} holds for $\lambda$-terms over $\rGamma$. This follows from this (classical) encoding of the element of $\rGamma$ as pure $\lambda$-terms. 
+Every element  $a \in \rGamma$ of arity $n$ is represented, using  a variable $x_a$ of type 
+\begin{align}
+\overbrace{\otype \to \otype \to \cdots \to \otype}^{\text{$n$ times}} \to \otype
+\end{align}
+as follows
+\begin{center}
+\includegraphics[scale=.4]{pictures/encode-gamma}
+\end{center}
 \subsection{Evaluation of register updates}
 \label{sec:updates-endgame}
 In this section, we complete the proof of derivability for the evaluation of register updates. The rough idea is to reduce it to the evaluation of $\lambda$-terms as in Theorem~\ref{thm:normalise}. %This reduction will involve the matrix power. 
 
-Fix a first-order register transducer, with registers names $\regnames$ and output alphabet $\rGamma$. We suppose that it has $k$ registers and the set of names $\regnames$ is $[1,k]$. In this case, register valuations and register updates can be though of as lists of terms. 
+Fix a first-order register transducer, with registers names $\regnames$ and output alphabet $\rGamma$. We suppose that it has $k$ registers and that the set of names $\regnames$ is $\set{1,\dots,k}$. In this case, register valuations and register updates can be though of as lists of terms. 
 From now on, when speaking about register updates or register valuations, we assume these register names and this alphabet. Our goal is to prove the following lemma. 
 \begin{lemma}\label{lem:derive-register-updates}
     The  following tree-to-tree function  is derivable:
@@ -30,7 +44,7 @@ As discussed at the beginning of  Section~\ref{sec:stt}, the lemma completes the
 
 
 
-The main ingredient to prove the lemma consists in defining an arity preserving function, called \emph{$\lambda\text{-representation}$}, which encodes register updates as a matrix power of $\lambda$-terms. 
+The main ingredient to prove Lemma~\ref{lem:derive-register-updates} consists in defining an arity preserving function, called \emph{$\lambda\text{-representation}$}, which encodes register updates as a matrix power of $\lambda$-terms. 
 
 \paragraph*{$\lambda$-representations of register updates.} If $m$ is the maximal arity of the registers $\regnames$, let $X=\set{x_1\dots,x_m}$ be a set of variables of type $\otype$.  We set $\ranked{\Gamma_\lambda}$ to be the type $\ranked{\Gamma+X^\lambda}$. The     $\lambda$-representation of register updates is an  arity preserving function, of type
 \begin{align}\label{eq:lambda-representation-regup}
@@ -41,11 +55,11 @@ The main ingredient to prove the lemma consists in defining an arity preserving 
 }
 }.
 \end{align}
-To define it, we use the auxiliary function $\lambda$ of type
+To define it, we first show how to encode every term of $\ranked{\tmonad (\Gamma+n\regnames)}$ as a $\lambda$-term over $\rGamma$, using the  function $\lambda$ of type
 \begin{align*}
 \lambda: \ranked{\tmonad(\Sigma+n R)} \to \ranked{\tmonad \Gamma_\lambda} 
 \end{align*}
-defined as follows. If  $t$ be a term of $\ranked{\tmonad(\Sigma+n R)}$ of arity $l$, then $\lambda(t)$ is obtained by:
+defined as follows.  If  $t$  is a term of $\ranked{\tmonad(\Sigma+n R)}$ of arity $l$, then $\lambda(t)$ is obtained by:
 \begin{enumerate}
 \item[(a)] Replacing the  $i$-th port  of $t$ with the variable $x_i$.
 \item[(b)] Binding all the  variables $x_1,\ldots,x_l$  at the beginning of the term, in this order.
@@ -64,7 +78,7 @@ Note that the function $\lambda$ is not arity preserving. Now, the $\lambda$-rep
 \begin{align*}
 u \mapsto \lambda(u)/f 
 \end{align*}
- $f$ being the function
+ where $\lambda(u)$ is the coordinate-wise application of $\lambda$ to $u$ and $f$ is the function
  \begin{align*}
  \text{port of $r_i$ } \mapsto (r,i).
  \end{align*}
@@ -206,7 +220,7 @@ We claim that all of the arrows (c), (d) and (e) on the  right-down path  in the
     To convert this output into a tuple of trees, we use the last prime function in Figure~\ref{fig:monad} to remove the fold $\reduce k$.
     \item[(e)] Finally, arrow (e) represents the evaluation of $\lambda$-terms. This arrow is derivable thanks to Theorem~\ref{thm:normalise}. The assumptions of this theorem are met, as discussed when describing the $\lambda$-representation.
 \end{itemize}
-Since arrows (c), (d), (e) are derivable, and the diagram commutes, it follows that  the composition of the arrows (a) and (b) is derivable. In other words, there is a derivable function which maps a tree of register updates to the $\lambda$-representation of the resulting register valuation. If we project the register valuation to the coordinate of the output register, we get the $\lambda$-representation of the output tree, which is the same thing as the output tree, since $\lambda$-representation does nothing for terms of arity zero. 
+Since arrows (c), (d), (e) are derivable, and the diagram commutes, it follows that  the composition of the arrows (a) and (b) is derivable. In other words, there is a derivable function which maps a tree of register updates to the $\lambda$-representation of the resulting register valuation. If we project the register valuation to the coordinate of the output register, we get the $\lambda$-representation of the output tree, which is the same thing as the output tree, since $\lambda$-representation does nothing for terms of arity zero. \footnote{@Mikolaj: this is true only when we dont see the nodes of lambda representations as a syntactic sugar. This is why I used this lambda terms over $\rGamma$ thing. }
 
 This completes the proof of Lemma~\ref{lem:derive-register-updates}, and therefore also of the main theorem. 
 
