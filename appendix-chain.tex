@@ -1,0 +1,169 @@
+\section{Chain logic and general unfold}
+\label{sec:appendix-chain}
+In this section, we prove Theorem~\ref{thm:chain-transductions}, which says that adding general unfold to \mso yields exactly the chain logic tree-to-tree transductions. For the rest of this section, we use the word ``derivable'' to mean derivable in the extension of Definition~\ref{def:derivable-function} where general unfold is used instead of monotone unfold. 
+
+\subsection{General unfold is derivable}
+
+
+\subsection{Chain logic is derivable}
+\label{sec:derive-chain-relabellings}
+We now prove the remaining implication in Theorem~\ref{thm:chain-transductions}, namely that all chain logic transductions are derivable in the presence of general unfolding. 
+
+Define  \emph{chain logic relabellings} in the same way as the first-order relabellings from Definition~\ref{def:forat}, except that chain logic is used instead of first-order logic.   As in Theorem~\ref{thm:mso-transductions} about \mso transductions, we push all of the power of chain logic into  tree relabellings.
+
+\begin{lemma}\label{lem:chain-colcombet}
+    Every   chain logic tree-to-tree transduction can be decomposed as: (a) a chain logic relabelling; followed by (b) a first-order tree-to-tree transduction. 
+\end{lemma}
+\begin{proof}[Proof sketch.]
+    Same proof as in~\cite[Corollary 1]{colcombetCombinatorialTheoremTrees2007}, except that \mso is replaced  by chain logic. The key property is that the compositionality method, which is used in Lemmas 1 and 2 of~\cite{colcombetCombinatorialTheoremTrees2007},  also works for chain logic. 
+\end{proof}
+
+Thanks to the above lemma, and derivability of first-order tree-to-tree transductions from our main theorem, 
+in order to finish the proof of Theorem~\ref{thm:chain-transductions}, it suffices to show that every chain logic relabelling is derivable.  
+To prove derivability of chain logic relabellings, we  decompose them into simpler pieces. Unlike for first-order relabellings, where the decomposition was based on Schlingloff's theorem about temporal logic, in the case of chain logic we use an approach based on top-down tree automata\footnote{The results of this section could be translated into an apparently new result about temporal lo chain logic has the same expressive power as an  extension of Schlingloff's logic obtained by adding group modalities as defined by Baziramwabo, McKenzie and  Th{\'e}rien in~\cite[Section 4]{baziramwabo1999modular}.}. 
+
+\paragraph*{Top-down tree automata.}
+We begin by defining top-down tree automata. 
+These are automata which process the input tree in a deterministic top-down (i.e.~root-to-leaves)  pass. Since we do not use nondeterministic top-down tree automata, we implicitly assume that the automata are deterministic.
+
+
+\begin{definition}
+    A \emph{top-down tree automaton}  is given by:
+    \begin{enumerate}
+        \item an \emph{input alphabet} $\rSigma$, which is a finite ranked set;
+        \item a  finite unranked set of \emph{states} $Q$;
+        \item a designated initial state in $Q$;
+        \item \label{it:top-down-transition} for each input letter $a \in \rSigma$, a transition function
+        \begin{align*}
+        \delta_q : Q \to Q^{\text{arity of $a$}};
+        \end{align*}
+        \item an \emph{accepting set}, which is a subset of 
+        \begin{align*}
+        Q \times \text{(input letters of arity zero)}.
+        \end{align*}
+    \end{enumerate}
+\end{definition}
+For an input tree $t \in \trees \rSigma$, the \emph{run} of the automaton is defined to be the labelling of the nodes by states, which is  defined as follows by induction on the distance from the root. The state in the root is the initial state. Suppose that we have already defined the state $q$ in a node $x$ of the input tree. Apply the transition function, corresponding to the label of node $x$, to the state $q$, yielding a tuple of states $q_1,\ldots,q_n$. These are the states of the run in the children of node $x$. An input tree is accepted if for every leaf, the accepting set contains the pair (state in the leaf, label of the leaf). 
+
+
+
+
+\begin{definition}[Tree relabellings associated to a top-down tree automaton]
+    \label{def:tree-relabellings-for-a-top-down-tree-automaton}
+    We associate two tree-to-tree functions to a top-down tree automaton $\Aa$ with input alphabet $\rSigma$. Each  of these is a special cases of a chain logic relabelling. 
+\begin{itemize}
+    \item The \emph{ancestor relabelling}, is denoted by 
+     \begin{align*}
+        \Aa^\uparrow: \trees \rSigma \to \trees \ranked{(\black Q \times \rSigma)},
+        \end{align*}
+        where  $Q \ranked{\times \Sigma}$ is be the ranked set which consists of one copy of the alphabet $\rSigma$ for each state. The ancestor relabelling simply extends the input tree with the run of the automaton. Note that the accepting set  of the automaton does not play a role in the definition of the ancestors relabelling.
+    \item The \emph{descendant relabelling}, denoted by
+    \begin{align*}
+        \Aa^\downarrow : \trees \rSigma \to \trees\ranked{(\rSigma + \rSigma)},
+        \end{align*}
+    is the characteristic function, in the sense of Section~\ref{sec:fo-translation}, of the query which selects nodes whose subtree is accepted by $\Aa$. In other words, for each node $x$ in the input tree, its label is replaced by the corresponding label in the first copy of $\rSigma$ if the subtree of $x$ is accepted by $\Aa$, and otherwise it is replaced by the corresponding label in the second copy of $\rSigma$. 
+\end{itemize}
+\end{definition}
+
+The reason for  notation in the above definition is that, in the ancestor relabelling, the label of a node depends on its ancestors, while in the descendant  relabelling, the label of a node depends on its descendants. It is worth pointing out that many different runs of the automaton are used in the descendant relabelling, because for each node the automaton is started again with the initial state in that node. 
+
+We begin with the following lemma, which states a connection between chain logic and (nestings of) top-down tree automata that was described in~\cite{bojanczykDecidablePropertiesTree2004}.
+\begin{lemma}\label{lem:chain-phd}
+    Every chain logic relabelling is a composition of functions which are either:
+    \begin{itemize}
+        \item[(a)] a letter-to-letter homomorphism; or 
+        \item[(b)] the descendant relabelling of  a  top-down tree automaton.
+    \end{itemize}
+\end{lemma}
+\begin{proof}
+    Adjusting for a slightly different terminology, this lemma is the same as ~\cite[Theorem 2.5.9]{bojanczykDecidablePropertiesTree2004}. To help with the terminology, we note that the wordsum automata (WS) from~\cite{bojanczykDecidablePropertiesTree2004}  are the same as top-down tree automata here, while the cascade product of wordsum automata  is the same as composing descendant relabellings.
+\end{proof}
+Since letter-to-letter homomorphisms are derivable, in order to finish the proof of Theorem~\ref{thm:chain-transductions}, it  remains to prove that every function of kind (b) in the above lemma is  derivable. We prove this by doing a further decomposition, which reduces  the descendant relabelling  to the ancestor relabelling.
+
+
+\begin{lemma}\label{lem:reduce-descendant-to-ancestor}
+    For every top-down tree automaton, its descendant relabelling is  a composition of functions which are either:
+    \begin{itemize}
+        \item[(c)] a first-order relabelling; or 
+        \item[(d)] the ancestor relabelling of a  top-down tree automaton.
+    \end{itemize}
+\end{lemma}
+\begin{proof} In this proof, we use the forward Ramseyan splits  of Colcombet~\cite{colcombetCombinatorialTheoremTrees2007}.
+
+    Fix a top-down tree automaton $\Aa$. 
+      For the proof of this lemma, as well as for subsequent results, it will be convenient to use a different perspective on top-down tree automata, which uses automata on words. Recall the set of branches $\branches \rSigma$ that was defined in page~\pageref{page:branches}: a branch is a letter together with a distinguished port. Define the \emph{branch automaton} of $\Aa$ to be the deterministic word automaton, where the input alphabet is $\branches \rSigma$, the states are the same, the initial state is the same as in $\Aa$, and the transition function is defined by 
+    \begin{align*}
+    (\overbrace q^{Q}, \overbrace{(a,i)}^{\branches \rSigma}) \qquad \mapsto \qquad \text{$i$-th state in the tuple $\delta_a(q)$.}
+    \end{align*}
+    The branch automaton does not have accepting states.  Roughly speaking, the run of a top-down tree automaton corresponds to running the branch automaton on every root-to-leaf path in the tree. This correspondence is spelled out in more detail below.
+
+    Consider two nodes in a tree, called the \emph{source} and \emph{target}, such that the source is an ancestor of the target. The source can be equal to the target. The \emph{path} between these two nodes is defined to be the set of edges in the tree which connects them. We can view the path as a word over the alphabet $\branches \rSigma$, as illustrated in the following picture:
+    \mypic{114}
+    The correspondence between the top-down tree automaton $\Aa$ and its  branch automaton can now be phrased as follows: for a node $x$, the state of the top-down tree automaton in node $x$ is the same as the state of the branch automaton after reading the (word corresponding to the) path from the root to node $x$.  
+
+    Equipped with the above terminology, we complete the proof of the lemma. For a path in an input tree, define its  \emph{state transformation} to be the function of type $Q \to Q$ which describes the state transformation of the branch automaton over the (word corresponding to the) path.  By Colcombet's results on forward Ramseyan splits~\cite[Lemma 3]{colcombetCombinatorialTheoremTrees2007},   there is a top-down tree automaton $\Bb$ with input alphabet $\rSigma$  and a family of first-order formulas
+\begin{align*}
+\set{\varphi_f(x,y)}_{f : Q \to Q}
+\end{align*}
+with the following property. For every input tree $t \in \trees \rSigma$ and nodes $x \le y$ in that tree, the state transformation for the path from $x$ to $y$ is equal to $f$ if and only if 
+\begin{align*}
+\Bb^{\uparrow}(t) \models \varphi_f(x,y).
+\end{align*}
+The idea is that the  top-down tree automaton $\Bb$ computes the forward Ramseyan split associated to state transformations in the branch automaton of $\Aa$. It follows that there is a formula $\varphi(x)$ of first-order logic such that for every $t \in \trees \rSigma$, 
+\begin{align*}
+\Bb^{\uparrow}(t) \models \varphi(x)
+\end{align*}
+holds if and only if  the subtree of  node $x$ is accepted by the automaton $\Aa$. The formula says that for all leaves  $y \le x$, the corresponding state transformation of the branch automaton leads to an accepting state. Therefore, the descendant relabelling of $\Aa$ can be computed by first applying the ancestor relabelling of $\Bb$, and then a first-order relabelling.
+\end{proof}
+
+We now show that the ancestor relabellings produced by the previous lemma can be further decomposed, so that the underlying automata are reversible. 
+Call a top-down tree automaton \emph{reversible} if the corresponding branch automaton, as defined in the proof of Lemma~\ref{lem:reduce-descendant-to-ancestor}, is reversible, which means that for every input letter the corresponding transition function is a permutation of the states. 
+\begin{lemma}\label{lem:reduce-to-reversible}
+    For every  top-down automaton, its ancestor function is a composition of functions which are either:
+    \begin{itemize}
+        \item[(c)] a first-order relabelling; or 
+        \item[(e)] the ancestor relabelling of a reversible top-down automaton.
+    \end{itemize}  
+\end{lemma}
+\begin{proof}
+    A corollary of the original Krohn-Rhodes theorem. 
+    
+    Define a \emph{Mealy machine} to be a string-to-string transducer, which is obtained from a deterministic word automaton by adding an output function, which maps every transition to a letter of an output alphabet.  The original Krohn-Rhodes theorem says that every Mealy machine is a composition of Mealy machines where the underlying automaton is either aperiodic or reversible.  
+    
+    Take a top-down tree automaton. We can view its associated branch automaton  as a Mealy machine  which decorates each position in the input word by the state after reading the input word up to and including that position. To this Mealy machine apply the Krohn-Rhodes theorem. The relabellings for the aperiodic Mealy machines can be computed by the functions of kind (c), while the relabellings for the reversible ones correspond to kind (e).
+\end{proof}
+
+Putting together Lemmas~\ref{lem:chain-phd}, \ref{lem:reduce-descendant-to-ancestor} and~\ref{lem:reduce-to-reversible}, we see that every chain logic relabelling is a composition of functions which have kinds (c) or (e) as in the statement of Lemma~\ref{lem:reduce-to-reversible}. Since first-order relabellings are derivable, it remains to derive the functions of kind (e). 
+
+\begin{lemma}
+    For every reversible top-down tree automaton, its ancestor relabelling is derivable (in the presence of general unfolding).
+\end{lemma}
+\begin{proof}
+    Let the states of the automaton be $Q = \set{q_1,\ldots,q_k}$. We assume that $q_1$ is the initial state.
+    Consider an input letter $a$, and its associated transition function as in item~\ref{it:top-down-transition}. Here is a picture of such a transition function, where the letter $a$ is binary and the number of states is $k=3$.
+    \mypic{116}
+    In terms of the above picture, the reversibility of the automaton can be described as follows:
+    \mypic{117}
+    We can represent the above transition function as an element of the $k$-th matrix power of $Q$ copies of the states, denoted by 
+    \begin{align*}
+    \hat a \in \ranked{\mati k {(\black Q \times \rSigma)}},
+    \end{align*}
+    which is illustrated in the following picture:
+    \mypic{115}
+    More formally, $\hat a$ is defined so that for every port $i$ of the letter $a$, the $i$-th twist function (see Section~\ref{sec:unfolding}) is equal to the state transformation of the branch automaton when reading the letter $(a,i) \in \branches \rSigma$. The twist functions need not be monotone, since the branch automaton need not be monotone. 
+    The reversibility of the automaton is crucial here; for a non-reversible automaton we might need to use a sub-port of the matrix power several times. 
+
+    The transformation $a \mapsto \hat a$ is defined so that unfolding the matrix power captures exactly run computation in the top-down tree automaton, as described in the following commuting  diagram
+    \begin{align*}
+    \xymatrix@C=3cm{
+        \trees \rSigma \ar[r]^{\trees(a \mapsto \hat a)} \ar[dr]_{\Aa^\uparrow}& 
+        \trees \ranked{(\mati k {(\black Q \times \rSigma)})} \ar[d]^{
+            \substack{
+                \text{unfold and}\\
+                \text{take coordinate $1$}
+            }}\\
+        & \trees{\ranked{(\black Q \times \rSigma)}}
+    }
+    \end{align*}
+This completes the proof of the lemma. Note how general unfolding is used, since the twists involved need not be monotone.
+\end{proof}
