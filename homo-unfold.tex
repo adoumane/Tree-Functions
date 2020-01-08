@@ -2,7 +2,11 @@
 \subsection{Term unfolding for homogeneous inputs}
 \label{sec:homo-unfold}
 
-\subsubsection{Preliminaries}
+The goal of this section is to show that term unfolding is derivable for homogeneous inputs. Actually, we will first show that unfolding is derivable for another particular case of inputs which we call \emph{constant-twists}. Then we will use this function as a macro to unfold the homogeneous inputs.  
+
+\subsubsection{Unfolding constant-twist functions}
+
+In the proof of this section, it will be sometimes convenient to manipulate \emph{partial shallow terms}, that is shallow terms where some children of the root maybe ports. We will define them more precisely, and show that unfolding matrix power of partial shallow terms is derivable.  
 
 \paragraph*{Partial shallow unfold}
  If $\rGamma$ and $\rDelta$ are types, we define $\ranked{\Gamma\odot\Delta}$ to be $\ranked{\Gamma.(\Delta+\set{1})}$. We call its inhabitants the \emph{partial shallow} terms. A partial shallow term looks like this, where we omitted to draw the element $1$ 
