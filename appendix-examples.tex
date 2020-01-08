@@ -1,28 +1,28 @@
 
-\section{Examples}
+\section{Examples}\label{sec:AppendixExamples}
 
-\subsection{Example of an FO tree-to-tree transduction}\label{sec:appendix-example-fo-transductions}
-
-
-\begin{example}\label{ex:pre-order}
-    Consider the ranked alphabets
-\begin{center}
-    \includegraphics[scale=.4]{pictures/input-alphabet}
-    
-    \includegraphics[scale=.4]{pictures/output-alphabet}
-\end{center}    
-    and the tree-to-tree function which does a pre-order traversal of the input tree, as described in the following picture:
-\begin{center}
- \includegraphics[scale=.34, page=30]{pics}
-\end{center}
-     The above function is first-order tree-to-tree transduction. We use four copies of the input tree: one for the binary gray nodes, two for the gray nodes of arity zero, and one for the nodes of the input tree. The key observation is that the pre-order  is first-order definable: a node $x$ is before $y$ in the pre-order if either $x \le y$, or there exist nodes $x',y'$ such that 
-     $$\begin{array}{c}
-      x' \le x \quad \land \quad  y' \le y \quad \land \quad  \underbrace{\forall z \ z < x' \Leftrightarrow z < y'}_{\text{$x',y'$ are siblings}} \quad \\ \land \quad \underbrace{\bigvee_{i<j}\child i (x') \land \child j(y').}_{\text{$x'$ is an earlier sibling than $y'$}}
-     \end{array}$$
-     Note that the disjunction over  $i<j$ is finite, since the maximal arity of nodes is determined by the alphabet. 
-\end{example}
-
-\subsection{Examples of derivable functions}\label{sec:AppendixExamples}
+%\subsection{Example of an FO tree-to-tree transduction}\label{sec:appendix-example-fo-transductions}
+%
+%
+%\begin{example}\label{ex:pre-order}
+%    Consider the ranked alphabets
+%\begin{center}
+%    \includegraphics[scale=.4]{pictures/input-alphabet}
+%    
+%    \includegraphics[scale=.4]{pictures/output-alphabet}
+%\end{center}    
+%    and the tree-to-tree function which does a pre-order traversal of the input tree, as described in the following picture:
+%\begin{center}
+% \includegraphics[scale=.34, page=30]{pics}
+%\end{center}
+%     The above function is first-order tree-to-tree transduction. We use four copies of the input tree: one for the binary gray nodes, two for the gray nodes of arity zero, and one for the nodes of the input tree. The key observation is that the pre-order  is first-order definable: a node $x$ is before $y$ in the pre-order if either $x \le y$, or there exist nodes $x',y'$ such that 
+%     $$\begin{array}{c}
+%      x' \le x \quad \land \quad  y' \le y \quad \land \quad  \underbrace{\forall z \ z < x' \Leftrightarrow z < y'}_{\text{$x',y'$ are siblings}} \quad \\ \land \quad \underbrace{\bigvee_{i<j}\child i (x') \land \child j(y').}_{\text{$x'$ is an earlier sibling than $y'$}}
+%     \end{array}$$
+%     Note that the disjunction over  $i<j$ is finite, since the maximal arity of nodes is determined by the alphabet. 
+%\end{example}
+%
+%\subsection{Examples of derivable functions}
 To illustrate derivable functions, we present a series of examples, some of them will be useful later.
 
 
