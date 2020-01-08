@@ -54,7 +54,11 @@ illustrated by the following picture
 \begin{center}
 {\includegraphics[scale=.4]{pictures/tensor-shallow-distrib}}
 \end{center}
-and defined as follows. 
+and defined as follows. If $t=(a_1,\dots,a_k)(b_1,\dots,b_n)$ is an inhabitant of $\ranked{\shallowterm  {\Gamma^k} {\Sigma}}$ then $\ranked{h}(t)$ is
+\begin{align*}
+(a_1(b_1,\dots,b_{\text{ar}_1}), a_2(b_{\text{ar}_1+1},\dots,b_{\text{ar}_2}),\dots ,a_k(b_{\text{ar}_{k-1}+1},\dots,b_{\text{ar}_k}))
+\end{align*} 
+where $\text{ar}_i$ is the arity of $a_i$ for $i\in\set{1,\dots,k}$.
 
 \paragraph*{Unfolding shallow terms.} Unfolding for shallow terms is defined to be  the composition of the following functions
   \begin{align*}
