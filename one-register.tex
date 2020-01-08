@@ -1,7 +1,7 @@
 \subsection{Evaluation of simply typed affine terms}
 \label{sec:one-register}
 
-In this section, we explain how (a subclass of) $\lambda$-terms can be evaluated using a derivable function. The subclass consists of affine terms which can be typed using a bounded number of types. These notions will be explained in more detail below.  
+In this section, we explain how $\lambda$-terms can be evaluated using a derivable function, assuming that the $\lambda$-terms are linear and  can be typed using a bounded number of types. These notions will be explained in more detail below.  
 
 
 
@@ -11,9 +11,9 @@ Define  \emph{simple types} to be expressions  generated from an atomic type $\o
     \otype \qquad \otype \to \otype \qquad (\otype \to \otype) \to (\otype \to \otype) \qquad \cdots 
 \end{align*}
 For our purposes, one can think of the atomic type $\otype$ as representing trees over the output alphabet.
-Let $X$ be a set of variables, each one with an associated simple type.  A $\lambda$-term over variables $X$ is any expression that is constructed by starting with the variables, and using $\lambda$-abstraction $\lambda x. M$ and term application $M N$. 
+Let $X$ be a set of variables, each one with an associated simple type.  A $\lambda$-term  is any expression that is constructed by starting with the variables, and using $\lambda$-abstraction $\lambda x. M$ and term application $M N$. 
 We say that a $\lambda$-term is \emph{well-typed} if one can associate  to it  a simple type according to the usual typing rules of simply typed $\lambda$-calculus,
-see~\cite[Definition 3.2.1]{sorensen_lectures_2006}. Because variables are typed, a  $\lambda$-term can have either a unique type, or it is not well-typed.  Here is an example of a well-typed $\lambda$-term, with type annotation in blue: 
+see~\cite[Definition 3.2.1]{sorensen_lectures_2006}. Because the variables are typed, a  $\lambda$-term has  either a unique type, or is not well-typed.  Here is an example of a well-typed $\lambda$-term, with the type annotation in blue: 
 \begin{align*}
     \typecolor{\overbrace{
         \usualcolor{\lambda \typevar y {\otype \to \otype}. \ \lambda \typevar x \otype.}  \ \underbrace{\usualcolor{y (y x).}}_{\otype}}^{(\otype \to \otype) \to \otype \to \otype}}
@@ -34,7 +34,7 @@ A $\lambda$-term  can be seen as a tree over the ranked alphabet
     \label{eq:alphabet-for-lambda-terms}
   \overbrace{\set{x : x \in X}}^{\text{arity 0}} \cup \overbrace{\set{\lambda x : x \in X}}^{\text{arity 1}} \cup  \overbrace{\set @}^{\text{arity 2}}
 \end{align}
-where @ represents term application. Using this representation, it makes sense to talk about the tree-to-tree function
+where @ represents term application. Using this representation, and assuming that the set of variables is finite, it makes sense to talk about the tree-to-tree function
 \begin{align*}
 \text{$\lambda$-term} \qquad \mapsto \qquad \text{its normal form},
 \end{align*}

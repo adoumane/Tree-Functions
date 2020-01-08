@@ -3,9 +3,9 @@
 
 The purpose of this paper is to decompose tree transformations into simple building blocks. An important inspiration  is the Krohn-Rhodes theorem~\cite[p.~454]{Krohn1965}, which says that every string-to-string function recognised by a Mealy machine can be decomposed into certain prime functions. 
 
-\paragraph*{Regular functions.} This paper is mainly about a class of transformations called the regular functions, and especially its first-order definable fragment.  We begin by describing this class, both for strings and trees. 
+\paragraph*{Regular functions.} The transformations studied in this paper are the so called  regular functions.
 
-In~\cite[Theorem 13]{engelfrietMSODefinableString2001}, Engelfriet and Hoogeboom proved that deterministic two-way transducers recognise the same string-to-string functions as \mso transductions. Because of this and other good properties -- such as closure under composition~\cite[Theorem 1]{chytilSerialComposition2Way1977} and decidable equivalence~\cite[Theorem 1]{gurariEquivalenceProblemDeterministic1982} --  this class of functions is now called the \emph{regular string-to-string functions}. Other  equivalent descriptions of this class include: string transducers of Alur and {\v C}ern{\'y}~\cite{alurExpressivenessStreamingString2010}, and several models based on combinators~\cite{alur2014regular,daveGastinKrishna18, bojanczykRegularFirstOrderList2018}. 
+In~\cite[Theorem 13]{engelfrietMSODefinableString2001}, Engelfriet and Hoogeboom proved that deterministic two-way transducers recognise the same string-to-string functions as \mso transductions. Because of this and other properties -- such as closure under composition~\cite[Theorem 1]{chytilSerialComposition2Way1977} and decidable equivalence~\cite[Theorem 1]{gurariEquivalenceProblemDeterministic1982} --  this class of functions is now called the \emph{regular string-to-string functions}. Other  equivalent descriptions of the regular functions include: string transducers of Alur and {\v C}ern{\'y}~\cite{alurExpressivenessStreamingString2010}, and several models based on combinators~\cite{alur2014regular,daveGastinKrishna18, bojanczykRegularFirstOrderList2018}. 
  
 % One corollary of the description in~\cite{bojanczykRegularFirstOrderList2018} is that the regular  string-to-string functions are the smallest class of string-to-string functions which is closed under composition, contains functions recognised by one-way deterministic automata, and the following two operations:
 % \begin{eqnarray*}
@@ -14,9 +14,16 @@ In~\cite[Theorem 13]{engelfrietMSODefinableString2001}, Engelfriet and Hoogeboom
 % \end{eqnarray*}
 % where $w_1,\ldots,w_n \in \set{a,b}^*$ and $|$ is a separator symbol. The deterministic one-way automata themselves can be further decomposed using the Krohn-Rhodes theorem; thus leading a decomposition into very simple prime functions.
 
-There are also tree-to-tree regular functions, which can be defined using any of the following equivalent models: \mso tree-to-tree transductions~\cite[Section 3]{bloem_comparison_2000}, single use attributed tree grammars~\cite{bloem_comparison_2000}, macro tree transducers of linear size increase~\cite[Theorem 7.1]{engelfriet_macro_2003}, and streaming tree transducers~\cite[Theorem 4.6]{alur2017streaming}. The  functions computed by these models are the topic of this paper. 
+There are also regular functions for trees, which can be defined using any of the following equivalent models: \mso tree-to-tree transductions~\cite[Section 3]{bloem_comparison_2000}, single use attributed tree grammars~\cite{bloem_comparison_2000}, macro tree transducers of linear size increase~\cite[Theorem 7.1]{engelfriet_macro_2003}, and streaming tree transducers~\cite[Theorem 4.6]{alur2017streaming}. 
 
-\paragraph*{First-order transductions. } Although \mso transductions are the more popular model, we work mainly with the less expressive model of first-order transductions. Why?
+The goal of this paper is to prove a decomposition result for regular tree-to-tree functions. As in the Krohn-Rhodes theorem, we want to show that every such function can be obtained by combining certain prime functions.  
+
+\paragraph*{First-order transductions. } Although \mso transductions are the more popular model, we work mainly with the less expressive model of first-order transductions.
+
+As we argue in Section~\ref{sec:e}
+
+
+Why?
 
 One reason is that \mso on trees is too hard if we are interested in Krohn-Rhodes decompositions.  Already for the simplest tree formalisms, such as tree languages or letter-to-letter transformations, there is no known  Krohn-Rhodes theory. One would expect a Krohn-Rhodes theorem  for trees to yield an effective characterisation of first-order logic -- as it does for words -- but finding such a characterisation remains a major open problem~\cite[Section 3]{bojanczyk2015automata}. We do not attempt to solve this problem here. In contrast, first-order logic on trees does have decomposition theorems, which we can use: including the temporal logic {\sc ctl*} \cite[Main Theorem]{haferthomas}, cascade products of tree automata~\cite[Theorem 2.5.7]{bojanczykDecidablePropertiesTree2004}, block products~\cite[Corollary 3.11]{esik2010algebraic} and wreath products~\cite[Theorem 3.1]{bojanczykWreathProductsForest2012}. For our paper, the most useful decomposition is a remarkable theorem of Schlingloff, which shows that first-order logic on trees is equivalent to a certain two-way variant  {\sc ctl}~\cite[Theorem 4.5]{schlingloff1992expressive}.
 
@@ -34,6 +41,9 @@ For trees,  the choice of datatypes  becomes harder. The difficulty is in splitt
 
 We finish the introduction by stating 
 one of the guiding principles behind our approach:  we want to describe tree-to-tree functions using a formalism devoid of any iteration mechanisms, such as states or {\tt fold} functions. This also validates the choice of first-order logic. If we would use \mso, at the very least we would need to have some mechanism for groups, which are a basic building block for Krohn-Rhodes decompositions, or for evaluating Boolean formulas. 
+
+
+This is a long paper. Given the limited space, we have decided to prioritise  explaining the definitions and approach that we use, with pictures and examples. As a result, almost all of the proofs are in the appendix. 
 
 
 
