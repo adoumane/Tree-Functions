@@ -3,25 +3,69 @@
 \label{sec:to-logic}
 The goal of this section is to show the right-to-left implication of Theorem~\ref{thm:main}, which says that derivable functions can be implemented by first-order transductions. 
 
-As discussed in the body of the paper, we proceed by induction on the derivation. During this induction, we will need to show that every prime function is a first-order transduction. But prime functions are not tree-to-tree functions. Instead they transform dataypes into datatypes. This is the reason why we need to generalize
+As discussed in the body of the paper, we proceed by induction on the derivation. During this induction, we will need to show that every prime function is a first-order transduction. Prime functions are not tree-to-tree functions, instead they transform dataypes into datatypes. This is the reason why we need 
 \begin{itemize}
-\item
-\item
+\item to generalize tree-to-tree transductions into  transductions that can transform models over arbitrary vocabularies (and not only the vocabulary of trees). 
+\item show how datatypes (terms, pairs, copairs and folds) can be encoded as models over a well chosen vocabulary. More precisely, we will associate to every datatype $\rSigma$ a relational vocabulary that we call \emph{vocabulary of $\rSigma$}. Then we will define the function
+\begin{align*}
+\underline{\bullet}: \rSigma \xrightarrow{\qquad} \text{Vocabulary of $\rSigma$}
+\end{align*} 
+which encodes the inhabitants of $\rSigma$ as models over the vocabulary of $\rSigma$.
 \end{itemize}
  
- Right-to-left implication can be then generalized to the following statement, more suited to the induction
+ Right-to-left implication can be then generalized to the following statement, more suited to a proof by induction
 
 \begin{proposition}\label{prop:main-right-to-left}
-
+Let $\rGamma$ and $\rSigma$ be two datatype.  For every derivable function $\ranked{f}$, there is a first-order transduction $g$ such that the following diagram commutes
+  \begin{align*}
+  \xymatrix@C=2.8cm{
+          \rSigma 
+        \ar[d]_{\substack{\underline{\bullet}}}
+        \ar[r]^-{\ranked{f}}
+        &
+    \rGamma \ar[d]^{\substack{\underline{\bullet}}}
+        \\
+      \text{Vocabulary of $\rSigma$}
+        \ar[r]_-{g}
+        &
+    \text{Vocabulary of $\rGamma$}   
+    } 
+\end{align*}  
 \end{proposition}
 
-In the rest of this section, we will define first-order transductions not only for trees but for any kind of models (section~\ref{}), encode datatypes as models over a well chosen vocabulary (section~\ref{}) an finally prove Proposition~\ref{prop:main-right-to-left} (section~\ref{}).
+The rest of this section is organized as follows. We define first-order transductions transforming arbitrary models in Section~\ref{}. In Section~\ref{} we define the vocabulary of a datatype and show the encoding $\underline{\bullet}$ of data into models. Finally, we prove Proposition~\ref{prop:main-right-to-left} which gives as a corollary the right-to-left implication of Theorem~\ref{thm:main}.
 
 \subsection{First-order transductions}
 
+\begin{definition}[First-order transduction]\label{def:fo-transduction}\ 
+\begin{enumerate}
+    \item \emph{Copying.} Fix some  relational vocabulary $\ranked \sigma$ and let $k \in \set{1,2,\ldots}$. Define $k$-copying to be the operation 
+    $$\begin{array}{lll}
+     \text{models over $\ranked \sigma$} & \to & 
+     \begin{array}{c}
+     \text{models over $\ranked \sigma$}\\ 
+     \text{extended with a $k$-ary relation $\mathrm{copy}$}
+     \end{array}
+    \end{array}$$
+which inputs a model $\mathbb A$, and outputs $k$ disjoint copies of $\mathbb A$, where the  $\mathrm{copy}$ relation is interpreted as the set of tuples $(a_1,\ldots,a_k)$ such that, for  some $a \in \mathbb A$, the first copy of $a$ is  $a_1$, the second copy of $a$ is $a_2$, etc. The $\mathrm{copy}$ relation  is not commutative, because we distinguish the copies.
+\item    \emph{Non-copying first-order transduction.} The syntax of a \emph{non-copying first-order transduction}  is given by:
+\begin{enumerate}
+    \item Input relational vocabulary $\ranked\sigma$ and output relational vocalbulary $\ranked{\gamma}$.
+    \item A first-order \emph{universe formula} $\varphi(x)$ over $\ranked{\sigma}$.
+    \item For every relation $R$ in vacubulary $\ranked{\gamma}$, a first-order  formula $\varphi_R(x_1,\ldots,x_{\arity R})$ over $\ranked{\sigma}$.
+\end{enumerate}
+The semantics of a non-copying first-order transduction is  a function
+\begin{align*}
+    \text{models over $\ranked\sigma$} \quad \to \quad \text{models over $\ranked\gamma$}
+\end{align*}
+defined as follows. If the input model is $\mathbb A$, then the output model is defined as follows: the universe is elements of $\mathbb A$ which satisfy the universe formula, and each relation $R$ is interpreted as those tuples that satisfy $\varphi_R$. 
+\item \emph{First-order transductions.} A \emph{first-order transduction} is defined to be any  composition of $k$-copying (for some $k$) followed by a non-copying first-order transduction. 
+ \end{enumerate}
+\end{definition}
+
 
 \subsection{Datatypes as models.}
-Let us show how to encode datatypes as models. 
+Let us show how to encode datatypes as relational vocabularies and data as models over these vocabularies. 
 \begin{definition}[Associated models for terms, pairs, co-pairs and tensors.] \label{def:type-model} To each type  $\rSigma$ we associate a vocabulary, called the \emph{vocabulary of $\rSigma$}, and a map 
     \begin{align*}
         a \in \rSigma \qquad \mapsto \qquad \underbrace{\underline a \in \text{models over the  vocabulary of  $\rSigma$}}_{\text{associated model of $a$}}.
@@ -79,14 +123,14 @@ whose elements are used as the ports, and interpreting the binary relation $R$ a
 The above  definition creates a certain ambiguity for trees, because if $t$ is a tree over a finite ranked set $\rSigma$, then $\underline t$ can be understood in two ways: as per  Definition~\ref{def:tree-model} for trees, or as per Definition~\ref{def:type-model} when $t$ is viewed as a special case of a term $t \in \tmonad \rSigma$. Since we only use first-order transductions to transform relational structures,  this ambiguity is not a problem, because one can easily define first-order transductions which map one definition of $\underline t$ to the other.
 
 
-\subsection{Proof of Theorem~\ref{}}
-The proof proceeds by induction, following the definition of derivable functions. All the cases are easy, and consist mainly on unfolding the definitions. We will treat only the cases of the basic function $\unit_\rSigma$  to illustrate this process.
+\subsection{Proof of Proposition~\ref{prop:main-right-to-left}}
+The proof proceeds by induction, following the definition of derivable functions. All the cases are easy, and consist mainly on unfolding the definitions. We will treat only the case of the prime function $\unit$  to illustrate this process.
     
     In the following, it will be convenient to use, as part of the vocabulary of $\rSigma$, the unary relation  $\mathsf{Port}_\rSigma$ which selects the ports of the structures over the vocabulary of $\rSigma$; and the binary relation $\sqsubset_\rSigma$ which orders these ports. By induction on $\rSigma$, we can show that both relations are definable by first-order formulas over  the vocabulary of $\rSigma$.
     
     
-   Given an element $x$ of $\rSigma$, let us show how  $\unit_\rSigma(x)$ can be implemented using a FO transduction.  The copying constant is 2,
-    the first copy will contain the whole structure $\underline{x}$ and the second copy will select only the ports of $\underline{x}$ which will serve as the ports of the structure $\underline{\unit_\rSigma(x)}$, as illustrated by the following picture 
+   Given an element $x$ of $\rSigma$, let us show how  $\unit(x)$ can be implemented using a FO transduction.  The copying constant is 2,
+    the first copy will contain the whole structure $\underline{x}$ and the second copy will select only the ports of $\underline{x}$ which will serve as the ports of the structure $\underline{\unit(x)}$, as illustrated by the following picture 
 \begin{center}
     \includegraphics[scale=.18]{pictures/to-logic-unit.pdf}
     \end{center}    
@@ -99,11 +143,11 @@ The proof proceeds by induction, following the definition of derivable functions
    \varphi_R^{1}(x)=R(x) \quad&\quad \varphi_S^{1,1}(x,y)=S(x,y)\\
    \varphi_R^{2}(x)=\mathsf{False} \quad&\quad \varphi_S^{2,2}(x,y)=\mathsf{False}
 \end{align*}      
-Let us interpret the relations $<$ and $\sqsubset$ of the vocabulary of $\tmonad\rSigma$. The  ports of $\underline{\unit_\rSigma(x)}$ inherit the order of the ports of $\underline{x}$, this is why we set:
+Let us interpret the relations $<$ and $\sqsubset$ of the vocabulary of $\tmonad\rSigma$. The  ports of $\underline{\unit(x)}$ inherit the order of the ports of $\underline{x}$, this is why we set:
 \begin{align*}
 \varphi_\sqsubset^{2,2}(x,y)=x\sqsubset_\rSigma y
 \end{align*}
-The descendant relation $<$ connects the $i^{th}$ port of $\underline{x}$ to the $i^{th}$ port of $\underline{\unit_\rSigma(x)}$. Since these nodes come from the same node in the original structure, we set:
+The descendant relation $<$ connects the $i^{th}$ port of $\underline{x}$ to the $i^{th}$ port of $\underline{\unit(x)}$. Since these nodes come from the same node in the original structure, we set:
 \begin{align*}
 \varphi_<^{1,2}(x,y)=x=y
 \end{align*}
