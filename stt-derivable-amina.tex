@@ -18,14 +18,14 @@ Well-typedeness extends in a natural way.
 
 We claim that under the same restrictions, Theorem~\ref{thm:normalise} holds for $\lambda$-terms over $\rGamma$. This follows from this (classical) encoding of the element of $\rGamma$ as pure $\lambda$-terms. 
 Every element  $a \in \rGamma$ of arity $n$ is represented, using  a variable $x_a$ of type 
-\begin{align}
+\begin{align}\label{eq:low-order-type}
 \overbrace{\otype \to \otype \to \cdots \to \otype}^{\text{$n$ times}} \to \otype
 \end{align}
-as a spine of application nodes of lenght $n$, ending with the variable $x_a$, as shown below.
+as a spine of application nodes of length $n$, ending with the variable $x_a$, as shown below.
 \begin{center}
 \includegraphics[scale=.4]{pictures/encode-gamma}
 \end{center}
-If a non pure term satisfies the condition of Theorem~\ref{thm:normalise}, then so does its pure encoding. Indeed, the variables corresponding to $\rGamma$  -- which are not bound -- are the only ones used multiple times; every other variable is used at most once in its scope.   Furthermore, all sub-terms in the $\lambda$-representation have type of the form~\eqref{eq:low-order-type}, with $n$ being at most the maximal arity of letters in $\rGamma$. Summing up, the encoding of a non-pure $\lambda$-term is linear and can be typed using a bounded set of types, and therefore it falls under the scope of Theorem~\ref{thm:normalise}. 
+If a non-pure term satisfies the condition of Theorem~\ref{thm:normalise}, then so does its pure encoding. Indeed, the variables corresponding to $\rGamma$  -- which are not bound -- are the only ones used multiple times.  Furthermore, all sub-terms in the encoding have type of the form~\eqref{eq:low-order-type}, with $n$ being at most the maximal arity of letters in $\rGamma$. Summing up, the encoding of a non-pure $\lambda$-term is linear and can be typed using a bounded set of types, and therefore it falls under the scope of Theorem~\ref{thm:normalise}. 
   
 \subsection{Evaluation of register updates}
 \label{sec:updates-endgame}
