@@ -1,10 +1,11 @@
 \section{Unfolding the matrix power} 
 \label{sec:appendix-unfold}
-In this appendix, we define formally the unfolding function described in Section~\ref{sec:unfolding}, by induction on the size of the input term. For the inductive step, we will call the unfolding function on a very specific class of terms called \emph{shallow terms} and defined below. We define unfolding for these shallow terms and generalize it, via induction, to the whole class to terms.
+In this part of the appendix, we define formally the unfolding function described in Section~\ref{sec:unfolding}.
+As a first step, we will define it for a very specific class of inputs called \emph{shallow terms} and defined below. Then we will lift this construction, by induction, to the whole class to terms.
 
 \subsection{Shallow terms and their unfolding}\label{sec:shallow-terms}
 
-\paragraph*{Shallow terms.} Let us describe the shallow-terms datatype. For now, it is just an intermediary type to define formally the unfolding function. Later on, we will use it as a basic datatype when we will decompose the unfolding function into smaller prime functions (see Appendix~\ref{ap:matrix-power}). 
+\paragraph*{Shallow terms.} Let us describe the shallow terms datatype. For now, it is just an intermediary type to define formally the unfolding function. Later on, we will use it as a basic datatype when we will decompose the unfolding function into smaller prime functions (see Appendix~\ref{ap:matrix-power}). 
 
  Let $\rSigma$ and $\rGamma$ be two ranked sets. An element of the shallow terms datatype denoted $\shallowterm \rSigma \rGamma$, is an expression of the form $a\tensorpair{b_1,\dots,b_n}$ where $a$ is an $n$-ary element of $\rSigma$ and $b_1,\dots, b_n$ are elements of $\rGamma$. We draw shallow terms like this:
 \mypic{54}
@@ -19,11 +20,11 @@ Unfolding of shallow terms is the function of type
         }
     }
 \end{align*}
-which is the restriction of the more general unfolding function we want to define to shallow terms. Here is a picture of unfolding for shallow terms:
+which is the restriction of unfolding to shallow terms. Here is a picture of unfolding for shallow terms:
 \begin{center}
 \includegraphics[scale=.17]{pictures/shallow-term-unfold}
 \end{center}
-To define it formally, we will introduce three functions manipulating shallow terms. Here again, these functions, which are used here as an intermediary functions to define the unfolding formally, will become prime functions when we will decompose the unfolding function.
+To define it formally, we will introduce three functions manipulating shallow terms. Again, these functions, which are used here as  intermediary functions to define the unfolding formally, will become prime functions when we will decompose the unfolding function in Appendix~\ref{ap:matrix-power}.
 
 \paragraph*{Functions on shallow terms.} Let $\rGamma$ and $\rSigma$ be two datatypes.  Consider the function $f$
 \begin{align*}
