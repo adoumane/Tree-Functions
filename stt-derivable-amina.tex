@@ -1,10 +1,11 @@
 
 \section{Evaluation of register updates}
 \label{sec:stt-derivable}
-In this section, we deal with the second computation phase in a first-order register transducer, namely evaluating register updates. Together with Proposition~\ref{prop:forat} from the previous section, this proves that all first-order register transducers are derivable. Combining this with  Theorem~\ref{thm:stt} about expressive completeness of first-order register transducers, we finish the proof of our main result. 
+In this section, we deal with the second computation phase in a first-order register transducer, namely evaluating register updates. Together with Proposition~\ref{prop:forat} from the previous section, this proves derivability for  first-order register transducers, and thus completes the proof of our main theorem. 
 
 
-To derive the function that   evaluates for register updates, we  use the language of $\lambda$-calculus.  In Section~\ref{sec:one-register},  we show that evaluation of $\lambda$-terms is derivable, under certain restrictions. This result is then used in Section~\ref{sec:updates-endgame}, where unfolding the matrix power is used to reduce the evaluation of register updates to the evaluation of $\lambda$-terms.  
+
+Our proof uses the language of $\lambda$-calculus.  In Section~\ref{sec:one-register},  we discuss derivability of  evaluation for $\lambda$-terms. In Section~\ref{sec:updates-endgame}, we reduce evaluation of register updates to  unfolding the matrix power  and evaluation of $\lambda$-terms.  
 
 \input{one-register}
 %
@@ -30,10 +31,14 @@ To derive the function that   evaluates for register updates, we  use the langua
   
 \subsection{Evaluation of register updates}
 \label{sec:updates-endgame}
-Equipped with Theorem~\ref{thm:normalise}, we  prove in this section that evaluation of  register updates is a derivable function. Fix a set of registers names $\regnames$, an output alphabet $\rGamma$, and a finite set $\rDelta$ of monotone register updates.  From now on, when speaking about register updates or register valuations, we assume these register names and this alphabet. 
+Equipped with Theorem~\ref{thm:normalise}, we  prove derivability of  evaluation of  register updates. 
+Fix a first-order register transducer.
+% Fix a set of registers names $\regnames$, an output alphabet $\rGamma$, and a finite set $\rDelta$ of monotone register updates.  
+From now on, when speaking about register updates or register valuations, we mean those of the fixed transducer. 
 Our goal is to prove the following lemma. 
 \begin{lemma}\label{lem:derive-register-updates}
-    The   tree-to-tree function  of type $\trees \rDelta \to \trees \rGamma$, which evaluates a tree of register updates and returns the contents of the designated output register, is derivable. 
+    Consider
+    the   tree-to-tree function, which inputs a tree of  register updates, evaluates it, and outputs the  contents of the designated output register. This function is derivable. 
     % \begin{eqnarray*}
     % \trees{\ranked{\text{(register updates)}}} &\to & \trees \rGamma \\
     % t & \mapsto & \text{contents of register 1 after evaluating $t$}\\
@@ -43,36 +48,36 @@ Our goal is to prove the following lemma.
 % Theorem~\ref{thm:main}.  
 % To prove the lemma, we will model   register updates by evaluation of $\lambda$-terms as in Theorem~\ref{thm:normalise}. %This reduction will involve the matrix power. 
 
-\paragraph*{Output letters in $\lambda$-terms.} We will   use $\lambda$-terms to represent register updates. Therefore, for the  rest of Section~\ref{sec:updates-endgame}, we use an extended definition of $\lambda$-terms, which allows  constructing $\lambda$-terms of the form 
+\paragraph*{Output letters in $\lambda$-terms.} We will   use $\lambda$-terms to represent register updates, which involve letters of the output alphabet $\rGamma$. Therefore, for the  rest of Section~\ref{sec:updates-endgame}, we use an extended definition of $\lambda$-terms, which allows  constructing $\lambda$-terms of the form 
 \begin{align}\label{eq:non-pure}
 a(M_1,\ldots,M_n) \qquad \text{for every $a \in \rGamma$ of arity $n$.}
 \end{align}
-The typing rules are extended as follows: the arguments $M_1,\ldots,M_n$ need to have type $\otype$, and then the  type of~\eqref{eq:non-pure} is also $\otype$. The extended $\lambda$-terms can also  be represented as trees, as in the following picture:
+The typing rules are extended as follows: if the arguments $M_1,\ldots,M_n$ all have type $\otype$ (no other type is allowed for arguments of $a$),  then~\eqref{eq:non-pure} has type $\otype$. These $\lambda$-terms can  be represented as trees, as in the following picture:
 \mypic{118}
 % We write $\ranked{\rGamma_\lambda}$ for the ranked alphabet used in the tree representation; this is the ranked alphabet from~\eqref{eq:alphabet-for-lambda-terms} plus the output alphabet $\rGamma$. 
-Theorem~\ref{thm:normalise} works without change for the  $\lambda$-terms as discussed in this section. Note that here is no $\beta$-reduction rule for the symbols from the output alphabet. 
+Theorem~\ref{thm:normalise} works without change for the extended definition of  $\lambda$-terms used in this section. Note that there is no $\beta$-reduction rule for $\lambda$-terms of the form~\eqref{eq:non-pure}.
 
 
 \paragraph*{$\lambda$-representations of register updates.}
 %  Let $k$ be the number of registers. 
 % Register valuations and register updates can be thought of as lists of terms, ordered using the linear order on registers. 
-The main ingredient in the proof of Lemma~\ref{lem:derive-register-updates} is an arity preserving function, called \emph{$\lambda\text{-representation}$}, which represents register updates using a matrix power of $\lambda$-terms. 
+To prove Lemma~\ref{lem:derive-register-updates}, we represent  register updates using a matrix power of $\lambda$-terms. The idea is that the matrix power handles the parallel evaluation of registers.
 
-Let $X$ be a set of variables $\set{x_1\dots,x_m}$, of type $\otype$,  where $m$ is the maximal arity among registers. Define  $\ranked{\Gamma_\lambda}$ to be $\rGamma$ plus the ranked alphabet defined in~\eqref{eq:non-pure} to represent $\lambda$-terms over $X$ as trees. 
+Let $X$ be a set of variables $\set{x_1\dots,x_m}$, all of them having type $\otype$,  where $m$ is the maximal arity among registers. Define  $\ranked{\Gamma_\lambda}$ to be the output alphabet $\rGamma$ plus the ranked alphabet defined in~\eqref{eq:non-pure} for tree representations of  $\lambda$-terms. 
 
-
-Recall that a register update -- of arity say $n$ -- consists of a family of terms  over alphabet $\ranked{\Gamma + n\regnames}$, one for each register. Let us use the name \emph{placeholders} for the elements of $\ranked{n \regnames}$ and write them as $r_i$ with $r \in \regnames$ and  $i \in \set{1,\ldots,n}$.
-We begin by explaining the $\lambda$-representation for   terms with  placeholders, which is a function of type
+Recall that a register update -- of arity say $n$ -- consists of a family of terms  over alphabet $\ranked{\Gamma + n\regnames}$, one for each register $r \in \regnames$. We begin by explaining the $\lambda$-representation for terms in the family, which is a function 
+ of type
 \begin{align}\label{eq:placeholders}
 \xymatrix@C=2cm{
     \ranked{\tmonad(\rGamma+n R)} \ar[r]^-{\text{$\lambda$-representation}} &
     \ranked{\tmonad {\Gamma_\lambda}}
-},
+}.
 \end{align}
-which is not arity preserving and is  explained in the following picture:
+This function  is not arity preserving, which is why it is not written in red. Define a  \emph{placeholder} to be an element of $\ranked{n \regnames}$; we write placeholders as $r_i$ with $r \in \regnames$ and  $i \in \set{1,\ldots,n}$.
+The function~\eqref{eq:placeholders}  is  explained in the following picture:
 \mypic{103}
-As mentioned above, 
- arities need not be preserved: the arity of the output is the number of placeholders in the input, which need not be the same as the number of ports in the input. The correspondence of ports in the output term with placeholders in the input term is defined with respect to some arbitrary order on the set $\ranked{n \regnames}$ of placeholders, say lexicographic with respect to the orders on registers and  $\set{1,\ldots,n}$.
+Note how the  
+ arities need not be preserved: the arity of the output is the number of placeholders in the input, which need not be the same as the number of ports in the input. The correspondence of ports in the output term with placeholders in the input term is defined with respect to some arbitrary order on the set $\ranked{n \regnames}$ of placeholders, say lexicographic with respect to the order on registers and  $\set{1,\ldots,n}$.
 
 % We will represent it as a term over  define its $\lambda$-representation to be  of arity $l$, then $\lambda(t)$ is obtained by:
 % \begin{enumerate}
@@ -90,23 +95,21 @@ As mentioned above,
 % \includegraphics[scale=.33]{pictures/lambda}
 % \end{center}
 
-Having defined the $\lambda$-representation of terms with placeholders, we lift it below to  register updates, yielding an  arity preserving function of type
+Having defined the $\lambda$-representation of terms with placeholders, we lift it a $\lambda$-representation of  register updates
 \begin{align}\label{eq:lambda-representation-regup}
 \ranked{
     \xymatrix@C=2cm{
  \text{register updates}    \ar[r]^-{\text{$\lambda$-representation}} &
  \mati k {(\tmonad\Gamma_\lambda)}
 }
-}.
+},
 \end{align}
+where $k$ is the number of registers. This function is arity preserving. 
 For a register update $(t_1,\ldots,t_k)$, where $t_i$ is the term with placeholders used in the $i$-th register,  its $\lambda$-representation is defined to be 
 \begin{align*}
 (\text{$\lambda$-representation of $t_1$},\ldots,\text{$\lambda$-representation of $t_k$})/f ,
 \end{align*}
- where the grouping function $f$ is defined by
- \begin{align*}
- \text{port corresponding to  of $r_i$ } \mapsto (r,i).
- \end{align*}
+ where the grouping function $f$ connects a placeholder $r_i$ to the $r$-th sub-port of port $i$. 
 Here is a picture
 \mypic{119}
 
@@ -116,9 +119,9 @@ Here is a picture
 
 % \noindent {\small (a): port of $s_1$ contributes to the second position of the first port in the matrix power.}
 % \end{center}
-We  summarise below three properties of the $\lambda$-representation for register updates, which will be used later in the proof:
+The following  three properties of the $\lambda$-representation for register updates will be used later in the proof:
 \begin{enumerate}
-\item[(P1)] It is  arity preserving. If we restrict the domain to a finite set of register updates, then it is a prime function, by virtue of having finite domain.
+\item[(P1)]  If we restrict the domain to a finite set of register updates, e.g.~those used in the transducer, then it is a prime function, by virtue of having finite domain.
 \item[(P2)] A register update is monotone  (as in Definition~\ref{def:stt})  if and only if its $\lambda$-representation is monotone (as defined in    Section~\ref{sec:unfolding} for the matrix power).
 \item[(P3)] Every bound variable in the $\lambda$-representation is used exactly once, and the types that appear are of the form 
 \begin{align*}
@@ -198,60 +201,62 @@ hence Theorem~\ref{thm:normalise} can be applied.
 \label{page:monotone-discussed}
 
 
-\paragraph*{Putting it all together.}
-We now finish the proof of Lemma~\ref{lem:derive-register-updates}, by  observing  that the semantics of a register automaton are translated -- under $\lambda$-representation -- to unfolding the matrix power and evaluating a $\lambda$-term.  This observation is illustrated in Figure~\ref{fig:register-lambda} and stated in the following lemma.
+\paragraph*{Putting it all together.} To finish the proof of Lemma~\ref{lem:derive-register-updates}, we   observe  that the semantics of a register automaton are translated -- under the $\lambda$-representation -- to unfolding the matrix power and evaluating a $\lambda$-term.  This observation is formalised by saying that the diagram in Figure~\ref{fig:lambda-representation-diagram} commutes, and it  follows directly from the definitions. Instead of giving a proof, we illustrate it on an example in Figure~\ref{fig:lambda-representation-proof}.
+
+
+
 \begin{figure}[]
     \centering
-\includegraphics[scale=.3]{pictures/lambda-rep-diagram}   
-    \caption{Evaluation of register updates can be simulated, through $\lambda$-representation, by unfolding of matrix power followed by normalisation of $\lambda$-terms.}
-    \label{fig:register-lambda}
-    \amitodo{Maybe give the first line as an example in section 4, then give here only the second line? }
-\end{figure}
-
-
-\begin{lemma}\label{lem:commuting-endgame}
-    The following diagram commutes 
-        \captionsetup{singlelinecheck=false}
-    \centering
-    \xymatrix@C=3cm{
-        \trees \ranked{\text{(register updates)}} 
-        \ar[dd]_{\substack{\text{evaluate}\\\text{register}\\\text{updates}}}^{\text{(a)}}
-        \ar[r]^-{\trees(\text{\ranked{$\lambda$-representation}})}_{\text{(c)}}
-        &
-        \trees \ranked{(\mati k{(\tmonad \Gamma_\lambda)})}
-        \ar[d]^{\substack{\text{unfold}\\\text{matrix}\\\text{power}}}_{\text{(d)}} \\
-        & 
-        (\trees \ranked{\Gamma_\lambda})^k 
-        \ar[d]^{\substack{\text{evaluate}\\\text{$\lambda$-terms}}}_{\text{(e)}}\\
-         \text{register valuations}
-        \ar[r]_-{\text{$\lambda$-representation}}^{\text{(b)}}
-        &
-        (\trees \ranked{\Gamma_\lambda})^k
-    }    
-%    \caption[foo bar]{In the diagram, the arrows describe the following operations:
-%    \begin{enumerate}
-%        \item[(a)] is as defined in the semantics of register transducers; 
-%        \item[(b),(c)]   is $\lambda$-representation of register updates as defined in~\eqref{eq:lambda-representation-regup};
-%        \item[(d)] is the unfolding as described in Section~\ref{sec:prime-and-combinators}; 
-%        \item[(e)] is computing the $\beta$-normal form for each $\lambda$-term.
-%    \end{enumerate}
-%       }
-\end{lemma}
-
-The lemma follows  directly from the definitions, and is given without proof.  
-
-We claim that all of the arrows (c), (d) and (e) on the  right-down path  in the diagram from Lemma~\ref{lem:commuting-endgame}  are derivable:
-\begin{itemize}
-    \item[(c)] Since we are working with a fixed register transducer, there is a finite subset $\rDelta$ of register updates that it uses, and therefore  operation (a) in the figure is derivable by property (P1).
-    \item[(d)] Arrow (d) represents the unfolding of the matrix power. By property (P2), the outputs of arrow (c) are monotone, and so we can use the monotone unfolding operation, which is a  prime function and therefore derivable. One technicality that needs to be explained about arrow (d): after applying monotone unfolding to the output of arrow (c), we get an  arity zero element of 
     \begin{align*}
-        \ranked{
-            \mati k {(\tmonad \rGamma_\lambda)}} = \reduce  k {\powersmall{(\tmonad \rGamma_\lambda)}{k}}.
-    \end{align*}
-    To convert this output into a tuple of trees, we use the last prime function in Figure~\ref{fig:monad} to remove the fold $\reduce k$.
+        \xymatrix@C=3cm{
+            \trees \ranked{\text{(register updates)}} 
+            \ar[dd]_{\substack{\text{evaluate}\\\text{register}\\\text{updates}}}^{\text{(a)}}
+            \ar[r]^-{\trees(\text{\ranked{$\lambda$-representation}})}_{\text{(c)}}
+            &
+            \trees \ranked{(\mati k{(\tmonad \Gamma_\lambda)})}
+            \ar[d]^{\substack{\text{unfold}\\\text{matrix}\\\text{power}}}_{\text{(d)}} \\
+            & 
+            \txt{{\tiny arity 0 elements of }\\
+            $
+            \mati k {\ranked{(\tmonad \Gamma_\lambda)}}
+            $}
+            \ar[d]^{\substack{\text{evaluate}\\\text{$\lambda$-terms}}}_{\text{(e)}}\\
+             \text{register valuations}
+            \ar[r]_-{\ranked{\text{$\lambda$-representation}}}^{\text{(b)}}
+            &
+            \txt{{\tiny arity 0 elements of }\\
+            $
+            \mati k {\ranked{(\tmonad \Gamma_\lambda)}}
+            $}
+        }
+    \end{align*} 
+    \caption{}
+    \label{fig:lambda-representation-diagram}
+\end{figure}
+\begin{figure}[]   
+    \hspace{-0.5cm}
+    \includegraphics[page=120,scale=0.34]{pics}
+    \caption{Example for Figure~\ref{fig:lambda-representation-diagram}.}
+    \label{fig:lambda-representation-proof}
+\end{figure}
+ 
+\pagebreak 
+We claim that all of the arrows (c), (d) and (e) on the  right-down path  in  Figure~\ref{fig:lambda-representation-diagram}  are derivable:
+\begin{itemize}
+    \item[(c)] Since we work with a fixed register transducer, there is a finite subset $\rDelta$ of register updates  used, and therefore  operation (a) in the figure is derivable by property (P1).
+    \item[(d)] Arrow (d) represents the unfolding of the matrix power. By property (P2), the outputs of arrow (c) are monotone, and so we can use the monotone unfolding operation, which is a  prime function and therefore derivable. 
+    % One technicality that needs to be explained about arrow (d): after applying monotone unfolding to the output of arrow (c), we get an  arity zero element of 
+    % \begin{align*}
+    %     \ranked{
+    %         \mati k {(\tmonad \rGamma_\lambda)}} = \reduce  k {\powersmall{(\tmonad \rGamma_\lambda)}{k}}.
+    % \end{align*}
+    % To convert this output into a tuple of trees, we use the last prime function in Figure~\ref{fig:monad} to remove the fold $\reduce k$.
     \item[(e)] Finally, arrow (e) represents the evaluation of $\lambda$-terms. This arrow is derivable by Theorem~\ref{thm:normalise}. The assumptions of this theorem are met by property (P3).
 \end{itemize}
-Since arrows (c), (d), (e) are derivable, and the diagram commutes, it follows that  the composition of the arrows (a) and (b) is derivable. In other words, there is a derivable function which maps a tree of register updates to the $\lambda$-representation of the resulting register valuation. If we project the register valuation to the coordinate of the output register, we get the $\lambda$-representation of the output tree, which is the same thing as the output tree, since $\lambda$-representation does nothing for terms of arity zero. \footnote{@Mikolaj: this is true only when we dont see the nodes of lambda representations as a syntactic sugar. This is why I used this lambda terms over $\rGamma$ thing. }
+Since the arrows (c), (d), (e) are derivable, and the diagram commutes, it follows that  the composition of the arrows (a) and (b) is derivable. In other words, there is a derivable function which maps a tree of register updates to the $\lambda$-representation of the resulting register valuation (when viewing a register valuation as a special case of a register update of arity zero). Finally, to get the contents of the output register, we get rid of the fold in the matrix power by using the last function from Figure~\ref{fig:monad}, and  project onto the coordinate for the output register. 
+
+
+% If we project the register valuation to the coordinate of the output register, we get the $\lambda$-representation of the output tree, which is the same thing as the output tree, since $\lambda$-representation does nothing for terms of arity zero. \footnote{@Mikolaj: this is true only when we dont see the nodes of lambda representations as a syntactic sugar. This is why I used this lambda terms over $\rGamma$ thing. }
 
 This completes the proof of Lemma~\ref{lem:derive-register-updates}, and therefore also of the main theorem. 
 
