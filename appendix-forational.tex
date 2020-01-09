@@ -1,28 +1,14 @@
 \section{Appendix on first-order relabelling}~\label{sec:AppendixForat}
 
+The goal of this section is to show Proposition~\ref{prop:forat}, which says that first-order relabeling are derivable. As discussed in the body of the paper, the proof of this proposition is based on an equivalence result between first-order queries on trees  and a temporal logic, as stated in Lemma~\ref{lem:schlingloff}. While this result is deaply inspired from a similar result of Schlingloff \cite{schlingloff1992expressive}, our frameworks are not exactly the same (he uses for ainstance unranked trees).  
+In the rest of this section, we provide more details about the reduction from Schilgloff's result to our lemma (Section~\ref{sec:reduction-schilingloff}). Then we show in Section~\ref{sec:relabeling}  how to use it in order to prove Proposition~\ref{prop:forat}.  
 
-\subsection{Reduction to Schilgloff's theorem}
 
-In this section, we provide more details about the proof of Lemma~\ref{lem:schlingloff}. We recall its statement below.
 
-\begin{lemma} \label{restatelem:Schlingloff}The first-order tree relabeling are equal to the smallest class of functions which is closed under composition and which  contains the following functions:
-    \begin{enumerate}
-        \item \label{it:relabeling} \emph{Relabeling}. To every finite $\rGamma,\rSigma$ and $\ranked {f : \rSigma \to \rGamma}$, the tree lifting $\trees \ranked f : \trees \rSigma \to \trees \rGamma$.
-        \item \label{it:child} \emph{Child.} For every $\rSigma$ and  $i \in \set{1,2,\ldots}$, the characteristic function of the  unary query 
-        \begin{align*}
-            \underbrace{\child i (x).}_{\text{$x$ is an $i$-th child}}
-        \end{align*}
-         \item \label{it:until} \emph{Until.} For every finite $\rGamma, \rDelta \subseteq \rSigma$,  the characteristic function of the unary query
-         \begin{align*}
-              \underbrace{\exists y\ y > x \land \rDelta(y) \land  \forall z \ (x < z < y \Rightarrow \rGamma(z)).}_{\substack{\text{$x$ has a descendant $y$ with label in $\rDelta$, such that}\\ \text{all nodes strictly between $x$ and $y$ have label in $\rGamma$}}} 
-         \end{align*} 
-         \item \label{it:since}\emph{Since.} For every $\rGamma, \rDelta \subseteq \rSigma$,    the characteristic function of the unary query
-         \begin{align*}
-              \underbrace{\exists y\ y < x \land \rDelta(y) \land  \forall z \ (y < z < x \Rightarrow \rGamma(z)).}_{\substack{\text{$x$ has a descendant $y$ with label in $\rDelta$, such that}\\ \text{all nodes strictly between $x$ and $y$ have label in $\rGamma$}}}  
-         \end{align*} 
-    \end{enumerate}
-    In items \ref{it:child} -- \ref{it:since}, the alphabet is $\rSigma$, so the characteristic functions have type $\trees \rSigma \to \trees(\rSigma + \rSigma)$. 
-\end{lemma}
+
+\subsection{Reduction to Schilgloff's theorem}\label{sec:reduction-schilingloff}
+
+Let us proceed to the proof of Lemma~\ref{lem:schlingloff}.
 Clearly the functions in the lemma are first-order tree relabeling, and first-order tree relabeling are easily seen to be closed under composition, which gives the right-to-left inclusion in the lemma. The hard part is the left-to-right inclusion, which says that every first-order tree relabeling can be decomposed into functions as in items~\ref{it:relabeling} -- \ref{it:since}. 
 The first  step in the proof of  the right-to-left inclusion is the observation that  every first-order tree relabeling can be decomposed as 
 \begin{align*}
@@ -30,35 +16,33 @@ The first  step in the proof of  the right-to-left inclusion is the observation 
 \end{align*}
 where $g$ is a relabeling as in item~\ref{it:relabeling} of the lemma and each $f_i$ is a  characteristic function of some unary query (not necessarily of the simple form indicated in items~\ref{it:child} -- \ref{it:since} in the lemma). This is a simple observation: the functions $f_1,\ldots,f_n$ annotate the tree with the truth values of the unary queries used in the definition of the  first-order relabeling, and $g$ uses these truth values to select the appropriate output label. The hard part of the lemma is showing that each $f_i$  can be further decomposed into functions as indicated in the lemma. This is where we us the result of Schlingloff~\cite[Theorem 2.6]{schlingloff1992expressive}, which says that all first-order definable tree properties can be defined using a temporal logic that has operators similar to the ones used in items~\ref{it:child} -- \ref{it:since} of the lemma. 
 
-The following table summarizes our framework (first column) and Schlingloff's one (second column). The first row describes the model of trees under consideration, the second row the corresponding version of first-order logic, and the third row the corresponding temporal logic. 
+The following table summarizes our framework (first column) and Schlingloff's one (second column). The first row describes the models under consideration, the second row the corresponding version of first-order logic, and the third row the corresponding temporal logic. 
 \begin{center}
-\begin{tabular}{C{1.8cm}|C{2.8cm}|C{2.8cm}|}
-\cline{2-3}
-& {Trees over a ranked alphabet $\rGamma$} & {Models over a set of propositions $P$}\\
-\hline 
-Description of the model & Finitely branching \footnote{Because $\rGamma$ is finite.} ranked trees, labeled from $\rGamma$. & Finitely branching, unranked trees, labeled from $2^P$. \\
+\begin{tabular}{|C{1.8cm}|C{2.9cm}|C{2.8cm}|}
+\cline{1-3}
+\textbf{Models} & \textbf{Trees over a finite ranked alphabet $\rGamma$}: finitely branching, ranked trees, labeled from $\rGamma$. & \textbf{Models over a set of propositions $P$}: finitely branching, unranked trees, labeled from $2^P$.\\
 \hline
-    \multirow{3}{1.8cm}{First-order logic}&\multicolumn{2}{C{5.6cm}|}{Usual first-order connectives ($\exists, \vee, \neg$) with the descendant predicate $x\leq y$ and the following predicates:}\\
+    \multirow{3}{1.8cm}{\begin{center}\textbf{First-order logic}\end{center}}&\multicolumn{2}{C{5.6cm}|}{Usual first-order connectives ($\exists, \vee, \neg$) with the descendant predicate $x\leq y$ and the following predicates:}\\
     \cline{2-3} 
                                  & $a(x)$:  $x$ is labeled $a$  $(a \in \rGamma)$.  & $p(x)$: label of $x$ contains $p$
                                   ($p\in P$). \\
                                   &\hspace{-.14cm}$\child i(x)$: $x$ is an $i$-th child. &\\
-   &       We call it $\rGamma$-FO.    & We call it $P$-FO.             \\
+   &       \textbf{We call it $\rGamma$-FO.}    &  \textbf{We call it $P$-FO. }            \\
     \hline
-    \multirow{4}{1.8cm}{Temporal logic}& \multicolumn{2}{C{5.6cm}|}{Usual CTL connectives ($S$ (Since), $U$ (Until), $\vee$, $\neg$) together with:}\\
+    \multirow{4}{1.8cm}{\begin{center}
+    \textbf{Temporal logic}
+    \end{center}}& \multicolumn{2}{C{5.6cm}|}{Usual CTL connectives ($S$ (Since), $U$ (Until), $\vee$, $\neg$) together with:}\\
     \cline{2-3} 
     
      & $a \in \rGamma$, & $p \in P$, \\
     & $\odot_i \phi$: the $i$-th child satisfies $\phi$. & $X_i \phi$: at least $i$ children satisfy $\phi$.\\ 
-    &       We call it 2-CTL.    & We call it 4-CTL.             \\
+    &       \textbf{ We call it 2-CTL. }   &   \textbf{We call it 4-CTL.            } \\
     \hline
 \end{tabular}
 \end{center}
-
-Schlingloff's theorem says that P-FO formulas are equivalent to 4-CTL formulas. To prove Lemma~\ref{restatelem:Schlingloff}, we need to prove that $\rGamma$-FO formulas are equivalent to 2-CTL ones. 
+What is named $\rGamma$-FO in the table is what we simply called first-order logic along the paper. The operators of 2-CTL are those of Lemma~\ref{lem:schlingloff}.  
+Schlingloff's theorem says that P-FO formulas are equivalent to 4-CTL formulas. To prove Lemma~\ref{lem:Schlingloff}, we need to prove that $\rGamma$-FO formulas are equivalent to 2-CTL ones. 
 For this purpose, we will show how to translate every ranked tree $t$ over $\rGamma$ into a model $[t]$ over a well chosen set of propositions $P$. Then we will apply the following scheme
-
- 
     $$\xymatrix@C=2.5cm{
         \varphi \in \rGamma\text{-FO} 
         \ar@{<->}[r]^{\forall t, \ t\models \varphi \ \leftrightarrow \ [t] \models \psi}_{\text{Lemma}~\ref{lem:from-Gamma-to-P-FO}}
@@ -157,7 +141,7 @@ X_1(i\text{-th-child}\wedge \phi)
 %\end{lemma}
 %
 \subsection{First-order relabelling are derivable}\label{sec:relabeling}
-
+To show Proposition~\ref{prop:forat}, saying that first-order relabelling are derivable, we will show that each function appearing in Lemma~\ref{lem:schlingloff} and corresponding to each operator of 2-CTL is derivable. This is the role of Lemmas\ref{lem:nextmod}--\ref{lem:sincemod} presented below.
 \begin{lemma}\label{lem:nextmod}
   For every finite $\rSigma$, $\rGamma\subseteq \rSigma$ and $i \in \set{1,2,\ldots}$, the characteristic function $\ranked{f:\tmonad \rSigma\to\tmonad(\rSigma+\rSigma)}$ of the  unary query 
         \begin{align*}
