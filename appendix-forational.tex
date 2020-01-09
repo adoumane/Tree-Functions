@@ -27,7 +27,7 @@ The following table summarizes our framework (first column) and Schlingloff's on
                                  & $a(x)$:  $x$ is labeled $a$  $(a \in \rGamma)$.  & $p(x)$: label of $x$ contains $p$
                                   ($p\in P$). \\
                                   &\hspace{-.14cm}$\child i(x)$: $x$ is an $i$-th child. &\\
-   &       \textbf{We call it $\rGamma$-FO.}    &  \textbf{We call it $P$-FO. }            \\
+   &       \textbf{We call it $\rGamma$-\fo.}    &  \textbf{We call it $P$-\fo. }            \\
     \hline
     \multirow{4}{1.8cm}{\begin{center}
     \textbf{Temporal logic}
@@ -40,13 +40,13 @@ The following table summarizes our framework (first column) and Schlingloff's on
     \hline
 \end{tabular}
 \end{center}
-What is named $\rGamma$-FO in the table is what we simply called first-order logic along the paper. The operators of 2-CTL are those of Lemma~\ref{lem:schlingloff}.  Using the notation of the table, 
-Schlingloff's theorem says that P-FO formulas are equivalent to 4-CTL formulas, and  Lemma~\ref{lem:schlingloff} states that $\rGamma$-FO formulas are equivalent to 2-CTL ones. To deduce the later from the former, we will show how to translate every ranked tree $t$ over $\rGamma$ into a model $[t]$ over a well chosen set of propositions $P$, then we will apply the following scheme
+What is named $\rGamma$-\fo in the table is what we simply called first-order logic along the paper. The operators of 2-CTL are those of Lemma~\ref{lem:schlingloff}.  Using the notation of the table, 
+Schlingloff's theorem says that $P$-\fo formulas are equivalent to 4-CTL formulas, and  Lemma~\ref{lem:schlingloff} states that $\rGamma$-\fo formulas are equivalent to 2-CTL ones. To deduce the later from the former, we will show how to translate every ranked tree $t$ over $\rGamma$ into a model $[t]$ over a well chosen set of propositions $P$, then we will apply the following scheme
     $$\xymatrix@C=2.5cm{
-        \varphi \in \rGamma\text{-FO} 
+        \varphi \in \rGamma\text{-\fo} 
         \ar@{<->}[r]^{\forall t, \ t\models \varphi \ \leftrightarrow \ [t] \models \psi}_{\text{Lemma}~\ref{lem:from-Gamma-to-P-FO}}
         &
-        \psi \in P \text{-FO}
+        \psi \in P \text{-\fo}
         \ar@{<->}[d]^{\substack{\text{Schlingloff's}\\\text{theorem}}} \\
        \theta \in \text{2-CTL}
         \ar@{<->}[r]^{\forall t, \ t\models \theta \ \leftrightarrow \ [t] \models \delta}_{\text{Lemma}~\ref{lem:from-4-CTL-to-2CTL}}
@@ -61,20 +61,20 @@ P\eqdef \rGamma\cup\set{i\text{-th-child}\ |\ i\in[1, \text{max arity of }\rGamm
 \end{align*}
  Let $t$ be a ranked tree over $\rGamma$. The translation $[t]$ of $t$ is the model defined as follows. It has the same set of nodes and the same descendant relation as $t$. The label of a node contains $a$ if its label in $t$ is $a$. It contains the proposition $i\text{-th-child}$ if it is an $i$-th child in $t$.
 
-\paragraph{From $\rGamma$-FO to $P$-FO.} Let $\rGamma$ and $P$ be as above. We show that
+\paragraph{First-order logic for ranked and unranked trees.} Let $\rGamma$ and $P$ be as above. Let us show that $\rGamma$-\fo and $P$-\fo are equivalent.
 \begin{lemma}\label{lem:from-Gamma-to-P-FO}
-For every $\rGamma$-FO formula $\phi$, there is a $P$-FO formula $\psi$ such that
+For every $\rGamma$-\fo formula $\phi$, there is a $P$-\fo formula $\psi$ such that
 $$ \forall t\in \trees\rGamma, \qquad t\models \phi \leftrightarrow [t]\models \psi$$
 and conversely.
 \end{lemma}
 \begin{proof}
-To show this lemma its is enough to show how to translate the specific predicates of each formalism into the other. The predicate $a(x)$ of $\rGamma$-FO can be translated by the same predicate in P-FO and conversely. The predicate $\child i(x)$ can be translated by $i\text{-th-child}(x)$ and conversely.  It is clear that these translations preserve the semantics.
+To show this lemma its is enough to show how to translate the specific predicates of each formalism into the other. The predicate $a(x)$ of $\rGamma$-\fo can be translated by the same predicate in $P$-\fo and conversely. The predicate $\child i(x)$ can be translated by $i\text{-th-child}(x)$ and conversely.  It is clear that these translations preserve the semantics.
 \end{proof}
 
-\paragraph{From 4-CTL to 2-CTL}
-Let $\rGamma$ and $P$ be as above. We show that
+\paragraph{Temporal logic for ranked and unranked trees.}
+Let $\rGamma$ and $P$ be as above. We show that 2-CTL and 4-CTL are equivalent.
 \begin{lemma}\label{lem:from-4-CTL-to-2CTL}
-For every $\rGamma$-FO formula $\phi$, there is a $P$-FO formula $\psi$ such that
+For every $\rGamma$-\fo formula $\phi$, there is a $P$-\fo formula $\psi$ such that
 $$ \forall t\in \trees\rGamma, \qquad t\models \phi \leftrightarrow [t]\models \psi$$
 and conversely. \end{lemma}
 \begin{proof}
