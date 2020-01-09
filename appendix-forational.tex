@@ -40,9 +40,8 @@ The following table summarizes our framework (first column) and Schlingloff's on
     \hline
 \end{tabular}
 \end{center}
-What is named $\rGamma$-FO in the table is what we simply called first-order logic along the paper. The operators of 2-CTL are those of Lemma~\ref{lem:schlingloff}.  
-Schlingloff's theorem says that P-FO formulas are equivalent to 4-CTL formulas. To prove Lemma~\ref{lem:Schlingloff}, we need to prove that $\rGamma$-FO formulas are equivalent to 2-CTL ones. 
-For this purpose, we will show how to translate every ranked tree $t$ over $\rGamma$ into a model $[t]$ over a well chosen set of propositions $P$. Then we will apply the following scheme
+What is named $\rGamma$-FO in the table is what we simply called first-order logic along the paper. The operators of 2-CTL are those of Lemma~\ref{lem:schlingloff}.  Using the notation of the table, 
+Schlingloff's theorem says that P-FO formulas are equivalent to 4-CTL formulas, and  Lemma~\ref{lem:schlingloff} states that $\rGamma$-FO formulas are equivalent to 2-CTL ones. To deduce the later from the former, we will show how to translate every ranked tree $t$ over $\rGamma$ into a model $[t]$ over a well chosen set of propositions $P$, then we will apply the following scheme
     $$\xymatrix@C=2.5cm{
         \varphi \in \rGamma\text{-FO} 
         \ar@{<->}[r]^{\forall t, \ t\models \varphi \ \leftrightarrow \ [t] \models \psi}_{\text{Lemma}~\ref{lem:from-Gamma-to-P-FO}}
@@ -54,8 +53,7 @@ For this purpose, we will show how to translate every ranked tree $t$ over $\rGa
         &
         \delta \in \text{4-CTL}
     }$$    
-
- Let us show the translation $[\_]$ and Lemmas~\ref{lem:from-Gamma-to-P-FO} and \ref{lem:from-4-CTL-to-2CTL}.
+The translation $[\_]$ and Lemmas~\ref{lem:from-Gamma-to-P-FO} and \ref{lem:from-4-CTL-to-2CTL} are explained below.
 
 \paragraph{From ranked trees to Schlingloff's models.} Let us fix a ranked alphabet $\rGamma$. Let $P$ be the following set of propositions
 \begin{align*}

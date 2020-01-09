@@ -1,4 +1,4 @@
-\section{Well-typedeness and normalization of $\lambda$-terms in first-order logic}
+\section{Normalization of $\lambda$-terms is a first-order transduction}
 \label{sec:eval}
 
 \newcommand{\lambdaterm}{$\lambda$-term }
@@ -14,11 +14,16 @@
 
 \newcommand{\thinterm}[1]{\ranked{\mathsf{Thin}_{#1}}}
 
-In this part of the appendix, we establish a link between FO logic and $\lambda$-terms throught two results: under some conditions, well-typedeness is a FO property (Thm.\ref{prop:WellTypedFo}), and normalization is a FO transduction (Thm.\ref{thm:evalOneType}). 
+In this part of the appendix, we show Theorem~\ref{thm:normalise}, which says that under some restrictions, evaluation of $\lambda$-terms is a first-order transduction. Before proving this result in~\ref{sec:evaluation-lambda}, we will first explain in~\ref{sec:explaining-restrictions} why these restrictions are unavoidable. Then we show in \ref{sec:restrictions-are-fo} that the set of $\lambda$-terms satisfying these restrictions form a first-order tree language. This result will be useful for the proof of Theorem~\ref{thm:normalise}.
 
-\subsection{Explaining the restrictions}
 
- Because of iterated duplication, the normal form of a well-typed $\lambda$-term can be exponential (or worse, see~\cite[Section 3.6]{sorensen_lectures_2006}), as shown by the following example.
+
+\subsection{Explaining the restrictions}\label{sec:explaining-restrictions}
+
+Recall that Theorem~\ref{thm:normalise} says that evaluation of $\lambda$-terms is derivable under two assumptions:
+the input term should be linear (actually it could be also affine),  and it could be typed using a fixed finite set of types. 
+
+If the linearity condition is removed, and because of iterated duplication, the normal form of a well-typed $\lambda$-term can be exponential (or worse, see~\cite[Section 3.6]{sorensen_lectures_2006}), as shown by the following example.
  
 \begin{example}\label{ex:exponential}
     Assume that we have two variables $\typevar x  \otype$ and $\typevar y {\otype \to \otype \to \otype}$ and consider the $\lambda$-terms defined by:
@@ -29,14 +34,15 @@ In this part of the appendix, we establish a link between FO logic and $\lambda$
     % as shown in the following picture, which uses variables $x : \otype$ and  $z : \otype \to \otype \to \otype$.
     % \mypic{44}
 \end{example}
+If there was a first-order transduction normalizing these terms, it would be exponential-size increase, which is not possible since all first-order transductions are linear-size increase. 
+% For this reason, we  limit attention to linear  $\lambda$-terms.
+%: a $\lambda$-term is called \emph{affine} if every bound variable is used at most once in its scope, but free variables are allowed to appear multiple times.  For example, 
+%\begin{align*}
+%\typevar z {\otype \to \otype \to \otype} \big(\lambda \typevar x \otype.  \typevar y {\otype \to \otype} (\typevar y {\otype \to \otype}  \typevar x \otype)\big) \big(\lambda \typevar x \otype.  \typevar y {\otype \to \otype} (\typevar y {\otype \to \otype}  \typevar x \otype)\big)
+%\end{align*}
+%is affine, even if $\typevar y {\otype \to \otype}$ appears four times. If we prepend $\lambda \typevar y {\otype \to \otype}$, then the $\lambda$-term ceases to be affine.
 
- For this reason, we  limit attention to affine $\lambda$-terms: a $\lambda$-term is called \emph{affine} if every bound variable is used at most once in its scope, but free variables are allowed to appear multiple times.  For example, 
-\begin{align*}
-\typevar z {\otype \to \otype \to \otype} \big(\lambda \typevar x \otype.  \typevar y {\otype \to \otype} (\typevar y {\otype \to \otype}  \typevar x \otype)\big) \big(\lambda \typevar x \otype.  \typevar y {\otype \to \otype} (\typevar y {\otype \to \otype}  \typevar x \otype)\big)
-\end{align*}
-is affine, even if $\typevar y {\otype \to \otype}$ appears four times. If we prepend $\lambda \typevar y {\otype \to \otype}$, then the $\lambda$-term ceases to be affine.
-
-Being affine alone is not enough to normalise terms with first-order transductions. Another obstacle is terms that use types of unbounded complexity, as illustrated in the following example. 
+Being linear alone is not enough to normalise terms with first-order transductions. Another obstacle is terms that use types of unbounded complexity, as illustrated in the following example. 
 
 \begin{example}\label{ex:affine-not-enough}
 Consider the following $\lambda$-terms, which have types of 
@@ -56,7 +62,7 @@ This is a well-typed affine term, whose type is
 then there would be a first-order formula which would be true for terms of the form~\eqref{eq:complicated-term} with $m>n$ and which would be false for terms of the form~\eqref{eq:complicated-term} with $m=n$. Such a formula cannot exist, which can be shown using a pumping argument or Ehrenfeucht-Fra\"iss\'e games. 
 \end{example}
 
-\subsection{Well-typedeness}
+\subsection{Well-typedeness} \label{sec:restrictions-are-fo}
 In general, well-typedeness is not a FO property (actually not even a MSO property) as shown by Example~\ref{ex:exponential} in Section~\ref{sec:one-register}.
 However, checking whether the type of a \lambdaterm and the type of its sub-terms all belong to a fixed finite set of types if a FO property. 
 %Note that contrarily to normalization, well-typedeness does not require linearity to be in FO.
@@ -174,7 +180,7 @@ By the first two properties above, we have necessarily that
 
 
 
-\subsection{Evaluation of linear $\lambda$-terms}
+\subsection{Evaluation of $\lambda$-terms}\label{sec:evaluation-lambda}
 
 We define $\LinTerms S X$ to be the set of linear \lambdaterms of $\NonLinTerms S X$ (that is well-typed linear $\lambda$-terms whose sub-terms have types in $S$).
 In this section we show that computing the normal form of $\LinTerms S X$ terms  is a derivable function:
