@@ -135,7 +135,7 @@ We conclude this section with two examples of first-order tree-to-tree transduct
 \begin{center}
 \includegraphics[scale=.35, page=19]{pics.pdf}
 \end{center}
-This is a non-copying first-order  transduction. The universe formula selects nodes which have non-unary labels $\blueball$ or $\whiteball$. The descendant relation is inherited from the input tree. To define the child relation on the output tree, we need to use the descendant relation in the input tree. A node $x$  satisfies the unary  $i$-th child predicate i  in the output tree if it satisfies the following first-order formula in the input tree:
+This is a non-copying first-order  transduction. The universe formula selects nodes which have non-unary labels. The descendant relation is inherited from the input tree. To define the child relation on the output tree, we need to use the descendant relation in the input tree. A node $x$  satisfies the unary  $i$-th child predicate i  in the output tree if it satisfies the following first-order formula in the input tree:
 \begin{align*}
     \exists y \ \child i (y) \land \underbrace{y \le x \land   \forall z\ (y < z < x \Rightarrow \blueball(z))}_{\substack{\text{$y$ is the farthest ancestor that can be} \\ \text{reached from $x$ using only unary nodes}}}.
 \end{align*}
