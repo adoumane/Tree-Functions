@@ -1,6 +1,9 @@
 \section{Derivable functions}\label{sec:derivable-functions}
 In this section, we state the main result of this paper, which says that the  first-order tree-to-tree transductions are those that  can be  obtained by starting with certain prime functions (such as pre-order traversal from Example~\ref{ex:pre-order-main}) and applying certain  combinators (such as function composition). 
 
+The guiding principle behind our approach is to describe tree-to-tree functions using a formalism devoid of any iteration mechanisms, such as states or {\tt fold} functions. This also validates the choice of first-order logic. If we would use \mso, at the very least we would need to have some mechanism for groups, which are a basic building block for Krohn-Rhodes decompositions, or for evaluating Boolean formulas. 
+
+
 \subsection{Datatypes}
 \label{sec:datatype-constructors}
 Apart from trees, the prime functions and combinators  use  datatypes  such as pairs of trees or trees of trees, etc. Although these datatypes  could be encoded in trees, we avoid this encoding and use explicit datatype constructors. An important property of our datatypes is that they represent ranked sets, i.e.~each element of a datatype has an arity. The datatypes, as described below, are obtained from the atomic datatypes by applying four datatype constructors.
