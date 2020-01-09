@@ -26,25 +26,33 @@ which is the restriction of unfolding to shallow terms. Here is a picture of unf
 \end{center}
 To define it formally, we will introduce three functions manipulating shallow terms. Again, these functions, which are used here as  intermediary functions to define the unfolding formally, will become prime functions when we will decompose the unfolding function in Appendix~\ref{ap:matrix-power}.
 
-\paragraph*{Functions on shallow terms.} Let $\rGamma$ and $\rSigma$ be two datatypes.  Consider the function $f$
+\paragraph*{Functions on shallow terms.} Let $\rGamma$ and $\rSigma$ be two datatypes.  Consider the function $\ranked{f}$
 \begin{align*}
-\ranked{\shallowterm  \Gamma {\reduce k \Sigma} \xrightarrow{\quad f\quad} \reduce k(\shallowterm  \Gamma  \Sigma)} 
+\ranked{\shallowterm  \Gamma {\reduce k \Sigma}} \ranked{\xrightarrow{\quad f \quad}} \ranked{\reduce k(\shallowterm  \Gamma  \Sigma)}
 \end{align*}
-illustrated by the following picture  
+which swaps the fold with shallow term. The function $\ranked{f}$ is illustrated by the following picture
 \begin{center}
 \includegraphics[scale=.4]{pictures/shallow-fold-distrib}
 \end{center}
-and defined as follows. 
+and formally defined by 
+$$\begin{array}{rcl}
+f:a(b_1/g_1,\dots,b_n/g_n)&\mapsto& a(b_1,\dots,b_n)/g_0
+\end{array}$$
+where $g_0$ is defined as follows. For every  $i \in\set{1,\dots,n}$,  if  $j\in\set{1,\dots,\arity{b_i}}$ then 
+\begin{align*}
+ g_0(j+\underset{l<i}{\Sigma} \arity{b_l})=(\pi_1(g_i(j)),\pi_2(g_i(j))+\underset{l<i}{\Sigma} \arity{b_l/g_l})
+\end{align*}
+\smallskip
 
-Let $g$ be the function of type
+Now, consider the function $\ranked{g}$ which matches the fold with the product power. The type of $\ranked{g}$ is
 \begin{align*}
 \ranked{\shallowterm  {\reduce k \Gamma} {\Sigma^k} \xrightarrow{\quad g\quad} \reduce 1 (\shallowterm  \Gamma  \Sigma)} 
 \end{align*}
-illustrated by the following picture  
+and it is illustrated by the following picture  
 \begin{center}
 \includegraphics[scale=.37]{pictures/shallow-unfold}
 \end{center}
-and defined as follows. 
+Formally, $\ranked{g}$ is defined as follows.
 
 Finally consider the function $h$
 \begin{align*}
