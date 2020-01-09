@@ -33,11 +33,12 @@ Let $\rGamma$ and $\rSigma$ be two datatype.  For every derivable function $\ran
 \end{align*}  
 \end{proposition}
 
-The rest of this section is organized as follows. We define first-order transductions transforming arbitrary models in Section~\ref{}. In Section~\ref{} we define the vocabulary of a datatype and show the encoding $\underline{\bullet}$ of data into models. Finally, we prove Proposition~\ref{prop:main-right-to-left} which gives as a corollary the right-to-left implication of Theorem~\ref{thm:main}.
+The rest of this section is organized as follows. We define first-order transductions transforming arbitrary models in Section~\ref{sec:fo-transduction-def}. In Section~\ref{sec:data-as-models} we define the vocabulary of a datatype and show the encoding $\underline{\bullet}$ of data into models. Finally, we prove Proposition~\ref{prop:main-right-to-left} which gives as a corollary the right-to-left implication of Theorem~\ref{thm:main}.
 
-\subsection{First-order transductions}
+\subsection{First-order transductions}\label{sec:fo-transduction-def}
+The following definition introduces first-order transductions, which generalizes tree-to-tree transductions given in Definition~\ref{def:fo-transduction}.  
 
-\begin{definition}[First-order transduction]\label{def:fo-transduction}\ 
+\begin{definition}[First-order transduction]\label{def:fo-transduction-gen}\ 
 \begin{enumerate}
     \item \emph{Copying.} Fix some  relational vocabulary $\ranked \sigma$ and let $k \in \set{1,2,\ldots}$. Define $k$-copying to be the operation 
     $$\begin{array}{lll}
@@ -63,8 +64,9 @@ defined as follows. If the input model is $\mathbb A$, then the output model is 
  \end{enumerate}
 \end{definition}
 
-
-\subsection{Datatypes as models.}
+When restricted to the vocabulary of trees, Definition~\ref{def:fo-transduction-gen} of first-order transductions does not match exactly the definition of tree-to-tree transductions given in the body of the paper. More precisely, the $k$-copying operation is not exactly the same in these two definitions. They are however equivalent in the sens that, when restricted to the vocabulary of trees, we can find for every first-order transduction in the sens of definition~\ref{def:fo-transduction-gen}, a tree-to-tree transduction as in Definition~\ref{def:fo-transduction}, and conversely.
+ 
+\subsection{Data as models.}\label{sec:data-as-models}
 Let us show how to encode datatypes as relational vocabularies and data as models over these vocabularies. 
 \begin{definition}[Associated models for terms, pairs, co-pairs and tensors.] \label{def:type-model} To each type  $\rSigma$ we associate a vocabulary, called the \emph{vocabulary of $\rSigma$}, and a map 
     \begin{align*}

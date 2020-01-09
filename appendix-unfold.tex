@@ -52,13 +52,25 @@ and it is illustrated by the following picture
 \begin{center}
 \includegraphics[scale=.37]{pictures/shallow-unfold}
 \end{center}
-Formally, $\ranked{g}$ is defined as follows.
+Formally, $\ranked{g}$ is defined as follows. If 
+\begin{align*}
+t=a/f((b_{(1,1)},\dots,b_{(k,1)}),\dots, (b_{(1,n)},\dots,b_{(k,n)}))
+\end{align*}
+is an element of $\ranked{\shallowterm  {\reduce k \Gamma} {\Sigma^k}  }$ where $a$ is of arity $m$, then $g(t)$ is 
+\begin{align*}
+a(b_{f(1)},\dots,b_{f(m)})/f'
+\end{align*}
+where $f'$ is defined by 
+\begin{align*}
+\forall i\in\set{1,\dots,m} \qquad  f'(i)=(1, \underset{j<i}{\Sigma} \arity{b_{f(j)}}+1)
+\end{align*}
+\smallskip
 
-Finally consider the function $h$
+Finally consider the function $\ranked{h}$ 
 \begin{align*}
 \ranked{\shallowterm  {\Gamma^k} {\Sigma} \xrightarrow{\quad h\quad} (\shallowterm  \Gamma  \Sigma)^k} 
 \end{align*}
-illustrated by the following picture  
+which permutes the product with  the shallow term datatype. It is illustrated by the following picture  
 \begin{center}
 {\includegraphics[scale=.4]{pictures/tensor-shallow-distrib}}
 \end{center}
@@ -85,7 +97,7 @@ where $\text{ar}_i$ is the arity of $a_i$ for $i\in\set{1,\dots,k}$.
 \end{align*}    
 
 \subsection{Definition of unfolding}
-Let us define now define the unfolding function for arbitrary inputs.
+Let us define now  the unfolding function for arbitrary inputs.
 Unfolding is the function of type 
 \begin{align*}
     \ranked{\unfold : \tmonad \mati k \rSigma \to \mati k {(\tmonad \Sigma)} }
