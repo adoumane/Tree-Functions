@@ -1,15 +1,15 @@
 \section{Monadic second-order transductions}
 \label{sec:mso-trans}
-Our main theorem characterises first-order tree-to-tree transductions. We finish the paper by extending the notion of derivability so that it captures  \mso tree-to-tree transductions. 
-Our solution is not particularly subtle. We simply add, as prime functions, all \mso relabellings, which are defined the  same way as the first-order relabellings from Definition~\ref{def:forat}, except that the unary queries can use \mso logic instead of first-order logic. 
+We finish the paper by discussing a variant of our main theorem for   \mso tree-to-tree transductions. 
+We simply add, as prime functions, all \mso relabellings, which are defined the  same way as the first-order relabellings from Definition~\ref{def:forat}, except that the unary queries can use \mso logic instead of first-order logic. 
 
 \begin{theorem}\label{thm:mso-transductions}
-    A tree-to-tree function is an \mso  transduction if and only if it can be using  Definition~\ref{def:derivable-function}  extended by  adding  all \mso relabellings as prime functions. 
+    A tree-to-tree function is an \mso  transduction if and only if it can be derived  using  Definition~\ref{def:derivable-function}  extended by  adding  all \mso relabellings as prime functions. 
 \end{theorem}
 \begin{proof}
     In~\cite[Corollary 1]{colcombetCombinatorialTheoremTrees2007}, Colcombet shows that every \mso formula on trees can be replaced by a first-order formula that runs on an \mso relabelling of the input tree. Applying that result to transductions, we see that every \mso tree-to-tree transduction can be decomposed as: (a) an \mso relabelling; followed by (b) a first-order tree-to-tree transduction.  The theorem follows.
 \end{proof}
-Unlike for the  above result,   in the first-order case from our main theorem, we took care to have a small number of primitives. This  was possible thanks in part to the decomposition of first-order queries into simpler ones, see Section~\ref{sec:fo-translation}.  In principle, such a decomposition might be possible also for the \mso case, but proving it  would likely require developing a new decomposition  theory for regular tree languages, in the style of the Krohn-Rhodes theorem, which we feel is beyond the scope of this paper. 
+The solution above is not particularly subtle, and contrasts our results for  first-order logic and chain logic, where  we took care to have a small number of primitives. This  was possible thanks in part to the decomposition of first-order queries into simpler ones that was is in Section~\ref{sec:fo-translation}, and the Krohn-Rhodes theorem that is used in the proof of Theorem~\ref{thm:chain-transductions} about chain logic.  In principle,  a decomposition of \mso relabelling could be possible, but proving it  would likely require developing a new decomposition  theory for regular tree languages, in the style of the Krohn-Rhodes theorem, which we feel is beyond the scope of this paper. One would expect a Krohn-Rhodes theorem  for trees to yield an effective characterisation of first-order logic -- as it does for words -- but finding such a characterisation remains a major open problem~\cite[Section 3]{bojanczyk2015automata}. 
 
 
 

@@ -48,10 +48,10 @@ To transform register valuations, we use \emph{register updates}.  A register up
 \end{align*}
 where $\ranked{nR}$ stands for the disjoint union of $n$ copies of $\regnames$. The $i$-th copy of $\regnames$ represents the register contents in the $i$-th argument.
 % Register valuations can be seen as the special case of register updates of arity zero.  
-Here is a picture of a binary register update:
+Here is a picture of a register update which has arity 3 and uses two registers $r$ and $s$:
 \mypic{32}
 An $n$-ary register update $\ranked u$ induces a operation, which inputs  $n$ register valuations and  outputs the  register valuation obtained by  taking $\ranked u$ and replacing the $i$-th copy of a register name with the  contents of that register in the $i$-th input register valuation. 
-Register updates have arities, and therefore the ranked set of register updates is written in red, and can be used for labels in a tree. For such a  tree 
+Register updates have arities, and therefore the ranked set of register updates is written in red, and can be used for labels in a tree. For such a  tree   
 \begin{align*}
     t \in  \trees(\ranked{\text{register updates}}),
 \end{align*}
