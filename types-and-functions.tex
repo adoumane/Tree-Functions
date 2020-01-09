@@ -21,9 +21,7 @@ We use the terminal set to model partial functions: a partial function with outp
 
 \paragraph*{Terms.} The central datatype constructor is the  \emph{term} constructor, which is a generalisation of trees to higher arities. A term is a tree with dangling edges, called ports. The dangling edges ares used to decompose trees (and other terms) into smaller pieces, as  illustrated by the figure below. 
 % Each  part of the tree is not a tree as it has dangling ports.  We call \emph{terms} such trees with ports. 
-\begin{center}
-\includegraphics[scale=.32, page=15]{pics.pdf}
-\end{center}
+\mypic{15}
 Formally speaking, terms are defined by induction as follows. As term over a  ranked set $\rSigma$ is either the term denoted by  $\portletter$ which consists of a port and nothing else, 
 or otherwise it is an expression of the  form $a \tensorpair{t_1,\ldots,t_n}$ where $a \in \rSigma$ has arity $n$, and $t_1,\ldots,t_n$ are already defined terms. The arity of a term is the number of ports. Terms of arity zero are the same as trees. We write $\tmonad \rSigma$ for the ranked set of terms over an ranked set $\rSigma$.   Because the term constructor -- like other datatype constructors -- outputs a ranked set, it makes sense to talk about terms of terms, etc.
 
