@@ -57,12 +57,12 @@ which is explained in the following picture:
 \mypic{121}
 To define this operation formally, we further decompose it using  three functions manipulating shallow terms. These functions, which are used here as  intermediate functions in the definition of shallow unfolding, will become prime functions when we decompose the unfolding function in Appendix~\ref{ap:matrix-power}.
 
-\subsubsection{Distribute fold over shallow terms}
+\subsubsection{Distribute shallow terms over fold}
  Let $\rGamma$ and $\rSigma$ be two datatypes.  Consider the function $\ranked{f_1}$
 \begin{align*}
 \ranked{\shallowterm  \Gamma {\reduce k \Sigma}} \ranked{\xrightarrow{\quad f_1 \quad}} \ranked{\reduce k(\shallowterm  \Gamma  \Sigma)}
 \end{align*}
-which distributes  folding across the shallow term. This function is illustrated by the following picture
+which distributes shallow terms over folding. This function is illustrated by the following picture
 \mypic{55}
 and  defined by 
 $$\begin{array}{rcl} 
@@ -76,9 +76,9 @@ where $g$ is the function defined as follows. For every  $i \in\set{1,\dots,n}$,
  \end{array}
  \ar@{|->}[d]^{g}\\
  \begin{array}{c}
-  \biggl( \underbrace{\pi_1(g_i(j))}_{\begin{array}{c}
+  \biggl(\ \ \ \underbrace{\pi_2(g_i(j))+\underset{l<i}{\Sigma} \arity{b_l/g_l}}_{\text{Position of the group is shifted}}\ \ , \underbrace{\pi_1(g_i(j))}_{\begin{array}{c}
 { \scriptsize\text{Position inside}}\\[-5pt]{\scriptsize \text{the group is unchaged}}
- \end{array}},\underbrace{\pi_2(g_i(j))+\underset{l<i}{\Sigma} \arity{b_l/g_l}}_{\text{Position of the group is shifted}} \ \ \biggr)
+ \end{array}}\biggr)
  \end{array}}
  \end{align*}
  
@@ -110,7 +110,7 @@ where $g$ is the function defined as follows. For every  $i \in\set{1,\dots,n}$,
 
 \smallskip
 
-\subsubsection{Match $k$-fold with $k$-th power}
+\subsubsection{Matching function}
 We now define a function 
 \begin{align*}
 \ranked{\shallowterm  {(\reduce k \Gamma)} {(\Sigma^k)} \xrightarrow{\quad f_2\quad} \reduce 1 (\shallowterm  \Gamma  \Sigma)} 
@@ -141,17 +141,17 @@ where $m$ is the arity of $a$ and the grouping function  $g'$ is  the natural em
     \text{ports of $a(b_{g(1)},\dots,b_{g(m)}))$}
     \ar[d]
     \\
- \displaystyle{\biggl(1, \coprod_{\substack{i \in \set{1,\ldots,n}\\ j \in \set{1,\ldots,k}}} \text{ports of $b_{i,j}$} \biggr)} 
+ \displaystyle{\biggl(\coprod_{\substack{i \in \set{1,\ldots,n}\\ j \in \set{1,\ldots,k}}} \text{ports of $b_{i,j}$}, 1 \biggr)} 
 }
 \end{align*}
 \smallskip
 
-\subsubsection{Distribute powers across shallow terms}
+\subsubsection{Distribute shallow terms over product}
 Finally, consider the function 
 \begin{align*}
 \ranked{\shallowterm  {\Gamma^k} {\Sigma} \xrightarrow{\quad f_3\quad} (\shallowterm  \Gamma  \Sigma)^k} 
 \end{align*}
-which distributes the $k$-th power across shallow terms.  This function is illustrated by the following  picture 
+which distributes shallow terms over the $k$-th power.  This function is illustrated by the following  picture 
 \mypic{67}
 and defined by 
 \begin{eqnarray*}
@@ -167,15 +167,15 @@ where $\text{ar}_i$ is the arity of $a_i$ for $i\in\set{1,\dots,k}$.
   \begin{align*}
   \xymatrix@C=2.5cm{
           \ranked{\shallowterm{\mati k \rSigma} {\mati k \rGamma} = {\shallowterm{\reduce k {\Sigma^k}}{\reduce k {\Gamma^k}}} 
-        \ar[d]_{\ranked{\substack{f}}}
+        \ar[d]_{\ranked{\substack{f_1}}}
         \ar[r]^-{\ranked{\text{Shallow unfold}}}}
         &
         \ranked{ \reduce k(\shallowterm{\Sigma}{ {\Gamma}})^k = \mati k {(\shallowterm \Sigma \Gamma)}}
         \\
        \ranked{  \reduce k(\shallowterm{\reduce k {\Sigma^k}}{ {\Gamma^k}})}
-        \ar[r]_-{\ranked{\flatt\circ \reduce k g}}
+        \ar[r]_-{\ranked{\flatt\circ \reduce k f_2}}
         &
-    \ranked{   \reduce k(\shallowterm{\Sigma^k}{ {\Gamma}}) } \ar[u]^{\ranked{\reduce k  h}}
+    \ranked{   \reduce k(\shallowterm{\Sigma^k}{ {\Gamma}}) } \ar[u]^{\ranked{\reduce k  f_3}}
     } 
 \end{align*}    
 
