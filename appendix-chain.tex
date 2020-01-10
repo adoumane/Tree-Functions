@@ -2,13 +2,13 @@
 \label{sec:appendix-chain}
 In this section, we prove Theorem~\ref{thm:chain-transductions}, which says that adding general unfold to \mso yields exactly the chain logic tree-to-tree transductions. For the rest of this section, we use the word ``derivable'' to mean derivable in the extension of Definition~\ref{def:derivable-function} where general unfold is used instead of monotone unfold. 
 
-\subsection{General unfold is derivable}
+To prove that every derivable function is a chain logic transduction, we use the same proof as in Appendix~\ref{sec:to-logic}. The only difference is that we need to deal with  general unfolding instead of monotone unfolding. For general unfolding, we use the same proof as in Section~\ref{sec:fo-transduction-for-unfolding}, with the only difference being in Lemma~\ref{lem:counter-free}. As opposed to the monotone case in Lemma~\ref{lem:counter-free}, we need to compose  not necessarily monotone partial functions. In the presence of non-monotone functions, the language corresponding to $L$ from Lemma~\ref{lem:counter-free} is no longer first-order definable, but it is still a regular language, and therefore it is definable in \mso. Chain logic can evaluate arbitrary \mso properties on paths in a tree, and therefore a formula of chain logic can be used to compute the twist function between two nodes in an input tree.
+
+There rest of this appendix is devoted to the converse implication in Theorem~\ref{thm:chain-transductions}, which says that every chain logic tree-to-tree transduction is derivable, in the presence of general unfolding.
 
 
-\subsection{Chain logic is derivable}
-\label{sec:derive-chain-relabellings}
-We now prove the remaining implication in Theorem~\ref{thm:chain-transductions}, namely that all chain logic transductions are derivable in the presence of general unfolding. 
 
+\paragraph*{Chain logic relabellings.}
 Define  \emph{chain logic relabellings} in the same way as the first-order relabellings from Definition~\ref{def:forat}, except that chain logic is used instead of first-order logic.   As in Theorem~\ref{thm:mso-transductions} about \mso transductions, we push all of the power of chain logic into  tree relabellings.
 
 \begin{lemma}\label{lem:chain-colcombet}

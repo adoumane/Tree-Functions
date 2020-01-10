@@ -26,25 +26,25 @@
 To illustrate derivable functions, we present a series of examples, some of them will be useful later.
 
 
-\noindent \begin{example}[Tree homomorphisms]\label{ex:morphism} 
-Given two types $\rSigma, \rGamma$ and an arity preserving  function $\ranked{f:\Sigma\to\tmonad\Gamma}$, we can lift $\ranked{f}$ to the tree homomophism  $\ranked{\mathsf{Hom}_f:\tmonad\Sigma\to \tmonad\Gamma}$ which replaces every node by the term corresponding to its label. If $\ranked{f}$ is derivable, then so is  $\ranked{\mathsf{Hom}_f}$. To see this, we use the composition of the two basic functions
-\begin{align*}
-\ranked{\tmonad\Sigma\xrightarrow{\tmonad f}\tmonad\tmonad\Gamma \xrightarrow{\flatt_\Gamma} \tmonad \Gamma}
-\end{align*}
-\end{example}
+% \noindent \begin{example}[Tree homomorphisms]\label{ex:morphism} 
+% Given two types $\rSigma, \rGamma$ and an arity preserving  function $\ranked{f:\Sigma\to\tmonad\Gamma}$, we can lift $\ranked{f}$ to the tree homomophism  $\ranked{\mathsf{Hom}_f:\tmonad\Sigma\to \tmonad\Gamma}$ which replaces every node by the term corresponding to its label. If $\ranked{f}$ is derivable, then so is  $\ranked{\mathsf{Hom}_f}$. To see this, we use the composition of the two basic functions
+% \begin{align*}
+% \ranked{\tmonad\Sigma\xrightarrow{\tmonad f}\tmonad\tmonad\Gamma \xrightarrow{\flatt_\Gamma} \tmonad \Gamma}
+% \end{align*}
+% \end{example}
 
-\noindent\begin{example}[Filter]\label{ex:filter} Consider the types $\rGamma, \rSigma$  where $\rGamma$ is a finite type of unary symbols. Consider the function:
-$$ \ranked{f:\tmonad (\rSigma+\rGamma)\to\tmonad \rSigma}$$
-which erases the elements of $\rGamma$ from the input term. This function is well defined since erasing unary symbols does not break the tree structure of the input.
-Let us explain why this is a derivable function.
-Consider the basic functions $\ranked{\unit:\rSigma\to\tmonad\rSigma}$ and the constant function $\ranked{\mathsf{empty}:\rGamma\to\tmonad\rSigma}$ which associates to every element of $\rGamma$ the empty term. We compose the following two functions 
-\begin{align*}
-\xymatrix{
-    \ranked{\rSigma+\rGamma}\quad \ar[r]^-{\ranked{\unit+\mathsf{empty}}} & \quad \ranked{\tmonad\rSigma+\tmonad\rSigma}\ar[r]^-{\ranked{\mathrm{forget}}} &\tmonad\rSigma
-},
-\end{align*}
-Then we lift the obtained function to terms, and compose the result with the $\flatt$ function to obtain our function $\ranked{f}$.  
-\end{example}
+% \noindent\begin{example}[Filter]\label{ex:filter} Consider the types $\rGamma, \rSigma$  where $\rGamma$ is a finite type of unary symbols. Consider the function:
+% $$ \ranked{f:\tmonad (\rSigma+\rGamma)\to\tmonad \rSigma}$$
+% which erases the elements of $\rGamma$ from the input term. This function is well defined since erasing unary symbols does not break the tree structure of the input.
+% Let us explain why this is a derivable function.
+% Consider the basic functions $\ranked{\unit:\rSigma\to\tmonad\rSigma}$ and the constant function $\ranked{\mathsf{empty}:\rGamma\to\tmonad\rSigma}$ which associates to every element of $\rGamma$ the empty term. We compose the following two functions 
+% \begin{align*}
+% \xymatrix{
+%     \ranked{\rSigma+\rGamma}\quad \ar[r]^-{\ranked{\unit+\mathsf{empty}}} & \quad \ranked{\tmonad\rSigma+\tmonad\rSigma}\ar[r]^-{\ranked{\mathrm{forget}}} &\tmonad\rSigma
+% },
+% \end{align*}
+% Then we lift the obtained function to terms, and compose the result with the $\flatt$ function to obtain our function $\ranked{f}$.  
+% \end{example}
 
 \noindent \begin{example}[Parent and children]\label{ex:sibling}  Let $\rGamma$ be a finite type. We define $\ranked{\rGamma_0}$  to be the ranked set obtained from $\rGamma$ by setting the arity of every element to $0$.  
 \medskip
@@ -137,7 +137,7 @@ Similarly, the function $$\ranked{\mathsf{Leaves}_{f,g} : \tmonad\rSigma \to \tm
 \end{example}
 
 
-\noindent\begin{example}[Descendants and ancestors]\label{ex:descendant} If $\rSigma$ is a finite type and $\rGamma\subseteq \rSigma$, then the functions 
+\noindent\begin{example}[Descendants and ancestors]\label{ex:descendant} If $\rSigma$ is a finite type and $\ranked{\rGamma\subseteq \rSigma}$, then the functions 
 \begin{itemize}
 \item $\ranked{\mathsf{Descendant}_\rGamma: \tmonad \rSigma \to \tmonad (\rSigma+\rSigma)}$ which replaces the label of each node by its first or second copy, depending on whether it has a descendant in $\rGamma$,
 \item $\ranked{\mathsf{Ancestor}_\rGamma: \tmonad \rSigma \to \tmonad (\rSigma+\rSigma)}$ which replaces the label of each node by its first or second copy, depending on whether it has a descendant in $\rGamma$,
