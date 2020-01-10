@@ -55,20 +55,21 @@ The general unfolding operation is too powerful  to be included in the derivable
 \end{itemize}
 \end{theorem}
 
-\begin{figure}
-    \mypic{108}
-    \caption{Non-monotone unfolding}
-    \label{fig:non-monotone}
-\end{figure}
+% \begin{figure}
+%     \mypic{108}
+%     \caption{Non-monotone unfolding}
+%     \label{fig:non-monotone}
+% \end{figure}
 
 
 
- To see why chain logic is needed to describe general unfolding, consider the unfolding in Figure~\ref{fig:non-monotone}, where two coordinates are swapped in each node of the input tree.
+ To see why chain logic is needed to describe general unfolding, consider the following unfolding, where two coordinates are swapped in each node of the input tree:
+ \mypic{108}
 For inputs with an odd number of swaps, the output of unfolding has a white leaf in the first coordinate, and for inputs with an even number of swaps, the output has a white leaf in the first coordinate.  Checking if a path has even length can be done in chain logic, but not in  first-order logic.  
 
 % On trees, first-order logic is strictly less expressive than chain logic, which is strictly less expressive than \mso, see~\cite[Fact 2.5.8]{bojanczykDecidablePropertiesTree2004}, and the same inclusions carry over to tree-to-tree transductions.
 \paragraph*{Monotone unfolding}
-To avoid the problems with cyclic swaps, we impose a monotonicity requirement on the matrix power. 
+To avoid the problems with cyclic swaps, the unfolding function in Figure~\ref{fig:not-explained} imposes a monotonicity requirement on the matrix power, described below.
 
 % instead of general unfold, the prime functions in Figure~\ref{fig:not-explained} use a partial operation of type
 % \begin{align*}
@@ -76,15 +77,15 @@ To avoid the problems with cyclic swaps, we impose a monotonicity requirement on
 % \end{align*}
 % which is called \emph{monotone unfolding}. This is the same as general unfolding, except that it is defined only for inputs which satisfy a monotonicity restriction that is explained below.
 
- Let  $a \in \mati k \rSigma$ be an element of the matrix power,  let $p,q \in \set{1,\ldots,k}$, and let  $i$ be a port of $a$. We write $
-     q \to_i p$
+ Let  $a \in \mati k \rSigma$ be an element of the matrix power,  let $p,q \in \set{1,\ldots,k}$, and let  $i$ be a port of $a$. Define the \emph{twist function of port $i$}, denoted by $\to_i$, as follows:
+     $q \to_i p$ 
 if coordinate $q$ in the $i$-th outgoing edge  is connected to  coordinate $p$ in root, as described in the following picture:
 \mypic{125}
-One can see that $\to_i$ is a partial function from $\set{1,\ldots,k}$ to $\set{1,\ldots,k}$. We call it the  \emph{twist function of the $i$-th port}. For example, the twist function  of the unique port in 
+The twist function is partial. Call  an element of the matrix power  \emph{monotone} if for every port, its twist functions is monotone (when restricted to inputs where it is defined). In the picture above, $\to_1$ is monotone, while $\to_2$ is not. Also, the problems with an even number of swaps discussed earlier arise from  a non-monotone twist function:
 \mypic{110}
-swaps coordinates $1$ and $2$.  Call  an element of the matrix power  \emph{monotone} if for every port, its twist functions is monotone (when restricted to inputs where it is defined). The \emph{monotone unfolding} operation in Figure~\ref{fig:unfold} defined to be the restriction of general unfolding,  which  is undefined if the input contains at least one label which is non-monotone, and otherwise returns the output of the general unfolding.
+The \emph{monotone unfolding} operation in Figure~\ref{fig:unfold} defined to be the restriction of general unfolding,  which  is undefined if the input contains at least one label which is non-monotone, and otherwise returns the output of the general unfolding.
 
-\paragraph*{Is unfolding derivable?} The  prime functions in our main theorem  are meant to be simple syntactic rewritings. It is debatable whether the  unfolding operation -- even in its monotone variant -- is of this kind. For example, proving that monotone unfolding is a first-order transduction requires non-trivial effort, including an invocation of the Sch\"utzenberger-McNaughton-Papert theorem about first-order logic on words being the same as counter-free automata. 
+\paragraph*{Is unfolding derivable?} The  prime functions in our main theorem  are meant to be simple syntactic rewritings. It is debatable whether the  unfolding operation -- even in its monotone variant -- is of this kind. For example, our proof  that monotone unfolding is a first-order transduction requires an invocation of the Sch\"utzenberger-McNaughton-Papert theorem about first-order logic on words being the same as counter-free automata. 
 
 Is it possible to break down monotone unfolding into simpler primitives?
 In the appendix, we devote considerable resources to answering this question. We propose one new  datatype
