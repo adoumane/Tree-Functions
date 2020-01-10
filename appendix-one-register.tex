@@ -318,7 +318,7 @@ This concludes the proof of the first claim.
 
 Let us construct now a derivable function which computes the normal form of linear thin $\lambda$-terms. We illustrate this construction on the term $t$ below which will be our running example in this proof. 
 \begin{center}
-\includegraphics[scale=.3]{pictures/running-thin}
+\includegraphics[scale=.4]{pictures/running-thin}
 \end{center}
 
 \begin{proof}[Proof of Proposition~\ref{prop:EvaluateThin}] Let $t$ be a linear thin $\lambda$-term in $\tmonad \ranked{\lamrank X}$.
@@ -355,7 +355,7 @@ The query $\varphi$ being first-order, its characteristic function is derivable 
 When we apply this function to $t$, we get a term in $\ranked{\tmonad(\ranked{\lamrank X}+\ranked{\lamrank X})}$ term below. 
 Below is the effect of this first step on our running example. We colored in red the nodes belonging to the first copy of $\ranked{\lamrank X}$, that is the nodes satisfying the query $\varphi$. These nodes are the ones that will disappear in the normal form of $t$. 
 \begin{center}
-\includegraphics[scale=.3]{pictures/running-thin-2}
+\includegraphics[scale=.4]{pictures/running-thin-2}
 \end{center}
 \item After that, we apply the $\preorder$ function 
 \begin{align*}
@@ -402,7 +402,7 @@ Now back to our term, we replace the  $\ranked{\tmonad 1}$ factors by the empty 
 \end{align*}
 which untwists two consecutive applications of $\reduce 1$. Doing so, we get a term of type  $$\ranked{\reduce 1\tmonad(X^\lambda+X^\lambda+0+2)}$$ which is  the normal form of $t$. Our running example becomes then
 \begin{center}
-\includegraphics[scale=.3]{pictures/running-thin-5}
+\includegraphics[scale=.4]{pictures/running-thin-5}
 \end{center}
 
 \item Note that we obtained the desired term, but not with the desired type. To obtain a term in 
@@ -418,7 +418,7 @@ $\ranked{\reduce 1\tmonad{X^\lambda}}$, we get rid of the labels $0+2$ by transf
 
 In a linear $\lambda$-term, we call \emph{full redex} a set of nodes  containing a redex, the node of its variable, together with the set of nodes between them, as illustrated below
 \begin{center}
-\includegraphics[scale=1.2]{pictures/full-redex.pdf}
+\includegraphics[scale=.4]{pictures/full-redex.pdf}
 \end{center}
 
 
