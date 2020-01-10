@@ -79,21 +79,21 @@ $$
 \fbox{
 \begin{minipage}{1\linewidth}
 \begin{itemize}
-\item \textbf{Folds over pairs.}
+\item \textbf{Fold over coproduct.}
 $$
 \begin{array}{rll}
   \ranked{\reduce k (\Sigma_1 + \Sigma_2)}& \ranked{\to} & \ranked{\reduce k \Sigma_1 + \reduce k \Sigma_2}\\
          (a,i)/f & \mapsto & ((a/f),i)
 \end{array}
 $$
-\item \textbf{Shallow terms over pairs.}
+\item \textbf{Shallow terms over coproduct.}
 $$
 \begin{array}{rll}
   {\shallowterm {(\Sigma_1 + \Sigma_2)} \Gamma} & \ranked{\to} & \ranked{(\shallowterm {\Sigma_1} \Gamma) + (\shallowterm {\Sigma_2} \Gamma)}\\
         (a,i)\tensorpair{t_1,\dots,t_n} &\mapsto& (a\tensorpair{t_1,\dots,t_n},i)
 \end{array}
 $$
-\item \textbf{Shallow terms over copairs.}
+\item \textbf{Shallow terms over product.}
 $$
 \begin{array}{c}
   \ranked{{\shallowterm {(\Sigma_1 \product \Sigma_2)} \Gamma}
@@ -101,28 +101,28 @@ $$
         {\includegraphics[scale=.4]{pictures/tensor-shallow-distrib}}
         \end{array}
 $$
-\item \textbf{Folds over copairs.}
+\item \textbf{Fold over product.}
 $$
 \begin{array}{c}
 \ranked{(\reduce k \Sigma_1) \product (\reduce k {\Sigma_2}) \ \ \to \ \reduce k (\Sigma_1 \product \Sigma_2)}\\[5pt]
         {\includegraphics[scale=.4]{pictures/tensor-fold-distrib-2}}  
 \end{array}
 $$
-\item \textbf{Folds over copairs (bis).}
+\item \textbf{Folds over product (bis).}
 $$
 \begin{array}{c}
     \ranked{\reduce k (\Sigma_1 \product \Sigma_2) \ \ \to \ \ \reduce k ((\reduce k {\Sigma_1})\product (\reduce k \Sigma_2))}\\[5pt]
         {\includegraphics[scale=.4]{pictures/tensor-fold-distrib-1}}   
 \end{array}
 $$
-\item \textbf{Shallow terms over folds.}
+\item \textbf{Shallow terms over fold.}
 $$
 \begin{array}{c}
  \ranked{\shallowterm \Sigma {\reduce k \Gamma}\ \ \to \ \ \reduce k (\shallowterm \Sigma {\Gamma})}\\[5pt]
  {\includegraphics[scale=.4]{pictures/shallow-fold-distrib}} 
 \end{array}
 $$
-\item \textbf{Folds over shallow terms.} 
+\item \textbf{Fold over shallow terms.} 
 $$
 \begin{array}{c}
  \ranked{\reduce k \Sigma\cdot \Gamma\ \ \to \ \ (\reduce k \Sigma) \cdot \mati k \Gamma}\\[5pt]
