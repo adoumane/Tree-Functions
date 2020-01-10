@@ -245,7 +245,7 @@ Therefore, to complete the proof, it remains to show the following lemma. This i
     \end{align*}
 \end{lemma}
 \begin{proof}
-    Let $F$ be the set of monotone partial functions  from $\set{1,\ldots,k}$ to itself. Define $L \subseteq F^*$ to be the set of those words $f_1 \cdots f_n$ such that the composition of functions $f_n\circ \cdots \circ f_1$ maps $i$ to $j$. We will show that -- thanks to the monotonicity assumption -- the language is $L$ is definable in first-order logic. By running the corresponding first-order  formula on the path from $x$ to $y$, we get the conclusion of the lemma.   
+    Let $F$ be the set of monotone partial functions  from $\set{1,\ldots,k}$ to itself. Define $L \subseteq F^*$ to be the set of those words $f_1 \cdots f_n$ such that the composition of functions $f_n\circ \cdots \circ f_1$ maps $i$ to $j$. We will show that -- thanks to the monotonicity assumption -- the language is $L$ is definable in first-order logic. To get the conclusion of the lemma, we check if the sequence of twist functions on the path  from $x$ to $y$ satisfies the first-order formula defining the language $L$.
     
     
     The language $L$ is recognised by a finite automaton, which has states $\set{1,\ldots,k,\bot}$, and which simply applies the function in its input letter to the present state. We show below that this automaton is counter-free, in the sense of McNaughton and Papert~\cite[p.~6]{McNaughtonPapert71}, and therefore it can be defined in first-order logic. 
