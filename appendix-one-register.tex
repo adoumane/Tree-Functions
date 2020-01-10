@@ -198,7 +198,7 @@ By the first two properties above, we have necessarily that
 %\end{theorem}
 This section is dedicated to the proof of Theorem~\ref{thm:normalise}. Let us first introduce some terminology. In a $\lambda$-term, we call \emph{redex} a pattern of the following form 
 \begin{center}
-\includegraphics[scale=1.2]{pictures/redex.pdf}
+\includegraphics[scale=.5]{pictures/redex.pdf}
 \end{center}
 that is, an application node whose left child is an abstraction node. In a well-typed $\lambda$-term, we define the \emph{type of a redex} to be the type of the left sub-term of its application node. In the figure above, the type of the redex is $\tau\rightarrow\sigma$. If the abstraction node of a redex is labeled by $\lambda x$, we say that \emph{$x$ is the variable of the redex} and that this redex is an \emph{$x$-redex}. 
 \medskip
@@ -243,7 +243,7 @@ As discussed earlier, we will need to normalise \lambdaterms with ports (the fac
 \end{align*}
 With this notation, \lambdaterms with ports are the inhabitants of $\ranked{\tmonad \ranked{\lamrank X}}$. Normalisation of these terms generalizes that of usual \lambdaterms in a straightforward way: the $i$-th port is replaced by a fresh variable $x_i$, the obtained \lambdaterm (without ports) is evaluated as usual, then the variable $x_i$ is replaced back by the port $i$, as one can see in the following example.  
   \begin{center}
-\includegraphics[scale=1.2]{pictures/normalization-with-ports.pdf}
+\includegraphics[scale=.4]{pictures/normalization-with-ports.pdf}
 \end{center}
   Note that when a \lambdaterm is linear, its normal form has the same number of ports. Note also that respecting the original order of ports in the normal form (which is important for compositionality) may twist ports, as in the example above. As a consequence, normalisation of linear \lambdaterms with ports is an arity preserving function of  type:
   \begin{align*}
@@ -264,9 +264,9 @@ In the remaining of this section we will omit the mention ``with ports'' if clea
 
 Since thin $\lambda$-terms branch only on redexes, the result of their normalisation is a ``word'', in the sens that every node has at most one non-port child.  We will show that this word can actually be obtained by a pre-order traversal of the original $\lambda$-term. We will then use the prime $\preorder$ function to show that normalisation of thin $\lambda$-terms is derivable. 
 
-The left $\lambda$-term below is linear and thin. The colored nodes are the ones which are not redexes nor the variables of these redexes. The right $\lambda$-term is its normal form: we can see that  nodes appear top-down in the pre-order  of the original $\lambda$-term.  
+The left $\lambda$-term below is linear and thin. The rednodes are the ones which are not redexes nor the variables of these redexes. The right $\lambda$-term is its normal form: we can see that  nodes appear top-down in the pre-order  of the original $\lambda$-term.  
 \begin{center}
-		\includegraphics[scale=.2]{pictures/normalisation-thin}
+		\includegraphics[scale=.45]{pictures/thin}
 		\end{center}
 
 \begin{proposition}\label{prop:EvaluateThin}
