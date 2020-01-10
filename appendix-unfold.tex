@@ -167,17 +167,17 @@ where $\text{ar}_i$ is the arity of $a_i$ for $i\in\set{1,\dots,k}$.
   \begin{align*}
   \xymatrix@C=2.5cm{
           \ranked{\shallowterm{\mati k \rSigma} {\mati k \rGamma} = {\shallowterm{\reduce k {\Sigma^k}}{\reduce k {\Gamma^k}}} 
-        \ar[d]_{\ranked{\substack{f}}}
+        \ar[d]_{\ranked{\substack{f_1}}}
         \ar[r]^-{\ranked{\text{Shallow unfold}}}}
         &
         \ranked{ \reduce k(\shallowterm{\Sigma}{ {\Gamma}})^k = \mati k {(\shallowterm \Sigma \Gamma)}}
         \\
        \ranked{  \reduce k(\shallowterm{\reduce k {\Sigma^k}}{ {\Gamma^k}})}
-        \ar[r]_-{\ranked{\flatt\circ \reduce k g}}
+        \ar[r]_-{\ranked{\flatt\circ \reduce k f_2}}
         &
-    \ranked{   \reduce k(\shallowterm{\Sigma^k}{ {\Gamma}}) } \ar[u]^{\ranked{\reduce k  h}}
+    \ranked{   \reduce k(\shallowterm{\Sigma^k}{ {\Gamma}}) } \ar[u]^{\ranked{\reduce k  {f_3}}}
     } 
-\end{align*}    
+\end{align*}     
 
 \subsection{Definition of unfolding}
 Having defined shallow unfolding, we apply the induction principle described in Section~\ref{sec:terms-induction-principle} to  define unfolding for general terms

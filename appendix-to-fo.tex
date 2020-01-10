@@ -180,15 +180,15 @@ Recall  that when  defining the  monotone  unfolding operation,  for each elemen
 \to_i : \set{1,\ldots,k} \to \set{1,\ldots,k},
 \end{align*}
 one for each port $i$ of $a$. For the reader's convenience, we repeat a picture from Section~\ref{sec:unfolding}, which explains the twist functions:
-\mypic{109}
-In the example  above, the twist functions are:
-\begin{align*}
-\xymatrix@C=0.5cm@R=1.7cm{
-     & && 1 & 2 & 3 \\
-    1\ar[urrr]^-{\to_1} & 2 & 3 \ar[urr]^-{\to_1} &&&&
-    1\ar[ul]_-{\to_2} & 2\ar[ullll]^-{\to_2} & 3\ar[ulll]_-{\to_2}
-}
-\end{align*}
+\mypic{125}
+% In the example  above, the twist functions are:
+% \begin{align*}
+% \xymatrix@C=0.5cm@R=1.7cm{
+%      & && 1 & 2 & 3 \\
+%     1\ar[urrr]^-{\to_1} & 2 & 3 \ar[urr]^-{\to_1} &&&&
+%     1\ar[ul]_-{\to_2} & 2\ar[ullll]^-{\to_2} & 3\ar[ulll]_-{\to_2}
+% }
+% \end{align*}
 In this example, the twist function $\to_1$ is monotone, but  $\to_2$ is not. The monotone unfolding operation works in the same way as general  unfolding, except that it uses the undefined value $\termset$ if the input term has at least one letter which uses at least one non-monotone twist. 
 
 The following lemma, whose simple proof is left to the reader, shows that the twist functions can be defined using first-order logic.

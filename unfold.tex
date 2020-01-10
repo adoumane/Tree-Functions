@@ -79,9 +79,8 @@ To avoid the problems with cyclic swaps, we impose a monotonicity requirement on
  Let  $a \in \mati k \rSigma$ be an element of the matrix power,  let $p,q \in \set{1,\ldots,k}$, and let  $i$ be a port of $a$. We write $
      q \to_i p$
 if coordinate $q$ in the $i$-th outgoing edge  is connected to  coordinate $p$ in root, as described in the following picture:
-\mypic{109}
-\amitodo{left 2 doesnt point to the second component}
-One can see that $\to_i$ is a partial function from $\set{1,\ldots,k}$ to $\set{1,\ldots,k}$. We call it the  \emph{twist function of the $i$-th port}. For example, the twist function in of the unique port in 
+\mypic{125}
+One can see that $\to_i$ is a partial function from $\set{1,\ldots,k}$ to $\set{1,\ldots,k}$. We call it the  \emph{twist function of the $i$-th port}. For example, the twist function  of the unique port in 
 \mypic{110}
 swaps coordinates $1$ and $2$.  Call  an element of the matrix power  \emph{monotone} if for every port, its twist functions is monotone (when restricted to inputs where it is defined). The \emph{monotone unfolding} operation in Figure~\ref{fig:unfold} defined to be the restriction of general unfolding,  which  is undefined if the input contains at least one label which is non-monotone, and otherwise returns the output of the general unfolding.
 
