@@ -68,34 +68,43 @@ and  defined by
 $$\begin{array}{rcl} 
 a(b_1/g_1,\dots,b_n/g_n)&\mapsto& a(b_1,\dots,b_n)/g
 \end{array}$$
-where $g$ is the function described below
-\begin{align*}
-    \xymatrix@C=5cm{
-        \text{ports of $(b_1,\ldots,b_n)$} 
-        \ar[d]^{\text{same ports}}
-        \\
-        \text{ports of $a(b_1,\ldots,b_n)$} 
-        \ar[d]^{\text{re-indexing of ports in a product}}
-        \\
-        \displaystyle{
-        \coprod_{i \in \set{1,\ldots,n}} \text{ports of $b_i$}} \ar[d]^-{\coprod_i g_i} 
-        \\
-        \displaystyle{
-        \coprod_{i \in \set{1,\ldots,n}}  (\text{(ports of $b_i/g_i$)}} \times \set{1,\ldots,k})
-        \ar[d]^{\text{distribute}}
-        \\
-        \displaystyle{
-        (\coprod_{i \in \set{1,\ldots,n}}  \text{(ports of $b_i/g_i$)}}) \times \set{1,\ldots,k}
-        \ar[d]^-{\text{re-indexing of ports in a product}}
-        \\             
-        \displaystyle{
-              \text{(ports of $a(b_1,\ldots,b_n)/g$)}}) \times \set{1,\ldots,k}
-        }
-    \end{align*}
-% defined as follows. For every  $i \in\set{1,\dots,n}$,  if  $j\in\set{1,\dots,\arity{b_i}}$ then 
-% \begin{align*}
-%  g_0(j+\underset{l<i}{\Sigma} \arity{b_l})=(\pi_1(g_i(j)),\pi_2(g_i(j))+\underset{l<i}{\Sigma} \arity{b_l/g_l})
-% \end{align*}
+where $g$ is the function defined as follows. For every  $i \in\set{1,\dots,n}$,  if  $j\in\set{1,\dots,\arity{b_i}}$ then 
+ \begin{align*}
+ \xymatrix@C=5cm{
+ \begin{array}{c}
+ \overbrace{j+\underset{l<i}{\Sigma} \arity{b_l}}^{\text{Position of the $j$-th port of $b_i$ is shifted}}
+ \end{array}
+ \ar@{|->}[d]^{g}\\
+ \begin{array}{c}
+  \biggl( \underbrace{\pi_1(g_i(j))}_{\begin{array}{c}
+{ \scriptsize\text{Position inside}}\\[-5pt]{\scriptsize \text{the group is unchaged}}
+ \end{array}},\underbrace{\pi_2(g_i(j))+\underset{l<i}{\Sigma} \arity{b_l/g_l}}_{\text{Position of the group is shifted}} \ \ \biggr)
+ \end{array}}
+ \end{align*}
+ 
+%\begin{align*}
+%    \xymatrix@C=5cm{
+%        \text{ports of $(b_1,\ldots,b_n)$} 
+%        \ar[d]^{\text{same ports}}
+%        \\
+%        \text{ports of $a(b_1,\ldots,b_n)$} 
+%        \ar[d]^{\text{re-indexing of ports in a product}}
+%        \\
+%        \displaystyle{
+%        \coprod_{i \in \set{1,\ldots,n}} \text{ports of $b_i$}} \ar[d]^-{\coprod_i g_i} 
+%        \\
+%        \displaystyle{
+%        \coprod_{i \in \set{1,\ldots,n}}  (\text{(ports of $b_i/g_i$)}} \times \set{1,\ldots,k})
+%        \ar[d]^{\text{distribute}}
+%        \\
+%        \displaystyle{
+%        (\coprod_{i \in \set{1,\ldots,n}}  \text{(ports of $b_i/g_i$)}}) \times \set{1,\ldots,k}
+%        \ar[d]^-{\text{re-indexing of ports in a product}}
+%        \\             
+%        \displaystyle{
+%              \text{(ports of $a(b_1,\ldots,b_n)/g$)}}) \times \set{1,\ldots,k}
+%        }
+%    \end{align*}
 
 
 
@@ -132,7 +141,7 @@ where $m$ is the arity of $a$ and the grouping function  $g'$ is  the natural em
     \text{ports of $a(b_{g(1)},\dots,b_{g(m)}))$}
     \ar[d]
     \\
- \displaystyle{\coprod_{\substack{i \in \set{1,\ldots,n}\\ j \in \set{1,\ldots,k}}} \text{ports of $b_{i,j}$}} 
+ \displaystyle{\biggl(1, \coprod_{\substack{i \in \set{1,\ldots,n}\\ j \in \set{1,\ldots,k}}} \text{ports of $b_{i,j}$} \biggr)} 
 }
 \end{align*}
 \smallskip

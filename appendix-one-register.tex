@@ -21,7 +21,7 @@ In this part of the appendix, we show Theorem~\ref{thm:normalise}, which says th
 \subsection{Explaining the restrictions}\label{sec:explaining-restrictions}
 
 Recall that Theorem~\ref{thm:normalise} says that normalisation of $\lambda$-terms is derivable under two assumptions:
-the input term should be linear (actually it could be also affine),  and it could be typed using a fixed finite set of types. 
+the input term should be linear, and could be typed using a fixed finite set of types. 
 
 If the linearity condition is removed, and because of iterated duplication, the normal form of a well-typed $\lambda$-term can be exponential (or worse, see~\cite[Section 3.6]{sorensen_lectures_2006}), as shown by the following example.
  
@@ -34,7 +34,7 @@ If the linearity condition is removed, and because of iterated duplication, the 
     % as shown in the following picture, which uses variables $x : \otype$ and  $z : \otype \to \otype \to \otype$.
     % \mypic{44}
 \end{example}
-If there was a first-order transduction normalizing these terms, it would be exponential-size increase, which is not possible since all first-order transductions are linear-size increase. 
+If there was a first-order transduction normalising these terms, it would be exponential-size increase, which is not possible since all first-order transductions are linear-size increase. 
 % For this reason, we  limit attention to linear  $\lambda$-terms.
 %: a $\lambda$-term is called \emph{affine} if every bound variable is used at most once in its scope, but free variables are allowed to appear multiple times.  For example, 
 %\begin{align*}
@@ -87,15 +87,15 @@ Before establishing this lemma, let us see how Proposition~\ref{prop:WellTypedFo
  
 Consider the unary formula $\mathsf{Lambda}(u)$, which expresses that $u$ is a binder node, that its type and the type of its child match well and both belong to $\Tt$: 
 $$\begin{array}{ll}
-\mathsf{Lambda}(u) &:= \underbrace{\lambda x(u)}_{\substack{\text{$u$ has label $\lambda x$}}} \wedge\bigvee_{\substack{\sigma\rightarrow\tau \in S\\x:\sigma}}  \underbrace{\varphi_{\sigma\rightarrow\tau}(u)}_{\substack{\text{$u$ has type $\sigma\rightarrow\tau$}}}  \\ & \wedge \underbrace{\exists v\ \ \mathrm{Succ}_1(u, v) \wedge \varphi_\tau (v)}_{\substack{\text{the child of $u$ has type $\tau$}}}
+\mathsf{Lambda}(u) &:= \underbrace{\lambda x(u)}_{\substack{\text{$u$ has label $\lambda x$}}} \wedge\bigvee_{\substack{\sigma\rightarrow\tau \in \Tt\\x:\sigma}}  \underbrace{\varphi_{\sigma\rightarrow\tau}(u)}_{\substack{\text{$u$ has type $\sigma\rightarrow\tau$}}}  \\ & \wedge \underbrace{\exists v\ \ \mathrm{Succ}_1(u, v) \wedge \varphi_\tau (v)}_{\substack{\text{the child of $u$ has type $\tau$}}}
 \end{array}$$
 Similarly, consider the unary formula $\mathsf{Application}(u)$ which checks that a node is an application node, that the type of its children match well and that both belong to $\Tt$: 
 $$\begin{array}{l}
-\mathsf{Application}(u) := \underbrace{@(u)}_{\substack{\text{$u$ has label @}}} \wedge \\ \exists v, w \underset{\sigma\rightarrow\tau \in S}{\bigvee}  \underbrace{\mathrm{Succ}_1(u, v) \wedge \varphi_{\sigma\rightarrow\tau} (v)}_{\substack{\text{the left child of $u$ has type $\sigma\rightarrow\tau$}}} \wedge \underbrace{\mathrm{Succ}_2(u, w) \wedge \varphi_{\sigma} (w)}_{\substack{\text{the right child of $u$ has type $\sigma$}}}
+\mathsf{Application}(u) := \underbrace{@(u)}_{\substack{\text{$u$ has label @}}} \wedge \\ \exists v, w \underset{\sigma\rightarrow\tau \in \Tt}{\bigvee}  \underbrace{\mathrm{Succ}_1(u, v) \wedge \varphi_{\sigma\rightarrow\tau} (v)}_{\substack{\text{the left child of $u$ has type $\sigma\rightarrow\tau$}}} \wedge \underbrace{\mathrm{Succ}_2(u, w) \wedge \varphi_{\sigma} (w)}_{\substack{\text{the right child of $u$ has type $\sigma$}}}
 \end{array}$$
 Finally, consider the formula $\mathsf{Variable}(u)$, which expresses that $u$ is a variable node, whose type is in $\Tt$:
 \begin{align*}
-\mathsf{Variable}(u) :=  \bigvee_{x:\sigma\in S}\underbrace{x(u)}_{\substack{\text{$u$ has label $x$}}} 
+\mathsf{Variable}(u) :=  \bigvee_{x:\sigma\in \Tt}\underbrace{x(u)}_{\substack{\text{$u$ has label $x$}}} 
 \end{align*}  
 We claim that the following (nullary) formula $\phi$ recognizes the tree language $\NonLinTerms \Tt X$
 \begin{align*}
@@ -157,7 +157,7 @@ A direct consequence of this lemma is that $P_\tau$ recognizes $W_\tau$. Another
 Let us start with some observations. In the pushdown automaton $P_\tau$, the effect of a word $w$ on a stack $s$, starting from the state $p$ is the following: it erases the first $n$ top level elements of $s$, and replaces them by a word $u$. The number $n$ and the word $u$ do not depend on the stack $s$ but only on the word $w$. This is exactly what the following lemma claims.
 
 \begin{lemma}
-For every word $w$ over ${X^\lambda}^*$, there is a natural number $n$ and a word $u\in S^*$ such that if $(p,s)\xrightarrow{w}(p,s')$ then $s$ and $s'$ can be decomposed as follows:
+For every word $w$ over ${X^\lambda}^*$, there is a natural number $n$ and a word $u\in \Tt^*$ such that if $(p,s)\xrightarrow{w}(p,s')$ then $s$ and $s'$ can be decomposed as follows:
 $$s=t.v,\qquad s'=t.u\qquad \text{ and }\qquad |v|=n.$$
 \end{lemma}
 The proof is an easy induction on the length of $w$. As a consequence we have that:
@@ -201,11 +201,15 @@ This section is dedicated to the proof of Theorem~\ref{thm:normalise}. Let us fi
 \includegraphics[scale=1.2]{pictures/redex.pdf}
 \end{center}
 that is, an application node whose left child is an abstraction node. In a well-typed $\lambda$-term, we define the \emph{type of a redex} to be the type of the left sub-term of its application node. In the figure above, the type of the redex is $\tau\rightarrow\sigma$. If the abstraction node of a redex is labeled by $\lambda x$, we say that \emph{$x$ is the variable of the redex} and that this redex is an \emph{$x$-redex}. 
+\medskip
 
-Let us go back to the proof of Theorem~\ref{thm:normalise}. 
-On suppose que nos terms satisfont les restrictions du theorem.
+Let us go back to the proof of Theorem~\ref{thm:normalise}. Before normalising $\lambda$-terms, the first thing to do is to discriminate those $\lambda$-terms satisfying the restrictions of Theorem~\ref{thm:normalise} from the others. This amounts to pre-processing the normalisation process by the function
+\begin{align*}
+\trees \ranked{X^\lambda} \to \trees \ranked{X^\lambda} +\bot
+\end{align*}
+which is the identity for inputs satisfying the restrictions and is undefined otherwise. Let us see how this function can be derived. Thanks to Proposition~\ref{prop:WellTypedFo}, the restrictions of Theorem~\ref{thm:normalise} are first-order definable, say by a first-order query $\phi$. By virtue of Proposition~\ref{prop:forat}, the characteristic function of $\phi$ is derivable. Now following the label's root of the input, we either output the input tree if the label says that it satisfies the query $\phi$, or outputs the undefined symbol otherwise. This last function can be easily derived. From now on, we suppose that our $\lambda$-terms satify the restrictions of Theorem~\ref{thm:normalise}.  
 
-We proceed by induction on the set of types $\Tt$. The main observation is that, if the evaluation of a redex of type $\sigma\rightarrow \tau$ creates new redexes, then their types are either $\sigma$ or $\tau$. They belong, in particular, to  $\Tt\setminus\{\sigma\rightarrow\tau\}$. As a consequence, we only need to show that the function that evaluates all the redexes of a fixed type is derivable. As we only create strictly smaller redexes, we need to iterate this process only finitely many times, the bound being the size of $\Tt$. 
+To normalise $\lambda$-terms, we proceed by induction on the set of types $\Tt$. The main observation is that, if the evaluation of a redex of type $\sigma\rightarrow \tau$ creates new redexes, then their types are either $\sigma$ or $\tau$. They belong, in particular, to  $\Tt\setminus\{\sigma\rightarrow\tau\}$. As a consequence, we only need to show that the function that evaluates all the redexes of a fixed type is derivable. As we only create strictly smaller redexes, we need to iterate this process only finitely many times, the bound being the size of $\Tt$. 
 
   Since we have only finitely many typed variables, it is enough to show that the function that evaluates all the redexes of a fixed type $\sigma$ and a fixed variable $x$ is derivable. This will be our goal in the rest of this section.
 
@@ -224,7 +228,7 @@ To show this proposition, we will factorise (via a derivable function) our \lamb
 %In other words, for every such redex, its application node, its abstraction node, and the variable it binds are in the same factor.
 \item[(P2)] Each factor have a a very specific shape called \emph{thin}. These factors are those $\lambda$-terms with ports whose normal form have the shape of a word (by opposition to trees, which is the general case).
 \end{itemize}
-By properties (P1) and (P2), it is enough to show that normalisation of thin \lambdaterms (with ports) is derivable. For this purpose, our strategy will be to prove that the word obtained by normalizing a thin \lambdaterm results from a depth-first traversal. Since depth-first traversal is a prime function,  this implies that normalisation of thin $\lambda$-terms is derivable.
+By properties (P1) and (P2), it is enough to show that normalisation of thin \lambdaterms (with ports) is derivable. For this purpose, our strategy will be to prove that the word obtained by normalising a thin \lambdaterm results from a pre-order traversal. Since pre-order traversal is a prime function,  this implies that normalisation of thin $\lambda$-terms is derivable.
  
  The last ingredient to conclude the proof is to notice that $\beta$-reducing the factors of (a factorisation of) a $\lambda$-term, then applying a flattening, is the same thing as $\beta$-reducing the original $\lambda$-term, which follows directly from the fact that $\beta$-reduction is a congruence on terms. This concludes the proof. 
  
@@ -258,9 +262,9 @@ A \emph{thin $\lambda$-term with ports} is a term from $\tmonad \ranked{\lamrank
 \end{definition}
 In the remaining of this section we will omit the mention ``with ports'' if clear from the context.
 
-Since thin $\lambda$-terms branch only on redexes, the result of their normalisation is a ``word'', in the sens that every node has at most one non-port child.  We will show that this word can actually be obtained by a depth-first traversal of the original $\lambda$-term. We will then use the basic depth-first traversal  function to show that normalisation of thin $\lambda$-terms is derivable. 
+Since thin $\lambda$-terms branch only on redexes, the result of their normalisation is a ``word'', in the sens that every node has at most one non-port child.  We will show that this word can actually be obtained by a pre-order traversal of the original $\lambda$-term. We will then use the prime $\preorder$ function to show that normalisation of thin $\lambda$-terms is derivable. 
 
-The left $\lambda$-term below is linear and thin. The colored nodes are the ones which are not redexes nor the variables of these redexes. The right $\lambda$-term is its normal form: we can see that the order of in which the nodes appear top-down follows the depth-first traversal of the original $\lambda$-term.  
+The left $\lambda$-term below is linear and thin. The colored nodes are the ones which are not redexes nor the variables of these redexes. The right $\lambda$-term is its normal form: we can see that  nodes appear top-down in the pre-order  of the original $\lambda$-term.  
 \begin{center}
 		\includegraphics[scale=.2]{pictures/normalisation-thin}
 		\end{center}
@@ -277,7 +281,7 @@ The left $\lambda$-term below is linear and thin. The colored nodes are the ones
 Let $t$ be a thin $\lambda$-term and let $u$ be its normal form. As noticed before, $u$ has the shape of a word. Moreover, since $t$ is linear, the nodes of $u$ are exactly the nodes of $t$ which are not redexes, nor their variables.
 
 \begin{proposition}\label{prop:normal-form-depth-first} Let $t$ be a linear thin \lambdaterm and let $u$ be its normal form. 
-The order in which the inner nodes (ie. non ports) of $u$ appear top-down is the depth-first order of $t$.  
+The order in which the inner nodes (ie. non ports) of $u$ appear top-down is the pre-order of $t$.  
 \end{proposition}
 
 \begin{proof}
@@ -285,7 +289,7 @@ To establish this proposition, we need the following lemma.
 \begin{lemma}\label{lem:internalLemma}
 Let $t$ be a linear thin $\lambda$-term and let $r$ be one of its redexes. Consider $m$ to be the binder node of $r$ and $n$ to be its variable node.
 
-The node $n$ is the greatest (that is the left-most) node in the sub-term $t|_m$ w.r.t. the depth-first order. 
+The node $n$ is the greatest (that is the left-most) node in the sub-term $t|_m$ w.r.t. the pre-order. 
 \end{lemma}
 
 \begin{proof}
@@ -298,11 +302,11 @@ of $l$, which is a binder. The node $m, n, o$ and $p$ are illustrated below:
 bound by $p$ is strictly greater than $n$. Is is also strictly smaller than $o$, which gives a contradiction and concludes the proof. 
 \end{proof}
 
-Let us go back to the proof of our proposition. Consider two inner nodes $n, m$ of $t$ which are also nodes of $u$, and such that $m$ is smaller than $n$ is the tree order of $t$. We show that $n$ is a descendant of $m$ in $u$. There is two cases to consider:
+Let us go back to the proof of our proposition. Consider two inner nodes $n, m$ of $t$ which are also nodes of $u$, and such that $m$ is smaller than $n$ is the pre-order of $t$ (we well call it simply pre-order in the rest of the proof). We show that $n$ is a descendant of $m$ in $u$. There is two cases to consider:
 \begin{itemize}
 \item Either $n$ is a descendant of $m$ in $t$, in this case we can conclude easily since $\beta$-reduction preserves the descendant relation. Indeed, by a small analysis of $\beta$-reduction, one can notice that a reduction step may extend the descendant relation, but can never change (or break) the order of two comparable nodes in the original $\lambda$-term.  
 \item  Otherwise, let us consider the lowest common ancestor $p$ of $m$ and $n$. We proceed by induction on the length of the path between $m$ and $p$. By definition of thin $\lambda$-terms, since $p$ is branching it is necessarily an application node, whose left child $q$ is a binder node, let us say $\lambda x$. 
-By Lemma~\ref{lem:internalLemma}, $m$ is smaller w.r.t. the depth-first order than the node $r$ of the variable bound by $q$ . 
+By Lemma~\ref{lem:internalLemma}, $m$ is smaller w.r.t. the pre-order than the node $r$ of the variable bound by $q$ . 
 We are then left with the following two situations. The first case, illustrated by the left figure below, is when $r$ is a descendant of $m$ in $t$. In this case, after one reduction step $n$ will be a descendant of of $m$. The other case is when $m$ is in the left of $r$ in $t$, as illustrated by the right figure below. In this case, after one reduction step, the lowest common ancestor between $m$ and $n$ will be a descendant of $p$, and we can conclude by induction hypothesis. 
 \begin{center}
 \includegraphics[scale=.3]{pictures/cases-lemma}
@@ -353,7 +357,7 @@ Below is the effect of this first step on our running example. We colored in red
 \begin{center}
 \includegraphics[scale=.3]{pictures/running-thin-2}
 \end{center}
-\item After that, we apply the depth-first traversal function 
+\item After that, we apply the $\preorder$ function 
 \begin{align*}
             \ranked{\preorder : \tmonad (\ranked{\lamrank X}+\ranked{\lamrank X}) \to \reduce 1\tmonad( \ranked{\lamrank X}+\ranked{\lamrank X} + 0 +2)}
 \end{align*}
@@ -361,7 +365,7 @@ After this step, our initial term becomes
 \begin{center}
 \includegraphics[scale=.3]{pictures/running-thin-3}
 \end{center}  
-In this term, the nodes of the normal form appear in the right order thanks to Prop.~\ref{prop:normal-form-depth-first}. Now, we only need to get rid of the redexes and the variable nodes that participated in the computation of the normal form (that is the ones colored in red) together with the nodes $\grayball$ and $\grayballbin$ introduced by the depth-first traversal function. 
+In this term, the nodes of the normal form appear in the right order thanks to Prop.~\ref{prop:normal-form-depth-first}. Now, we only need to get rid of the redexes and the variable nodes that participated in the computation of the normal form (that is the ones colored in red) together with the nodes $\grayball$ and $\grayballbin$ introduced by the $\preorder$ function. 
 \item For this purpose, we apply the function 
 \begin{align*}
 \ranked{\ranked{\tmonad (X^\lambda+X^\lambda + 0+
