@@ -19,7 +19,7 @@ $$
 \item \textbf{Terms as shallow terms.}
 $$
 \begin{array}{c}
- \ranked {1 + \shallowterm \Sigma {\tmonad \Sigma}\ \ \to \ \  \tmonad \Sigma}\\[5pt]
+ \ranked {1 + \shallowterm \Sigma {\tmonad \Sigma}\ \ \leftrightarrow \ \  \tmonad \Sigma}\\[5pt]
         {
         \begin{tabular}{l}
             Every term is either just a port,\\ or has a root and child subterms.    
@@ -63,7 +63,7 @@ $$
  \ranked{\reduce {k+1} \Sigma \ \ \to \ \ \reduce {k}\Sigma+\bot}\\[5pt]
         {\includegraphics[scale=.4]{pictures/reduce-fold}}	 
 \end{array}$$
-\item \textbf{projection of copairs.}
+\item \textbf{Projection of products.}
 $$
 \begin{array}{c}
    \ranked{\Sigma\product \Sigma \ \ \to \ \ \reduce 1 \Sigma}\\[5pt]
@@ -104,15 +104,15 @@ $$
 \item \textbf{Fold over product.}
 $$
 \begin{array}{c}
-\ranked{(\reduce k \Sigma_1) \product (\reduce k {\Sigma_2}) \ \ \to \ \reduce k (\Sigma_1 \product \Sigma_2)}\\[5pt]
-        {\includegraphics[scale=.4]{pictures/tensor-fold-distrib-2}}  
-\end{array}
-$$
-\item \textbf{Folds over product (bis).}
-$$
-\begin{array}{c}
     \ranked{\reduce k (\Sigma_1 \product \Sigma_2) \ \ \to \ \ \reduce k ((\reduce k {\Sigma_1})\product (\reduce k \Sigma_2))}\\[5pt]
         {\includegraphics[scale=.4]{pictures/tensor-fold-distrib-1}}   
+\end{array}
+$$
+\item \textbf{Fold over product (bis).}
+$$
+\begin{array}{c}
+\ranked{(\reduce k \Sigma_1) \product (\reduce k {\Sigma_2}) \ \ \to \ \reduce k (\Sigma_1 \product \Sigma_2)}\\[5pt]
+        {\includegraphics[scale=.4]{pictures/tensor-fold-distrib-2}}  
 \end{array}
 $$
 \item \textbf{Shallow terms over fold.}
@@ -125,7 +125,7 @@ $$
 \item \textbf{Fold over shallow terms.} 
 $$
 \begin{array}{c}
- \ranked{\reduce k \Sigma\cdot \Gamma\ \ \to \ \ (\reduce k \Sigma) \cdot \mati k \Gamma}\\[5pt]
+ \ranked{\reduce k (\Sigma\cdot \Gamma)\ \ \to \ \ (\reduce k \Sigma) \cdot \mati k \Gamma}\\[5pt]
  {\includegraphics[scale=.4]{pictures/last-prime-function}} 
 \end{array}
 $$

@@ -168,14 +168,14 @@ The descendant relation $<$ connects the $i^{th}$ port of $\underline{x}$ to the
 
 \subsubsection{A first-order transduction for monotone unfolding}
 \label{sec:fo-transduction-for-unfolding}
-Having illustrated the syntax of first-order transduction on the example of the unit function, we describe a first-order transduction for the monotone unfolding operation 
+Having illustrated the syntax of first-order transductions on the example of the unit function, we describe a first-order transduction for the monotone unfolding operation 
 \begin{align*}
     \ranked{\tmonad \mati k{\Sigma} \to \mati k{( \tmonad \Sigma)} + \termset}.
 \end{align*}
 This is the only prime function whose corresponding first-order transduction is not obvious.
 Unlike in Section~\ref{sec:transduction-unit},  we focus more  on the underlying conceptual difficulties than on the syntax of first-order transductions. 
 
-Recall  that when  defining the  monotone  unfolding operation,  for each element $a \in {\tmonad \mati k{\Sigma}}$ of the matrix power, we used a family of (partial) twist functions
+Recall  that when  defining the  monotone  unfolding operation,  for each element $a \in \ranked{\tmonad \mati k{\Sigma}}$ of the matrix power, we used a family of (partial) twist functions
 \begin{align*}
 \to_i : \set{1,\ldots,k} \to \set{1,\ldots,k},
 \end{align*}
@@ -221,7 +221,7 @@ When defining the descendant relation on sub-nodes, the crucial part is composin
 \begin{align}\label{eq:descendant-relationship}
 (x,i) \stackrel?{\le} (y,j),
 \end{align}
-where $x,y$ are nodes on the input term and $i,j \in \set{1,\ldots,k}$. We will show that the descendant relationship~\eqref{lem:reduce-descendant-to-ancestor} holds if and only if $x$ is an ancestor of $y$ in the input term,  and the twist functions on the path connecting $x$ and $y$ maps $j$ to $i$, as explained below. 
+where $x,y$ are nodes on the input term and $i,j \in \set{1,\ldots,k}$. We will show that the descendant relationship~\eqref{eq:descendant-relationship} holds if and only if $x$ is an ancestor of $y$ in the input term,  and the twist functions on the path connecting $x$ and $y$ maps $j$ to $i$, as explained below. 
 
 Consider a path in the input term, which connects  node $x$ with $y$, as  illustrated in the following picture
 \mypic{123}    
