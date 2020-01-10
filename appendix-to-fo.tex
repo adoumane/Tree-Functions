@@ -82,22 +82,22 @@ Let us show how to encode datatypes as relational vocabularies and data as model
     \begin{itemize}
         \item \emph{Finite ranked sets.} Elements of a ranked set   \begin{align*}
         \rSigma =  \set{a_1,\ldots,a_k}
-        \end{align*} are modeled  using a vocabulary which has unary relations $a_1,\ldots,a_k$ and $P_1,\ldots,P_m$ where $m$ is the maximal arity of elements in $\rSigma$. 
+        \end{align*} are modelled  using a vocabulary which has unary relations $a_1,\ldots,a_k$ and $P_1,\ldots,P_m$ where $m$ is the maximal arity of elements in $\rSigma$. 
         For $a \in \rSigma$ of arity $n$, the  universe of $\underline a$ is $\set{0,1,\ldots,n}$, with the ports being $1,\ldots,n$. 
             The  relation $P_i$  is interpreted as $\set i$ when $i \in \set{1,\ldots,n}$ and as the empty set otherwise. The relation $a_i$ is interpreted as $\set 0$ when $a = a_i$ and as the empty set otherwise. 
-        \item \emph{Coproduct.}  Elements of the coproduct $\ranked{\Sigma_1 + \Sigma_2}$ are modeled using the disjoint union of the vocabularies of $\ranked{\Sigma_1}$ and $\ranked{\Sigma_2}$. 
+        \item \emph{Coproduct.}  Elements of the coproduct $\ranked{\Sigma_1 + \Sigma_2}$ are modelled using the disjoint union of the vocabularies of $\ranked{\Sigma_1}$ and $\ranked{\Sigma_2}$. 
             If an element of the coproduct comes from $\ranked{\Sigma_1}$, then its associated model is defined as for the type $\ranked{\Sigma_1}$, with  the remaining relations from the vocabulary of   $\ranked{\Sigma_2}$ interpreted   as empty sets. The definition is analogous for  elements from $\ranked{\Sigma_2}$. 
-        \item \emph{Product.}   Pairs in   $\ranked{\Sigma_1 \product \Sigma_2}$ are modeled
+        \item \emph{Product.}   Pairs in   $\ranked{\Sigma_1 \product \Sigma_2}$ are modelled
         using the disjoint union of the vocabularies of $\ranked{\Sigma_1}$ and $\ranked{\Sigma_2}$. 
             For  $\tensorpair{a_1,a_2}$, the associated model is    the disjoint union of models $\underline{a_1} + \underline {a_2}$, with the relations of $\underline {a_1}$ using the  vocabulary of ${\ranked{\Sigma_1}}$, and the relations of $\underline {a_2}$ using the vocabulary  ${\ranked{\Sigma_1}}$. 
             If $n_1$ is the arity of $a_1$, then the first $n_1$ ports are inherited from  $\underline {a_1}$ and the remaining ports are inherited from  $\underline {a_2}$.
-        % \item \emph{Cartesian product.}   Cartesian pairs in  $\ranked{\Sigma_1 \product \Sigma_2}$ are modeled  using the disjoint union of the vocabularies of $\ranked{\Sigma_1}$ and $\ranked{\Sigma_2}$, plus an extra binary relation $R$.  
+        % \item \emph{Cartesian product.}   Cartesian pairs in  $\ranked{\Sigma_1 \product \Sigma_2}$ are modelled  using the disjoint union of the vocabularies of $\ranked{\Sigma_1}$ and $\ranked{\Sigma_2}$, plus an extra binary relation $R$.  
         %     The model associated to a Cartesian pair   $ (a_1,a_2)$,  is      the disjoint union $\underline{a_1} +  \underline {a_2}$, in the same sense as in the previous item for $\product$,  with the binary relation $R$ interpreted as 
         %         \begin{align*}
         %            \quad \set{(\text{$i$-th port of $\underline {a_1}$}, \text{$i$-th port of $\underline a_2$}): i \in [1,\text{arity of $(a_1,a_2)$}]} 
         %         \end{align*}
         %         The ports are inherited from   $\underline {a_1}$.
-        \item \emph{Folding.}   For $k \in \set{1,2,\ldots}$, elements of   $\reduce k \rSigma$ are modeled using the  vocabulary of $\rSigma$ plus two extra binary relations $\portord$ and $R$. If $a \in \rSigma$ has arity $nk$, then the model associated to $a/f$ -- which has arity $n$ --   is obtained from  $\underline{a}$ by adding a copy of the model below, where $\sqsubset$ is the natural ordering on integers
+        \item \emph{Folding.}   For $k \in \set{1,2,\ldots}$, elements of   $\reduce k \rSigma$ are modelled using the  vocabulary of $\rSigma$ plus two extra binary relations $\portord$ and $R$. If $a \in \rSigma$ has arity $nk$, then the model associated to $a/f$ -- which has arity $n$ --   is obtained from  $\underline{a}$ by adding a copy of the model below, where $\sqsubset$ is the natural ordering on integers
                 \begin{align*}
                 (\set{1,\ldots,n}, \portord),
                 \end{align*}
@@ -107,7 +107,7 @@ whose elements are used as the ports, and interpreting the binary relation $R$ a
         \end{align*}
                 
                 
-        \item \emph{Terms.}   Terms in $\tmonad \rSigma$ are modeled using vocabulary of $\rSigma$ extended with two fresh binary relations $\anceord$ and $\portord$. 
+        \item \emph{Terms.}   Terms in $\tmonad \rSigma$ are modelled using vocabulary of $\rSigma$ extended with two fresh binary relations $\anceord$ and $\portord$. 
           Let $t \in \tmonad \rSigma$. Consider the disjoint union of models
             \begin{align}\label{eq:non-port}
                  \coprod_{x \in \text{non-port nodes in $t$}} \underline{a(x)},
