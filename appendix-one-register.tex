@@ -21,7 +21,7 @@ In this part of the appendix, we show Theorem~\ref{thm:normalise}, which says th
 \subsection{Explaining the restrictions}\label{sec:explaining-restrictions}
 
 Recall that Theorem~\ref{thm:normalise} says that normalisation of $\lambda$-terms is derivable under two assumptions:
-the input term should be linear (actually it could be also affine),  and it could be typed using a fixed finite set of types. 
+the input term should be linear, and could be typed using a fixed finite set of types. 
 
 If the linearity condition is removed, and because of iterated duplication, the normal form of a well-typed $\lambda$-term can be exponential (or worse, see~\cite[Section 3.6]{sorensen_lectures_2006}), as shown by the following example.
  
@@ -87,15 +87,15 @@ Before establishing this lemma, let us see how Proposition~\ref{prop:WellTypedFo
  
 Consider the unary formula $\mathsf{Lambda}(u)$, which expresses that $u$ is a binder node, that its type and the type of its child match well and both belong to $\Tt$: 
 $$\begin{array}{ll}
-\mathsf{Lambda}(u) &:= \underbrace{\lambda x(u)}_{\substack{\text{$u$ has label $\lambda x$}}} \wedge\bigvee_{\substack{\sigma\rightarrow\tau \in S\\x:\sigma}}  \underbrace{\varphi_{\sigma\rightarrow\tau}(u)}_{\substack{\text{$u$ has type $\sigma\rightarrow\tau$}}}  \\ & \wedge \underbrace{\exists v\ \ \mathrm{Succ}_1(u, v) \wedge \varphi_\tau (v)}_{\substack{\text{the child of $u$ has type $\tau$}}}
+\mathsf{Lambda}(u) &:= \underbrace{\lambda x(u)}_{\substack{\text{$u$ has label $\lambda x$}}} \wedge\bigvee_{\substack{\sigma\rightarrow\tau \in \Tt\\x:\sigma}}  \underbrace{\varphi_{\sigma\rightarrow\tau}(u)}_{\substack{\text{$u$ has type $\sigma\rightarrow\tau$}}}  \\ & \wedge \underbrace{\exists v\ \ \mathrm{Succ}_1(u, v) \wedge \varphi_\tau (v)}_{\substack{\text{the child of $u$ has type $\tau$}}}
 \end{array}$$
 Similarly, consider the unary formula $\mathsf{Application}(u)$ which checks that a node is an application node, that the type of its children match well and that both belong to $\Tt$: 
 $$\begin{array}{l}
-\mathsf{Application}(u) := \underbrace{@(u)}_{\substack{\text{$u$ has label @}}} \wedge \\ \exists v, w \underset{\sigma\rightarrow\tau \in S}{\bigvee}  \underbrace{\mathrm{Succ}_1(u, v) \wedge \varphi_{\sigma\rightarrow\tau} (v)}_{\substack{\text{the left child of $u$ has type $\sigma\rightarrow\tau$}}} \wedge \underbrace{\mathrm{Succ}_2(u, w) \wedge \varphi_{\sigma} (w)}_{\substack{\text{the right child of $u$ has type $\sigma$}}}
+\mathsf{Application}(u) := \underbrace{@(u)}_{\substack{\text{$u$ has label @}}} \wedge \\ \exists v, w \underset{\sigma\rightarrow\tau \in \Tt}{\bigvee}  \underbrace{\mathrm{Succ}_1(u, v) \wedge \varphi_{\sigma\rightarrow\tau} (v)}_{\substack{\text{the left child of $u$ has type $\sigma\rightarrow\tau$}}} \wedge \underbrace{\mathrm{Succ}_2(u, w) \wedge \varphi_{\sigma} (w)}_{\substack{\text{the right child of $u$ has type $\sigma$}}}
 \end{array}$$
 Finally, consider the formula $\mathsf{Variable}(u)$, which expresses that $u$ is a variable node, whose type is in $\Tt$:
 \begin{align*}
-\mathsf{Variable}(u) :=  \bigvee_{x:\sigma\in S}\underbrace{x(u)}_{\substack{\text{$u$ has label $x$}}} 
+\mathsf{Variable}(u) :=  \bigvee_{x:\sigma\in \Tt}\underbrace{x(u)}_{\substack{\text{$u$ has label $x$}}} 
 \end{align*}  
 We claim that the following (nullary) formula $\phi$ recognizes the tree language $\NonLinTerms \Tt X$
 \begin{align*}
@@ -157,7 +157,7 @@ A direct consequence of this lemma is that $P_\tau$ recognizes $W_\tau$. Another
 Let us start with some observations. In the pushdown automaton $P_\tau$, the effect of a word $w$ on a stack $s$, starting from the state $p$ is the following: it erases the first $n$ top level elements of $s$, and replaces them by a word $u$. The number $n$ and the word $u$ do not depend on the stack $s$ but only on the word $w$. This is exactly what the following lemma claims.
 
 \begin{lemma}
-For every word $w$ over ${X^\lambda}^*$, there is a natural number $n$ and a word $u\in S^*$ such that if $(p,s)\xrightarrow{w}(p,s')$ then $s$ and $s'$ can be decomposed as follows:
+For every word $w$ over ${X^\lambda}^*$, there is a natural number $n$ and a word $u\in \Tt^*$ such that if $(p,s)\xrightarrow{w}(p,s')$ then $s$ and $s'$ can be decomposed as follows:
 $$s=t.v,\qquad s'=t.u\qquad \text{ and }\qquad |v|=n.$$
 \end{lemma}
 The proof is an easy induction on the length of $w$. As a consequence we have that:
@@ -201,11 +201,15 @@ This section is dedicated to the proof of Theorem~\ref{thm:normalise}. Let us fi
 \includegraphics[scale=1.2]{pictures/redex.pdf}
 \end{center}
 that is, an application node whose left child is an abstraction node. In a well-typed $\lambda$-term, we define the \emph{type of a redex} to be the type of the left sub-term of its application node. In the figure above, the type of the redex is $\tau\rightarrow\sigma$. If the abstraction node of a redex is labeled by $\lambda x$, we say that \emph{$x$ is the variable of the redex} and that this redex is an \emph{$x$-redex}. 
+\medskip
 
-Let us go back to the proof of Theorem~\ref{thm:normalise}. 
-On suppose que nos terms satisfont les restrictions du theorem.
+Let us go back to the proof of Theorem~\ref{thm:normalise}. Before normalising $\lambda$-terms, the first thing to do is to discriminate those $\lambda$-terms satisfying the restrictions of Theorem~\ref{thm:normalise} from the others. This amounts to pre-processing the normalisation process by the function
+\begin{align*}
+\trees \ranked{X^\lambda} \to \trees \ranked{X^\lambda} +\bot
+\end{align*}
+which is the identity for inputs satisfying the restrictions and is undefined otherwise. Let us see how this function can be derived. Thanks to Proposition~\ref{prop:WellTypedFo}, the restrictions of Theorem~\ref{thm:normalise} are first-order definable, say by a first-order query $\phi$. By virtue of Proposition~\ref{prop:forat}, the characteristic function of $\phi$ is derivable. Now following the label's root of the input, we either output the input tree if the label says that it satisfies the query $\phi$, or outputs the undefined symbol otherwise. This last function can be easily derived. From now on, we suppose that our $\lambda$-terms satify the restrictions of Theorem~\ref{thm:normalise}.  
 
-We proceed by induction on the set of types $\Tt$. The main observation is that, if the evaluation of a redex of type $\sigma\rightarrow \tau$ creates new redexes, then their types are either $\sigma$ or $\tau$. They belong, in particular, to  $\Tt\setminus\{\sigma\rightarrow\tau\}$. As a consequence, we only need to show that the function that evaluates all the redexes of a fixed type is derivable. As we only create strictly smaller redexes, we need to iterate this process only finitely many times, the bound being the size of $\Tt$. 
+To normalise $\lambda$-terms, we proceed by induction on the set of types $\Tt$. The main observation is that, if the evaluation of a redex of type $\sigma\rightarrow \tau$ creates new redexes, then their types are either $\sigma$ or $\tau$. They belong, in particular, to  $\Tt\setminus\{\sigma\rightarrow\tau\}$. As a consequence, we only need to show that the function that evaluates all the redexes of a fixed type is derivable. As we only create strictly smaller redexes, we need to iterate this process only finitely many times, the bound being the size of $\Tt$. 
 
   Since we have only finitely many typed variables, it is enough to show that the function that evaluates all the redexes of a fixed type $\sigma$ and a fixed variable $x$ is derivable. This will be our goal in the rest of this section.
 
