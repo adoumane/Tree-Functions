@@ -5,7 +5,7 @@ In this section, we deal with the second computation phase in a first-order regi
 
 
 
-Our proof uses the language of $\lambda$-calculus.  In Section~\ref{sec:one-register},  we discuss derivability of  evaluation for $\lambda$-terms. In Section~\ref{sec:updates-endgame}, we reduce evaluation of register updates to  unfolding the matrix power  and evaluation of $\lambda$-terms.  
+Our proof uses the language of $\lambda$-calculus.  In Section~\ref{sec:one-register},  we discuss derivability of $\lambda$-terms normalisation. In Section~\ref{sec:updates-endgame}, we reduce evaluation of register updates to  unfolding the matrix power  and normalisation of $\lambda$-terms.  
 
 \input{one-register}
 %
@@ -63,7 +63,7 @@ Theorem~\ref{thm:normalise} works without change for the extended definition of 
 % Register valuations and register updates can be thought of as lists of terms, ordered using the linear order on registers. 
 To prove Lemma~\ref{lem:derive-register-updates}, we represent  register updates using a matrix power of $\lambda$-terms. The idea is that the matrix power handles the parallel evaluation of registers.
 
-Let $X$ be a set of variables $\set{x_1\dots,x_m}$, all of them having type $\otype$,  where $m$ is the maximal arity among registers. Define  $\ranked{\Gamma_\lambda}$ to be the output alphabet $\rGamma$ plus the ranked alphabet defined in~\eqref{eq:non-pure} for tree representations of  $\lambda$-terms. 
+Let $X$ be a set of variables $\set{x_1\dots,x_m}$, all of them having type $\otype$,  where $m$ is the maximal arity among registers. Define  $\ranked{\Gamma_\lambda}$ to be the output alphabet $\rGamma$ plus the ranked alphabet defined in~\eqref{eq:alphabet-for-lambda-terms} for tree representations of  $\lambda$-terms. 
 
 Recall that a register update -- of arity say $n$ -- consists of a family of terms  over alphabet $\ranked{\Gamma + n\regnames}$, one for each register $r \in \regnames$. We begin by explaining the $\lambda$-representation for terms in the family, which is a function 
  of type
@@ -201,7 +201,7 @@ hence Theorem~\ref{thm:normalise} can be applied.
 \label{page:monotone-discussed}
 
 
-\paragraph*{Putting it all together.} To finish the proof of Lemma~\ref{lem:derive-register-updates}, we   observe  that the semantics of a register automaton are translated -- under the $\lambda$-representation -- to unfolding the matrix power and evaluating a $\lambda$-term.  This observation is formalised by saying that the diagram in Figure~\ref{fig:lambda-representation-diagram} commutes, and it  follows directly from the definitions. Instead of giving a proof, we illustrate it on an example in Figure~\ref{fig:lambda-representation-proof}.
+\paragraph*{Putting it all together.} To finish the proof of Lemma~\ref{lem:derive-register-updates}, we   observe  that the semantics of a register automaton are translated -- under the $\lambda$-representation -- to unfolding the matrix power and normalising a $\lambda$-term.  This observation is formalised by saying that the diagram in Figure~\ref{fig:lambda-representation-diagram} commutes, and it  follows directly from the definitions. Instead of giving a proof, we illustrate it on an example in Figure~\ref{fig:lambda-representation-proof}.
 
 
 
@@ -220,7 +220,7 @@ hence Theorem~\ref{thm:normalise} can be applied.
             $
             \mati k {\ranked{(\tmonad \Gamma_\lambda)}}
             $}
-            \ar[d]^{\substack{\text{evaluate}\\\text{$\lambda$-terms}}}_{\text{(e)}}\\
+            \ar[d]^{\substack{\text{normalise}\\\text{$\lambda$-terms}}}_{\text{(e)}}\\
              \text{register valuations}
             \ar[r]_-{\ranked{\text{$\lambda$-representation}}}^{\text{(b)}}
             &
@@ -251,7 +251,7 @@ We claim that all of the arrows (c), (d) and (e) on the  right-down path  in  Fi
     %         \mati k {(\tmonad \rGamma_\lambda)}} = \reduce  k {\powersmall{(\tmonad \rGamma_\lambda)}{k}}.
     % \end{align*}
     % To convert this output into a tuple of trees, we use the last prime function in Figure~\ref{fig:monad} to remove the fold $\reduce k$.
-    \item[(e)] Finally, arrow (e) represents the evaluation of $\lambda$-terms. This arrow is derivable by Theorem~\ref{thm:normalise}. The assumptions of this theorem are met by property (P3).
+    \item[(e)] Finally, arrow (e) represents normalisation of $\lambda$-terms. This arrow is derivable by Theorem~\ref{thm:normalise}. The assumptions of this theorem are met by property (P3).
 \end{itemize}
 Since the arrows (c), (d), (e) are derivable, and the diagram commutes, it follows that  the composition of the arrows (a) and (b) is derivable. In other words, there is a derivable function which maps a tree of register updates to the $\lambda$-representation of the resulting register valuation (when viewing a register valuation as a special case of a register update of arity zero). Finally, to get the contents of the output register, we get rid of the fold in the matrix power by using the last function from Figure~\ref{fig:monad}, and  project onto the coordinate for the output register. 
 

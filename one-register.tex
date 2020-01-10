@@ -1,4 +1,4 @@
-\subsection{Evaluation of simply typed linear $\lambda$-terms}
+\subsection{Normalisation of simply typed linear $\lambda$-terms}
 \label{sec:one-register}
 
 % In this section, we explain how $\lambda$-terms can be evaluated using a derivable function, assuming that the $\lambda$-terms are linear and  can be typed using a bounded number of types. These notions will be explained in more detail below.  
@@ -38,13 +38,13 @@ where @ represents term application. Using this representation, and assuming tha
 \begin{align*}
 \text{$\lambda$-term} \qquad \mapsto \qquad \text{its normal form},
 \end{align*}
-which we call evaluation of $\lambda$ terms. 
+which we call normalisation of $\lambda$ terms. 
  We show that this function is derivable, under two assumptions on the input $\lambda$-term. 
  
  The first assumption is that the input $\lambda$-term is \emph{linear}: 
     every bound variable is exactly once in its scope\footnote{This restriction could easily be relaxed to ``at most once''.}, but free variables are allowed to appear multiple times.  
     % If we allowed non-affine terms, then evaluation could lead to normal forms of super-linear size (e.g.~exponential), and thus could not be derivable.  For affine $\lambda$-terms, each step of $\beta$-reduction reduces the size by two or three, and therefore the normal form cannot be bigger than the original $\lambda$-term. 
-     The second assumption is that  the input $\lambda$-term can be typed using a fixed finite set of types $\Tt$: it has type in $\Tt$, and the same is true for all of its  sub-terms.  In the appendix, we explain why  assumptions are needed.
+     The second assumption is that  the input $\lambda$-term can be typed using a fixed finite set of types $\Tt$: it has type in $\Tt$, and the same is true for all of its  sub-terms.  In Appendix~\ref{sec:explaining-restrictions}, we explain why  assumptions are needed.
 
 
 % Because of iterated duplication, the normal form of a well-typed $\lambda$-term can be exponential, as witnessed by Example~\ref{ex:exponential} in the appendix.
