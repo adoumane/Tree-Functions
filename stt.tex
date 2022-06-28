@@ -64,6 +64,8 @@ define its \emph{evaluation} to be the register valuation defined by induction i
 % \ranked{u}(\ranked {u_1},\ldots,\ranked{u_n})  \qquad \text{of arity $m_1+\cdots + m_n$}
 % \end{align*}
 
+
+
 \paragraph*{First-order relabellings.} Our automaton model has no states. Instead, it uses a first-order relabelling, as defined below, to  directly assign to each node of the input tree a register update that will be applied in that node. A similar model is used by    Bloem and Engelfriet~\cite[Theorem 17]{bloem_comparison_2000}, except that in their case, the first phase uses  \mso relabellings, and the second phase is   an attribute grammar. 
 
 
@@ -136,8 +138,12 @@ The semantics of the transducer is  a tree-to-tree function, defined as follows.
 
 The main difference of our model with respect to prior work is that we want to capture  tree transformations defined in first-order logic, as opposed to \mso used in~\cite{bloem_comparison_2000,alurStreamingStringTransducers2011,alur2017streaming}. This is why we use first-order relabellings instead of  \mso relabellings.  For the same reason, we require the register updates to be monotone, see the discussion in Section~\ref{sec:unfolding}.  
 % We conjecture that monotonicity -- which is essential to our model -- cannot be achieved without
-
- 
+\begin{proposition}\label{prop:unary-register-stt}
+For every first-order register transducer, there is a first-order register transducer defining the same function, and whose registers are all unary.
+\end{proposition}
+% \begin{proof}
+% Proof sketch here? \todo{complete}
+% \end{proof}
 % The following two examples explain the single-use and monotonicity restrictions. 
 % \begin{example}\label{ex:single-use}
 %     To see the need for the single-use restriction, consider the following abstract register tree transducer, which is not single-use. The input alphabet has two letters of arities zero and one. There is one register $r$ of arity zero, and the update function is the following tree homomorphism \mypic{33}

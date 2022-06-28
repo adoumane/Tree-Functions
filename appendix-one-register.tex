@@ -20,8 +20,8 @@ In this part of the appendix, we show Theorem~\ref{thm:normalise}, which says th
 
 \subsection{Explaining the restrictions}\label{sec:explaining-restrictions}
 
-Recall that Theorem~\ref{thm:normalise} says that normalisation of $\lambda$-terms is derivable under two assumptions:
-the input term should be linear, and could be typed using a fixed finite set of types. 
+Recall that Theorem~\ref{thm:normalise} says that normalisation of $\lambda$-terms is derivable under three assumptions:
+the input term should be linear, uses a unique variable $x$ and could be typed using a fixed finite set of types. 
 
 If the linearity condition is removed, and because of iterated duplication, the normal form of a well-typed $\lambda$-term can be exponential (or worse, see~\cite[Section 3.6]{sorensen_lectures_2006}), as shown by the following example.
  
@@ -62,6 +62,23 @@ This is a well-typed affine term, whose type is
 then there would be a first-order formula which would be true for terms of the form~\eqref{eq:complicated-term} with $m>n$ and which would be false for terms of the form~\eqref{eq:complicated-term} with $m=n$. Such a formula cannot exist, which can be shown using a pumping argument or Ehrenfeucht-Fra\"iss\'e games. 
 \end{example}
 
+\begin{example}\label{ex:tito}
+Let $\mathsf{not}$ and $\mathsf{id}$ be the following terms:
+\begin{align*}
+\mathsf{not} \eqdef \lambda \typevar b {\otype \to \otype \to \otype} . \lambda \typevar x {\otype} . \lambda \typevar y {\otype} . \typevar b {\otype \to \otype \to \otype} \typevar y {\otype} \typevar x {\otype}  \\
+ \mathsf{id} \eqdef \lambda \typevar b {\otype \to \otype \to \otype}. \lambda \typevar x {\otype}. \lambda \typevar y {\otype}. \typevar b {\otype \to \otype \to \otype} \typevar x {\otype} \typevar y {\otype}
+\end{align*}
+For every $n\geq 1$, we let $\mathsf{not}_n$ be the following term:
+\begin{align*}
+\mathsf{not}_n = \lambda \typevar b {\otype \to \otype \to \otype}. \overbrace{\mathsf{not} \cdots \mathsf{not}}^{\text{$n$ times}} \typevar b {\otype \to \otype \to \otype}
+\end{align*}
+The normal form of $\mathsf{not}_n$ is $\mathsf{not}$ when $n$ is odd, and  $\mathsf{id}$ when $n$ is even. 
+
+The $\lambda$-terms $\mathsf{not}_n$ cannot be normalised using
+a first-order transduction. Otherwise we would have a first-order formula which is true for those terms $\mathsf{not}_n$ where $n$ is even and false when $n$ is odd. This formula cannot exist for the same reason as the example above.  
+
+Note that $\mathsf{not}_n$ is linear and its subterms can be typed using only the types $\otype, \otype\to\otype$ and ${\otype \to \otype \to \otype}$. By restricting ourselves to terms which uses a unique bound variable, we avoid this situation. 
+\end{example}
 \subsection{Restrictions of Theorem~\ref{thm:normalise} are first-order definable} \label{sec:restrictions-are-fo}
 
 In this section, we show that the restrictions of Theorem~\ref{thm:normalise} discussed above, are first-order definable, as stated in the following theorem.
@@ -200,7 +217,12 @@ This section is dedicated to the proof of Theorem~\ref{thm:normalise}. Let us fi
 \begin{center}
 \includegraphics[scale=.5]{pictures/redex.pdf}
 \end{center}
-that is, an application node whose left child is an abstraction node. In a well-typed $\lambda$-term, we define the \emph{type of a redex} to be the type of the left sub-term of its application node. In the figure above, the type of the redex is $\tau\rightarrow\sigma$. If the abstraction node of a redex is labeled by $\lambda x$, we say that \emph{$x$ is the variable of the redex} and that this redex is an \emph{$x$-redex}. 
+that is, an application node whose left child is an abstraction node. In a linear $\lambda$-term, we call \emph{full redex} a set of nodes  containing a redex, the node of its variable, together with the set of nodes between them, as illustrated below
+\begin{center}
+\includegraphics[scale=1.5]{pictures/full-redex.pdf}
+\end{center}
+ %In a well-typed $\lambda$-term, we define the \emph{type of a redex} to be the type of the left sub-term of its application node. In the figure above, the type of the redex is $\tau\rightarrow\sigma$. 
+%If the abstraction node of a redex is labeled by $\lambda x$, we say that \emph{$x$ is the variable of the redex} and that this redex is an \emph{$x$-redex}. 
 \medskip
 
 Let us go back to the proof of Theorem~\ref{thm:normalise}. Before normalising $\lambda$-terms, the first thing to do is to discriminate those $\lambda$-terms satisfying the restrictions of Theorem~\ref{thm:normalise} from the others. This amounts to pre-processing the normalisation process by the function
@@ -209,22 +231,22 @@ Let us go back to the proof of Theorem~\ref{thm:normalise}. Before normalising $
 \end{align*}
 which is the identity for inputs satisfying the restrictions and is undefined otherwise. Let us see how this function can be derived. Thanks to Proposition~\ref{prop:WellTypedFo}, the restrictions of Theorem~\ref{thm:normalise} are first-order definable, say by a first-order query $\phi$. By virtue of Proposition~\ref{prop:forat}, the characteristic function of $\phi$ is derivable. Now following the label's root of the input, we either output the input tree if the label says that it satisfies the query $\phi$, or outputs the undefined symbol otherwise. This last function can be easily derived. From now on, we suppose that our $\lambda$-terms satify the restrictions of Theorem~\ref{thm:normalise}.  
 
-To normalise $\lambda$-terms, we proceed by induction on the set of types $\Tt$. The main observation is that, if the evaluation of a redex of type $\sigma\rightarrow \tau$ creates new redexes, then their types are either $\sigma$ or $\tau$. They belong, in particular, to  $\Tt\setminus\{\sigma\rightarrow\tau\}$. As a consequence, we only need to show that the function that evaluates all the redexes of a fixed type is derivable. As we only create strictly smaller redexes, we need to iterate this process only finitely many times, the bound being the size of $\Tt$. 
+To normalise $\lambda$-terms satisfying the conditions of Thm.~\ref{thm:normalise}, the main observation is that the evaluation of a redex does not create new redexes. Hence, it suffices to reduce all the available redexes in such term to reach the normal form. 
 
-  Since we have only finitely many typed variables, it is enough to show that the function that evaluates all the redexes of a fixed type $\sigma$ and a fixed variable $x$ is derivable. This will be our goal in the rest of this section.
+%  Since we have only finitely many typed variables, it is enough to show that the function that evaluates all the redexes of a fixed type $\sigma$ and a fixed variable $x$ is derivable. This will be our goal in the rest of this section.
 
-\begin{proposition}\label{thm:evalOneType}
-    Let $X$ be a finite set of simply typed variables, $\typeset$ be a finite set of simple types, $x$ be a variable in $X$ and $\sigma$ a simple type in $\Tt$.
-    The following tree-to-tree function is derivable:
-    \begin{itemize}
-        \item{\bf Input.} A $\lambda$-term $t$ over variables $X$.
-        \item {\bf Output.} The $\lambda$-term obtained by evaluating in $t$ all the $x$-redexes of type $\sigma$, if $t$ is in $\NonLinTerms \Tt X$, and undefined otherwise.
-    \end{itemize}
-\end{proposition}
+%\begin{proposition}\label{thm:evalOneType}
+%    Let $X$ be a finite set of simply typed variables, $\typeset$ be a finite set of simple types, $x$ be a variable in $X$ and $\sigma$ a simple type in $\Tt$.
+%    The following tree-to-tree function is derivable:
+%    \begin{itemize}
+%        \item{\bf Input.} A $\lambda$-term $t$ over variables $X$.
+%        \item {\bf Output.} The $\lambda$-term obtained by evaluating in $t$ all the redexes of type $\sigma$, if $t$ satisfies the conditions of Thm.~\ref{thm:normalise}, and undefined otherwise.
+%    \end{itemize}
+%\end{proposition}
 
-To show this proposition, we will factorise (via a derivable function) our \lambdaterms into factors satisfying the following properties:
+To show Thm.~\ref{thm:normalise}, we will factorise (via a derivable function) our \lambdaterms into factors satisfying the following properties:
 \begin{itemize}
-\item[(P1)] All the $x$-redexes of type $\sigma$ fall entirely into one of the factors. 
+\item[(P1)] Every full redex falls into one of the factors. 
 %In other words, for every such redex, its application node, its abstraction node, and the variable it binds are in the same factor.
 \item[(P2)] Each factor have a a very specific shape called \emph{thin}. These factors are those $\lambda$-terms with ports whose normal form have the shape of a word (by opposition to trees, which is the general case).
 \end{itemize}
@@ -239,7 +261,7 @@ By properties (P1) and (P2), it is enough to show that normalisation of thin \la
 
 As discussed earlier, we will need to normalise \lambdaterms with ports (the factors of our factorisation). In the following, we will denote by $\ranked{\ranked{\lamrank X}}$ the ranked set 
 \begin{align*}
-     \overbrace{\set{x : x \in X}}^{\text{arity 0}} \cup \overbrace{\set{\lambda x : x \in X}}^{\text{arity 1}} \cup  \overbrace{\set @}^{\text{arity 2}}
+     \overbrace{\set{y : y \in X}}^{\text{arity 0}} \cup \overbrace{\set{\lambda x }}^{\text{arity 1}} \cup  \overbrace{\set @}^{\text{arity 2}}
 \end{align*}
 With this notation, \lambdaterms with ports are the inhabitants of $\ranked{\tmonad \ranked{\lamrank X}}$. Normalisation of these terms generalizes that of usual \lambdaterms in a straightforward way: the $i$-th port is replaced by a fresh variable $x_i$, the obtained \lambdaterm (without ports) is evaluated as usual, then the variable $x_i$ is replaced back by the port $i$, as one can see in the following example.  
   \begin{center}
@@ -274,7 +296,7 @@ The left $\lambda$-term below is linear and thin. The rednodes are the ones whic
     The following tree-to-tree function is derivable:
     \begin{itemize}
         \item{\bf Input.} A $\lambda$-term $t$ over variables $X$.
-        \item {\bf Output.} The normal form of $t$, if it is linear and thin, and undefined otherwise.
+        \item {\bf Output.} The normal form of $t$, if it is  thin and satisfies the conditions of Thm.~\ref{thm:normalise}, and undefined otherwise.
     \end{itemize}
 \end{proposition}
 
@@ -287,27 +309,25 @@ The order in which the inner nodes (ie. non ports) of $u$ appear top-down is the
 \begin{proof}
 To establish this proposition, we need the following lemma.
 \begin{lemma}\label{lem:internalLemma}
-Let $t$ be a linear thin $\lambda$-term and let $r$ be one of its redexes. Consider $m$ to be the binder node of $r$ and $n$ to be its variable node.
+Let $t$ be a linear thin $\lambda$-term which binds only the variable $x$ and let $r$ be one of its redexes. Consider $m$ to be the binder node of $r$ and $n$ to be the node of the variable it binds.
 
-The node $n$ is the greatest (that is the left-most) node in the sub-term $t|_m$ w.r.t. the pre-order. 
+The node $n$ is the greatest (that is the right-most) node in the sub-term $t|_m$ w.r.t. the pre-order. 
 \end{lemma}
 
-\begin{proof}
-We proceed by induction on the length of the path between $m$ and $n$. When it is $0$ the result is clear. Suppose by contradiction that it is strictly greater than $0$ and that there is a node $o$ which is strictly greater than $n$. We take $o$ to be the smallest node which is greater than $n$. Since $t$ is thin, the least common ancestor $l$ between $n$ and $o$ is an application node of a redex. Since $n$ is smaller than $o$, $n$ is the left descendant  of $l$, in other words it is the descendant of the left child $p$
-of $l$, which is a binder. The node $m, n, o$ and $p$ are illustrated below:
+\begin{proof} Suppose by contradiction that  there is a node $o$ which is strictly greater than $n$ in the subterm $t|_m$.  Since $t$ is thin, the least common ancestor $l$ between $n$ and $o$ is an application node of a redex. By hypothesis on the term $t$, the binder of this redex is $\lambda x$.  Since $n$ is smaller than $o$, $n$ is the left descendant  of $l$, in other words it is the descendant of the left child $p$
+of $l$, which is a binder $\lambda x$. The node $m, n, o$ and $p$ are illustrated below:
 \begin{center}
 		\includegraphics[scale=.3]{pictures/lemma-thin.pdf}
 \end{center} 
- By induction hypothesis, the variable
-bound by $p$ is strictly greater than $n$. Is is also strictly smaller than $o$, which gives a contradiction and concludes the proof. 
+ The variable of the node $n$ is under the scope of the binder of the node $p$, which contradicts the fact that it is bound by the binder of the node $m$, which concludes the proof. 
 \end{proof}
 
-Let us go back to the proof of our proposition. Consider two inner nodes $n, m$ of $t$ which are also nodes of $u$, and such that $m$ is smaller than $n$ is the pre-order of $t$ (we well call it simply pre-order in the rest of the proof). We show that $n$ is a descendant of $m$ in $u$. There is two cases to consider:
+Let us go back to the proof of our proposition. Consider two inner nodes $n, m$ of $t$ which are also nodes of $u$, and such that $m$ is smaller than $n$ in the pre-order of $t$ (we well call it simply pre-order in the rest of the proof). We show that $n$ is a descendant of $m$ in $u$. There is two cases to consider:
 \begin{itemize}
 \item Either $n$ is a descendant of $m$ in $t$, in this case we can conclude easily since $\beta$-reduction preserves the descendant relation. Indeed, by a small analysis of $\beta$-reduction, one can notice that a reduction step may extend the descendant relation, but can never change (or break) the order of two comparable nodes in the original $\lambda$-term.  
-\item  Otherwise, let us consider the lowest common ancestor $p$ of $m$ and $n$. We proceed by induction on the length of the path between $m$ and $p$. By definition of thin $\lambda$-terms, since $p$ is branching it is necessarily an application node, whose left child $q$ is a binder node, let us say $\lambda x$. 
+\item  Otherwise, let us consider the lowest common ancestor $p$ of $m$ and $n$. We proceed by induction on the length of the path between $m$ and $p$. By definition of thin $\lambda$-terms, since $p$ is branching it is necessarily an application node, whose left child $q$ is a binder node  $\lambda x$. 
 By Lemma~\ref{lem:internalLemma}, $m$ is smaller w.r.t. the pre-order than the node $r$ of the variable bound by $q$ . 
-We are then left with the following two situations. The first case, illustrated by the left figure below, is when $r$ is a descendant of $m$ in $t$. In this case, after one reduction step $n$ will be a descendant of of $m$. The other case is when $m$ is in the left of $r$ in $t$, as illustrated by the right figure below. In this case, after one reduction step, the lowest common ancestor between $m$ and $n$ will be a descendant of $p$, and we can conclude by induction hypothesis. 
+We are then left with the following two situations. The first case, illustrated by the left figure below, is when $r$ is a descendant of $m$ in $t$. In this case, after one reduction step, $n$ will be a descendant of $m$. The other case is when $m$ is in the left of $r$ in $t$, as illustrated by the right figure below. In this case, after one reduction step, the lowest common ancestor between $m$ and $n$ will be a descendant of $p$, and we can conclude by induction hypothesis. 
 \begin{center}
 \includegraphics[scale=.3]{pictures/cases-lemma}
 \end{center}
@@ -316,7 +336,7 @@ This concludes the proof of the first claim.
 %\end{center}    
 \end{proof}
 
-Let us construct now a derivable function which computes the normal form of linear thin $\lambda$-terms. We illustrate this construction on the term $t$ below which will be our running example in this proof. 
+Let us construct now a derivable function which computes the normal form of linear thin $\lambda$-terms binding a single variable $x$. We illustrate this construction on the term $t$ below which will be our running example in this proof. 
 \begin{center}
 \includegraphics[scale=.4]{pictures/running-thin}
 \end{center}
@@ -340,19 +360,20 @@ We start by distinguishing the redexes of $t$ and their variables from the other
     \end{center}
     This query is first-order expressible. Indeed it is the disjunction of the following queries
 $$\begin{array}{rl}
-@\mathsf{Redex}(u) = & @(u) \wedge \exists v \ \mathrm{Child}_1(u,v) \wedge \bigvee_{x\in X}\lambda x(v)\\[8pt]
+@\mathsf{Redex}(u) = & @(u) \wedge \exists v \ \mathrm{Child}_1(u,v) \wedge \lambda x(v)\\[8pt]
 \lambda\mathsf{Redex}(u)=& \lambda x(u) \wedge \exists v \ \mathrm{Child}_1(v,u) \wedge @(v) \\[8pt]
-X\mathsf{Redex}(u) = &\bigvee_{x\in X} x(u) \wedge \exists v\ \lambda\mathsf{Redex}(v) \wedge v\ \mathsf{binds}\ u
+X\mathsf{Redex}(u) = & x(u) \wedge \exists v\ \lambda\mathsf{Redex}(v) \wedge v\ \mathsf{binds}\ u
 \end{array}$$
 where $@\mathsf{Redex}(u)$ says that $u$ is the application node of a redex, $\lambda\mathsf{Redex}(u)$ says that it is the abstraction node of a redex and $X\mathsf{Redex}(u)$ says that it is the variable of a redex. 
 The formula $u\ \mathsf{binds}\ v$, defined below,  is a binary first-order query expressing that the node $u$ is an abstraction node that binds $v$.
  \begin{align*}
- \bigvee_{x\in X} \lambda x(u) \wedge x(v) \wedge u<v\wedge \forall u<w<v\ \neg \lambda x(w)
+ &\lambda x(u) \wedge x(v) \wedge(u<v)\ \\
+ \wedge \ & \forall u,v,w.\ u<w<v\Rightarrow \neg \lambda x(w)
  \end{align*}
 
-The query $\varphi$ being first-order, its characteristic function is derivable thanks to Proposition~\ref{prop:forat}. 
+The formula $\varphi$ being a first-order query, its characteristic function is derivable thanks to Proposition~\ref{prop:forat}. 
 
-When we apply this function to $t$, we get a term in $\ranked{\tmonad(\ranked{\lamrank X}+\ranked{\lamrank X})}$ term below. 
+When we apply this function to $t$, we get a term in $\ranked{\tmonad(\ranked{\lamrank X}+\ranked{\lamrank X})}$. 
 Below is the effect of this first step on our running example. We colored in red the nodes belonging to the first copy of $\ranked{\lamrank X}$, that is the nodes satisfying the query $\varphi$. These nodes are the ones that will disappear in the normal form of $t$. 
 \begin{center}
 \includegraphics[scale=.4]{pictures/running-thin-2}
@@ -371,7 +392,7 @@ In this term, the nodes of the normal form appear in the right order thanks to P
 \ranked{\ranked{\tmonad (X^\lambda+X^\lambda + 0+
 2)} \to \ranked{\tmonad (X^\lambda+X^\lambda + 0+2+1) }}
 \end{align*}
- which adds the unary symbol $1$ as the parent of every node $2$. This function can be easily implemented using the derivable homomorphism function of Example~\ref{ex:morphism}. Then we apply the factorisation $\ancfact$
+ which adds the unary symbol $1$ as the parent of every node $2$. This function can be easily  derivable. Then we apply the factorisation $\ancfact$
  to separate the symbol $1$ from the others:
  \begin{align*}
  \ranked{\ancfact : \tmonad (X^\lambda+X^\lambda + 0+2+1) \to \tmonad (\tmonad(X^\lambda+X^\lambda + 0+2)+\tmonad 1))}
@@ -406,7 +427,7 @@ which untwists two consecutive applications of $\reduce 1$. Doing so, we get a t
 \end{center}
 
 \item Note that we obtained the desired term, but not with the desired type. To obtain a term in 
-$\ranked{\reduce 1\tmonad{X^\lambda}}$, we get rid of the labels $0+2$ by transforming them respectively into variables and application nodes. The choice of which variables to choose is not important, since the only terms that will actually have $0+2$ in their results are \lambdaterms which are not linear or not thin.
+$\ranked{\reduce 1\tmonad{X^\lambda}}$, we get rid of the labels $0+2$ by transforming them respectively into variables and application nodes. The choice of which variables to choose is not important, since the only terms that will actually have $0+2$ in their results are \lambdaterms which are not thin or do not satisfy the conditions of Thm.~\ref{thm:normalise}.
 \end{enumerate}
 \end{proof}
 
@@ -416,16 +437,12 @@ $\ranked{\reduce 1\tmonad{X^\lambda}}$, we get rid of the labels $0+2$ by transf
 
 \subsubsection{Factorising $\lambda$-terms into blocks of thin $\lambda$-terms}\label{subsub:facto}
 
-In a linear $\lambda$-term, we call \emph{full redex} a set of nodes  containing a redex, the node of its variable, together with the set of nodes between them, as illustrated below
-\begin{center}
-\includegraphics[scale=.4]{pictures/full-redex.pdf}
-\end{center}
 
 
-\begin{proposition}\label{prop:FactoIntoThin} For every finite set of typed variables $X$, for every finite set of types $\Tt$ and for every $x\in X$ and $\sigma\in \Tt$, there is a factorisation $$\ranked{f:\tmonad \ranked{X^\lambda} \to \tmonad\tmonad \ranked{X^\lambda}+\bot}$$ 
-which satisfies, for every linear \lambdaterm $t$, that
+\begin{proposition}\label{prop:FactoIntoThin} For every finite set of typed variables $X$, for every finite set of types $\Tt$ and for every $x\in X$, there is a factorisation $$\ranked{f:\tmonad \ranked{X^\lambda} \to \tmonad\tmonad \ranked{X^\lambda}+\bot}$$ 
+which satisfies, for every \lambdaterm $t$ satisfying the conditions of Thm.~\ref{thm:normalise}, that
 \begin{itemize}
-\item[(1)] every full $x$-redex of type $\sigma$ in $t$ is entirely contained in one of the factors of $f(t)$;
+\item[(1)] every full redex of $t$ is entirely contained in one of the factors of $f(t)$;
 \item[(2)] the factors of $f(t)$ are thin.
 \end{itemize}
 and is undefined otherwise.
@@ -444,17 +461,15 @@ Let us show how to derive the function $\ranked{g}$, so that the $1$-nodes it in
 
 We define $\ranked{g}$ as the composition of the characteristic function of three first-order unary queries: $\mathsf{@redex}, \mathsf{Right}$ and $\mathsf{Left}$, followed by a homomorphims $\ranked{h}$. We define them in the following:
 \begin{itemize}
-\item The property $\mathsf{@Redex}$ checks whether a node is the application node of an $x$-redex of type $\sigma$. It can be expressed by the following first-order formula, where  $\varphi_\sigma$ is a first-order formula which decides if the type of a node is $\sigma$ (for instance the one given by Lemma~\ref{lem:IsTypeTauFo}):
-\begin{align*} \mathsf{App}( u ):=& \mathsf{@}(u)\ \wedge\ \exists v\  \mathrm{Succ}_1(u, v) \wedge \lambda x(v)\ \wedge\ \varphi_\sigma(v)
-\end{align*} 
-\item The query $\mathsf{Right}$ (resp. $\mathsf{Left}$) checks if the node is an application node, which lies, together with his right (resp. left) child, between the application node of an $x$-redex of type $\sigma$ and the node it binds. Those properties can be easily expressed by a first-order formula.
+\item The property $\mathsf{App}$ checks whether a node is the application node of a redex. It can be easily expressed by a first-order formula.
+\item The query $\mathsf{Right}$ (resp. $\mathsf{Left}$) checks if the node is an application node, which lies, together with his right (resp. left) child, between the binder of a redex  and the node it binds. Those properties can also be easily expressed by a first-order formula.
 \end{itemize}
 
 When we apply the characteristic functions of these queries to a term in $\ranked{\tmonad X^\lambda}$, each node will be decorated by three informations: whether is satisfies or not $\mathsf{App}$,  whether is satisfies or not $\mathsf{Right}$ and whether is satisfies or not $\mathsf{Left}$. Note that for linear $\lambda$-terms, some combinations of these properties cannot hold in the same node. For instance, a node cannot satisfy $\mathsf{Right}$ and $\mathsf{Left}$ simultaneously, as this would contradict linearity. 
 
 Now we define the homomorphism $\ranked{h}$, which maps the $\lambda$-terms with these three informations to terms of $\ranked{\tmonad (\ranked{X^\lambda}+1)}$. We define the action of $\ranked{h}$ on each node, depending on its label and the three informations it contains:
 \begin{itemize}
-\item If the label of the node is $y$ or $\lambda y$ for some variable $y\in X$, or if the label is $@$ and satisfies $\mathsf{App}$, then $\ranked{h}$ returns the same node (seen as a term), forgetting the extra three informations.
+\item If the label of the node is $y$  for some variable $y\in X$, or if the label is $@$ and satisfies $\mathsf{App}$, then $\ranked{h}$ returns the same node (seen as a term), forgetting the extra three informations.
 \item If the node is an application node satisfying 
 \begin{align*}
 \neg \mathsf{App} \wedge \neg \mathsf{Right} \wedge\neg \mathsf{Left} 
@@ -462,12 +477,12 @@ Now we define the homomorphism $\ranked{h}$, which maps the $\lambda$-terms with
 then $\ranked{h}$ adds $1$ to the two children of the node.
 \item If the node is an application node satisfying 
 \begin{align*}
-\neg \mathsf{App} \wedge \neg \mathsf{Right} \qquad\text{(resp. } \neg \mathsf{App} \wedge \neg \mathsf{Left} \text{)}
+\neg \mathsf{App} \wedge \mathsf{Right} \qquad\text{(resp. } \neg \mathsf{App} \wedge \mathsf{Left} \text{)}
 \end{align*} 
 then $\ranked{h}$ adds $1$ to the left (resp. right) child of the node. 
 \end{itemize}
-Let $t$ be a linear $\lambda$-term. We show that the factors induced by $g$ satisfy the two conditions of Proposition~\ref{prop:FactoIntoThin}. First of all, by analyzing the action of $\ranked{h}$ on each node, note that every application node will receive $1$ as one of its children, except when it is satisfies $\mathsf{App}$. Thus the only branching nodes in a factor are redexes, hence the factors are thin. Now suppose by contradiction that there is some full $x$-redex of type $\sigma$ of $t$ which is not entirely contained in a factor. This means that in $\ranked{g}(t)$ there is a $1$ between the application node of some $x$-redex of type $\sigma$ and its variable.
-By construction of $\ranked{h}$, $1$ is the child of an application node (call it $n$). Suppose w.l.o.g. that it is the right child of $n$. The node $n$ cannot satisfy $\mathsf{App}$ because it got $1$ as a child by $\ranked{h}$. Is satisfies $\mathsf{Right}$ by the contradiction hypothesis. Thus its satisfies $\neg \mathsf{App} \wedge \neg \mathsf{Right}$, therefore it receives also $1$ as its left child by $h$. This means that $n$ received $1$ for its both children, and the only way to get that is to satisfy $\neg \mathsf{App} \wedge \neg \mathsf{Right} \wedge\neg \mathsf{Left}$, which gives a contradiction. 
+Let $t$ be a linear $\lambda$-term. We show that the factors induced by $g$ satisfy the two conditions of Proposition~\ref{prop:FactoIntoThin}. First of all, by analyzing the action of $\ranked{h}$ on each node, note that every application node will receive $1$ as one of its children, except when it is satisfies $\mathsf{App}$. Thus the only branching nodes in a factor are redexes, hence the factors are thin. Now suppose by contradiction that there is some full redex  of $t$ which is not entirely contained in a factor. This means that in $\ranked{g}(t)$ there is a $1$ between the application node of some redex  and its variable.
+By construction of $\ranked{h}$, $1$ is the child of an application node (call it $n$). Suppose w.l.o.g. that it is the right child of $n$. The node $n$ cannot satisfy $\mathsf{App}$ because it got $1$ as a child by $\ranked{h}$. Is satisfies $\mathsf{Right}$ by the contradiction hypothesis. Thus its satisfies $\neg \mathsf{App} \wedge  \mathsf{Right}$, therefore it receives also $1$ as its left child by $h$. This means that $n$ received $1$ for its both children, and the only way to get that is to satisfy $\neg \mathsf{App} \wedge \neg \mathsf{Right} \wedge\neg \mathsf{Left}$, which gives a contradiction. 
 \end{proof}
 %\subsubsection{$\beta$-reduction commutes with factorisation} \label{subsub:commutes}
 %The last ingredient to show Thm.~\ref{thm:evalOneType} is to notice  that factorising a term, applying some $\beta$-reduction steps to the factors, then flattening, can be simulated by applying  $\beta$-reduction steps directly to the original $\lambda$-term.

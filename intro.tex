@@ -1,4 +1,7 @@
 
+\section{Erratum}
+In an early version of this paper, Theorem~\ref{thm:normalise} was stated without the restriction that $\lambda$-terms to be normalized need to use a unique variable as a bound variable. This old version is not correct, as pointed to us by Lê Thành Dũng Nguy$\tilde e$n. His Counter-example can be found in Example~\ref{ex:tito}.
+
 \section{Introduction}
 
 The purpose of this paper is to decompose tree transformations into simple building blocks. An important inspiration  is the Krohn-Rhodes theorem~\cite[p.~454]{Krohn1965}, which says that every string-to-string function recognised by a Mealy machine can be decomposed into certain prime functions. 
@@ -20,7 +23,7 @@ The goal of this paper is to prove a decomposition result for regular tree-to-tr
 
 \paragraph*{First-order transductions. } Although \mso transductions are the more popular model, we work mainly with the less expressive model of first-order transductions. Why?
 
-As we explain in Section~\ref{sec:mso-trans}, every \mso tree-to-tree transduction can be decomposed as: (a) first, a relabelling defined in \mso, which does not change the tree structure; followed by (b) a first-order tree-to-tree transduction. In this sense, as far as transformations of the tree structure are concerned,  first-order and \mso transductions have the same expressive power. Another argument for the importance of first-order tree-to-tree transductions is a connection with the $\lambda$-calculus. As we explain in Section~\ref{sec:stt-derivable}, first-order tree-to-tree transductions are expressive enough to capture evaluation of $\lambda$-terms (assuming linearity, i.e.~every variable is used once), and such evaluation turns out to be one of the core computational steps implicit in a tree-to-tree transduction. 
+As we explain in Section~\ref{sec:mso-trans}, every \mso tree-to-tree transduction can be decomposed as: (a) first, a relabelling defined in \mso, which does not change the tree structure; followed by (b) a first-order tree-to-tree transduction. In this sense, as far as transformations of the tree structure are concerned,  first-order and \mso transductions have the same expressive power. Another argument for the importance of first-order tree-to-tree transductions is a connection with the $\lambda$-calculus. As we explain in Section~\ref{sec:stt-derivable}, first-order tree-to-tree transductions are expressive enough to capture evaluation of $\lambda$-terms (assuming the use of a single variable and linearity), and such evaluation turns out to be one of the core computational steps implicit in a tree-to-tree transduction. 
 
 Another advantage of first-order logic on trees, compared to \mso, is  a better decomposition theory, in the sense of decomposing formulas into  simpler ones~\cite{haferthomas,bojanczykDecidablePropertiesTree2004,esik-weil1}. 
 % This theory includes characterisations in terms of the temporal logic {\sc ctl*} \cite[Main Theorem]{haferthomas}, cascade products of tree automata~\cite[Theorem 2.5.7]{bojanczykDecidablePropertiesTree2004}, block products~\cite[Corollary 3.11]{esik2010algebraic} and wreath products~\cite[Theorem 3.1]{bojanczykWreathProductsForest2012}. 
